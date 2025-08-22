@@ -1,0 +1,1121 @@
+```html
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest' };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script>tailwind.config = {
+            "theme": {
+                "extend": {
+                    "colors": {
+                        "navy": {
+                            "50": "#f0f4f9",
+                            "100": "#d9e2ec",
+                            "200": "#bcccdc",
+                            "300": "#9fb3c8",
+                            "400": "#829ab1",
+                            "500": "#627d98",
+                            "600": "#486581",
+                            "700": "#334e68",
+                            "800": "#243b53",
+                            "900": "#102a43"
+                        },
+                        "accent": {
+                            "orange": "#FF9F43",
+                            "green": "#28C76F"
+                        }
+                    },
+                    "fontFamily": {
+                        "sans": [
+                            "Inter",
+                            "sans-serif"
+                        ]
+                    }
+                }
+            }
+        };</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* Preserve Font Awesome icons */
+        .fa,
+        .fas,
+        .far,
+        .fal,
+        .fab {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        }
+
+        .highlighted-section {
+            outline: 2px solid #3F20FB;
+            background-color: rgba(63, 32, 251, 0.1);
+        }
+
+        .edit-button {
+            position: absolute;
+            z-index: 1000;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        html,
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: calc(100vh - 4rem);
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        #sidebar {
+            width: 256px;
+            flex-shrink: 0;
+        }
+
+        #main-content {
+            flex: 0 1 auto;
+            padding: 1rem;
+            overflow-x: hidden;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        #stats-section,
+        #charts-section,
+        #additional-metrics-section {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        /* Căn chỉnh các tiêu đề cấp cao trong sidebar dựa trên text */
+        #sidebar button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            text-align: left;
+            min-height: 2.5rem;
+            /* Đảm bảo chiều cao đồng đều */
+            border: none;
+            background: none;
+        }
+
+        #sidebar button>div.flex {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            /* Để text chiếm phần lớn không gian */
+        }
+
+        #sidebar button i {
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            width: 1rem;
+            /* Đặt chiều rộng cố định cho icon */
+        }
+
+        #sidebar button span {
+            font-size: 0.875rem;
+            text-align: left;
+            flex-grow: 1;
+            /* Để text mở rộng và căn đều */
+            white-space: nowrap;
+            /* Ngăn text xuống dòng */
+            padding: 0;
+            /* Xóa padding thừa */
+        }
+
+        /* Đảm bảo text thẳng hàng */
+        #sidebar button>div.flex>span {
+            margin-left: 0;
+            padding: 0;
+        }
+
+        /* Căn chỉnh dropdown items */
+        #sidebar .pl-10 span {
+            padding-left: 0.5rem;
+            /* Điều chỉnh padding cho các mục con */
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <!-- Task Management Popup (Hidden by default) -->
+    <div id="taskPopup"
+        class="hidden fixed top-16 right-4 w-96 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h3 class="font-semibold text-navy-800">Task Management</h3>
+                <button onclick="toggleTaskPopup()" class="text-gray-500 hover:text-navy-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="flex mb-4">
+                <button class="px-4 py-2 bg-navy-700 text-white rounded-md mr-2 text-sm">Ongoing</button>
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 text-sm">Overdue</button>
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-sm">Completed</button>
+            </div>
+
+            <div class="space-y-3 max-h-96 overflow-y-auto">
+                <!-- Task 1 -->
+                <div id="task-1" class="p-3 bg-gray-50 rounded-md border-l-4 border-accent-orange">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Review Contract Templates</h4>
+                        <span class="text-xs bg-accent-orange text-white px-2 py-1 rounded-full">High</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Update all contract templates with new legal clauses</p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: Today</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div id="task-2" class="p-3 bg-gray-50 rounded-md border-l-4 border-navy-600">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Prepare Onboarding Documents</h4>
+                        <span class="text-xs bg-navy-600 text-white px-2 py-1 rounded-full">Medium</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Prepare onboarding documents for new hires starting next week
+                    </p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: Tomorrow</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 3 -->
+                <div id="task-3" class="p-3 bg-gray-50 rounded-md border-l-4 border-navy-400">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Department Budget Review</h4>
+                        <span class="text-xs bg-navy-400 text-white px-2 py-1 rounded-full">Low</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Review Q3 budget allocation for all departments</p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: In 3 days</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 4 -->
+                <div id="task-4" class="p-3 bg-gray-50 rounded-md border-l-4 border-navy-400">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Performance Review Planning</h4>
+                        <span class="text-xs bg-navy-400 text-white px-2 py-1 rounded-full">Low</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Schedule Q4 performance reviews for all departments</p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: Next week</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header" class="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+        <div class="flex justify-between items-center px-6 py-3">
+            <div class="flex items-center">
+                <div class="mr-8">
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 bg-navy-700 rounded-md flex items-center justify-center text-white font-bold text-lg mr-2">
+                            HR
+                        </div>
+                        <span class="font-semibold text-navy-900 text-lg">HRM System</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center">
+                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
+                        <i class="fa-solid fa-house mr-1"></i> Dashboard
+                    </button>
+                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
+                        <i class="fa-solid fa-chart-simple mr-1"></i> Reports
+                    </button>
+                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
+                        <i class="fa-solid fa-calendar mr-1"></i> Calendar
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button id="taskButton" onclick="toggleTaskPopup()"
+                    class="relative p-2 text-gray-600 hover:text-navy-700 hover:bg-gray-100 rounded-full">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span
+                        class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                </button>
+
+                <button class="relative p-2 text-gray-600 hover:text-navy-700 hover:bg-gray-100 rounded-full">
+                    <i class="fa-solid fa-bell"></i>
+                    <span
+                        class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
+                </button>
+
+                <div class="flex items-center">
+                    <div class="mr-2 text-right">
+                        <p class="text-sm font-medium text-navy-800">John Doe</p>
+                        <p class="text-xs text-gray-500">HR Manager</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full overflow-hidden">
+                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                            alt="User Avatar" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-16 h-[calc(100vh-4rem)] w-64 bg-navy-800 text-white overflow-y-auto z-20">
+        <div class="py-4">
+            <!-- HR Core Section -->
+            <div class="px-4 py-2">
+                <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">HR Core</h3>
+
+                <!-- Task Management Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('taskManagementDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-clipboard-list mr-3 text-gray-400"></i>
+                            <span>Task Management</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="taskManagementDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Task</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Tracking</span>
+                    </div>
+                </div>
+
+                <!-- Employee Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('employeeDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-users mr-3 text-gray-400"></i>
+                            <span>Employee</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="employeeDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Workers</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Candidates</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Employees</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                            Employees</span>
+                    </div>
+                </div>
+
+                <!-- Contract Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('contractDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-file-contract mr-3 text-gray-400"></i>
+                            <span>Contract</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="contractDropdown" class="hidden pl-10 mt-1">
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Contracts</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Appendix</span>
+                    </div>
+                </div>
+
+                <!-- Events Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('eventsDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-calendar-days mr-3 text-gray-400"></i>
+                            <span>Events</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="eventsDropdown" class="hidden pl-10 mt-1">
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Onboarding</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Renew
+                            Contract</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                            Type/Rehire</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Termination</span>
+                    </div>
+                </div>
+
+                <!-- Working Record Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('workingRecordDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-clipboard mr-3 text-gray-400"></i>
+                            <span>Working Record</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="workingRecordDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Working
+                            Record</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Multi Working
+                            Record</span>
+                    </div>
+                </div>
+
+                <!-- Staff Movement Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('staffMovementDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-people-arrows mr-3 text-gray-400"></i>
+                            <span>Staff Movement</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="staffMovementDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Staff
+                            Movement</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Multi Staff
+                            Movement</span>
+                    </div>
+                </div>
+
+                <!-- Expat Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('expatDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-plane mr-3 text-gray-400"></i>
+                            <span>Expat</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="expatDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Expat
+                            Employee</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Document
+                            Workflow</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master Data Section -->
+            <div class="px-4 py-2 mt-4">
+                <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Master Data</h3>
+
+                <!-- Company Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('companyDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-building mr-3 text-gray-400"></i>
+                            <span>Company</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="companyDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Company</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Company
+                            Group</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Market</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Office</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Org
+                            Class</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Department
+                            HR</span>
+                    </div>
+                </div>
+
+                <!-- Country Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('countryDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-building mr-3 text-gray-400"></i>
+                            <span>Country</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="countryDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Country</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">City</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Distric</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Ward</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Nationality</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Ethnicity</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Religion</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Currency</span>
+                    </div>
+                </div>
+
+                <!-- Job Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('jobDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Job</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="jobDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Career
+                            Track</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                            Family</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                            Group</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Sub
+                            Group</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                            Title</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                            Level</span>
+                    </div>
+                </div>
+
+                <!-- Document Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('documentDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Document</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="documentDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Document
+                            Type</span>
+                    </div>
+                </div>
+
+                <!-- Contract Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('contractMasterDataDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Contract</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="contractMasterDataDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Contract Group
+                            Type</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Contract
+                            Type</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Appendix
+                            Contract Type</span>
+                    </div>
+                </div>
+
+                <!-- Employee Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('employeeTypesDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-id-card mr-3 text-gray-400"></i>
+                            <span>Employee</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="employeeTypesDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Employee
+                            Type</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Relationship
+                            Type</span>
+                    </div>
+                </div>
+
+                <!-- Working Record Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('workingRecordMasterDataDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Working Record</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="workingRecordMasterDataDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change Form
+                            Type</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                            Form</span>
+                    </div>
+                </div>
+
+                <!-- Bank Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('bankDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Bank</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="bankDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Bank</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Bank
+                            Branch</span>
+                    </div>
+                </div>
+
+                <!-- Job Description Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('jobDecriptionDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Job Dectiption</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="jobDecriptionDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Skill
+                            Category</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Skill Sub
+                            Category</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Skill </span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Industry
+                        </span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job Track
+                            Group</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                            Track</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Level For Post
+                            Job </span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job Type
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Education Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('educationDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Education</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="educationDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Certificate
+                            Rating</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Certificate
+                            Level</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Degree/Certificate
+                        </span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">School </span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Faculty</span>
+                        <span
+                            class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Speciality</span>
+                    </div>
+                </div>
+
+                <!-- Recruit Dropdown -->
+                <div class="mb-1">
+                    <button
+                        class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                        onclick="toggleDropdown('recruitDropdown')">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                            <span>Recruit</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="recruitDropdown" class="hidden pl-10 mt-1">
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Source
+                            Category</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Source
+                            Type</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Source</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">RR Program
+                        </span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Product
+                            Group</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Reason
+                            Event</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Reason
+                            Type</span>
+                        <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Reason</span>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <main id="main-content" class="pt-16 flex-grow-0 p-4 overflow-x-hidden">
+            <div class="p-6">
+                <!-- Welcome Section -->
+                <div id="welcome-section" class="mb-6">
+                    <br>
+                    <h1 class="text-2xl font-bold text-navy-900">HR Dashboard</h1>
+                    <p class="text-gray-600">Welcome back, John. Here's what's happening with your HR operations today.
+                    </p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div id="stats-section" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <!-- Total Employees Card -->
+                    <div id="total-employees-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm font-medium">Total Employees</p>
+                                <h3 class="text-3xl font-bold text-navy-900 mt-1">1,248</h3>
+                                <p class="text-sm text-accent-green mt-1 flex items-center">
+                                    <i class="fa-solid fa-arrow-up mr-1"></i> 3.2% from last month
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i class="fa-solid fa-users text-navy-700 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Hires Card -->
+                    <div id="new-hires-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm font-medium">New Hires (MTD)</p>
+                                <h3 class="text-3xl font-bold text-navy-900 mt-1">24</h3>
+                                <p class="text-sm text-accent-green mt-1 flex items-center">
+                                    <i class="fa-solid fa-arrow-up mr-1"></i> 12% from last month
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <i class="fa-solid fa-user-plus text-accent-green text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terminations Card -->
+                    <div id="terminations-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm font-medium">Terminations (MTD)</p>
+                                <h3 class="text-3xl font-bold text-navy-900 mt-1">8</h3>
+                                <p class="text-sm text-red-500 mt-1 flex items-center">
+                                    <i class="fa-solid fa-arrow-up mr-1"></i> 2% from last month
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                                <i class="fa-solid fa-user-minus text-red-500 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Open Positions Card -->
+                    <div id="open-positions-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500 text-sm font-medium">Open Positions</p>
+                                <h3 class="text-3xl font-bold text-navy-900 mt-1">32</h3>
+                                <p class="text-sm text-accent-green mt-1 flex items-center">
+                                    <i class="fa-solid fa-arrow-up mr-1"></i> 8% from last month
+                                </p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                                <i class="fa-solid fa-briefcase text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div id="charts-section" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Employee Growth Chart -->
+                    <div id="employee-growth-chart" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-semibold text-navy-900">Employee Growth Trend</h3>
+                            <div class="flex items-center space-x-2">
+                                <button class="text-xs px-3 py-1 rounded-full bg-navy-700 text-white">Year</button>
+                                <button
+                                    class="text-xs px-3 py-1 rounded-full bg-gray-200 text-gray-700">Quarter</button>
+                                <button class="text-xs px-3 py-1 rounded-full bg-gray-200 text-gray-700">Month</button>
+                            </div>
+                        </div>
+                        <div id="growth-chart" class="h-64"></div>
+                    </div>
+
+                    <!-- Department Distribution Chart -->
+                    <div id="department-distribution-chart" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-semibold text-navy-900">Employee Distribution by Department</h3>
+                            <button class="text-gray-500 hover:text-navy-700">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                        </div>
+                        <div id="department-chart" class="h-64"></div>
+                    </div>
+                </div>
+
+                <!-- Additional Metrics Section -->
+                <div id="additional-metrics-section" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Gender Distribution -->
+                    <div id="gender-distribution-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="font-semibold text-navy-900 mb-4">Gender Distribution</h3>
+                        <div id="gender-chart" class="h-48"></div>
+                        <div class="flex justify-center mt-4 space-x-6">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-navy-600 mr-2"></div>
+                                <span class="text-sm text-gray-600">Male (58%)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 rounded-full bg-accent-orange mr-2"></div>
+                                <span class="text-sm text-gray-600">Female (42%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employment Type -->
+                    <div id="employment-type-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="font-semibold text-navy-900 mb-4">Employment Type</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Full-time</span>
+                                    <span class="text-sm font-medium text-navy-800">78%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-navy-600 h-2 rounded-full" style="width: 78%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Part-time</span>
+                                    <span class="text-sm font-medium text-navy-800">15%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-accent-orange h-2 rounded-full" style="width: 15%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Contract</span>
+                                    <span class="text-sm font-medium text-navy-800">5%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 5%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-sm text-gray-600">Intern</span>
+                                    <span class="text-sm font-medium text-navy-800">2%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-purple-500 h-2 rounded-full" style="width: 2%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activities -->
+                    <div id="recent-activities-card" class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-semibold text-navy-900">Recent Activities</h3>
+                            <button class="text-xs text-navy-700">View All</button>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fa-solid fa-user-plus text-accent-green"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-navy-800">New employee onboarded</p>
+                                    <p class="text-xs text-gray-500">Sarah Johnson joined as UX Designer</p>
+                                    <p class="text-xs text-gray-400 mt-1">2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fa-solid fa-file-contract text-navy-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-navy-800">Contract updated</p>
+                                    <p class="text-xs text-gray-500">Mike Chen's contract renewed for 2 years</p>
+                                    <p class="text-xs text-gray-400 mt-1">Yesterday</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fa-solid fa-user-minus text-red-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-navy-800">Employee terminated</p>
+                                    <p class="text-xs text-gray-500">David Miller - Software Engineer</p>
+                                    <p class="text-xs text-gray-400 mt-1">2 days ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <div
+                                    class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3 mt-1">
+                                    <i class="fa-solid fa-building text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-navy-800">Department restructured</p>
+                                    <p class="text-xs text-gray-500">Marketing team reorganized</p>
+                                    <p class="text-xs text-gray-400 mt-1">1 week ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function () {
+            // Employee Growth Chart
+            Highcharts.chart('growth-chart', {
+                chart: {
+                    type: 'line',
+                    style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                },
+                title: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: {
+                        style: {
+                            color: '#64748b'
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: null
+                    },
+                    gridLineColor: '#e2e8f0',
+                    labels: {
+                        style: {
+                            color: '#64748b'
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.x + ':</b> ' + this.y + ' employees';
+                    }
+                },
+                series: [{
+                    name: 'Employees',
+                    data: [1150, 1168, 1180, 1195, 1205, 1210, 1218, 1225, 1232, 1240, 1243, 1248],
+                    color: '#334e68'
+                }]
+            });
+
+            // Department Distribution Chart
+            Highcharts.chart('department-chart', {
+                chart: {
+                    type: 'pie',
+                    style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                },
+                title: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: '#334e68',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Employees',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Engineering', y: 30, color: '#334e68' },
+                        { name: 'Sales', y: 20, color: '#FF9F43' },
+                        { name: 'Marketing', y: 15, color: '#28C76F' },
+                        { name: 'HR', y: 10, color: '#7367F0' },
+                        { name: 'Finance', y: 12, color: '#EA5455' },
+                        { name: 'Operations', y: 13, color: '#00CFE8' }
+                    ]
+                }]
+            });
+
+            // Gender Distribution Chart
+            Highcharts.chart('gender-chart', {
+                chart: {
+                    type: 'pie',
+                    style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                },
+                title: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%',
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Gender',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Male', y: 58, color: '#334e68' },
+                        { name: 'Female', y: 42, color: '#FF9F43' }
+                    ]
+                }]
+            });
+        });
+
+        // Toggle task popup
+        function toggleTaskPopup() {
+            const popup = document.getElementById('taskPopup');
+            popup.classList.toggle('hidden');
+        }
+
+        // Toggle sidebar dropdowns
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.classList.toggle('hidden');
+        }
+    </script>
+</body>
+
+</html>
+```
