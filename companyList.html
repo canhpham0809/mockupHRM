@@ -1,0 +1,290 @@
+<iframe title="wireframe-byJTAtBVweN7VCYFYFt7" srcdoc="&lt;html&gt;&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+    &lt;script&gt; window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js&quot; crossorigin=&quot;anonymous&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/script&gt;
+    
+    &lt;script&gt;tailwind.config = {
+  &quot;theme&quot;: {
+    &quot;extend&quot;: {
+      &quot;fontFamily&quot;: {
+        &quot;inter&quot;: [
+          &quot;Inter&quot;,
+          &quot;sans-serif&quot;
+        ],
+        &quot;sans&quot;: [
+          &quot;Inter&quot;,
+          &quot;sans-serif&quot;
+        ]
+      }
+    }
+  }
+};&lt;/script&gt;
+    &lt;style&gt;::-webkit-scrollbar { display: none;}&lt;/style&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin=&quot;&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;amp;display=swap&quot;&gt;&lt;style&gt;
+      body {
+        font-family: 'Inter', sans-serif !important;
+      }
+      
+      /* Preserve Font Awesome icons */
+      .fa, .fas, .far, .fal, .fab {
+        font-family: &quot;Font Awesome 6 Free&quot;, &quot;Font Awesome 6 Brands&quot; !important;
+      }
+    &lt;/style&gt;&lt;style&gt;
+  .highlighted-section {
+    outline: 2px solid #3F20FB;
+    background-color: rgba(63, 32, 251, 0.1);
+  }
+
+  .edit-button {
+    position: absolute;
+    z-index: 1000;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  html, body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  &lt;/style&gt;&lt;/head&gt;
+&lt;body class=&quot;bg-gray-50 font-sans&quot;&gt;
+
+&lt;div id=&quot;app&quot; class=&quot;min-h-screen&quot;&gt;
+    &lt;div id=&quot;header&quot; class=&quot;bg-white border-b border-gray-200 sticky top-0 z-50&quot;&gt;
+        &lt;div class=&quot;px-6 py-4&quot;&gt;
+            &lt;div class=&quot;flex items-center justify-between mb-4&quot;&gt;
+                &lt;div&gt;
+                    &lt;h1 class=&quot;text-2xl font-semibold text-gray-900&quot;&gt;Company Master Data&lt;/h1&gt;
+                    &lt;p class=&quot;text-sm text-gray-500 mt-1&quot;&gt;Manage company information and settings&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;flex items-center gap-3&quot;&gt;
+                    &lt;button class=&quot;px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors&quot;&gt;
+                        &lt;i class=&quot;fa-solid fa-download mr-2&quot;&gt;&lt;/i&gt;Export CSV
+                    &lt;/button&gt;
+                    &lt;button class=&quot;px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors&quot;&gt;
+                        &lt;i class=&quot;fa-solid fa-plus mr-2&quot;&gt;&lt;/i&gt;Add New
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div id=&quot;toolbar&quot; class=&quot;flex flex-wrap items-center gap-4&quot;&gt;
+                &lt;div class=&quot;flex-1 min-w-80&quot;&gt;
+                    &lt;div class=&quot;relative&quot;&gt;
+                        &lt;i class=&quot;fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400&quot;&gt;&lt;/i&gt;
+                        &lt;input type=&quot;text&quot; placeholder=&quot;Search by Code, Name, Country, Address...&quot; class=&quot;w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                
+                &lt;div class=&quot;flex items-center gap-3&quot;&gt;
+                    &lt;select class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
+                        &lt;option&gt;All Status&lt;/option&gt;
+                        &lt;option&gt;Active&lt;/option&gt;
+                        &lt;option&gt;Inactive&lt;/option&gt;
+                    &lt;/select&gt;
+                    
+                    &lt;select class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
+                        &lt;option&gt;All Countries&lt;/option&gt;
+                        &lt;option&gt;Vietnam&lt;/option&gt;
+                        &lt;option&gt;Singapore&lt;/option&gt;
+                        &lt;option&gt;Thailand&lt;/option&gt;
+                    &lt;/select&gt;
+                    
+                    &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+                        &lt;input type=&quot;date&quot; class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
+                        &lt;span class=&quot;text-gray-500&quot;&gt;to&lt;/span&gt;
+                        &lt;input type=&quot;date&quot; class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
+                    &lt;/div&gt;
+                    
+                    &lt;button class=&quot;px-3 py-2 text-gray-500 hover:text-gray-700&quot;&gt;
+                        &lt;i class=&quot;fa-solid fa-filter-circle-xmark&quot;&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;main-content&quot; class=&quot;p-6&quot;&gt;
+        &lt;div id=&quot;table-container&quot; class=&quot;bg-white rounded-lg border border-gray-200 overflow-hidden&quot;&gt;
+            &lt;div class=&quot;overflow-x-auto&quot;&gt;
+                &lt;table class=&quot;w-full&quot;&gt;
+                    &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                        &lt;tr&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16&quot;&gt;
+                                STT
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100&quot;&gt;
+                                Code &lt;i class=&quot;fa-solid fa-sort ml-1&quot;&gt;&lt;/i&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100&quot;&gt;
+                                Vietnamese Name &lt;i class=&quot;fa-solid fa-sort ml-1&quot;&gt;&lt;/i&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100&quot;&gt;
+                                English Name &lt;i class=&quot;fa-solid fa-sort ml-1&quot;&gt;&lt;/i&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                Head Office VI
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                Head Office EN
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100&quot;&gt;
+                                Country &lt;i class=&quot;fa-solid fa-sort ml-1&quot;&gt;&lt;/i&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                Status
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                Address
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                Description
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100&quot;&gt;
+                                Create Date &lt;i class=&quot;fa-solid fa-sort ml-1&quot;&gt;&lt;/i&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100&quot;&gt;
+                                Update Date &lt;i class=&quot;fa-solid fa-sort ml-1&quot;&gt;&lt;/i&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                User Update
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32&quot;&gt;
+                                Actions
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900&quot;&gt;ABC001&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty ABC Việt Nam&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;ABC Company Vietnam&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Hà Nội&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Hanoi&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Vietnam&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4&quot;&gt;
+                                &lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot;&gt;123 Nguyen Trai Street, Hanoi&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot; title=&quot;Leading technology company in Vietnam providing innovative solutions&quot;&gt;
+                                Leading technology company in Vietnam...
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-15&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-20&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin@company.com&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4&quot;&gt;
+                                &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+                                    &lt;button class=&quot;text-blue-600 hover:text-blue-800 transition-colors&quot; title=&quot;View&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-eye&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                    &lt;button class=&quot;text-green-600 hover:text-green-800 transition-colors&quot; title=&quot;Edit&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-edit&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                    &lt;button class=&quot;text-red-600 hover:text-red-800 transition-colors&quot; title=&quot;Delete&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-trash&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;2&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900&quot;&gt;XYZ002&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty XYZ Singapore&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;XYZ Company Singapore&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4&quot;&gt;
+                                &lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800&quot;&gt;Inactive&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot;&gt;456 Orchard Road, Singapore&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot; title=&quot;Financial services provider in Southeast Asia&quot;&gt;
+                                Financial services provider in Southeast...
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-10&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-18&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;manager@xyz.com&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4&quot;&gt;
+                                &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+                                    &lt;button class=&quot;text-blue-600 hover:text-blue-800 transition-colors&quot; title=&quot;View&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-eye&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                    &lt;button class=&quot;text-green-600 hover:text-green-800 transition-colors&quot; title=&quot;Edit&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-edit&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                    &lt;button class=&quot;text-red-600 hover:text-red-800 transition-colors&quot; title=&quot;Delete&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-trash&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;3&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900&quot;&gt;DEF003&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty DEF Thái Lan&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;DEF Company Thailand&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Bangkok&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Bangkok&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Thailand&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4&quot;&gt;
+                                &lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot;&gt;789 Sukhumvit Road, Bangkok&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot; title=&quot;Manufacturing company specializing in electronics&quot;&gt;
+                                Manufacturing company specializing in...
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-05&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-22&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;hr@def.com&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4&quot;&gt;
+                                &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+                                    &lt;button class=&quot;text-blue-600 hover:text-blue-800 transition-colors&quot; title=&quot;View&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-eye&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                    &lt;button class=&quot;text-green-600 hover:text-green-800 transition-colors&quot; title=&quot;Edit&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-edit&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                    &lt;button class=&quot;text-red-600 hover:text-red-800 transition-colors&quot; title=&quot;Delete&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-trash&quot;&gt;&lt;/i&gt;
+                                    &lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;pagination&quot; class=&quot;flex items-center justify-between mt-6&quot;&gt;
+            &lt;div class=&quot;flex items-center gap-4&quot;&gt;
+                &lt;select class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
+                    &lt;option&gt;10 per page&lt;/option&gt;
+                    &lt;option&gt;20 per page&lt;/option&gt;
+                    &lt;option&gt;50 per page&lt;/option&gt;
+                &lt;/select&gt;
+                &lt;span class=&quot;text-sm text-gray-500&quot;&gt;1–10 of 150 results&lt;/span&gt;
+            &lt;/div&gt;
+            
+            &lt;div class=&quot;flex items-center gap-2&quot;&gt;
+                &lt;button class=&quot;px-3 py-2 text-gray-500 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50&quot; disabled=&quot;&quot;&gt;
+                    &lt;i class=&quot;fa-solid fa-chevron-left&quot;&gt;&lt;/i&gt; Prev
+                &lt;/button&gt;
+                &lt;button class=&quot;px-3 py-2 bg-blue-600 text-white rounded-lg&quot;&gt;1&lt;/button&gt;
+                &lt;button class=&quot;px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg&quot;&gt;2&lt;/button&gt;
+                &lt;button class=&quot;px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg&quot;&gt;3&lt;/button&gt;
+                &lt;span class=&quot;px-2 text-gray-500&quot;&gt;...&lt;/span&gt;
+                &lt;button class=&quot;px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg&quot;&gt;15&lt;/button&gt;
+                &lt;button class=&quot;px-3 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50&quot;&gt;
+                    Next &lt;i class=&quot;fa-solid fa-chevron-right&quot;&gt;&lt;/i&gt;
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+
+&lt;/body&gt;&lt;/html&gt;" frameborder="0" class="w-full h-max overflow-visible border-2 border-carbon-300 border-solid rounded-lg" style="width: 1440px; height: 1025px; min-height: 1024px;"></iframe>

@@ -1,0 +1,1281 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest' };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+    <script>tailwind.config = {
+            "theme": {
+                "extend": {
+                    "colors": {
+                        "navy": {
+                            "50": "#f0f4f9",
+                            "100": "#d9e2ec",
+                            "200": "#bcccdc",
+                            "300": "#9fb3c8",
+                            "400": "#829ab1",
+                            "500": "#627d98",
+                            "600": "#486581",
+                            "700": "#334e68",
+                            "800": "#243b53",
+                            "900": "#102a43"
+                        },
+                        "accent": {
+                            "orange": "#FF9F43",
+                            "green": "#28C76F"
+                        }
+                    },
+                    "fontFamily": {
+                        "sans": [
+                            "Inter",
+                            "sans-serif"
+                        ]
+                    }
+                }
+            }
+        };</script>
+    
+    
+    <style type="text/css">@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:100;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:200;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:300;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/latin-ext/wght/normal.woff2);unicode-range:U+0100-02AF,U+0304,U+0308,U+0329,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/greek/wght/normal.woff2);unicode-range:U+0370-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:900;src:url(/cf-fonts/v/inter/5.0.16/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}</style>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* Preserve Font Awesome icons */
+        .fa,
+        .fas,
+        .far,
+        .fal,
+        .fab {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        }
+
+        .highlighted-section {
+            outline: 2px solid #3F20FB;
+            background-color: rgba(63, 32, 251, 0.1);
+        }
+
+        .edit-button {
+            position: absolute;
+            z-index: 1000;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        html,
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: flex;
+            height: calc(100vh - 4rem);
+            /* dưới header */
+            align-items: stretch;
+        }
+
+        #sidebar {
+            width: 256px;
+            flex-shrink: 0;
+        }
+
+        #main-content {
+            flex: 1;
+            /* chiếm toàn bộ không gian còn lại */
+            padding: 1rem;
+            overflow-x: hidden;
+        }
+
+        #stats-section,
+        #charts-section,
+        #additional-metrics-section {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        /* Căn chỉnh các tiêu đề cấp cao trong sidebar dựa trên text */
+        #sidebar button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            text-align: left;
+            min-height: 2.5rem;
+            /* Đảm bảo chiều cao đồng đều */
+            border: none;
+            background: none;
+        }
+
+        #sidebar button>div.flex {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            /* Để text chiếm phần lớn không gian */
+        }
+
+        #sidebar button i {
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+            width: 1rem;
+            /* Đặt chiều rộng cố định cho icon */
+        }
+
+        #sidebar button span {
+            font-size: 0.875rem;
+            text-align: left;
+            flex-grow: 1;
+            /* Để text mở rộng và căn đều */
+            white-space: nowrap;
+            /* Ngăn text xuống dòng */
+            padding: 0;
+            /* Xóa padding thừa */
+        }
+
+        /* Đảm bảo text thẳng hàng */
+        #sidebar button>div.flex>span {
+            margin-left: 0;
+            padding: 0;
+        }
+
+        /* Căn chỉnh dropdown items */
+        #sidebar .pl-10 span {
+            padding-left: 0.5rem;
+            /* Điều chỉnh padding cho các mục con */
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+    <!-- Task Management Popup (Hidden by default) -->
+    <div id="taskPopup"
+        class="hidden fixed top-16 right-4 w-96 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
+        <div class="p-4 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h3 class="font-semibold text-navy-800">Task Management</h3>
+                <button onclick="toggleTaskPopup()" class="text-gray-500 hover:text-navy-700">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="flex mb-4">
+                <button class="px-4 py-2 bg-navy-700 text-white rounded-md mr-2 text-sm">Ongoing</button>
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 text-sm">Overdue</button>
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md text-sm">Completed</button>
+            </div>
+
+            <div class="space-y-3 max-h-96 overflow-y-auto">
+                <!-- Task 1 -->
+                <div id="task-1" class="p-3 bg-gray-50 rounded-md border-l-4 border-accent-orange">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Review Contract Templates</h4>
+                        <span class="text-xs bg-accent-orange text-white px-2 py-1 rounded-full">High</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Update all contract templates with new legal clauses</p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: Today</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 2 -->
+                <div id="task-2" class="p-3 bg-gray-50 rounded-md border-l-4 border-navy-600">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Prepare Onboarding Documents</h4>
+                        <span class="text-xs bg-navy-600 text-white px-2 py-1 rounded-full">Medium</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Prepare onboarding documents for new hires starting next week
+                    </p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: Tomorrow</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 3 -->
+                <div id="task-3" class="p-3 bg-gray-50 rounded-md border-l-4 border-navy-400">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Department Budget Review</h4>
+                        <span class="text-xs bg-navy-400 text-white px-2 py-1 rounded-full">Low</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Review Q3 budget allocation for all departments</p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: In 3 days</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task 4 -->
+                <div id="task-4" class="p-3 bg-gray-50 rounded-md border-l-4 border-navy-400">
+                    <div class="flex justify-between">
+                        <h4 class="font-medium text-navy-800">Performance Review Planning</h4>
+                        <span class="text-xs bg-navy-400 text-white px-2 py-1 rounded-full">Low</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-1">Schedule Q4 performance reviews for all departments</p>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-gray-500">Due: Next week</span>
+                        <div class="flex items-center">
+                            <button class="text-gray-400 hover:text-navy-700 mr-2">
+                                <i class="fa-regular fa-edit"></i>
+                            </button>
+                            <button class="text-gray-400 hover:text-green-500">
+                                <i class="fa-regular fa-circle-check"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header" class="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+        <div class="flex justify-between items-center px-6 py-3">
+            <div class="flex items-center">
+                <div class="mr-8">
+                    <div class="flex items-center">
+                        <div
+                            class="w-10 h-10 bg-navy-700 rounded-md flex items-center justify-center text-white font-bold text-lg mr-2">
+                            HR
+                        </div>
+                        <span class="font-semibold text-navy-900 text-lg">HRM Core</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center">
+                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
+                        <i class="fa-solid fa-house mr-1"></i> Dashboard
+                    </button>
+                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
+                        <i class="fa-solid fa-chart-simple mr-1"></i> Reports
+                    </button>
+                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
+                        <i class="fa-solid fa-calendar mr-1"></i> Calendar
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button id="taskButton" onclick="toggleTaskPopup()"
+                    class="relative p-2 text-gray-600 hover:text-navy-700 hover:bg-gray-100 rounded-full">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span
+                        class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                </button>
+
+                <button class="relative p-2 text-gray-600 hover:text-navy-700 hover:bg-gray-100 rounded-full">
+                    <i class="fa-solid fa-bell"></i>
+                    <span
+                        class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
+                </button>
+
+                <div class="flex items-center">
+                    <div class="mr-2 text-right">
+                        <p class="text-sm font-medium text-navy-800">John Doe</p>
+                        <p class="text-xs text-gray-500">HR Manager</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full overflow-hidden">
+                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                            alt="User Avatar" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed top-16 h-[calc(100vh-4rem)] w-64 bg-navy-800 text-white overflow-y-auto z-20">
+            <div class="py-4">
+                <!-- HR Core Section -->
+                <div class="px-4 py-2">
+                    <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">HR Core</h3>
+
+                    <!-- Task Management Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('taskManagementDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-clipboard-list mr-3 text-gray-400"></i>
+                                <span>Task Management</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="taskManagementDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Task</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Tracking</span>
+                        </div>
+                    </div>
+
+                    <!-- Employee Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('employeeDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-users mr-3 text-gray-400"></i>
+                                <span>Employee</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="employeeDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Workers</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Candidates</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Employees</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                                Employees</span>
+                        </div>
+                    </div>
+
+                    <!-- Contract Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('contractDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-file-contract mr-3 text-gray-400"></i>
+                                <span>Contract</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="contractDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Contracts</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Appendix</span>
+                        </div>
+                    </div>
+
+                    <!-- Events Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('eventsDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-calendar-days mr-3 text-gray-400"></i>
+                                <span>Events</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="eventsDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Onboarding</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Renew
+                                Contract</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                                Type/Rehire</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Termination</span>
+                        </div>
+                    </div>
+
+                    <!-- Working Record Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('workingRecordDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-clipboard mr-3 text-gray-400"></i>
+                                <span>Working Record</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="workingRecordDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Working
+                                Record</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Multi
+                                Working
+                                Record</span>
+                        </div>
+                    </div>
+
+                    <!-- Staff Movement Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('staffMovementDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-people-arrows mr-3 text-gray-400"></i>
+                                <span>Staff Movement</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="staffMovementDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Staff
+                                Movement</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Multi
+                                Staff
+                                Movement</span>
+                        </div>
+                    </div>
+
+                    <!-- Expat Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('expatDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-plane mr-3 text-gray-400"></i>
+                                <span>Expat</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="expatDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Expat
+                                Employee</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Document
+                                Workflow</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Master Data Section -->
+                <div class="px-4 py-2 mt-4">
+                    <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Master Data</h3>
+
+                   <!-- Company Dropdown -->
+<div class="mb-1">
+  <button
+    class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+    onclick="toggleDropdown('companyDropdown')">
+    <div class="flex items-center">
+      <i class="fa-solid fa-building mr-3 text-gray-400"></i>
+      <span>Company</span>
+    </div>
+    <i class="fa-solid fa-chevron-down text-xs"></i>
+  </button>
+
+  <!-- bỏ hidden để mở mặc định -->
+  <div id="companyDropdown" class="pl-10 mt-1">
+     <span class="menu-item block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Company Group</span>
+    <span class="menu-item block px-4 py-2 text-sm rounded-md cursor-pointer bg-navy-700 text-white">
+      Company
+    </span>
+   
+    <span class="menu-item block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Market</span>
+    <span class="menu-item block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Office</span>
+    <span class="menu-item block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Org Class</span>
+    <span class="menu-item block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Department HR</span>
+  </div>
+</div>
+
+<script>
+  // hiệu ứng chọn 1 mục duy nhất
+  document.querySelectorAll("#companyDropdown .menu-item").forEach(item => {
+    item.addEventListener("click", () => {
+      document.querySelectorAll("#companyDropdown .menu-item")
+        .forEach(i => i.classList.remove("bg-navy-700", "text-white"));
+      item.classList.add("bg-navy-700", "text-white");
+    });
+  });
+</script>
+
+                    <!-- Country Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('countryDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-building mr-3 text-gray-400"></i>
+                                <span>Country</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="countryDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Country</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">City</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Distric</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Ward</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Nationality</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Ethnicity</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Religion</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Currency</span>
+                        </div>
+                    </div>
+
+                    <!-- Job Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('jobDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Job</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="jobDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Career
+                                Track</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                                Family</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                                Group</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Sub
+                                Group</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                                Title</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                                Level</span>
+                        </div>
+                    </div>
+
+                    <!-- Document Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('documentDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Document</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="documentDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Document
+                                Type</span>
+                        </div>
+                    </div>
+
+                    <!-- Contract Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('contractMasterDataDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Contract</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="contractMasterDataDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Contract
+                                Group
+                                Type</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Contract
+                                Type</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Appendix
+                                Contract Type</span>
+                        </div>
+                    </div>
+
+                    <!-- Employee Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('employeeTypesDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-id-card mr-3 text-gray-400"></i>
+                                <span>Employee</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="employeeTypesDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Employee
+                                Type</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Relationship
+                                Type</span>
+                        </div>
+                    </div>
+
+                    <!-- Working Record Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('workingRecordMasterDataDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Working Record</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="workingRecordMasterDataDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                                Form
+                                Type</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Change
+                                Form</span>
+                        </div>
+                    </div>
+
+                    <!-- Bank Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('bankDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Bank</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="bankDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Bank</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Bank
+                                Branch</span>
+                        </div>
+                    </div>
+
+                    <!-- Job Description Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('jobDecriptionDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Job Dectiption</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="jobDecriptionDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Skill
+                                Category</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Skill Sub
+                                Category</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Skill
+                            </span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Industry
+                            </span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job Track
+                                Group</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job
+                                Track</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Level For
+                                Post
+                                Job </span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Job Type
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Education Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('educationDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Education</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="educationDropdown" class="hidden pl-10 mt-1">
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Certificate
+                                Rating</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Certificate
+                                Level</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Degree/Certificate
+                            </span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">School
+                            </span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Faculty</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Speciality</span>
+                        </div>
+                    </div>
+
+                    <!-- Recruit Dropdown -->
+                    <div class="mb-1">
+                        <button
+                            class="w-full flex items-center justify-between px-4 py-2 text-sm text-white hover:bg-navy-700 rounded-md"
+                            onclick="toggleDropdown('recruitDropdown')">
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-briefcase mr-3 text-gray-400"></i>
+                                <span>Recruit</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="recruitDropdown" class="hidden pl-10 mt-1">
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Source
+                                Category</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Source
+                                Type</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Source</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">RR Program
+                            </span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Product
+                                Group</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Reason
+                                Event</span>
+                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Reason
+                                Type</span>
+                            <span
+                                class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Reason</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="dashboard-container">
+            <main id="main-content" class="pt-16 pl-20 flex-grow-0 p-4 overflow-x-hidden" style="
+    padding-left: 320px">
+    <br>
+    <br>
+                <iframe title="wireframe-BfNtWPYV1RQaTDs1yUS4" srcdoc="&lt;html&gt;&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
+    &lt;script&gt; window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js&quot; crossorigin=&quot;anonymous&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/script&gt;
+    
+    &lt;script&gt;tailwind.config = {
+  &quot;theme&quot;: {
+    &quot;extend&quot;: {
+      &quot;fontFamily&quot;: {
+        &quot;inter&quot;: [
+          &quot;Inter&quot;,
+          &quot;sans-serif&quot;
+        ],
+        &quot;sans&quot;: [
+          &quot;Inter&quot;,
+          &quot;sans-serif&quot;
+        ]
+      }
+    }
+  }
+};&lt;/script&gt;
+    &lt;style&gt;::-webkit-scrollbar { display: none;}&lt;/style&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin=&quot;&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;amp;display=swap&quot;&gt;&lt;style&gt;
+      body {
+        font-family: 'Inter', sans-serif !important;
+      }
+      
+      /* Preserve Font Awesome icons */
+      .fa, .fas, .far, .fal, .fab {
+        font-family: &quot;Font Awesome 6 Free&quot;, &quot;Font Awesome 6 Brands&quot; !important;
+      }
+    &lt;/style&gt;&lt;style&gt;
+  .highlighted-section {
+    outline: 2px solid #3F20FB;
+    background-color: rgba(63, 32, 251, 0.1);
+  }
+
+  .edit-button {
+    position: absolute;
+    z-index: 1000;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  html, body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  &lt;/style&gt;&lt;/head&gt;
+&lt;body class=&quot;bg-gray-50 font-sans&quot;&gt;
+
+&lt;div id=&quot;app&quot; class=&quot;min-h-screen&quot;&gt;
+    &lt;div id=&quot;header&quot; class=&quot;bg-white border-b border-gray-200 sticky top-0 z-50&quot;&gt;
+        &lt;div class=&quot;px-6 py-4&quot;&gt;
+            &lt;div class=&quot;flex items-center justify-between&quot;&gt;
+                &lt;div&gt;
+                    &lt;h1 class=&quot;text-2xl font-semibold text-gray-900&quot;&gt;Create Company&lt;/h1&gt;
+                    &lt;p class=&quot;text-sm text-gray-500 mt-1&quot;&gt;Add new company information&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div id=&quot;main-content&quot; class=&quot;p-6&quot;&gt;
+        &lt;div id=&quot;company-form&quot; class=&quot;bg-white rounded-lg border border-gray-200&quot;&gt;
+            &lt;div id=&quot;tabs&quot; class=&quot;border-b border-gray-200&quot;&gt;
+                &lt;nav class=&quot;flex space-x-8 px-6&quot;&gt;
+                    &lt;button class=&quot;tab-button active border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600&quot; data-tab=&quot;company-info&quot;&gt;
+                        Company Information
+                    &lt;/button&gt;
+                    &lt;button class=&quot;tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300&quot; data-tab=&quot;bank-account&quot;&gt;
+                        Bank Account
+                    &lt;/button&gt;
+                    &lt;button class=&quot;tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300&quot; data-tab=&quot;representative&quot;&gt;
+                        Representative Information
+                    &lt;/button&gt;
+                    &lt;button class=&quot;tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300&quot; data-tab=&quot;authorized&quot;&gt;
+                        Authorized Persons
+                    &lt;/button&gt;
+                &lt;/nav&gt;
+            &lt;/div&gt;
+
+            &lt;div id=&quot;tab-content&quot; class=&quot;p-6&quot;&gt;
+                &lt;div id=&quot;company-info&quot; class=&quot;tab-pane active&quot;&gt;
+                    &lt;form class=&quot;space-y-8&quot;&gt;
+                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
+                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Basic Information&lt;/h3&gt;
+                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;
+                                        Code &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;
+                                    &lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; required=&quot;&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Company Logo&lt;/label&gt;
+                                    &lt;div class=&quot;border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-cloud-upload-alt text-gray-400 text-2xl mb-2&quot;&gt;&lt;/i&gt;
+                                        &lt;p class=&quot;text-sm text-gray-500&quot;&gt;Click to upload logo&lt;/p&gt;
+                                    &lt;/div&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;
+                                        Vietnamese Name &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;
+                                    &lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; required=&quot;&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;
+                                        English Name &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;
+                                    &lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; required=&quot;&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Company Group&lt;/label&gt;
+                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select Company Group&lt;/option&gt;
+                                        &lt;option&gt;Technology&lt;/option&gt;
+                                        &lt;option&gt;Finance&lt;/option&gt;
+                                        &lt;option&gt;Manufacturing&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Parent Company&lt;/label&gt;
+                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select Parent Company&lt;/option&gt;
+                                        &lt;option&gt;ABC Holdings&lt;/option&gt;
+                                        &lt;option&gt;XYZ Corp&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;md:col-span-2&quot;&gt;
+                                    &lt;label class=&quot;flex items-center&quot;&gt;
+                                        &lt;input type=&quot;checkbox&quot; checked=&quot;&quot; class=&quot;rounded border-gray-300 text-blue-600 focus:ring-blue-500&quot;&gt;
+                                        &lt;span class=&quot;ml-2 text-sm text-gray-700&quot;&gt;Active&lt;/span&gt;
+                                    &lt;/label&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
+                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Main Address&lt;/h3&gt;
+                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;
+                                        Country &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;
+                                    &lt;/label&gt;
+                                    &lt;select required=&quot;&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select Country&lt;/option&gt;
+                                        &lt;option&gt;Vietnam&lt;/option&gt;
+                                        &lt;option&gt;Singapore&lt;/option&gt;
+                                        &lt;option&gt;Thailand&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;
+                                        City &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;
+                                    &lt;/label&gt;
+                                    &lt;select required=&quot;&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select City&lt;/option&gt;
+                                        &lt;option&gt;Ho Chi Minh&lt;/option&gt;
+                                        &lt;option&gt;Hanoi&lt;/option&gt;
+                                        &lt;option&gt;Da Nang&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;md:col-span-2&quot;&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;
+                                        Address &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;
+                                    &lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; required=&quot;&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
+                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Secondary Address&lt;/h3&gt;
+                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Country&lt;/label&gt;
+                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select Country&lt;/option&gt;
+                                        &lt;option&gt;Vietnam&lt;/option&gt;
+                                        &lt;option&gt;Singapore&lt;/option&gt;
+                                        &lt;option&gt;Thailand&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;City&lt;/label&gt;
+                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select City&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;md:col-span-2&quot;&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Address&lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
+                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Contact Information&lt;/h3&gt;
+                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Phone&lt;/label&gt;
+                                    &lt;input type=&quot;tel&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Fax&lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Email&lt;/label&gt;
+                                    &lt;input type=&quot;email&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Suffix Email&lt;/label&gt;
+                                    &lt;input type=&quot;email&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;md:col-span-2&quot;&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Website&lt;/label&gt;
+                                    &lt;input type=&quot;url&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
+                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Additional Info&lt;/h3&gt;
+                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Company Tagline&lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Head Office&lt;/label&gt;
+                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select Head Office&lt;/option&gt;
+                                        &lt;option&gt;Hanoi Office&lt;/option&gt;
+                                        &lt;option&gt;Ho Chi Minh Office&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;flex items-center&quot;&gt;
+                                        &lt;input type=&quot;checkbox&quot; class=&quot;rounded border-gray-300 text-blue-600 focus:ring-blue-500&quot;&gt;
+                                        &lt;span class=&quot;ml-2 text-sm text-gray-700&quot;&gt;Is Member&lt;/span&gt;
+                                    &lt;/label&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;CEO&lt;/label&gt;
+                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                        &lt;option&gt;Select CEO&lt;/option&gt;
+                                        &lt;option&gt;John Doe&lt;/option&gt;
+                                        &lt;option&gt;Jane Smith&lt;/option&gt;
+                                    &lt;/select&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Tax ID&lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; maxlength=&quot;15&quot; pattern=&quot;[0-9]*&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Establish License&lt;/label&gt;
+                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
+                                &lt;/div&gt;
+                                &lt;div class=&quot;md:col-span-2&quot;&gt;
+                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Description&lt;/label&gt;
+                                    &lt;textarea rows=&quot;4&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;&lt;/textarea&gt;
+                                &lt;/div&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                        
+                    &lt;/form&gt;
+                    
+                &lt;/div&gt;
+
+                &lt;div id=&quot;bank-account&quot; class=&quot;tab-pane hidden relative&quot;&gt;
+                    &lt;div class=&quot;overflow-x-auto&quot;&gt;
+                        &lt;table class=&quot;w-full&quot;&gt;
+                            &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                                &lt;tr&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Account Number&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Owner Name&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Bank&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Bank Branch&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Effective Date&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Active&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Actions&lt;/th&gt;
+                                &lt;/tr&gt;
+                            &lt;/thead&gt;
+                            &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                                &lt;tr class=&quot;text-center&quot;&gt;
+                                    &lt;td colspan=&quot;7&quot; class=&quot;px-4 py-8 text-gray-500&quot;&gt;No bank accounts added yet&lt;/td&gt;
+                                &lt;/tr&gt;
+                            &lt;/tbody&gt;
+                        &lt;/table&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;fixed bottom-24 right-8 bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:bg-blue-700 transition-colors&quot;&gt;
+                        &lt;i class=&quot;fa-solid fa-plus text-xl&quot;&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;div id=&quot;representative&quot; class=&quot;tab-pane hidden relative&quot;&gt;
+                    &lt;div class=&quot;overflow-x-auto&quot;&gt;
+                        &lt;table class=&quot;w-full&quot;&gt;
+                            &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                                &lt;tr&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Full Name&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Title&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Nationality&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Birthdate&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;ID Number&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Place of Issue&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Date of Issue&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Start Date&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;End Date&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Actions&lt;/th&gt;
+                                &lt;/tr&gt;
+                            &lt;/thead&gt;
+                            &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                                &lt;tr class=&quot;text-center&quot;&gt;
+                                    &lt;td colspan=&quot;10&quot; class=&quot;px-4 py-8 text-gray-500&quot;&gt;No representatives added yet&lt;/td&gt;
+                                &lt;/tr&gt;
+                            &lt;/tbody&gt;
+                        &lt;/table&gt;
+                    &lt;/div&gt;
+                    &lt;button class=&quot;fixed bottom-24 right-8 bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:bg-blue-700 transition-colors&quot;&gt;
+                        &lt;i class=&quot;fa-solid fa-plus text-xl&quot;&gt;&lt;/i&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;div id=&quot;authorized&quot; class=&quot;tab-pane hidden relative&quot;&gt;
+                    &lt;div class=&quot;overflow-x-auto&quot;&gt;
+                        &lt;table class=&quot;w-full&quot;&gt;
+                            &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                                &lt;tr&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Full Name&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Title (EN/VN)&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Birthdate&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;CCCD&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Date of Issue&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Place of Issue&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Nationality&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Start Date&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;End Date&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Authorization Number&lt;/th&gt;
+                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Authorization File&lt;/th&gt;
+                                    &lt;/tr&gt;&lt;/thead&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;" frameborder="0" class="w-full h-max overflow-visible border-2 border-carbon-300 border-solid rounded-lg" style="width: 1440px; height: 2111px; min-height: 1024px;"></iframe>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function () {
+            // Employee Growth Chart
+            Highcharts.chart('growth-chart', {
+                chart: {
+                    type: 'line',
+                    style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                },
+                title: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: {
+                        style: {
+                            color: '#64748b'
+                        }
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: null
+                    },
+                    gridLineColor: '#e2e8f0',
+                    labels: {
+                        style: {
+                            color: '#64748b'
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.x + ':</b> ' + this.y + ' employees';
+                    }
+                },
+                series: [{
+                    name: 'Employees',
+                    data: [1150, 1168, 1180, 1195, 1205, 1210, 1218, 1225, 1232, 1240, 1243, 1248],
+                    color: '#334e68'
+                }]
+            });
+
+            // Department Distribution Chart
+            Highcharts.chart('department-chart', {
+                chart: {
+                    type: 'pie',
+                    style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                },
+                title: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: '#334e68',
+                                fontWeight: 'normal'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Employees',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Engineering', y: 30, color: '#334e68' },
+                        { name: 'Sales', y: 20, color: '#FF9F43' },
+                        { name: 'Marketing', y: 15, color: '#28C76F' },
+                        { name: 'HR', y: 10, color: '#7367F0' },
+                        { name: 'Finance', y: 12, color: '#EA5455' },
+                        { name: 'Operations', y: 13, color: '#00CFE8' }
+                    ]
+                }]
+            });
+
+            // Gender Distribution Chart
+            Highcharts.chart('gender-chart', {
+                chart: {
+                    type: 'pie',
+                    style: {
+                        fontFamily: 'Inter, sans-serif'
+                    }
+                },
+                title: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%',
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Gender',
+                    colorByPoint: true,
+                    data: [
+                        { name: 'Male', y: 58, color: '#334e68' },
+                        { name: 'Female', y: 42, color: '#FF9F43' }
+                    ]
+                }]
+            });
+        });
+
+        // Toggle task popup
+        function toggleTaskPopup() {
+            const popup = document.getElementById('taskPopup');
+            popup.classList.toggle('hidden');
+        }
+
+        // Toggle sidebar dropdowns
+        function toggleDropdown(id) {
+            const dropdown = document.getElementById(id);
+            dropdown.classList.toggle('hidden');
+        }
+    </script>
+</body>
+
+</html>
