@@ -638,359 +638,554 @@
         </aside>
 
         <!-- Main Content -->
-<main id="main-content" class="pt-16 pl-20 flex-grow-0 p-4 overflow-x-hidden" style="padding-left: 320px">
-    <div class="mt-8">
-        <br>
-        <iframe title="wireframe-BfNtWPYV1RQaTDs1yUS4" srcdoc='
-            &lt;!DOCTYPE html&gt;
-            &lt;html lang=&quot;en&quot;&gt;
-            &lt;head&gt;
-                &lt;meta charset=&quot;UTF-8&quot;&gt;
-                &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-                &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;
-                &lt;script&gt;
-                    window.FontAwesomeConfig = { autoReplaceSvg: &quot;nest&quot; };
-                &lt;/script&gt;
-                &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js&quot; crossorigin=&quot;anonymous&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/script&gt;
-                &lt;script&gt;
-                    tailwind.config = {
-                        theme: {
-                            extend: {
-                                fontFamily: {
-                                    inter: [&quot;Inter&quot;, &quot;sans-serif&quot;],
-                                    sans: [&quot;Inter&quot;, &quot;sans-serif&quot;]
-                                }
-                            }
-                        }
-                    };
-                &lt;/script&gt;
-                &lt;style&gt;
-                    ::-webkit-scrollbar { display: none; }
-                    body { font-family: &quot;Inter&quot;, sans-serif !important; }
-                    .fa, .fas, .far, .fal, .fab { font-family: &quot;Font Awesome 6 Free&quot;, &quot;Font Awesome 6 Brands&quot; !important; }
-                    .highlighted-section { outline: 2px solid #3F20FB; background-color: rgba(63, 32, 251, 0.1); }
-                    .edit-button { position: absolute; z-index: 1000; }
-                    html, body { -ms-overflow-style: none; scrollbar-width: none; }
-                &lt;/style&gt;
-                &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;
-                &lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;
-                &lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap&quot;&gt;
-            &lt;/head&gt;
-            &lt;body class=&quot;bg-gray-50 font-sans&quot;&gt;
-                &lt;div id=&quot;app&quot; class=&quot;min-h-screen&quot;&gt;
-                    &lt;div id=&quot;header&quot; class=&quot;bg-white border-b border-gray-200 sticky top-0 z-50&quot;&gt;
-                        &lt;div class=&quot;px-6 py-4&quot;&gt;
-                            &lt;div class=&quot;flex items-center justify-between&quot;&gt;
-                                &lt;div&gt;
-                                    &lt;h1 class=&quot;text-2xl font-semibold text-gray-900&quot;&gt;Create Company&lt;/h1&gt;
-                                    &lt;p class=&quot;text-sm text-gray-500 mt-1&quot;&gt;Add new company information&lt;/p&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div id=&quot;main-content&quot; class=&quot;p-6&quot;&gt;
-                        &lt;div id=&quot;company-form&quot; class=&quot;bg-white rounded-lg border border-gray-200&quot;&gt;
-                            &lt;div id=&quot;tabs&quot; class=&quot;border-b border-gray-200&quot;&gt;
-                                &lt;nav class=&quot;flex space-x-8 px-6&quot;&gt;
-                                    &lt;button class=&quot;tab-button active border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-600&quot; data-tab=&quot;company-info&quot;&gt;Company Information&lt;/button&gt;
-                                    &lt;button class=&quot;tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300&quot; data-tab=&quot;bank-account&quot;&gt;Bank Account&lt;/button&gt;
-                                    &lt;button class=&quot;tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300&quot; data-tab=&quot;representative&quot;&gt;Representative Information&lt;/button&gt;
-                                    &lt;button class=&quot;tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300&quot; data-tab=&quot;authorized&quot;&gt;Authorized Persons&lt;/button&gt;
-                                &lt;/nav&gt;
-                            &lt;/div&gt;
-                            &lt;div id=&quot;tab-content&quot; class=&quot;p-6&quot;&gt;
-                                &lt;div id=&quot;company-info&quot; class=&quot;tab-pane active&quot;&gt;
-                                    &lt;form class=&quot;space-y-8&quot;&gt;
-                                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
-                                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Basic Information&lt;/h3&gt;
-                                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Code &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; required class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Company Logo&lt;/label&gt;
-                                                    &lt;div class=&quot;border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer&quot;&gt;
-                                                        &lt;i class=&quot;fa-solid fa-cloud-upload-alt text-gray-400 text-2xl mb-2&quot;&gt;&lt;/i&gt;
-                                                        &lt;p class=&quot;text-sm text-gray-500&quot;&gt;Click to upload logo&lt;/p&gt;
-                                                    &lt;/div&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Vietnamese Name &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; required class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;English Name &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; required class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Company Group&lt;/label&gt;
-                                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select Company Group&lt;/option&gt;
-                                                        &lt;option&gt;Technology&lt;/option&gt;
-                                                        &lt;option&gt;Finance&lt;/option&gt;
-                                                        &lt;option&gt;Manufacturing&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Parent Company&lt;/label&gt;
-                                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select Parent Company&lt;/option&gt;
-                                                        &lt;option&gt;ABC Holdings&lt;/option&gt;
-                                                        &lt;option&gt;XYZ Corp&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div class=&quot;md:col-span-2&quot;&gt;
-                                                    &lt;label class=&quot;flex items-center&quot;&gt;
-                                                        &lt;input type=&quot;checkbox&quot; checked class=&quot;rounded border-gray-300 text-blue-600 focus:ring-blue-500&quot;&gt;
-                                                        &lt;span class=&quot;ml-2 text-sm text-gray-700&quot;&gt;Active&lt;/span&gt;
-                                                    &lt;/label&gt;
-                                                &lt;/div&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
-                                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Main Address&lt;/h3&gt;
-                                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Country &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
-                                                    &lt;select required class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select Country&lt;/option&gt;
-                                                        &lt;option&gt;Vietnam&lt;/option&gt;
-                                                        &lt;option&gt;Singapore&lt;/option&gt;
-                                                        &lt;option&gt;Thailand&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;City &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
-                                                    &lt;select required class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select City&lt;/option&gt;
-                                                        &lt;option&gt;Ho Chi Minh&lt;/option&gt;
-                                                        &lt;option&gt;Hanoi&lt;/option&gt;
-                                                        &lt;option&gt;Da Nang&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div class=&quot;md:col-span-2&quot;&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Address &lt;span class=&quot;text-red-500&quot;&gt;*&lt;/span&gt;&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; required class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
-                                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Secondary Address&lt;/h3&gt;
-                                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Country&lt;/label&gt;
-                                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select Country&lt;/option&gt;
-                                                        &lt;option&gt;Vietnam&lt;/option&gt;
-                                                        &lt;option&gt;Singapore&lt;/option&gt;
-                                                        &lt;option&gt;Thailand&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;City&lt;/label&gt;
-                                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select City&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div class=&quot;md:col-span-2&quot;&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Address&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
-                                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Contact Information&lt;/h3&gt;
-                                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Phone&lt;/label&gt;
-                                                    &lt;input type=&quot;tel&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Fax&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Email&lt;/label&gt;
-                                                    &lt;input type=&quot;email&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Suffix Email&lt;/label&gt;
-                                                    &lt;input type=&quot;email&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div class=&quot;md:col-span-2&quot;&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Website&lt;/label&gt;
-                                                    &lt;input type=&quot;url&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                        &lt;div class=&quot;bg-gray-50 p-4 rounded-lg&quot;&gt;
-                                            &lt;h3 class=&quot;text-lg font-medium text-gray-900 mb-4&quot;&gt;Additional Info&lt;/h3&gt;
-                                            &lt;div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-6&quot;&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Company Tagline&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Head Office&lt;/label&gt;
-                                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select Head Office&lt;/option&gt;
-                                                        &lt;option&gt;Hanoi Office&lt;/option&gt;
-                                                        &lt;option&gt;Ho Chi Minh Office&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;flex items-center&quot;&gt;
-                                                        &lt;input type=&quot;checkbox&quot; class=&quot;rounded border-gray-300 text-blue-600 focus:ring-blue-500&quot;&gt;
-                                                        &lt;span class=&quot;ml-2 text-sm text-gray-700&quot;&gt;Is Member&lt;/span&gt;
-                                                    &lt;/label&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;CEO&lt;/label&gt;
-                                                    &lt;select class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                        &lt;option&gt;Select CEO&lt;/option&gt;
-                                                        &lt;option&gt;John Doe&lt;/option&gt;
-                                                        &lt;option&gt;Jane Smith&lt;/option&gt;
-                                                    &lt;/select&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Tax ID&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; maxlength=&quot;15&quot; pattern=&quot;[0-9]*&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Establish License&lt;/label&gt;
-                                                    &lt;input type=&quot;text&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;
-                                                &lt;/div&gt;
-                                                &lt;div class=&quot;md:col-span-2&quot;&gt;
-                                                    &lt;label class=&quot;block text-sm font-medium text-gray-700 mb-2&quot;&gt;Description&lt;/label&gt;
-                                                    &lt;textarea rows=&quot;4&quot; class=&quot;w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500&quot;&gt;&lt;/textarea&gt;
-                                                &lt;/div&gt;
-                                            &lt;/div&gt;
-                                        &lt;/div&gt;
-                                    &lt;/form&gt;
-                                    &lt;div class=&quot;flex justify-end space-x-4 mt-6&quot;&gt;
-                                        &lt;button type=&quot;button&quot; class=&quot;px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500&quot;&gt;Cancel&lt;/button&gt;
-                                        &lt;button type=&quot;submit&quot; class=&quot;px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500&quot;&gt;Save&lt;/button&gt;
-                                    &lt;/div&gt;
-                                &lt;/div&gt;
-                                &lt;div id=&quot;bank-account&quot; class=&quot;tab-pane hidden relative&quot;&gt;
-                                    &lt;div class=&quot;overflow-x-auto&quot;&gt;
-                                        &lt;table class=&quot;w-full&quot;&gt;
-                                            &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
-                                                &lt;tr&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Account Number&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Owner Name&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Bank&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Bank Branch&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Effective Date&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Active&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Actions&lt;/th&gt;
-                                                &lt;/tr&gt;
-                                            &lt;/thead&gt;
-                                            &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
-                                                &lt;tr class=&quot;text-center&quot;&gt;
-                                                    &lt;td colspan=&quot;7&quot; class=&quot;px-4 py-8 text-gray-500&quot;&gt;No bank accounts added yet&lt;/td&gt;
-                                                &lt;/tr&gt;
-                                            &lt;/tbody&gt;
-                                        &lt;/table&gt;
-                                    &lt;/div&gt;
-                                    &lt;button class=&quot;fixed bottom-24 right-8 bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:bg-blue-700 transition-colors&quot;&gt;
-                                        &lt;i class=&quot;fa-solid fa-plus text-xl&quot;&gt;&lt;/i&gt;
-                                    &lt;/button&gt;
-                                &lt;/div&gt;
-                                &lt;div id=&quot;representative&quot; class=&quot;tab-pane hidden relative&quot;&gt;
-                                    &lt;div class=&quot;overflow-x-auto&quot;&gt;
-                                        &lt;table class=&quot;w-full&quot;&gt;
-                                            &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
-                                                &lt;tr&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Full Name&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Title&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Nationality&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Birthdate&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;ID Number&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Place of Issue&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Date of Issue&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Start Date&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;End Date&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Actions&lt;/th&gt;
-                                                &lt;/tr&gt;
-                                            &lt;/thead&gt;
-                                            &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
-                                                &lt;tr class=&quot;text-center&quot;&gt;
-                                                    &lt;td colspan=&quot;10&quot; class=&quot;px-4 py-8 text-gray-500&quot;&gt;No representatives added yet&lt;/td&gt;
-                                                &lt;/tr&gt;
-                                            &lt;/tbody&gt;
-                                        &lt;/table&gt;
-                                    &lt;/div&gt;
-                                    &lt;button class=&quot;fixed bottom-24 right-8 bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:bg-blue-700 transition-colors&quot;&gt;
-                                        &lt;i class=&quot;fa-solid fa-plus text-xl&quot;&gt;&lt;/i&gt;
-                                    &lt;/button&gt;
-                                &lt;/div&gt;
-                                &lt;div id=&quot;authorized&quot; class=&quot;tab-pane hidden relative&quot;&gt;
-                                    &lt;div class=&quot;overflow-x-auto&quot;&gt;
-                                        &lt;table class=&quot;w-full&quot;&gt;
-                                            &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
-                                                &lt;tr&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Full Name&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Title (EN/VN)&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Birthdate&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;CCCD&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Date of Issue&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Place of Issue&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Nationality&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Start Date&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;End Date&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Authorization Number&lt;/th&gt;
-                                                    &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase&quot;&gt;Authorization File&lt;/th&gt;
-                                                &lt;/tr&gt;
-                                            &lt;/thead&gt;
-                                            &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
-                                                &lt;tr class=&quot;text-center&quot;&gt;
-                                                    &lt;td colspan=&quot;11&quot; class=&quot;px-4 py-8 text-gray-500&quot;&gt;No authorized persons added yet&lt;/td&gt;
-                                                &lt;/tr&gt;
-                                            &lt;/tbody&gt;
-                                        &lt;/table&gt;
-                                    &lt;/div&gt;
-                                    &lt;button class=&quot;fixed bottom-24 right-8 bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:bg-blue-700 transition-colors&quot;&gt;
-                                        &lt;i class=&quot;fa-solid fa-plus text-xl&quot;&gt;&lt;/i&gt;
-                                    &lt;/button&gt;
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-                &lt;script&gt;
-                    document.addEventListener(&quot;DOMContentLoaded&quot;, function () {
-                        const tabButtons = document.querySelectorAll(&quot;.tab-button&quot;);
-                        const tabPanes = document.querySelectorAll(&quot;.tab-pane&quot;);
-                        tabButtons.forEach(button =&gt; {
-                            button.addEventListener(&quot;click&quot;, function () {
-                                tabButtons.forEach(btn =&gt; {
-                                    btn.classList.remove(&quot;active&quot;, &quot;border-blue-500&quot;, &quot;text-blue-600&quot;);
-                                    btn.classList.add(&quot;border-transparent&quot;, &quot;text-gray-500&quot;, &quot;hover:text-gray-700&quot;, &quot;hover:border-gray-300&quot;);
-                                });
-                                tabPanes.forEach(pane =&gt; {
-                                    pane.classList.add(&quot;hidden&quot;);
-                                    pane.classList.remove(&quot;active&quot;);
-                                });
-                                const tabId = this.getAttribute(&quot;data-tab&quot;);
-                                this.classList.add(&quot;active&quot;, &quot;border-blue-500&quot;, &quot;text-blue-600&quot;);
-                                this.classList.remove(&quot;border-transparent&quot;, &quot;text-gray-500&quot;, &quot;hover:text-gray-700&quot;, &quot;hover:border-gray-300&quot;);
-                                const targetPane = document.getElementById(tabId);
-                                if (targetPane) {
-                                    targetPane.classList.remove(&quot;hidden&quot;);
-                                    targetPane.classList.add(&quot;active&quot;);
-                                }
-                            });
-                        });
-                    });
-                &lt;/script&gt;
-            &lt;/body&gt;
-            &lt;/html&gt;
-        '
-        frameborder="0" class="w-full h-max overflow-visible border-2 border-carbon-300 border-solid rounded-lg" style="width: 1440px; height: 2111px; min-height: 1024px;"></iframe>
+<!-- Main Content -->
+<main id="main-content" class="ml-64 mt-16 p-6 pb-24">
+    
+    <!-- Company Information Section -->
+    <section id="company-info-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                <i class="fas fa-building text-blue-600 mr-2"></i>
+                Company Information
+            </h2>
+        </div>
+        <div class="p-6">
+<!-- Company Information -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Logo Column -->
+    <div class="col-span-1">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Company Logo
+        </label>
+        <div class="border-2 border-dashed border-gray-300 rounded-lg 
+                    w-24 h-24 flex flex-col items-center justify-center 
+                    text-center hover:border-blue-400 transition-colors">
+            <i class="fas fa-upload text-gray-400 text-xl mb-1"></i>
+            <p class="text-xs text-gray-500">Click to upload</p>
+            <p class="text-[8px] text-gray-400 mt-1">PNG, JPG ≤ 2MB</p>
+        </div>
     </div>
+</div>
+<br>
+<!-- Info Fields next to Logo -->
+    <div class="col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                Company Code <span class="text-red-500">*</span>
+            </label>
+            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                   placeholder="Enter company code">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                Vietnamese Name <span class="text-red-500">*</span>
+            </label>
+            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                   placeholder="Enter Vietnamese company name">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+                English Name <span class="text-red-500">*</span>
+            </label>
+            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                   placeholder="Enter English company name">
+        </div>
+    </div>
+
+<!-- Next Fields in 3-column grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+    <!-- Row 1 -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Company Group <span class="text-red-500">*</span>
+        </label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option>Select Company Group</option>
+            <option>Technology</option>
+            <option>Manufacturing</option>
+            <option>Services</option>
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Parent Company
+        </label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option>Select Parent Company</option>
+            <option>ABC Corporation</option>
+            <option>XYZ Holdings</option>
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Phone
+        </label>
+        <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="+84 xxx xxx xxx">
+    </div>
+
+    <!-- Row 2 -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Fax
+        </label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Enter fax number">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Email
+        </label>
+        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="contact@company.com">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Suffix Email
+        </label>
+        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="@company.com">
+    </div>
+
+    <!-- Row 3 -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Website
+        </label>
+        <input type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="https://www.company.com">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Company Tagline
+        </label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Enter company tagline">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Head Office
+        </label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option>Select Head Office</option>
+            <option>Main Office</option>
+            <option>Regional Office</option>
+        </select>
+    </div>
+
+    <!-- Row 4 -->
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            CEO
+        </label>
+        <select class="w-full px-3 py-2 border border-gray-300 rounded-md 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option>Select CEO</option>
+            <option>John Smith</option>
+            <option>Jane Doe</option>
+        </select>
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Tax ID
+        </label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Enter tax ID">
+    </div>
+    <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+            Establish License
+        </label>
+        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md 
+               focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Enter license number">
+    </div>
+</div>
+
+            <!-- Address Sections -->
+            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-md font-medium text-gray-900 mb-3">Address 1</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Country <span class="text-red-500">*</span>
+                            </label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Vietnam</option>
+                                <option>United States</option>
+                                <option>Singapore</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                City <span class="text-red-500">*</span>
+                            </label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Ho Chi Minh City</option>
+                                <option>Hanoi</option>
+                                <option>Da Nang</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Address <span class="text-red-500">*</span>
+                            </label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Enter full address"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-md font-medium text-gray-900 mb-3">Address 2</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Country
+                            </label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Select Country</option>
+                                <option>Vietnam</option>
+                                <option>United States</option>
+                                <option>Singapore</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                City
+                            </label>
+                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Select City</option>
+                                <option>Ho Chi Minh City</option>
+                                <option>Hanoi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                Address
+                            </label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Enter full address"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Description
+                </label>
+                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Enter company description"></textarea>
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="flex items-center space-x-6 mt-4">
+                <label class="flex items-center">
+                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <span class="ml-2 text-sm text-gray-700">Is Member</span>
+                </label>
+                <label class="flex items-center">
+                    <input type="checkbox" checked="" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <span class="ml-2 text-sm text-gray-700">Active</span>
+                </label>
+            </div>
+        </div>
+    </section>
+
+     <!-- Business License Section -->
+    <section id="business-license-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                <i class="fas fa-certificate text-blue-600 mr-2"></i>
+                Business License
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Registration Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter registration number">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Issued Date <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Issued by <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter issuing authority">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Attachment
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+                            <i class="fas fa-file-pdf text-gray-400 text-xl mb-2"></i>
+                            <p class="text-sm text-gray-600">Upload PDF document</p>
+                            <p class="text-xs text-gray-400 mt-1">PDF up to 10MB</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal Representative Section -->
+    <section id="legal-representative-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                <i class="fas fa-user-tie text-blue-600 mr-2"></i>
+                Legal Representative
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Full Name <span class="text-red-500">*</span>
+                        </label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option>Select Employee</option>
+                            <option>John Smith - CEO</option>
+                            <option>Jane Doe - COO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Title
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="Chief Executive Officer" readonly="">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Nationality
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="Vietnamese" readonly="">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Birthdate
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="15/05/1980" readonly="">
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            ID Number
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="079080001234" readonly="">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Place of Issue
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="Ho Chi Minh City Police Department" readonly="">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Date of Issue
+                        </label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="20/03/2015" readonly="">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Start Date <span class="text-red-500">*</span>
+                            </label>
+                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                End Date
+                            </label>
+                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Account Banking Section -->
+    <section id="banking-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                <i class="fas fa-university text-blue-600 mr-2"></i>
+                Account Banking
+            </h2>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center">
+                <i class="fas fa-plus mr-2"></i>
+                Add Account
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Number</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Owner</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effective Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">1234567890</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">ABC Technology Ltd.</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Vietcombank</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">District 1 Branch</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
+                            <td class="px-4 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">0987654321</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">ABC Technology Ltd.</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">BIDV</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Ben Thanh Branch</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">15/03/2024</td>
+                            <td class="px-4 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                            </td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    
+   
+
+    <!-- Authorized Person Section -->
+    <section id="authorized-person-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
+                <i class="fas fa-users-cog text-blue-600 mr-2"></i>
+                Authorized Person
+            </h2>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center">
+                <i class="fas fa-plus mr-2"></i>
+                Add Person
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title (EN)</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title (VN)</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birthdate</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CCCD</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auth Number</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Nguyen Van A</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">General Manager</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Tổng Giám Đốc</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">10/08/1975</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">079075001234</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">31/12/2024</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">AUTH001</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Tran Thi B</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Finance Director</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Giám Đốc Tài Chính</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">25/12/1982</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">079082005678</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">01/02/2024</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">AUTH002</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="text-blue-600 hover:text-blue-900">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
 </main>
+<!-- Footer with Action Buttons -->
+<footer id="footer" class="fixed bottom-0 left-64 right-0 bg-white border-t border-gray-200 px-6 py-4">
+    <div class="flex items-center justify-end space-x-3">
+        <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+            Save Draft
+        </button>
+        <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+            Cancel
+        </button>
+        <button class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            Save
+        </button>
+    </div>
+</footer>
+
     </div>
 
     <script>
