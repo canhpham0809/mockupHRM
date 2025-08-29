@@ -1,627 +1,519 @@
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
-    <style>
-        ::-webkit-scrollbar { display: none;}
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-    <script>tailwind.config = {
-  "theme": {
-    "extend": {
-      "fontFamily": {
-        "inter": [
-          "Inter",
-          "sans-serif"
-        ],
-        "sans": [
-          "Inter",
-          "sans-serif"
-        ]
+<main class="flex-grow overflow-y-auto"><div><div class="flex items-center justify-center mx-4 my-8"><iframe title="wireframe-KEZ7RjkAUJ9cfFUdCACX" srcdoc="&lt;html&gt;&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;script src=&quot;https://cdn.tailwindcss.com&quot;&gt;&lt;/script&gt;&lt;script&gt;
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif']
+            }
+          }
+        }
+      };
+    &lt;/script&gt;
+    &lt;script&gt; window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js&quot; crossorigin=&quot;anonymous&quot; referrerpolicy=&quot;no-referrer&quot;&gt;&lt;/script&gt;
+    &lt;style&gt;::-webkit-scrollbar { display: none;}&lt;/style&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin=&quot;&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;amp;display=swap&quot;&gt;&lt;style&gt;
+      body {
+        font-family: 'Inter', sans-serif !important;
       }
-    }
+      
+      /* Preserve Font Awesome icons */
+      .fa, .fas, .far, .fal, .fab {
+        font-family: &quot;Font Awesome 6 Free&quot;, &quot;Font Awesome 6 Brands&quot; !important;
+      }
+    &lt;/style&gt;&lt;style&gt;
+  .highlighted-section {
+    outline: 2px solid #3F20FB;
+    background-color: rgba(63, 32, 251, 0.1);
   }
-};</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap">
-    <style>
-      .highlighted-section {
-        outline: 2px solid #3F20FB;
-        background-color: rgba(63, 32, 251, 0.1);
-      }
 
-      .edit-button {
-        position: absolute;
-        z-index: 1000;
-      }
+  .edit-button {
+    position: absolute;
+    z-index: 1000;
+  }
 
-      ::-webkit-scrollbar {
-        display: none;
-      }
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-      html, body {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-    </style>
-</head>
-<body class="bg-gray-50 font-sans">
+  html, body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  &lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
 
-<!-- Header -->
-<header id="header" class="bg-white border-b border-gray-200 h-16 flex items-center px-6 fixed top-0 left-0 right-0 z-50">
-    <div class="flex items-center space-x-4">
-        <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <i class="fas fa-building text-white text-sm"></i>
-            </div>
-            <h1 class="text-xl font-semibold text-gray-900">Company Information Management</h1>
-        </div>
-    </div>
-    <div class="ml-auto flex items-center space-x-4">
-        <div class="flex items-center space-x-2">
-            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg" alt="User" class="w-8 h-8 rounded-full">
-            <span class="text-sm font-medium text-gray-700">John Smith</span>
-            <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-        </div>
-    </div>
-</header>
+&lt;div class=&quot;flex flex-col h-screen bg-gray-50&quot;&gt;
+    &lt;!-- Header --&gt;
+    &lt;header id=&quot;header&quot; class=&quot;flex items-center px-4 py-2 border-b border-gray-200 bg-white&quot;&gt;
+        &lt;button class=&quot;mr-4 text-gray-500&quot;&gt;
+            &lt;i class=&quot;fa-solid fa-bars&quot;&gt;&lt;/i&gt;
+        &lt;/button&gt;
+        &lt;div class=&quot;flex items-center text-gray-600&quot;&gt;
+            &lt;span&gt;Company Management&lt;/span&gt;
+            &lt;span class=&quot;mx-2&quot;&gt;/&lt;/span&gt;
+            &lt;div class=&quot;flex items-center&quot;&gt;
+                &lt;span class=&quot;font-medium text-gray-700&quot;&gt;Change History&lt;/span&gt;
+                &lt;i class=&quot;fa-solid fa-chevron-down ml-1 text-gray-500&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;ml-auto flex items-center&quot;&gt;
+            &lt;button class=&quot;text-gray-600 mr-3&quot;&gt;
+                &lt;span&gt;Feedback?&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;div class=&quot;w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white&quot;&gt;
+                HT
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
 
-<!-- Main Content -->
-<main id="main-content" class="ml-64 mt-16 p-6 pb-24">
+    &lt;!-- Tabs --&gt;
+    &lt;div id=&quot;tab-navigation&quot; class=&quot;flex items-center border-b border-gray-200 bg-white&quot;&gt;
+        &lt;div class=&quot;flex items-center&quot;&gt;
+            &lt;button class=&quot;px-4 py-2 text-sm text-gray-600&quot;&gt;
+                Company Details
+            &lt;/button&gt;
+            &lt;button class=&quot;px-4 py-2 flex items-center text-sm border-b-2 border-blue-500 text-blue-600 font-medium&quot;&gt;
+                &lt;span&gt;Change History&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;button class=&quot;px-4 py-2 text-sm text-gray-600&quot;&gt;
+                Documents
+            &lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Main Content --&gt;
+    &lt;div id=&quot;main-content&quot; class=&quot;flex-1 overflow-auto p-6&quot;&gt;
+        
+        &lt;!-- Company Info History Panel --&gt;
+        &lt;div id=&quot;company-info-panel&quot; class=&quot;mb-6 bg-white rounded-lg shadow-sm border border-gray-200&quot;&gt;
+            &lt;div class=&quot;px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer&quot; onclick=&quot;togglePanel('company-info-table')&quot;&gt;
+                &lt;h3 class=&quot;text-lg font-medium text-gray-900&quot;&gt;Company Info History&lt;/h3&gt;
+                &lt;i id=&quot;company-info-icon&quot; class=&quot;fa-solid fa-chevron-down text-gray-500&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;company-info-table&quot; class=&quot;overflow-x-auto&quot;&gt;
+                &lt;table class=&quot;w-full&quot;&gt;
+                    &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                        &lt;tr&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Company Name
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Address
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Status
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Effective Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action User
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Type
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;ABC&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;font-semibold text-blue-600&quot;&gt;Lô Z06, Đường số 13, Phường Tân Thuận Đông, Tp. Hồ Chí Minh, Việt Nam&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium&quot;&gt;Active&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/08/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;25/07/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium&quot;&gt;Update&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50 bg-gray-25&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;ABC&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quận 7, Tp. Hồ Chí Minh, Việt Nam&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium&quot;&gt;Active&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;31/12/2015&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;30/12/2015&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium&quot;&gt;Create&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Legal Representative History Panel --&gt;
+        &lt;div id=&quot;legal-rep-panel&quot; class=&quot;mb-6 bg-white rounded-lg shadow-sm border border-gray-200&quot;&gt;
+            &lt;div class=&quot;px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer&quot; onclick=&quot;togglePanel('legal-rep-table')&quot;&gt;
+                &lt;h3 class=&quot;text-lg font-medium text-gray-900&quot;&gt;Legal Representative History&lt;/h3&gt;
+                &lt;i id=&quot;legal-rep-icon&quot; class=&quot;fa-solid fa-chevron-down text-gray-500&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;legal-rep-table&quot; class=&quot;overflow-x-auto&quot;&gt;
+                &lt;table class=&quot;w-full&quot;&gt;
+                    &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                        &lt;tr&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Full Name
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Title
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Nationality
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Dob
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    ID Number
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Place of Issue
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Date of Issue
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Start Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    End Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action User
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Type
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;font-semibold text-blue-600&quot;&gt;Nguyễn Văn An&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;font-semibold text-blue-600&quot;&gt;Tổng giám đốc&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/04/1994&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;font-semibold text-blue-600&quot;&gt;0921321732&lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Khánh Hòa&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/04/2002&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/04/2032&lt;/td&gt;
+                            
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/08/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;25/07/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium&quot;&gt;Update&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50 bg-gray-25&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Nguyễn Văn Bình&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Giám đốc tài chính&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;03/02/1992&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;0473217456&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Khánh Hòa&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/04/2002&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/04/2032&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;01/08/2015&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;30/12/2015&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium&quot;&gt;Create&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Authorized Person History Panel --&gt;
+        &lt;div id=&quot;authorized-person-panel&quot; class=&quot;mb-6 bg-white rounded-lg shadow-sm border border-gray-200&quot;&gt;
+            &lt;div class=&quot;px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer&quot; onclick=&quot;togglePanel('authorized-person-table')&quot;&gt;
+                &lt;h3 class=&quot;text-lg font-medium text-gray-900&quot;&gt;Authorized Person History&lt;/h3&gt;
+                &lt;i id=&quot;authorized-person-icon&quot; class=&quot;fa-solid fa-chevron-down text-gray-500&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;authorized-person-table&quot; class=&quot;overflow-x-auto&quot;&gt;
+                &lt;table class=&quot;w-full&quot;&gt;
+                    &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                        &lt;tr&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Full Name
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Title (EN/VN)
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    ID Number
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Authorization
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Files
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action User
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Type
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Nguyễn Văn Bảo&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;
+                                &lt;div class=&quot;flex flex-col&quot;&gt;
+                                    &lt;span class=&quot;font-medium&quot;&gt;CFO&lt;/span&gt;
+                                    &lt;span class=&quot;text-gray-500 text-xs&quot;&gt;Giám đốc tài chính&lt;/span&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;047321745&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;QĐ/23&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;text-blue-600 hover:text-blue-800 flex items-center cursor-pointer&quot;&gt;
+                                    &lt;i class=&quot;fa-solid fa-file-word mr-1&quot;&gt;&lt;/i&gt;
+                                    File1.docx
+                                &lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;25/07/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium&quot;&gt;Update&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50 bg-gray-25&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Trần Thị Anh&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;
+                                &lt;div class=&quot;flex flex-col&quot;&gt;
+                                    &lt;span class=&quot;font-medium&quot;&gt;HR Director&lt;/span&gt;
+                                    &lt;span class=&quot;text-gray-500 text-xs&quot;&gt;Giám đốc nhân sự&lt;/span&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;043564567&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;QĐ/12&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;text-blue-600 hover:text-blue-800 flex items-center cursor-pointer&quot;&gt;
+                                    &lt;i class=&quot;fa-solid fa-file-word mr-1&quot;&gt;&lt;/i&gt;
+                                    File2.docx
+                                &lt;/span&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;25/07/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium&quot;&gt;Create&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Business License History Panel --&gt;
+        &lt;div id=&quot;business-license-panel&quot; class=&quot;mb-6 bg-white rounded-lg shadow-sm border border-gray-200&quot;&gt;
+            &lt;div class=&quot;px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer&quot; onclick=&quot;togglePanel('business-license-table')&quot;&gt;
+                &lt;h3 class=&quot;text-lg font-medium text-gray-900&quot;&gt;Business License History&lt;/h3&gt;
+                &lt;i id=&quot;business-license-icon&quot; class=&quot;fa-solid fa-chevron-down text-gray-500&quot;&gt;&lt;/i&gt;
+            &lt;/div&gt;
+            &lt;div id=&quot;business-license-table&quot; class=&quot;overflow-x-auto&quot;&gt;
+                &lt;table class=&quot;w-full&quot;&gt;
+                    &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+                        &lt;tr&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Registration Number
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Issued Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Issued By
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Attached Files
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Date
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action User
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider&quot;&gt;
+                                &lt;div class=&quot;flex items-center&quot;&gt;
+                                    Action Type
+                                    &lt;i class=&quot;fa-solid fa-sort ml-1 text-gray-400&quot;&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                            &lt;/th&gt;
+                        &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+                        &lt;tr class=&quot;hover:bg-gray-50&quot;&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;00934249832&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;10/10/2021&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Phòng đăng ký kinh doanh thuộc Sở&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;div class=&quot;flex flex-col space-y-1&quot;&gt;
+                                    &lt;span class=&quot;text-blue-600 hover:text-blue-800 flex items-center cursor-pointer&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-file-word mr-1&quot;&gt;&lt;/i&gt;
+                                        File1.docx
+                                    &lt;/span&gt;
+                                    &lt;span class=&quot;text-blue-600 hover:text-blue-800 flex items-center cursor-pointer&quot;&gt;
+                                        &lt;i class=&quot;fa-solid fa-file-word mr-1&quot;&gt;&lt;/i&gt;
+                                        File2.docx
+                                    &lt;/span&gt;
+                                &lt;/div&gt;
+                            &lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;25/07/2025&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;hoaipt1&lt;/td&gt;
+                            &lt;td class=&quot;px-4 py-4 text-sm&quot;&gt;
+                                &lt;span class=&quot;px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium&quot;&gt;Create&lt;/span&gt;
+                            &lt;/td&gt;
+                        &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+function togglePanel(tableId) {
+    const table = document.getElementById(tableId);
+    const icon = document.getElementById(tableId.replace('-table', '-icon'));
     
-    <!-- Company Information Section -->
-    <section id="company-info-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <i class="fas fa-building text-blue-600 mr-2"></i>
-                Company Information
-            </h2>
-        </div>
-        <div class="p-6">
-            <!-- Company Logo (Full Width at Top) -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Company Logo
-                </label>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
-                    <i class="fas fa-upload text-gray-400 text-2xl mb-2"></i>
-                    <p class="text-sm text-gray-600">Click to upload logo</p>
-                    <p class="text-xs text-gray-400 mt-1">PNG, JPG up to 2MB</p>
-                </div>
-            </div>
+    if (table.style.display === 'none') {
+        table.style.display = 'block';
+        icon.className = 'fa-solid fa-chevron-down text-gray-500';
+    } else {
+        table.style.display = 'none';
+        icon.className = 'fa-solid fa-chevron-right text-gray-500';
+    }
+}
+&lt;/script&gt;
 
-            <!-- Fields in 3-column grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Row 1 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Company Code <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter company code">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Vietnamese Name <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter Vietnamese company name">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        English Name <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter English company name">
-                </div>
 
-                <!-- Row 2 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Company Group <span class="text-red-500">*</span>
-                    </label>
-                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option>Select Company Group</option>
-                        <option>Technology</option>
-                        <option>Manufacturing</option>
-                        <option>Services</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Parent Company
-                    </label>
-                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option>Select Parent Company</option>
-                        <option>ABC Corporation</option>
-                        <option>XYZ Holdings</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Phone
-                    </label>
-                    <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+84 xxx xxx xxx">
-                </div>
-
-                <!-- Row 3 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Fax
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter fax number">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Email
-                    </label>
-                    <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="contact@company.com">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Suffix Email
-                    </label>
-                    <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="@company.com">
-                </div>
-
-                <!-- Row 4 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Website
-                    </label>
-                    <input type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="https://www.company.com">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Company Tagline
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter company tagline">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Head Office
-                    </label>
-                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option>Select Head Office</option>
-                        <option>Main Office</option>
-                        <option>Regional Office</option>
-                    </select>
-                </div>
-
-                <!-- Row 5 -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        CEO
-                    </label>
-                    <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option>Select CEO</option>
-                        <option>John Smith</option>
-                        <option>Jane Doe</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Tax ID
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter tax ID">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Establish License
-                    </label>
-                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter license number">
-                </div>
-            </div>
-
-            <!-- Address Sections -->
-            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                    <h3 class="text-md font-medium text-gray-900 mb-3">Address 1</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Country <span class="text-red-500">*</span>
-                            </label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option>Vietnam</option>
-                                <option>United States</option>
-                                <option>Singapore</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                City <span class="text-red-500">*</span>
-                            </label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option>Ho Chi Minh City</option>
-                                <option>Hanoi</option>
-                                <option>Da Nang</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Address <span class="text-red-500">*</span>
-                            </label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Enter full address"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-md font-medium text-gray-900 mb-3">Address 2</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Country
-                            </label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option>Select Country</option>
-                                <option>Vietnam</option>
-                                <option>United States</option>
-                                <option>Singapore</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                City
-                            </label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                <option>Select City</option>
-                                <option>Ho Chi Minh City</option>
-                                <option>Hanoi</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">
-                                Address
-                            </label>
-                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" placeholder="Enter full address"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <div class="mt-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Description
-                </label>
-                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Enter company description"></textarea>
-            </div>
-
-            <!-- Checkboxes -->
-            <div class="flex items-center space-x-6 mt-4">
-                <label class="flex items-center">
-                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                    <span class="ml-2 text-sm text-gray-700">Is Member</span>
-                </label>
-                <label class="flex items-center">
-                    <input type="checkbox" checked="" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                    <span class="ml-2 text-sm text-gray-700">Active</span>
-                </label>
-            </div>
-        </div>
-    </section>
-
-    <!-- Account Banking Section -->
-    <section id="banking-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <i class="fas fa-university text-blue-600 mr-2"></i>
-                Account Banking
-            </h2>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center">
-                <i class="fas fa-plus mr-2"></i>
-                Add Account
-            </button>
-        </div>
-        <div class="p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Number</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Owner</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Effective Date</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">1234567890</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">ABC Technology Ltd.</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Vietcombank</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">District 1 Branch</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
-                            <td class="px-4 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
-                            </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <button class="text-blue-600 hover:text-blue-900">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">0987654321</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">ABC Technology Ltd.</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">BIDV</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Ben Thanh Branch</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">15/03/2024</td>
-                            <td class="px-4 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
-                            </td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <button class="text-blue-600 hover:text-blue-900">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- Legal Representative Section -->
-    <section id="legal-representative-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <i class="fas fa-user-tie text-blue-600 mr-2"></i>
-                Legal Representative
-            </h2>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Full Name <span class="text-red-500">*</span>
-                        </label>
-                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option>Select Employee</option>
-                            <option>John Smith - CEO</option>
-                            <option>Jane Doe - COO</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Title
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="Chief Executive Officer" readonly="">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Nationality
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="Vietnamese" readonly="">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Birthdate
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="15/05/1980" readonly="">
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            ID Number
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="079080001234" readonly="">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Place of Issue
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="Ho Chi Minh City Police Department" readonly="">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Date of Issue
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50" value="20/03/2015" readonly="">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Start Date <span class="text-red-500">*</span>
-                            </label>
-                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                End Date
-                            </label>
-                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Business License Section -->
-    <section id="business-license-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <i class="fas fa-certificate text-blue-600 mr-2"></i>
-                Business License
-            </h2>
-        </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Registration Number <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter registration number">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Issued Date <span class="text-red-500">*</span>
-                        </label>
-                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Issued by <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter issuing authority">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Attachment
-                        </label>
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
-                            <i class="fas fa-file-pdf text-gray-400 text-xl mb-2"></i>
-                            <p class="text-sm text-gray-600">Upload PDF document</p>
-                            <p class="text-xs text-gray-400 mt-1">PDF up to 10MB</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Authorized Person Section -->
-    <section id="authorized-person-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                <i class="fas fa-users-cog text-blue-600 mr-2"></i>
-                Authorized Person
-            </h2>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors flex items-center">
-                <i class="fas fa-plus mr-2"></i>
-                Add Person
-            </button>
-        </div>
-        <div class="p-6">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title (EN)</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title (VN)</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Birthdate</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CCCD</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auth Number</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Nguyen Van A</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">General Manager</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Tổng Giám Đốc</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">10/08/1975</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">079075001234</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">01/01/2024</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">31/12/2024</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">AUTH001</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <button class="text-blue-600 hover:text-blue-900">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Tran Thi B</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Finance Director</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">Giám Đốc Tài Chính</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">25/12/1982</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">079082005678</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">01/02/2024</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">-</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">AUTH002</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                <button class="text-blue-600 hover:text-blue-900">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="text-red-600 hover:text-red-900">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<!-- Footer with Action Buttons -->
-<footer id="footer" class="fixed bottom-0 left-64 right-0 bg-white border-t border-gray-200 px-6 py-4">
-    <div class="flex items-center justify-end space-x-3">
-        <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-            Save Draft
-        </button>
-        <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-            Cancel
-        </button>
-        <button class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-            Save
-        </button>
-    </div>
-</footer>
-
-<script>
-// Add interactivity for dropdowns and form validation
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle file uploads
-    const fileUploadAreas = document.querySelectorAll('[class*="border-dashed"]');
-    fileUploadAreas.forEach(area => {
-        area.addEventListener('click', function() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = this.textContent.includes('PDF') ? '.pdf' : 'image/*';
-            input.click();
-        });
-    });
-
-    // Handle table row selection
-    const tableRows = document.querySelectorAll('tbody tr');
-    tableRows.forEach(row => {
-        row.addEventListener('click', function(e) {
-            if (!e.target.closest('button')) {
-                row.classList.toggle('bg-blue-50');
-            }
-        });
-    });
-
-    // Form validation
-    const requiredFields = document.querySelectorAll('input[required], select[required]');
-    requiredFields.forEach(field => {
-        field.addEventListener('blur', function() {
-            if (!this.value) {
-                this.classList.add('border-red-300');
-            } else {
-                this.classList.remove('border-red-300');
-            }
-        });
-    });
-});
-</script>
-
-</body>
-</html>
+&lt;/body&gt;&lt;/html&gt;" frameborder="0" class="w-full h-max overflow-visible border-2 border-carbon-300 border-solid rounded-lg" style="width: 1440px; height: 1027px; min-height: 1024px;"></iframe></div></div></main>

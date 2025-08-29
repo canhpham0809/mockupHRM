@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <script>
+    window.FontAwesomeConfig = { autoReplaceSvg: 'nest' };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif !important;
+    }
+    /* Preserve Font Awesome icons */
+    .fa, .fas, .far, .fal, .fab {
+      font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+    }
+    .highlighted-section {
+      outline: 2px solid #3F20FB;
+      background-color: rgba(63, 32, 251, 0.1);
+    }
+    .edit-button {
+      position: absolute;
+      z-index: 1000;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    html, body {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="flex flex-col h-screen bg-gray-50">
+    <!-- Header -->
+    <header id="header" class="flex items-center px-4 py-2 border-b border-gray-200 bg-white">
+      <button class="mr-4 text-gray-500">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="flex items-center text-gray-600">
+        <span>Company Management</span>
+        <span class="mx-2">/</span>
+        <div class="flex items-center">
+          <span class="font-medium text-gray-700">Change History</span>
+          <i class="fa-solid fa-chevron-down ml-1 text-gray-500"></i>
+        </div>
+      </div>
+      <div class="ml-auto flex items-center">
+        <button class="text-gray-600 mr-3">
+          <span>Feedback?</span>
+        </button>
+        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-white">
+          HT
+        </div>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div id="tab-navigation" class="flex items-center border-b border-gray-200 bg-white">
+      <div class="flex items-center">
+        <button class="px-4 py-2 text-sm text-gray-600">
+          Company Details
+        </button>
+        <button class="px-4 py-2 flex items-center text-sm border-b-2 border-blue-500 text-blue-600 font-medium">
+          <span>Change History</span>
+        </button>
+        <button class="px-4 py-2 text-sm text-gray-600">
+          Documents
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow overflow-y-auto">
+      <div class="flex items-center justify-center mx-4 my-8">
+        <div class="w-full" style="width: 1440px; min-height: 1024px;">
+          <!-- Company Info History Panel -->
+          <div id="company-info-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('company-info-table')">
+              <h3 class="text-lg font-medium text-gray-900">Company Info History</h3>
+              <i id="company-info-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
+            </div>
+            <div id="company-info-table" class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Effective Date
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Company Name VI
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Company Name EN
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Address 1
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Address 2
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2025 - Nay</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">VNG Corp</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">VNG Corp</td>
+                    <td class="px-4 py-4 text-sm">
+                      <span class="font-semibold text-blue-600">Lô Z06, Đường số 13, Phường Tân Thuận Đông, Tp. ...</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quậ...</td>
+                    
+                  </tr>
+                  <tr class="hover:bg-gray-50 bg-gray-25">
+                    <td class="px-4 py-4 text-sm text-gray-900">31/12/2015 - 01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Vinagame</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Vinagame</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quậ...</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quậ...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Legal Representative History Panel -->
+          <div id="legal-rep-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('legal-rep-table')">
+              <h3 class="text-lg font-medium text-gray-900">Legal Representative History</h3>
+              <i id="legal-rep-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
+            </div>
+            <div id="legal-rep-table" class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Effective Date
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Full Name
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Title
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Nationality
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Dob
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        ID Number
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Date of Issue
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Place of Issue
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2025 - Nay</td>
+                    <td class="px-4 py-4 text-sm">
+                      <span class="font-semibold text-blue-600">Nguyễn Văn An</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">
+                      <div class="flex flex-col">
+                        <span class="font-medium">CEO</span>
+                        <span class="text-gray-500 text-xs">Tổng giám đốc </span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Việt Nam</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/02/1993</td>
+                    <td class="px-4 py-4 text-sm">
+                      <span class="font-semibold text-blue-600">0921321732</span>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/02/1993</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Khánh Hòa</td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 bg-gray-25">
+                    <td class="px-4 py-4 text-sm text-gray-900">31/12/2015 - 01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Nguyễn Văn Bình</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">
+                      <div class="flex flex-col">
+                        <span class="font-medium">CFO</span>
+                        <span class="text-gray-500 text-xs">Giám đốc tài chính</span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Việt Nam</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/02/1993</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Vũng Tàu</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Authorized Person History Panel -->
+          <div id="authorized-person-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('authorized-person-table')">
+              <h3 class="text-lg font-medium text-gray-900">Authorized Person History</h3>
+              <i id="authorized-person-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
+            </div>
+            <div id="authorized-person-table" class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Effective Date
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Full Name
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Title (EN/VN)
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Dob
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        ID Number
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Place of Issue
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Date of Issue
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Authorization
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Files
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                 <td class="px-4 py-4 text-sm text-gray-900">01/08/2025 - Nay</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Nguyễn Văn Bảo</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">
+                      <div class="flex flex-col">
+                        <span class="font-medium">CFO</span>
+                        <span class="text-gray-500 text-xs">Giám đốc tài chính</span>
+                      </div>
+                    </td>
+
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Vũng Tàu</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2015</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">QĐ/23</td>
+                    <td class="px-4 py-4 text-sm">
+                      <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
+                        <i class="fa-solid fa-file-word mr-1"></i>
+                        File1.docx
+                      </span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 bg-gray-25">
+                    <td class="px-4 py-4 text-sm text-gray-900">01/03/2019 - Nay</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Dương Đình Khải</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">
+                      <div class="flex flex-col">
+                        <span class="font-medium">COO</span>
+                        <span class="text-gray-500 text-xs">Giám đốc điều hành</span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Lâm Đồng</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2015</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">QĐ/12</td>
+                    <td class="px-4 py-4 text-sm">
+                      <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
+                        <i class="fa-solid fa-file-word mr-1"></i>
+                        File2.docx
+                      </span>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50 bg-gray-25">
+                    <td class="px-4 py-4 text-sm text-gray-900">31/12/2015 - 01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Trần Thị Anh</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">
+                      <div class="flex flex-col">
+                        <span class="font-medium">HR Director</span>
+                        <span class="text-gray-500 text-xs">Giám đốc nhân sự</span>
+                      </div>
+                    </td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Vũng Tàu</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2015</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">QĐ/12</td>
+                    <td class="px-4 py-4 text-sm">
+                      <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
+                        <i class="fa-solid fa-file-word mr-1"></i>
+                        File2.docx
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Business License History Panel -->
+          <div id="business-license-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('business-license-table')">
+              <h3 class="text-lg font-medium text-gray-900">Business License History</h3>
+              <i id="business-license-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
+            </div>
+            <div id="business-license-table" class="overflow-x-auto">
+              <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Effective Date
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Registration Number
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Issued Date
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Issued By
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Attached Files
+                        <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-4 text-sm text-gray-900">01/08/2018 - Nay</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">00934249832</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">10/10/2021</td>
+                    <td class="px-4 py-4 text-sm text-gray-900">Phòng đăng ký kinh doanh thuộc Sở</td>
+                    <td class="px-4 py-4 text-sm">
+                      <div class="flex flex-col space-y-1">
+                        <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
+                          <i class="fa-solid fa-file-word mr-1"></i>
+                          File1.docx
+                        </span>
+                        <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
+                          <i class="fa-solid fa-file-word mr-1"></i>
+                          File2.docx
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function togglePanel(tableId) {
+      const table = document.getElementById(tableId);
+      const icon = document.getElementById(tableId.replace('-table', '-icon'));
+      
+      if (table.style.display === 'none') {
+        table.style.display = 'block';
+        icon.className = 'fa-solid fa-chevron-down text-gray-500';
+      } else {
+        table.style.display = 'none';
+        icon.className = 'fa-solid fa-chevron-right text-gray-500';
+      }
+    }
+  </script>
+</body>
+</html>
