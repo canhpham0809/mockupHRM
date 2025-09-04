@@ -836,7 +836,7 @@
         &lt;div class=&quot;px-6 py-4&quot;&gt;
             &lt;div class=&quot;flex items-center justify-between mb-4&quot;&gt;
                 &lt;div&gt;
-                    &lt;h1 class=&quot;text-2xl font-semibold text-gray-900&quot;&gt;Compnay List&lt;/h1&gt;
+                    &lt;h1 class=&quot;text-2xl font-semibold text-gray-900&quot;&gt;Company List (12)&lt;/h1&gt;
                     &lt;p class=&quot;text-sm text-gray-500 mt-1&quot;&gt;Manage company information and settings&lt;/p&gt;
                 &lt;/div&gt;
                 &lt;div class=&quot;flex items-center gap-3&quot;&gt;
@@ -871,16 +871,7 @@
                         &lt;option&gt;Singapore&lt;/option&gt;
                         &lt;option&gt;Thailand&lt;/option&gt;
                     &lt;/select&gt;
-                    
-                    &lt;div class=&quot;flex items-center gap-2&quot;&gt;
-                        &lt;input type=&quot;date&quot; class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
-                        &lt;span class=&quot;text-gray-500&quot;&gt;to&lt;/span&gt;
-                        &lt;input type=&quot;date&quot; class=&quot;px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500&quot;&gt;
-                    &lt;/div&gt;
-                    
-                    &lt;button class=&quot;px-3 py-2 text-gray-500 hover:text-gray-700&quot;&gt;
-                        &lt;i class=&quot;fa-solid fa-filter-circle-xmark&quot;&gt;&lt;/i&gt;
-                    &lt;/button&gt;
+                
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/div&gt;
@@ -888,121 +879,223 @@
 
     &lt;div id=&quot;main-content&quot; class=&quot;p-6&quot;&gt;
         &lt;div id=&quot;table-container&quot; class=&quot;bg-white rounded-lg border border-gray-200 overflow-hidden&quot;&gt;
-            &lt;div class=&quot;overflow-x-auto&quot;&gt;
-                &lt;table class=&quot;w-full&quot;&gt;
-                    &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
-                        &lt;tr&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-16&quot;&gt;
-                                Stt
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-16&quot;&gt;
-                                Code
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-16&quot;&gt;
-                                VI Name
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-16&quot;&gt;
-                                EN Name
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-16&quot;&gt;
-                                Head Office VI
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Head Office EN
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Country
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Status
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Address
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Description
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Create Date
-                            &lt;/th&gt;
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                Update Date
-                            &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider&quot;&gt;
-                                User Update
-                            &lt;/th&gt;
-                        &lt;/tr&gt;
-                    &lt;/thead&gt;
-                    &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
-                        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;1&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900&quot;&gt;ABC001&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty ABC Việt Nam&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;ABC Company Vietnam&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Hà Nội&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Hanoi&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Vietnam&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4&quot;&gt;
-                                &lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;
-                            &lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot;&gt;123 Nguyen Trai Street, Hanoi&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot; title=&quot;Leading technology company in Vietnam providing innovative solutions&quot;&gt;
-                                Leading technology company in Vietnam...
-                            &lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-15&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-20&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin@company.com&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4&quot;&gt;
-                                
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-                        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;2&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900&quot;&gt;XYZ002&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty XYZ Singapore&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;XYZ Company Singapore&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4&quot;&gt;
-                                &lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800&quot;&gt;Inactive&lt;/span&gt;
-                            &lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot;&gt;456 Orchard Road, Singapore&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot; title=&quot;Financial services provider in Southeast Asia&quot;&gt;
-                                Financial services provider in Southeast...
-                            &lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-10&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-18&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;manager@xyz.com&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4&quot;&gt;
-                               
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-                        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;3&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900&quot;&gt;DEF003&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty DEF Thái Lan&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;DEF Company Thailand&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Bangkok&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Bangkok&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Thailand&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4&quot;&gt;
-                                &lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;
-                            &lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot;&gt;789 Sukhumvit Road, Bangkok&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 max-w-48 truncate&quot; title=&quot;Manufacturing company specializing in electronics&quot;&gt;
-                                Manufacturing company specializing in...
-                            &lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-05&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;2024-01-22&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;hr@def.com&lt;/td&gt;
-                            &lt;td class=&quot;px-4 py-4&quot;&gt;
-                                
-                            &lt;/td&gt;
-                        &lt;/tr&gt;
-                    &lt;/tbody&gt;
-                &lt;/table&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+  &lt;div class=&quot;overflow-x-auto&quot;&gt;
+    &lt;table class=&quot;w-full&quot;&gt;
+      &lt;thead class=&quot;bg-gray-50 border-b border-gray-200&quot;&gt;
+        &lt;tr&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-12&quot;&gt;Stt&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-24 whitespace-nowrap&quot;&gt;Code&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-56&quot;&gt;VI Name&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-56&quot;&gt;EN Name&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-40&quot;&gt;Head Office VI&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-40&quot;&gt;Head Office EN&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-28&quot;&gt;Country&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-24&quot;&gt;Status&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-64&quot;&gt;Address&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-64&quot;&gt;Description&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-28 whitespace-nowrap&quot;&gt;Create Date&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-28 whitespace-nowrap&quot;&gt;Update Date&lt;/th&gt;
+          &lt;th class=&quot;px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-28 whitespace-nowrap&quot;&gt;Update By&lt;/th&gt;
+        &lt;/tr&gt;
+      &lt;/thead&gt;
+
+      &lt;tbody class=&quot;bg-white divide-y divide-gray-200&quot;&gt;
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;1&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;VNG&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty Cổ Phần Tập Đoàn VNG&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG GROUP JSC&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;11/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;2&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;2Morebits&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty TNHH 2Morebits&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;2Morebits Company Limited&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;22/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;3&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;VNGGames&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNGGAMES PTE. LTD.&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNGGAMES PTE. LTD.&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Singapore&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800&quot;&gt;Inactive&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;21/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;4&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;TLN&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công Ty Cổ Phần Kết Nối Nhân Tài&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Talent Net Corporation&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;5&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;ADTIMA&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty Cổ Phần Adtima&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Adtima Joint Stock Company&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;6&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;VNN&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty Cổ Phần Dịch vụ Mạng&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VINA Net Services Joint Stock Company&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;7&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;VNG Solutions&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty TNHH VNG Solutions&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Solutions Company Limited&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;-&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;8&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;VTH&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công Ty Cổ Phần Phát Triển VTH&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VTH Software Development JSC&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;9&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;Zion&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty Cổ Phần ZION&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Zion Joint Stock Company&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;10&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;VNG DC&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty Cổ Phần VNG Data Center&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Data Center Joint Stock Company&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;11&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;Thanh Sơn HCM&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;CN Công ty TNHH Thương mại Thanh Sơn HCM&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Thanh Sơn HCM&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+
+        &lt;tr class=&quot;hover:bg-gray-50 transition-colors&quot;&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;12&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm font-medium text-gray-900 whitespace-nowrap&quot;&gt;Vinadata&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Công ty Cổ Phần Dịch vụ Dữ liệu Vinadata&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Vinadata Information Services JSC&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;VNG Campus&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900&quot;&gt;Việt Nam&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4&quot;&gt;&lt;span class=&quot;inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800&quot;&gt;Active&lt;/span&gt;&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-900 truncate&quot;&gt;N/A, N/A&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;13/08/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500 whitespace-nowrap&quot;&gt;10/07/2025&lt;/td&gt;
+          &lt;td class=&quot;px-4 py-4 text-sm text-gray-500&quot;&gt;admin&lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/tbody&gt;
+    &lt;/table&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
 
         &lt;div id=&quot;pagination&quot; class=&quot;flex items-center justify-between mt-6&quot;&gt;
             &lt;div class=&quot;flex items-center gap-4&quot;&gt;
