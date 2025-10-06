@@ -3,693 +3,595 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRM Core Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        window.FontAwesomeConfig = { autoReplaceSvg: 'nest' };
-    </script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap">
-
+    
     <style>
-        /* Tùy chỉnh thanh cuộn */
-        ::-webkit-scrollbar {
-            display: none;
+        ::-webkit-scrollbar { display: none;}
+        body { font-family: 'Inter', sans-serif; }
+        .org-chart-container {
+            background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.1) 1px, transparent 0);
+            background-size: 20px 20px;
         }
-        html, body {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            margin: 0;
-            padding: 0;
+        .org-node {
+            transition: all 0.3s ease;
         }
-        body {
-            font-family: 'Inter', sans-serif !important;
+        .org-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-        .fa, .fas, .far, .fal, .fab {
-            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        .tree-line {
+            border-left: 2px solid #e5e7eb;
+            border-bottom: 2px solid #e5e7eb;
         }
-        .highlighted-section {
-            outline: 2px solid #3F20FB;
-            background-color: rgba(63, 32, 251, 0.1);
+        .tree-line-vertical {
+            border-left: 2px solid #e5e7eb;
         }
-        .edit-button {
-            position: absolute;
-            z-index: 1000;
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
         }
-        .dashboard-container {
-            display: flex;
-            height: calc(100vh - 4rem);
-            align-items: stretch;
-        }
-        #sidebar {
-            width: 256px;
-            flex-shrink: 0;
-            background-color: #102a43;
-            color: white;
-            overflow-y: auto;
-        }
-        #main-content {
-            flex: 1;
-            padding: 1rem;
-            overflow-x: hidden;
-        }
-        #sidebar button {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 0.5rem 1rem;
-            text-align: left;
-            min-height: 2.5rem;
-            border: none;
-            background: none;
-            color: white;
-        }
-        #sidebar button:hover {
-            background-color: #334e68;
-        }
-        #sidebar button > .flex {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-        #sidebar button i {
-            margin-right: 0.75rem;
-            flex-shrink: 0;
-            width: 1rem;
-        }
-        #sidebar button span {
-            font-size: 0.875rem;
-            text-align: left;
-            flex-grow: 1;
-            white-space: nowrap;
-        }
-        #sidebar .pl-10 span {
-            padding-left: 0.5rem;
-            text-align: left;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
+        .tooltip.show {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
+    <script>tailwind.config = {
+  "theme": {
+    "extend": {
+      "fontFamily": {
+        "inter": [
+          "Inter",
+          "sans-serif"
+        ]
+      }
+    }
+  }
+};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap">
+<style>
+  .highlighted-section {
+    outline: 2px solid #3F20FB;
+    background-color: rgba(63, 32, 251, 0.1);
+  }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: {
-                            50: '#f0f4f9',
-                            100: '#d9e2ec',
-                            200: '#bcccdc',
-                            300: '#9fb3c8',
-                            400: '#829ab1',
-                            500: '#627d98',
-                            600: '#486581',
-                            700: '#334e68',
-                            800: '#243b53',
-                            900: '#102a43'
-                        },
-                        accent: {
-                            orange: '#FF9F43',
-                            green: '#28C76F'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        };
-    </script>
+  .edit-button {
+    position: absolute;
+    z-index: 1000;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  html, body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
 </head>
-
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-50 font-custom">
     <!-- Header -->
-    <header id="header" class="bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
-        <div class="flex justify-between items-center px-6 py-3">
-            <div class="flex items-center">
-                <div class="mr-8 flex items-center">
-                    <div class="w-10 h-10 bg-navy-700 rounded-md flex items-center justify-center text-white font-bold text-lg mr-2">
-                        HR
+    <header id="header" class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-full mx-auto px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-sitemap text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">Organization Chart</h1>
+                            <p class="text-sm text-gray-600">Company ABC Structure</p>
+                        </div>
                     </div>
-                    <span class="font-semibold text-navy-900 text-lg">HRM Core</span>
                 </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
-                        <i class="fa-solid fa-house mr-1"></i> Dashboard
+                <div class="flex items-center space-x-4">
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-download mr-2"></i>Export
                     </button>
-                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
-                        <i class="fa-solid fa-chart-simple mr-1"></i> Reports
+                    <button class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-cog mr-2"></i>Settings
                     </button>
-                    <button class="px-4 py-2 text-gray-600 hover:text-navy-700">
-                        <i class="fa-solid fa-calendar mr-1"></i> Calendar
-                    </button>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button id="taskButton" onclick="toggleTaskPopup()" class="relative p-2 text-gray-600 hover:text-navy-700 hover:bg-gray-100 rounded-full">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">3</span>
-                </button>
-                <button class="relative p-2 text-gray-600 hover:text-navy-700 hover:bg-gray-100 rounded-full">
-                    <i class="fa-solid fa-bell"></i>
-                    <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">5</span>
-                </button>
-                <div class="flex items-center">
-                    <div class="mr-2 text-right">
-                        <p class="text-sm font-medium text-navy-800">John Doe</p>
-                        <p class="text-xs text-gray-500">HR Manager</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full overflow-hidden">
-                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="User Avatar" class="w-full h-full object-cover">
-                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Dashboard Container -->
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside id="sidebar" class="fixed top-16 h-[calc(100vh-4rem)] w-64 bg-navy-800 text-white overflow-y-auto z-20">
-            <div class="py-4">
-                <!-- HR Core Section -->
-                <div class="px-4 py-2">
-                    <h3 class="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">HR Core</h3>
-                    <div class="mb-1">
-                        <button class="w-full rounded-md" onclick="toggleDropdown('taskManagementDropdown')">
-                            <div class="flex items-center">
-                                <i class="fa-solid fa-clipboard-list mr-3 text-gray-400"></i>
-                                <span>Task Management</span>
+    <!-- Controls Panel -->
+    <section id="controls-panel" class="bg-white border-b border-gray-200">
+        <div class="max-w-full mx-auto px-8 py-6">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" placeholder="Search departments or managers..." class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option>All Levels</option>
+                        <option>Company</option>
+                        <option>Business Unit</option>
+                        <option>Department Group</option>
+                        <option>Department</option>
+                        <option>Team</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-sm text-gray-600">Zoom:</span>
+                    <button onclick="zoomOut()" class="w-8 h-8 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-50">
+                        <i class="fas fa-minus text-xs"></i>
+                    </button>
+                    <span id="zoom-level" class="text-sm font-medium text-gray-700 min-w-[50px] text-center">100%</span>
+                    <button onclick="zoomIn()" class="w-8 h-8 border border-gray-300 rounded flex items-center justify-center hover:bg-gray-50">
+                        <i class="fas fa-plus text-xs"></i>
+                    </button>
+                    <button onclick="resetZoom()" class="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Organization Chart -->
+    <main id="org-chart-main" class="flex-1 p-8">
+        <div class="org-chart-container bg-white rounded-xl shadow-sm border border-gray-200 overflow-auto">
+            <div id="chart-container" class="p-12 min-w-max" style="transform-origin: top left;">
+                
+                <!-- Company Level -->
+                <div id="company-level" class="flex flex-col items-center">
+                    <div class="org-node bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6 rounded-xl shadow-lg cursor-pointer relative" onmouseover="showTooltip(event, 'company-tooltip')" onmouseout="hideTooltip('company-tooltip')">
+                        <div class="text-center">
+                            <div class="text-lg font-bold mb-1">Company ABC</div>
+                            <div class="text-blue-100 text-sm mb-1">
+                                <i class="fas fa-user-tie mr-1"></i>Manager: Nguyễn Văn CEO
                             </div>
-                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                            <div class="text-blue-100 text-sm">
+                                <i class="fas fa-users mr-1"></i>Employees: 1,200
+                            </div>
+                        </div>
+                        <button onclick="toggleNode('bu-level')" class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-6 h-6 bg-white text-blue-600 rounded-full shadow-md hover:shadow-lg">
+                            <i class="fas fa-minus text-xs" id="company-toggle"></i>
                         </button>
-                        <div id="taskManagementDropdown" class="hidden pl-10 mt-1">
-                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Task</span>
-                            <span class="block px-4 py-2 text-sm hover:bg-navy-700 rounded-md cursor-pointer">Tracking</span>
+                    </div>
+                    
+                    <!-- Tooltip for Company -->
+                    <div id="company-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                        <div class="text-sm">
+                            <div class="font-semibold">Nguyễn Văn CEO</div>
+                            <div class="text-gray-300">ceo@companyabc.com</div>
+                            <div class="text-gray-300">Chief Executive Officer</div>
                         </div>
                     </div>
-                    <!-- Other sidebar items omitted for brevity -->
                 </div>
-            </div>
-        </aside>
 
-        <!-- Main Content -->
-        <main id="main-content" class="ml-64 mt-16 p-6 pb-24">
-            <!-- Tabs -->
-            <div id="tab-navigation" class="flex items-center border-b border-gray-200 bg-white mb-6">
-                <div class="flex items-center">
-                    <button class="px-4 py-2 text-sm text-gray-600 border-b-2 border-blue-500 font-medium" onclick="showTab('company-details')">
-                        Company Details
-                    </button>
-                    <button class="px-4 py-2 text-sm text-gray-600" onclick="showTab('change-history')">
-                        Change History
-                    </button>
-                    <button class="px-4 py-2 text-sm text-gray-600" onclick="showTab('log-edited')">
-                        Log Edited
-                    </button>
+                <!-- Connection Line -->
+                <div class="flex justify-center">
+                    <div class="w-px h-8 bg-gray-300"></div>
                 </div>
-            </div>
 
-            <!-- Company Details Tab -->
-            <div id="company-details" class="tab-content active">
-                <!-- Company Information Section -->
-                <section id="company-info-section" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
-                    <div class="px-6 py-4 border-b border-gray-200">
-                        <h2 class="text-lg font-semibold text-gray-900 flex items-center">
-                            <i class="fas fa-building text-blue-600 mr-2"></i>
-                            Company Information
-                        </h2>
+                <!-- Business Units Level -->
+                <div id="bu-level" class="flex justify-center space-x-16">
+                    <!-- BU 1 -->
+                    <div class="flex flex-col items-center">
+                        <div class="org-node bg-white border-2 border-green-200 p-5 rounded-lg shadow-md cursor-pointer relative hover:border-green-300" onmouseover="showTooltip(event, 'bu1-tooltip')" onmouseout="hideTooltip('bu1-tooltip')">
+                            <div class="text-center">
+                                <div class="text-base font-semibold text-gray-800 mb-1">BU Technology</div>
+                                <div class="text-gray-600 text-sm mb-1">
+                                    <i class="fas fa-user mr-1"></i>Manager: Trần Văn BU1
+                                </div>
+                                <div class="text-gray-600 text-sm">
+                                    <i class="fas fa-users mr-1"></i>Employees: 400
+                                </div>
+                            </div>
+                            <button onclick="toggleNode('deptgroup1-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-green-500 text-white rounded-full shadow">
+                                <i class="fas fa-minus text-xs" id="bu1-toggle"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="bu1-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                            <div class="text-sm">
+                                <div class="font-semibold">Trần Văn BU1</div>
+                                <div class="text-gray-300">bu1@companyabc.com</div>
+                                <div class="text-gray-300">Business Unit Director</div>
+                            </div>
+                        </div>
+
+                        <!-- Connection to Department Groups -->
+                        <div class="w-px h-8 bg-gray-300"></div>
+                        
+                        <!-- Department Groups Level -->
+                        <div id="deptgroup1-level" class="flex space-x-12">
+                            <!-- DeptGroup A -->
+                            <div class="flex flex-col items-center">
+                                <div class="org-node bg-white border-2 border-purple-200 p-4 rounded-lg shadow-md cursor-pointer relative hover:border-purple-300" onmouseover="showTooltip(event, 'deptgroup1-tooltip')" onmouseout="hideTooltip('deptgroup1-tooltip')">
+                                    <div class="text-center">
+                                        <div class="text-sm font-semibold text-gray-800 mb-1">DeptGroup Development</div>
+                                        <div class="text-gray-600 text-xs mb-1">
+                                            <i class="fas fa-user mr-1"></i>Manager: Lê Văn Group1
+                                        </div>
+                                        <div class="text-gray-600 text-xs">
+                                            <i class="fas fa-users mr-1"></i>Employees: 200
+                                        </div>
+                                    </div>
+                                    <button onclick="toggleNode('dept1-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 text-white rounded-full shadow text-xs">
+                                        <i class="fas fa-minus" id="deptgroup1-toggle"></i>
+                                    </button>
+                                </div>
+                                
+                                <div id="deptgroup1-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                                    <div class="text-sm">
+                                        <div class="font-semibold">Lê Văn Group1</div>
+                                        <div class="text-gray-300">group1@companyabc.com</div>
+                                        <div class="text-gray-300">Department Group Manager</div>
+                                    </div>
+                                </div>
+
+                                <div class="w-px h-6 bg-gray-300"></div>
+                                
+                                <!-- Departments Level -->
+                                <div id="dept1-level" class="flex space-x-8">
+                                    <!-- Dept B -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="org-node bg-white border-2 border-orange-200 p-3 rounded-lg shadow-md cursor-pointer relative hover:border-orange-300" onmouseover="showTooltip(event, 'dept1-tooltip')" onmouseout="hideTooltip('dept1-tooltip')">
+                                            <div class="text-center">
+                                                <div class="text-sm font-semibold text-gray-800 mb-1">Dept Frontend</div>
+                                                <div class="text-gray-600 text-xs mb-1">
+                                                    <i class="fas fa-user mr-1"></i>Manager: Nguyễn Văn C
+                                                </div>
+                                                <div class="text-gray-600 text-xs">
+                                                    <i class="fas fa-users mr-1"></i>Employees: 100
+                                                </div>
+                                            </div>
+                                            <button onclick="toggleNode('team1-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-orange-500 text-white rounded-full shadow text-xs">
+                                                <i class="fas fa-minus" id="dept1-toggle"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <div id="dept1-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                                            <div class="text-sm">
+                                                <div class="font-semibold">Nguyễn Văn C</div>
+                                                <div class="text-gray-300">nguyenvanc@companyabc.com</div>
+                                                <div class="text-gray-300">Department Manager</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="w-px h-6 bg-gray-300"></div>
+                                        
+                                        <!-- Teams Level -->
+                                        <div id="team1-level" class="flex space-x-6">
+                                            <div class="org-node bg-white border-2 border-red-200 p-3 rounded-lg shadow-md cursor-pointer hover:border-red-300" onmouseover="showTooltip(event, 'team1-tooltip')" onmouseout="hideTooltip('team1-tooltip')">
+                                                <div class="text-center">
+                                                    <div class="text-xs font-semibold text-gray-800 mb-1">Team React</div>
+                                                    <div class="text-gray-600 text-xs mb-1">
+                                                        <i class="fas fa-user mr-1"></i>Manager: Nguyễn Văn A
+                                                    </div>
+                                                    <div class="text-gray-600 text-xs">
+                                                        <i class="fas fa-users mr-1"></i>Employees: 10
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="team1-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                                                <div class="text-sm">
+                                                    <div class="font-semibold">Nguyễn Văn A</div>
+                                                    <div class="text-gray-300">nguyenvana@companyabc.com</div>
+                                                    <div class="text-gray-300">Team Lead</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="org-node bg-white border-2 border-red-200 p-3 rounded-lg shadow-md cursor-pointer hover:border-red-300" onmouseover="showTooltip(event, 'team2-tooltip')" onmouseout="hideTooltip('team2-tooltip')">
+                                                <div class="text-center">
+                                                    <div class="text-xs font-semibold text-gray-800 mb-1">Team Vue</div>
+                                                    <div class="text-gray-600 text-xs mb-1">
+                                                        <i class="fas fa-user mr-1"></i>Manager: Trần Thị B
+                                                    </div>
+                                                    <div class="text-gray-600 text-xs">
+                                                        <i class="fas fa-users mr-1"></i>Employees: 8
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="team2-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                                                <div class="text-sm">
+                                                    <div class="font-semibold">Trần Thị B</div>
+                                                    <div class="text-gray-300">tranthib@companyabc.com</div>
+                                                    <div class="text-gray-300">Team Lead</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dept C -->
+                                    <div class="flex flex-col items-center">
+                                        <div class="org-node bg-white border-2 border-orange-200 p-3 rounded-lg shadow-md cursor-pointer relative hover:border-orange-300" onmouseover="showTooltip(event, 'dept2-tooltip')" onmouseout="hideTooltip('dept2-tooltip')">
+                                            <div class="text-center">
+                                                <div class="text-sm font-semibold text-gray-800 mb-1">Dept Backend</div>
+                                                <div class="text-gray-600 text-xs mb-1">
+                                                    <i class="fas fa-user mr-1"></i>Manager: Phạm Văn D
+                                                </div>
+                                                <div class="text-gray-600 text-xs">
+                                                    <i class="fas fa-users mr-1"></i>Employees: 100
+                                                </div>
+                                            </div>
+                                            <button onclick="toggleNode('team3-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-orange-500 text-white rounded-full shadow text-xs">
+                                                <i class="fas fa-plus" id="dept2-toggle"></i>
+                                            </button>
+                                        </div>
+                                        
+                                        <div id="dept2-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                                            <div class="text-sm">
+                                                <div class="font-semibold">Phạm Văn D</div>
+                                                <div class="text-gray-300">phamvand@companyabc.com</div>
+                                                <div class="text-gray-300">Department Manager</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="w-px h-6 bg-gray-300"></div>
+                                        
+                                        <div id="team3-level" class="hidden flex space-x-6">
+                                            <div class="org-node bg-white border-2 border-red-200 p-3 rounded-lg shadow-md cursor-pointer hover:border-red-300">
+                                                <div class="text-center">
+                                                    <div class="text-xs font-semibold text-gray-800 mb-1">Team Node.js</div>
+                                                    <div class="text-gray-600 text-xs mb-1">
+                                                        <i class="fas fa-user mr-1"></i>Manager: Lê Văn E
+                                                    </div>
+                                                    <div class="text-gray-600 text-xs">
+                                                        <i class="fas fa-users mr-1"></i>Employees: 12
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DeptGroup B -->
+                            <div class="flex flex-col items-center">
+                                <div class="org-node bg-white border-2 border-purple-200 p-4 rounded-lg shadow-md cursor-pointer relative hover:border-purple-300" onmouseover="showTooltip(event, 'deptgroup2-tooltip')" onmouseout="hideTooltip('deptgroup2-tooltip')">
+                                    <div class="text-center">
+                                        <div class="text-sm font-semibold text-gray-800 mb-1">DeptGroup QA</div>
+                                        <div class="text-gray-600 text-xs mb-1">
+                                            <i class="fas fa-user mr-1"></i>Manager: Hoàng Thị Group2
+                                        </div>
+                                        <div class="text-gray-600 text-xs">
+                                            <i class="fas fa-users mr-1"></i>Employees: 200
+                                        </div>
+                                    </div>
+                                    <button onclick="toggleNode('dept3-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-500 text-white rounded-full shadow text-xs">
+                                        <i class="fas fa-plus" id="deptgroup2-toggle"></i>
+                                    </button>
+                                </div>
+                                
+                                <div id="deptgroup2-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                                    <div class="text-sm">
+                                        <div class="font-semibold">Hoàng Thị Group2</div>
+                                        <div class="text-gray-300">hoangthigroup2@companyabc.com</div>
+                                        <div class="text-gray-300">Department Group Manager</div>
+                                    </div>
+                                </div>
+
+                                <div class="w-px h-6 bg-gray-300"></div>
+                                
+                                <div id="dept3-level" class="hidden">
+                                    <div class="org-node bg-white border-2 border-orange-200 p-3 rounded-lg shadow-md cursor-pointer">
+                                        <div class="text-center">
+                                            <div class="text-sm font-semibold text-gray-800 mb-1">Dept Testing</div>
+                                            <div class="text-gray-600 text-xs mb-1">
+                                                <i class="fas fa-user mr-1"></i>Manager: Vũ Văn F
+                                            </div>
+                                            <div class="text-gray-600 text-xs">
+                                                <i class="fas fa-users mr-1"></i>Employees: 200
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <!-- Company Information -->
-                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                            <div class="col-span-1">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Company Logo
-                                </label>
-                                <div class="border-2 border-dashed border-gray-300 rounded-lg w-24 h-24 flex flex-col items-center justify-center text-center hover:border-blue-400 transition-colors">
-                                    <i class="fas fa-upload text-gray-400 text-xl mb-1"></i>
-                                    <p class="text-xs text-gray-600">Click to upload</p>
-                                    <p class="text-[8px] text-gray-400 mt-1">PNG, JPG ≤ 2MB</p>
+
+                    <!-- BU 2 -->
+                    <div class="flex flex-col items-center">
+                        <div class="org-node bg-white border-2 border-green-200 p-5 rounded-lg shadow-md cursor-pointer relative hover:border-green-300" onmouseover="showTooltip(event, 'bu2-tooltip')" onmouseout="hideTooltip('bu2-tooltip')">
+                            <div class="text-center">
+                                <div class="text-base font-semibold text-gray-800 mb-1">BU Marketing</div>
+                                <div class="text-gray-600 text-sm mb-1">
+                                    <i class="fas fa-user mr-1"></i>Manager: Ngô Thị BU2
+                                </div>
+                                <div class="text-gray-600 text-sm">
+                                    <i class="fas fa-users mr-1"></i>Employees: 300
                                 </div>
                             </div>
-                            <div class="col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Company Code <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter company code">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Vietnamese Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter Vietnamese company name">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        English Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Enter English company name">
+                            <button onclick="toggleNode('deptgroup3-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-green-500 text-white rounded-full shadow">
+                                <i class="fas fa-plus text-xs" id="bu2-toggle"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="bu2-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                            <div class="text-sm">
+                                <div class="font-semibold">Ngô Thị BU2</div>
+                                <div class="text-gray-300">bu2@companyabc.com</div>
+                                <div class="text-gray-300">Business Unit Director</div>
+                            </div>
+                        </div>
+
+                        <div class="w-px h-8 bg-gray-300"></div>
+                        
+                        <div id="deptgroup3-level" class="hidden">
+                            <div class="org-node bg-white border-2 border-purple-200 p-4 rounded-lg shadow-md cursor-pointer">
+                                <div class="text-center">
+                                    <div class="text-sm font-semibold text-gray-800 mb-1">DeptGroup Digital</div>
+                                    <div class="text-gray-600 text-xs mb-1">
+                                        <i class="fas fa-user mr-1"></i>Manager: Đặng Văn Group3
+                                    </div>
+                                    <div class="text-gray-600 text-xs">
+                                        <i class="fas fa-users mr-1"></i>Employees: 300
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Other Company Details fields omitted for brevity -->
                     </div>
-                </section>
-                <!-- Other sections (Business License, Legal Representative, etc.) omitted for brevity -->
-            </div>
 
-            <!-- Change History Tab -->
-            <div id="change-history" class="tab-content">
-                <div class="flex items-center justify-center mx-4 my-8">
-                    <div class="w-full" style="width: 1440px; min-height: 1024px;">
-                        <!-- Company Info History Panel -->
-                        <div id="company-info-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
-                            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('company-info-table')">
-                                <h3 class="text-lg font-medium text-gray-900">Company Info History</h3>
-                                <i id="company-info-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
+                    <!-- BU 3 -->
+                    <div class="flex flex-col items-center">
+                        <div class="org-node bg-white border-2 border-green-200 p-5 rounded-lg shadow-md cursor-pointer relative hover:border-green-300" onmouseover="showTooltip(event, 'bu3-tooltip')" onmouseout="hideTooltip('bu3-tooltip')">
+                            <div class="text-center">
+                                <div class="text-base font-semibold text-gray-800 mb-1">BU Operations</div>
+                                <div class="text-gray-600 text-sm mb-1">
+                                    <i class="fas fa-user mr-1"></i>Manager: Bùi Văn BU3
+                                </div>
+                                <div class="text-gray-600 text-sm">
+                                    <i class="fas fa-users mr-1"></i>Employees: 500
+                                </div>
                             </div>
-                            <div id="company-info-table" class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead class="bg-gray-50 border-b border-gray-200">
-                                        <tr>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Effective Date
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Company Name VI
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Company Name EN
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Address 1
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Address 2
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025 - Nay</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">VNG Corp</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">VNG Corp</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Phường Tân Thuận Đông, Tp. ...</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quận...</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 bg-gray-25">
-                                            <td class="px-4 py-4 text-sm text-gray-900">31/12/2015 - 01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Vinagame</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Vinagame</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quận...</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Lô Z06, Đường số 13, Khu Chế Xuất Tân Thuận, Quận...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <button onclick="toggleNode('deptgroup4-level')" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-5 h-5 bg-green-500 text-white rounded-full shadow">
+                                <i class="fas fa-plus text-xs" id="bu3-toggle"></i>
+                            </button>
+                        </div>
+                        
+                        <div id="bu3-tooltip" class="tooltip absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl">
+                            <div class="text-sm">
+                                <div class="font-semibold">Bùi Văn BU3</div>
+                                <div class="text-gray-300">bu3@companyabc.com</div>
+                                <div class="text-gray-300">Business Unit Director</div>
                             </div>
                         </div>
 
-                        <!-- Legal Representative History Panel -->
-                        <div id="legal-rep-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
-                            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('legal-rep-table')">
-                                <h3 class="text-lg font-medium text-gray-900">Legal Representative History</h3>
-                                <i id="legal-rep-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
-                            </div>
-                            <div id="legal-rep-table" class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead class="bg-gray-50 border-b border-gray-200">
-                                        <tr>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Effective Date
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Full Name
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Title
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Nationality
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Dob
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    ID Number
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Date of Issue
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Place of Issue
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025 - Nay</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Nguyễn Văn An</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">
-                                                <div class="flex flex-col">
-                                                    <span class="font-medium">CEO</span>
-                                                    <span class="text-gray-500 text-xs">Tổng giám đốc</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Việt Nam</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/02/1993</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">0921321732</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/02/1993</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Khánh Hòa</td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 bg-gray-25">
-                                            <td class="px-4 py-4 text-sm text-gray-900">31/12/2015 - 01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Nguyễn Văn Bình</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">
-                                                <div class="flex flex-col">
-                                                    <span class="font-medium">CFO</span>
-                                                    <span class="text-gray-500 text-xs">Giám đốc tài chính</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Việt Nam</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/02/1993</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Vũng Tàu</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Authorized Person History Panel -->
-                        <div id="authorized-person-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
-                            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('authorized-person-table')">
-                                <h3 class="text-lg font-medium text-gray-900">Authorized Person History</h3>
-                                <i id="authorized-person-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
-                            </div>
-                            <div id="authorized-person-table" class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead class="bg-gray-50 border-b border-gray-200">
-                                        <tr>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Effective Date
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Full Name
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Title
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Dob
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    ID Number
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Place of Issue
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Date of Issue
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Authorization
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Files
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025 - Nay</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Nguyễn Văn Bảo</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">
-                                                <div class="flex flex-col">
-                                                    <span class="font-medium">CFO</span>
-                                                    <span class="text-gray-500 text-xs">Giám đốc tài chính</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Vũng Tàu</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2015</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">QĐ/23</td>
-                                            <td class="px-4 py-4 text-sm">
-                                                <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
-                                                    <i class="fa-solid fa-file-word mr-1"></i>
-                                                    File1.docx
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 bg-gray-25">
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/03/2019 - Nay</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Dương Đình Khải</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">
-                                                <div class="flex flex-col">
-                                                    <span class="font-medium">COO</span>
-                                                    <span class="text-gray-500 text-xs">Giám đốc điều hành</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Lâm Đồng</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2015</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">QĐ/12</td>
-                                            <td class="px-4 py-4 text-sm">
-                                                <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
-                                                    <i class="fa-solid fa-file-word mr-1"></i>
-                                                    File2.docx
-                                                </span>
-                                            </td>
-                                        </tr>
-                                        <tr class="hover:bg-gray-50 bg-gray-25">
-                                            <td class="px-4 py-4 text-sm text-gray-900">31/12/2015 - 01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Trần Thị Anh</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">
-                                                <div class="flex flex-col">
-                                                    <span class="font-medium">HR Director</span>
-                                                    <span class="text-gray-500 text-xs">Giám đốc nhân sự</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2025</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">0473217456</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Vũng Tàu</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2015</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">QĐ/12</td>
-                                            <td class="px-4 py-4 text-sm">
-                                                <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
-                                                    <i class="fa-solid fa-file-word mr-1"></i>
-                                                    File2.docx
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Business License History Panel -->
-                        <div id="business-license-panel" class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200">
-                            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('business-license-table')">
-                                <h3 class="text-lg font-medium text-gray-900">Business License History</h3>
-                                <i id="business-license-icon" class="fa-solid fa-chevron-down text-gray-500"></i>
-                            </div>
-                            <div id="business-license-table" class="overflow-x-auto">
-                                <table class="w-full">
-                                    <thead class="bg-gray-50 border-b border-gray-200">
-                                        <tr>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Effective Date
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Registration Number
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Issued Date
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Issued By
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                <div class="flex items-center">
-                                                    Attached Files
-                                                    <i class="fa-solid fa-sort ml-1 text-gray-400"></i>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white divide-y divide-gray-200">
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-4 text-sm text-gray-900">01/08/2018 - Nay</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">00934249832</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">10/10/2021</td>
-                                            <td class="px-4 py-4 text-sm text-gray-900">Phòng đăng ký kinh doanh thuộc Sở</td>
-                                            <td class="px-4 py-4 text-sm">
-                                                <div class="flex flex-col space-y-1">
-                                                    <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
-                                                        <i class="fa-solid fa-file-word mr-1"></i>
-                                                        File1.docx
-                                                    </span>
-                                                    <span class="text-blue-600 hover:text-blue-800 flex items-center cursor-pointer">
-                                                        <i class="fa-solid fa-file-word mr-1"></i>
-                                                        File2.docx
-                                                    </span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="w-px h-8 bg-gray-300"></div>
+                        
+                        <div id="deptgroup4-level" class="hidden">
+                            <div class="org-node bg-white border-2 border-purple-200 p-4 rounded-lg shadow-md cursor-pointer">
+                                <div class="text-center">
+                                    <div class="text-sm font-semibold text-gray-800 mb-1">DeptGroup HR</div>
+                                    <div class="text-gray-600 text-xs mb-1">
+                                        <i class="fas fa-user mr-1"></i>Manager: Cao Thị Group4
+                                    </div>
+                                    <div class="text-gray-600 text-xs">
+                                        <i class="fas fa-users mr-1"></i>Employees: 500
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <!-- Log Edited Tab (Placeholder) -->
-            <div id="log-edited" class="tab-content">
-                <div class="flex items-center justify-center mx-4 my-8">
-                    <div class="w-full" style="width: 1440px; min-height: 1024px;">
-                        <h3 class="text-lg font-medium text-gray-900">Log Edited</h3>
-                        <p class="text-sm text-gray-600">No data available for Log Edited.</p>
-                    </div>
+    <!-- Statistics Panel -->
+    <section id="statistics-panel" class="bg-white border-t border-gray-200">
+        <div class="max-w-full mx-auto px-8 py-6">
+            <div class="grid grid-cols-5 gap-6">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-600">1</div>
+                    <div class="text-sm text-gray-600">Company</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600">3</div>
+                    <div class="text-sm text-gray-600">Business Units</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-600">4</div>
+                    <div class="text-sm text-gray-600">Department Groups</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-600">3</div>
+                    <div class="text-sm text-gray-600">Departments</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-red-600">3</div>
+                    <div class="text-sm text-gray-600">Teams</div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-gray-900 text-white">
+        <div class="max-w-full mx-auto px-8 py-6">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-400">
+                    © 2024 Company ABC. Organization Chart System v2.1
+                </div>
+                <div class="flex items-center space-x-4 text-sm text-gray-400">
+                    <span>Last updated: December 2024</span>
+                    <span>•</span>
+                    <span>Total Employees: 1,200</span>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        function togglePanel(tableId) {
-            const table = document.getElementById(tableId);
-            const icon = document.getElementById(tableId.replace('-table', '-icon'));
-            if (table.style.display === 'none') {
-                table.style.display = 'block';
-                icon.className = 'fa-solid fa-chevron-down text-gray-500';
+        let currentZoom = 100;
+        
+        function toggleNode(nodeId) {
+            const node = document.getElementById(nodeId);
+            const toggleBtn = document.getElementById(nodeId.replace('-level', '-toggle'));
+            
+            if (node.classList.contains('hidden')) {
+                node.classList.remove('hidden');
+                toggleBtn.classList.remove('fa-plus');
+                toggleBtn.classList.add('fa-minus');
             } else {
-                table.style.display = 'none';
-                icon.className = 'fa-solid fa-chevron-right text-gray-500';
+                node.classList.add('hidden');
+                toggleBtn.classList.remove('fa-minus');
+                toggleBtn.classList.add('fa-plus');
             }
         }
-
-        function showTab(tabId) {
-            // Hide all tab contents
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => {
-                content.classList.remove('active');
+        
+        function showTooltip(event, tooltipId) {
+            const tooltip = document.getElementById(tooltipId);
+            tooltip.style.left = (event.pageX + 10) + 'px';
+            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.classList.add('show');
+        }
+        
+        function hideTooltip(tooltipId) {
+            const tooltip = document.getElementById(tooltipId);
+            tooltip.classList.remove('show');
+        }
+        
+        function zoomIn() {
+            if (currentZoom < 150) {
+                currentZoom += 10;
+                updateZoom();
+            }
+        }
+        
+        function zoomOut() {
+            if (currentZoom > 50) {
+                currentZoom -= 10;
+                updateZoom();
+            }
+        }
+        
+        function resetZoom() {
+            currentZoom = 100;
+            updateZoom();
+        }
+        
+        function updateZoom() {
+            const container = document.getElementById('chart-container');
+            container.style.transform = `scale(${currentZoom / 100})`;
+            document.getElementById('zoom-level').textContent = currentZoom + '%';
+        }
+        
+       
+        
+        // Initialize tooltips position
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltips = document.querySelectorAll('.tooltip');
+            tooltips.forEach(tooltip => {
+                tooltip.style.position = 'absolute';
+                tooltip.style.zIndex = '50';
             });
-
-            // Remove active class from all tab buttons
-            const tabButtons = document.querySelectorAll('#tab-navigation button');
-            tabButtons.forEach(button => {
-                button.classList.remove('border-b-2', 'border-blue-500', 'text-blue-600', 'font-medium');
-                button.classList.add('text-gray-600');
-            });
-
-            // Show selected tab content
-            const selectedTab = document.getElementById(tabId);
-            selectedTab.classList.add('active');
-
-            // Highlight selected tab button
-            const selectedButton = document.querySelector(`#tab-navigation button[onclick="showTab('${tabId}')"]`);
-            selectedButton.classList.add('border-b-2', 'border-blue-500', 'text-blue-600', 'font-medium');
-        }
-
-        function toggleTaskPopup() {
-            const popup = document.getElementById('taskPopup');
-            popup.classList.toggle('hidden');
-        }
-
-        function toggleDropdown(dropdownId) {
-            const dropdown = document.getElementById(dropdownId);
-            dropdown.classList.toggle('hidden');
-        }
+        });
     </script>
+
 </body>
 </html>
