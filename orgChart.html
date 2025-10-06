@@ -344,32 +344,7 @@
     </div>
 
     <!-- Statistics Panel -->
-    <section id="statistics-panel" class="bg-white border-t border-gray-200">
-        <div class="max-w-full mx-auto px-8 py-6">
-            <div class="grid grid-cols-5 gap-6">
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-600" id="comp-count">1</div>
-                    <div class="text-sm text-gray-600">COMP</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-green-600" id="unit-count">7</div>
-                    <div class="text-sm text-gray-600">UNIT</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-purple-600" id="deptgroup-count">20</div>
-                    <div class="text-sm text-gray-600">DEPT_GROUP</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-orange-600" id="dept-count">50</div>
-                    <div class="text-sm text-gray-600">DEPT</div>
-                </div>
-                <div class="text-center">
-                    <div class="text-2xl font-bold text-red-600" id="team-count">100</div>
-                    <div class="text-sm text-gray-600">TEAM</div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Footer -->
     <footer id="footer" class="bg-gray-900 text-white">
@@ -848,11 +823,11 @@
                 if (data.children) data.children.forEach(child => count += countNodes(child, type));
                 return count;
             }
-            document.getElementById('comp-count').textContent = countNodes(orgData, 'comp');
-            document.getElementById('unit-count').textContent = countNodes(orgData, 'unit');
-            document.getElementById('deptgroup-count').textContent = countNodes(orgData, 'dept_group');
-            document.getElementById('dept-count').textContent = countNodes(orgData, 'dept');
-            document.getElementById('team-count').textContent = countNodes(orgData, 'team');
+            //document.getElementById('comp-count').textContent = countNodes(orgData, 'comp');
+            //document.getElementById('unit-count').textContent = countNodes(orgData, 'unit');
+            //document.getElementById('deptgroup-count').textContent = countNodes(orgData, 'dept_group');
+            //document.getElementById('dept-count').textContent = countNodes(orgData, 'dept');
+            //document.getElementById('team-count').textContent = countNodes(orgData, 'team');
 
             // Total employees
             function sumEmployees(data) {
