@@ -329,7 +329,7 @@
     <div class="flex h-screen overflow-hidden">
         <!-- Organization Chart -->
         <main id="org-chart-main" class="org-chart-wrapper flex-1 p-8 overflow-auto">
-            <div class="org-chart-container bg-white rounded-xl shadow-sm border border-gray-200 h-full overflow-auto">
+        <div class="org-chart-container bg-white rounded-xl shadow-sm border border-gray-200 h-full overflow-auto cursor-grab">
                 <div id="chart-container" class="p-12 min-w-max min-h-full" style="transform-origin: top left;">
                     <!-- Rendered dynamically by JS -->
                 </div>
@@ -621,6 +621,43 @@ function renderNode(node, level = 0) {
         </div>
     `;
 }
+const container = document.querySelector('.org-chart-container');
+
+let isPanning = false;
+let startX, startY, scrollLeft, scrollTop;
+
+// Khi nhấn chuột
+container.addEventListener('mousedown', (e) => {
+  isPanning = true;
+  container.classList.remove('cursor-grab');
+  container.classList.add('cursor-grabbing');
+  startX = e.pageX - container.offsetLeft;
+  startY = e.pageY - container.offsetTop;
+  scrollLeft = container.scrollLeft;
+  scrollTop = container.scrollTop;
+});
+
+// Khi thả chuột hoặc rời vùng
+['mouseleave', 'mouseup'].forEach(evt =>
+  container.addEventListener(evt, () => {
+    isPanning = false;
+    container.classList.add('cursor-grab');
+    container.classList.remove('cursor-grabbing');
+  })
+);
+
+// Khi di chuyển chuột
+container.addEventListener('mousemove', (e) => {
+  if (!isPanning) return;
+  e.preventDefault();
+  const x = e.pageX - container.offsetLeft;
+  const y = e.pageY - container.offsetTop;
+  const walkX = (x - startX);
+  const walkY = (y - startY);
+  container.scrollLeft = scrollLeft - walkX;
+  container.scrollTop = scrollTop - walkY;
+});
+
 
 
         function toggleNode(nodeId) {
