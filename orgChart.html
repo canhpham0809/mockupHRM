@@ -277,18 +277,16 @@
                         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
                     </script>
                     <div class="relative">
-                        <input type="text" placeholder="Search departments or managers..."
+                        <input type="text" placeholder="Search names or managers..."
                             class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
                     <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         onchange="navigateToPage(this)">
-                        <option value="orgChart.html">Org Chart Unit</option>
-                        
+                        <option value="orgChart.html">Org Chart Unit</option>            
                         <option value="orgChartLegalEntity.html">Org Chart Legal Entity</option>
                         <option value="orgChartEmployee.html">Org Chart Employee</option>
                     </select>
-
                     <script>
                         function navigateToPage(select) {
                             const url = select.value;
@@ -513,62 +511,96 @@
         }
 
         function renderNode(node, level = 0) {
-            if (level === 0) return ''; // Skip root
-            const hasChildren = node.children && node.children.length > 0;
-            // Color based on type, not level
-            let borderColor = 'gray-200';
-            let hoverColor = 'gray-300';
-            if (node.type === 'unit') {
-                borderColor = 'green-200';
-                hoverColor = 'green-300';
-            } else if (node.type === 'dept_group') {
-                borderColor = 'purple-200';
-                hoverColor = 'purple-300';
-            } else if (node.type === 'dept') {
-                borderColor = 'orange-200';
-                hoverColor = 'orange-300';
-            } else if (node.type === 'team') {
-                borderColor = 'red-200';
-                hoverColor = 'red-300';
-            }
-            // Size based on type
-            let sizeClass = 'p-5 text-base';
-            if (node.type === 'team') sizeClass = 'p-2 text-xs';
-            else if (node.type === 'dept') sizeClass = 'p-3 text-sm';
-            else if (node.type === 'dept_group') sizeClass = 'p-4 text-sm';
-            // Spacing based on level
-            const spaceX = level <= 2 ? 'space-x-8' : level === 3 ? 'space-x-4' : 'space-x-2';
-            const toggleSize = node.type === 'team' ? 'w-4 h-4 text-xs' : 'w-5 h-5 text-xs';
-            const lineH = node.type === 'team' ? 'h-6' : 'h-8';
-            const toggleBg = node.type === 'unit' ? 'green' : node.type === 'dept_group' ? 'purple' : node.type === 'dept' ? 'orange' : 'red';
-            const toggleBtn = hasChildren ? `<button onclick="toggleNode('${node.id}'); event.stopPropagation();" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${toggleSize} bg-${toggleBg}-500 text-white rounded-full shadow hover:shadow-lg z-10"><i class="fas fa-minus" id="${node.id.replace('-level', '-toggle')}"></i></button>` : '';
-            let childrenContainerClass = `flex ${spaceX} flex-wrap hidden`;
-            if (node.type === 'dept') {
-                childrenContainerClass = 'grid grid-cols-3 gap-8 hidden justify-items-center';
-            }
-            const childrenHtml = hasChildren ? `<div class="w-px ${lineH} bg-gray-300"></div><div id="${node.id}" class="${childrenContainerClass}">${node.children.map(child => `<div class="flex flex-col items-center">${renderNode(child, level + 1)}</div>`).join('')}</div>` : '';
-            const title = node.name.split(' | ')[1] || node.name;
-            const email = node.email || `${node.manager.toLowerCase().replace(/[^a-z0-9]/g, '')}@vng.com`;
+    if (level === 0) return '';
+    const hasChildren = node.children && node.children.length > 0;
 
-            return `
-                <div class="flex flex-col items-center">
-                    <div class="org-node bg-white border-2 border-${borderColor} ${sizeClass} rounded-lg shadow-md cursor-pointer relative hover:border-${hoverColor}" 
-                         onclick="toggleDetail(this);"
-                         data-name="${node.manager}" 
-                         data-email="${email}" 
-                         data-title="${title}" 
-                         data-employees="${node.employees}">
-                        <div class="text-center">
-                            <div class="font-semibold text-gray-800 mb-1">${node.name}</div>
-                            <div class="text-gray-600 text-xs mb-1"><i class="fas fa-user mr-1"></i>Manager: ${node.manager}</div>
-                            <div class="text-gray-600 text-xs"><i class="fas fa-users mr-1"></i>Employees: ${node.employees.toLocaleString()}</div>
-                        </div>
-                        ${toggleBtn}
+    // 🎨 Màu sắc theo type
+    let borderColor = 'gray-200', hoverColor = 'gray-300';
+    if (node.type === 'unit') [borderColor, hoverColor] = ['green-200', 'green-300'];
+    else if (node.type === 'dept_group') [borderColor, hoverColor] = ['purple-200', 'purple-300'];
+    else if (node.type === 'dept') [borderColor, hoverColor] = ['orange-200', 'orange-300'];
+    else if (node.type === 'team') [borderColor, hoverColor] = ['red-200', 'red-300'];
+
+    // 📏 Kích thước giảm dần theo cấp
+    let sizeClass = 'p-5 text-base w-64';
+    if (node.type === 'dept_group') sizeClass = 'p-4 text-sm w-56';
+    else if (node.type === 'dept') sizeClass = 'p-3 text-xs w-48';
+    else if (node.type === 'team') sizeClass = 'p-2 text-[11px] w-40';
+
+    // 📐 Khoảng cách giữa node
+    const spaceX = level <= 2 ? 'space-x-8' : level === 3 ? 'space-x-4' : 'space-x-2';
+
+    // 🔘 Toggle button
+    const hasChildrenBtn = hasChildren
+        ? `<button onclick="toggleNode('${node.id}'); event.stopPropagation();"
+             class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-5 h-5 
+                    bg-${node.type === 'unit' ? 'green' : node.type === 'dept_group' ? 'purple' : node.type === 'dept' ? 'orange' : 'red'}-500 
+                    text-white rounded-full shadow hover:shadow-lg z-10">
+             <i class="fas fa-minus" id="${node.id.replace('-level', '-toggle')}"></i>
+           </button>`
+        : '';
+
+    // 🧱 Layout con
+    let childrenContainerClass = `flex ${spaceX} flex-wrap hidden`;
+    if (node.type === 'dept') {
+        if (node.children.length >= 3)
+            childrenContainerClass = 'grid grid-cols-3 gap-8 hidden justify-items-center';
+        else
+            childrenContainerClass = 'flex justify-center gap-8 hidden';
+    }
+
+    // 🧩 Thông tin node
+    const title = node.name.split(' | ')[1] || node.name;
+    const email = node.email || `${node.manager.toLowerCase().replace(/[^a-z0-9]/g, '')}@vng.com`;
+
+    const childrenHtml = hasChildren
+        ? `<div class="w-px h-8 bg-gray-300"></div>
+           <div id="${node.id}" class="${childrenContainerClass}">
+             ${node.children.map(child => `<div class="flex flex-col items-center">${renderNode(child, level + 1)}</div>`).join('')}
+           </div>`
+        : '';
+
+    // 🧠 Node chính
+    return `
+        <div class="flex flex-col items-center">
+            <div class="org-node bg-white border-2 border-${borderColor} ${sizeClass}
+                        rounded-lg shadow-md cursor-pointer relative hover:border-${hoverColor}
+                        group overflow-visible"
+                 onclick="toggleDetail(this);"
+                 data-name="${node.manager}"
+                 data-email="${email}"
+                 data-title="${title}"
+                 data-employees="${node.employees}">
+                 
+                <div class="text-center">
+                    <!-- Name -->
+                    <div class="font-semibold text-gray-800 mb-1 truncate max-w-full">${node.name}</div>
+                    <!-- Manager -->
+                    <div class="text-gray-600 text-xs mb-1 truncate max-w-full">
+                        <i class="fas fa-user mr-1"></i>Manager: ${node.manager}
                     </div>
-                    ${childrenHtml}
+                    <!-- Employees -->
+                    <div class="text-gray-600 text-xs">
+                        <i class="fas fa-users mr-1"></i>Employees: ${node.employees.toLocaleString()}
+                    </div>
                 </div>
-            `;
-        }
+
+                <!-- Tooltip hiển thị khi hover -->
+                <div class="tooltip hidden absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl 
+                            group-hover:block w-max left-1/2 -translate-x-1/2 -top-24 animate-fadeIn">
+                    <div class="text-sm text-left whitespace-nowrap">
+                        <div class="font-semibold">${node.manager}</div>
+                        <div class="text-gray-300">${email}</div>
+                        <div class="text-gray-300">${title}</div>
+                    </div>
+                </div>
+
+                ${hasChildrenBtn}
+            </div>
+            ${childrenHtml}
+        </div>
+    `;
+}
 
         function toggleNode(nodeId) {
             const node = document.getElementById(nodeId);

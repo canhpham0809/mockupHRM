@@ -277,7 +277,7 @@
                         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
                     </script>
                     <div class="relative">
-                        <input type="text" placeholder="Search departments or managers..."
+                        <input type="text" placeholder="Search names or managers..."
                             class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
@@ -407,104 +407,73 @@
             "email": "",
             "id": "comp",
             "children": [
-                // UNITS
                 {
                     "type": "unit",
-                    "name": "VG | VNG",
-                    "manager": "",
-                    "employees": 1310,
-                    "email": "",
-                    "id": "inct-level",
+                    "name": "VNG | VNG Corporation",
+                    "manager": "Trần Quang VNG",
+                    "employees": 3100,
+                    "email": "vng@vng.com",
+                    "id": "vng-level",
                     "children": [
-                        { "type": "dept_group", "name": "GTS | GreenNode Technical Services", "manager": "Lê Văn GTS", "employees": 800, "email": "gts@vng.com", "id": "gts-level", "children": [] },
-                        { "type": "dept_group", "name": "SOLUTION | VNG Solution", "manager": "Trần Thu Solution", "employees": 420, "email": "solution@vng.com", "id": "solution-level", "children": [] },
-                        { "type": "dept_group", "name": "INP | InstantiaPay", "manager": "Nguyễn Hữu INP", "employees": 230, "email": "inp@vng.com", "id": "inp-level", "children": [] },
-                        { "type": "dept_group", "name": "A4B | App For Business", "manager": "Phạm Thanh A4B", "employees": 310, "email": "a4b@vng.com", "id": "a4b-level", "children": [] },
-                        { "type": "dept_group", "name": "DATA | Data & Analytics", "manager": "Hoàng Minh DATA", "employees": 150, "email": "data@vng.com", "id": "data-level", "children": [] },
-                        { "type": "dept_group", "name": "OPS | Operations Center", "manager": "Đỗ Văn OPS", "employees": 275, "email": "ops@vng.com", "id": "ops-level", "children": [] },
-                        { "type": "dept_group", "name": "HR | Human Resources", "manager": "Vũ Thị HR", "employees": 95, "email": "hr@vng.com", "id": "hr-level", "children": [] },
-                        { "type": "dept_group", "name": "MARKETING | Brand & Growth", "manager": "Lê Khánh MARK", "employees": 185, "email": "marketing@vng.com", "id": "marketing-level", "children": [] },
-                        { "type": "dept_group", "name": "FIN | Finance & Accounting", "manager": "Ngô Quang FIN", "employees": 120, "email": "finance@vng.com", "id": "finance-level", "children": [] },
-                        { "type": "dept_group", "name": "R&D | Research & Development", "manager": "Trương Đức RnD", "employees": 260, "email": "rnd@vng.com", "id": "rnd-level", "children": [] }
+                        { "type": "dept_group", "name": "Instantia | Instantia Capital Pte. Ltd.", "manager": "Nguyễn Văn Instantia", "employees": 180, "email": "instantia@vng.com", "id": "instantia-level", "children": [] },
+                        { "type": "dept_group", "name": "VTH | VTH Software Development Joint Stock Company", "manager": "Phạm Thị VTH", "employees": 230, "email": "vth@vng.com", "id": "vth-level", "children": [] },
+                        { "type": "dept_group", "name": "Instantiapay | Instantiapay Holdings Pte. Ltd.", "manager": "Lê Minh Instantiapay", "employees": 310, "email": "instantiapay@vng.com", "id": "instantiapay-level", "children": [] },
+                        { "type": "dept_group", "name": "Verichains SG | Verichains SG Pte. Ltd.", "manager": "Trương Đức Verichains", "employees": 200, "email": "verichains@vng.com", "id": "verichains-sg-level", "children": [] },
+                        { "type": "dept_group", "name": "2Morebits | 2Morebits Company Limited", "manager": "Nguyễn Hải 2Morebits", "employees": 160, "email": "2morebits@vng.com", "id": "2morebits-level", "children": [] },
+                        { "type": "dept_group", "name": "Instantiapay AUS | Instantiapay Pty Ltd.", "manager": "Đỗ Văn AUS", "employees": 150, "email": "instantiapayaus@vng.com", "id": "instantiapay-aus-level", "children": [] },
+                        { "type": "dept_group", "name": "VNGs | VNG Software Development Company Limited", "manager": "Phan Thanh VNGs", "employees": 400, "email": "vngs@vng.com", "id": "vngs-level", "children": [] },
+                        { "type": "dept_group", "name": "BIPO China | Botong Enterprise management Shanghai Ltd.", "manager": "Trịnh Quốc BIPO", "employees": 220, "email": "bipochina@vng.com", "id": "bipo-china-level", "children": [] },
+                        { "type": "dept_group", "name": "Instantiapay SG | Instantiapay SG Pte. Ltd.", "manager": "Đặng Lan SG", "employees": 270, "email": "instantiapaysg@vng.com", "id": "instantiapay-sg-level", "children": [] },
+                        { "type": "dept_group", "name": "Greennode | Greennode Joint Stock Company", "manager": "Ngô Trọng Green", "employees": 240, "email": "greennode@vng.com", "id": "greennode-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Taiwan | VNG Singapore Pte. Ltd. Taiwan Branch", "manager": "Hồ Văn Taiwan", "employees": 150, "email": "vngtaiwan@vng.com", "id": "vng-taiwan-level", "children": [] },
+                        { "type": "dept_group", "name": "ZIE | ZIE Company Limited", "manager": "Đặng Hữu ZIE", "employees": 130, "email": "zie@vng.com", "id": "zie-level", "children": [] },
+                        { "type": "dept_group", "name": "XFM | XFM Joint Stock Company", "manager": "Lý Hải XFM", "employees": 190, "email": "xfm@vng.com", "id": "xfm-level", "children": [] },
+                        { "type": "dept_group", "name": "Greennode Sing | Greennode Pte. Ltd.", "manager": "Tô Thảo Greennode", "employees": 170, "email": "greennodesg@vng.com", "id": "greennode-sing-level", "children": [] },
+                        { "type": "dept_group", "name": "Adtima | Adtima Joint Stock Company", "manager": "Vũ Duy Adtima", "employees": 410, "email": "adtima@vng.com", "id": "adtima-level", "children": [] },
+                        { "type": "dept_group", "name": "TalentNet | Talent Net Corporation", "manager": "Lý Ngọc Talent", "employees": 300, "email": "tln@vng.com", "id": "talentnet-level", "children": [] },
+                        { "type": "dept_group", "name": "A4B | A4B Joint Stock Company", "manager": "Phạm Thanh A4B", "employees": 290, "email": "a4b@vng.com", "id": "a4b-level", "children": [] },
+                        { "type": "dept_group", "name": "MIXUS | MIXUS Joint Stock Company", "manager": "Vũ Hà MIXUS", "employees": 230, "email": "mixus@vng.com", "id": "mixus-level", "children": [] },
+                        { "type": "dept_group", "name": "VNGGames Thai | VNG Games Co., Ltd.", "manager": "Vũ Thảo Di Cầm", "employees": 260, "email": "vnggamesthai@vng.com", "id": "vnggames-thai-level", "children": [] },
+                        { "type": "dept_group", "name": "Fiza | Fiza Joint Stock Company", "manager": "Đỗ Nam Fiza", "employees": 150, "email": "fiza@vng.com", "id": "fiza-level", "children": [] },
+                        { "type": "dept_group", "name": "Zingplay | Zingplay International Pte. Ltd.", "manager": "Nguyễn Hữu Zing", "employees": 240, "email": "zingplay@vng.com", "id": "zingplay-level", "children": [] },
+                        { "type": "dept_group", "name": "Digital Business | VNG Digital Business Company Limited", "manager": "Hoàng Quân Digital", "employees": 340, "email": "digital@vng.com", "id": "digital-business-level", "children": [] },
+                        { "type": "dept_group", "name": "INSTANTIAPAY VN | Instantiapay Vietnam Company Limited", "manager": "Đặng Anh INP", "employees": 290, "email": "instantiapayvn@vng.com", "id": "instantiapay-vn-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Online | VNG Online Pte. Ltd.", "manager": "Đỗ Lan Online", "employees": 310, "email": "vngonline@vng.com", "id": "vng-online-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG SEA | VNG SEA Company Limited", "manager": "Phan Ngọc SEA", "employees": 250, "email": "vngsea@vng.com", "id": "vng-sea-level", "children": [] },
+                        { "type": "dept_group", "name": "VNGGames SG | VNGGames Pte. Ltd.", "manager": "Lê Anh Games", "employees": 270, "email": "vnggamessg@vng.com", "id": "vnggames-sg-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Taiwan Branch | VNG Taiwan Branch", "manager": "Hoàng Phúc Taiwan", "employees": 200, "email": "vngtw@vng.com", "id": "vng-tw-level", "children": [] },
+                        { "type": "dept_group", "name": "ZaloPay | ZaloPay Company Limited", "manager": "Ngô Minh ZaloPay", "employees": 350, "email": "zalopay@vng.com", "id": "zalopay-level", "children": [] },
+                        { "type": "dept_group", "name": "Zalo Group | Zalo Group Joint Stock Company", "manager": "Vũ Hạnh Zalo", "employees": 320, "email": "zalo@vng.com", "id": "zalogroup-level", "children": [] },
+                        { "type": "dept_group", "name": "Business Solutions | VNG Business Solutions Company Limited", "manager": "Nguyễn Văn Biz", "employees": 180, "email": "bizsol@vng.com", "id": "business-solutions-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Corp | VNG Corp", "manager": "Lê Quốc Corp", "employees": 400, "email": "vngcorp@vng.com", "id": "vngcorp-level", "children": [] },
+                        { "type": "dept_group", "name": "VNGGames SG | VNGGames Singapore Pte. Ltd.", "manager": "Phạm Văn SG", "employees": 280, "email": "vnggamessg@vng.com", "id": "vnggamessg-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Japan | VNG Japan Company Limited", "manager": "Nguyễn Nhật VNG", "employees": 160, "email": "vngjp@vng.com", "id": "vng-japan-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Malaysia | VNG Malaysia Company Limited", "manager": "Trần Văn MY", "employees": 130, "email": "vngmy@vng.com", "id": "vng-malaysia-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Philippines | VNG Philippines Inc.", "manager": "Hoàng Linh PH", "employees": 120, "email": "vngph@vng.com", "id": "vng-philippines-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG China | VNG China Ltd.", "manager": "Trương Minh CN", "employees": 150, "email": "vngchina@vng.com", "id": "vng-china-level", "children": [] },
+                        { "type": "dept_group", "name": "VNG Singapore | VNG Singapore Pte. Ltd.", "manager": "Đỗ Ngọc SG", "employees": 310, "email": "vngsg@vng.com", "id": "vng-singapore-level", "children": [] }
                     ]
-
                 },
-                // UNITS
                 {
                     "type": "unit",
-                    "name": "VND | VinaData",
-                    "manager": "",
+                    "name": "VND | Vinadata Joint Stock Company",
+                    "manager": "Nguyễn Văn VND",
                     "employees": 940,
-                    "email": "",
-                    "id": "inct-level5",
+                    "email": "vinadata@vng.com",
+                    "id": "vnd-level",
                     "children": [
-                        { "type": "dept_group", "name": "ALPHA-CORE | Alpha Core", "manager": "Trần Thị A1", "employees": 210, "email": "a1@vng.com", "id": "alpha-core", "children": [] },
-                        { "type": "dept_group", "name": "ALPHA-OPS | Alpha Operations", "manager": "Phạm Văn A2", "employees": 180, "email": "a2@vng.com", "id": "alpha-ops", "children": [] },
-                        { "type": "dept_group", "name": "ALPHA-RnD | Alpha R&D", "manager": "Lê Thị A3", "employees": 220, "email": "a3@vng.com", "id": "alpha-rnd", "children": [] },
-                        { "type": "dept_group", "name": "ALPHA-SALES | Alpha Sales", "manager": "Hoàng Văn A4", "employees": 300, "email": "a4@vng.com", "id": "alpha-sales", "children": [] },
-                        { "type": "dept_group", "name": "ALPHA-SUPPORT | Alpha Support", "manager": "Vũ Thị A5", "employees": 370, "email": "a5@vng.com", "id": "alpha-support", "children": [] }
-                    ]
-                },
-                // UNITS
-                {
-                    "type": "unit",
-                    "name": "VNT | VinatechSoft",
-                    "manager": "",
-                    "employees": 110,
-                    "email": "inct@vng.com",
-                    "id": "inct-level4",
-                    "children": [
-                        { "type": "dept_group", "name": "BETA-PLATFORM | Beta Platform", "manager": "Ngô Văn B1", "employees": 150, "email": "b1@vng.com", "id": "beta-platform", "children": [] },
-                        { "type": "dept_group", "name": "BETA-UX | Beta UX/UI", "manager": "Đỗ Thị B2", "employees": 130, "email": "b2@vng.com", "id": "beta-ux", "children": [] },
-                        { "type": "dept_group", "name": "BETA-ENG | Beta Engineering", "manager": "Phạm Minh B3", "employees": 220, "email": "b3@vng.com", "id": "beta-eng", "children": [] },
-                        { "type": "dept_group", "name": "BETA-CUSTOMER | Beta Customer", "manager": "Lê Văn B4", "employees": 190, "email": "b4@vng.com", "id": "beta-customer", "children": [] },
-                        { "type": "dept_group", "name": "BETA-ANALYTICS | Beta Analytics", "manager": "Hoàng Thị B5", "employees": 250, "email": "b5@vng.com", "id": "beta-analytics", "children": [] }
-                    ]
-                },
-                // UNITS
-                {
-                    "type": "unit",
-                    "name": "EPI | WEP EPI",
-                    "manager": "",
-                    "employees": 430,
-                    "email": "inct@vng.com",
-                    "id": "inct-level3",
-                    "children": [
-                        { "type": "dept_group", "name": "GAMMA-INCUB8 | Incub8 Team", "manager": "Trần Đăng G1", "employees": 120, "email": "g1@vng.com", "id": "gamma-incub8", "children": [] },
-                        { "type": "dept_group", "name": "GAMMA-BIZ | Gamma Business", "manager": "Nguyễn Thanh G2", "employees": 140, "email": "g2@vng.com", "id": "gamma-biz", "children": [] },
-                        { "type": "dept_group", "name": "GAMMA-TECH | Gamma Tech", "manager": "Phan Thị G3", "employees": 200, "email": "g3@vng.com", "id": "gamma-tech", "children": [] },
-                        { "type": "dept_group", "name": "GAMMA-OPS | Gamma Operations", "manager": "Võ Quang G4", "employees": 130, "email": "g4@vng.com", "id": "gamma-ops", "children": [] },
-                        { "type": "dept_group", "name": "GAMMA-HR | Gamma HR", "manager": "Đặng Thị G5", "employees": 170, "email": "g5@vng.com", "id": "gamma-hr", "children": [] }
+                        { "type": "dept_group", "name": "Vinadata Child | Example Dept of Vinadata", "manager": "Trần Đức VND1", "employees": 250, "email": "vndchild@vng.com", "id": "vnd-child-level", "children": [] }
                     ]
                 },
                 {
                     "type": "unit",
-                    "name": "IT | Intern",
-                    "manager": "",
-                    "employees": 140,
-                    "email": "inct@vng.com",
-                    "id": "inct-level2",
+                    "name": "EPI | EPI Technologies Joint Stock Company",
+                    "manager": "Phạm Văn EPI",
+                    "employees": 870,
+                    "email": "epi@vng.com",
+                    "id": "epi-level",
                     "children": [
-                        { "type": "dept_group", "name": "DELTA-BE | Back-end Team", "manager": "Nguyễn Hữu D1", "employees": 260, "email": "d1@vng.com", "id": "delta-be", "children": [] },
-                        { "type": "dept_group", "name": "DELTA-FE | Front-end Team", "manager": "Trịnh Thị D2", "employees": 210, "email": "d2@vng.com", "id": "delta-fe", "children": [] },
-                        { "type": "dept_group", "name": "DELTA-ML | Delta ML", "manager": "Lưu Văn D3", "employees": 180, "email": "d3@vng.com", "id": "delta-ml", "children": [] },
-                        { "type": "dept_group", "name": "DELTA-SEC | Delta Security", "manager": "Phùng Thị D4", "employees": 140, "email": "d4@vng.com", "id": "delta-sec", "children": [] },
-                        { "type": "dept_group", "name": "DELTA-OPS | Delta Operations", "manager": "Bùi Văn D5", "employees": 320, "email": "d5@vng.com", "id": "delta-ops", "children": [] }
-                    ]
-                },
-                {
-                    "type": "unit",
-                    "name": "VG | Zion",
-                    "manager": "",
-                    "employees": 640,
-                    "email": "inct@vng.com",
-                    "id": "inct-level1",
-                    "children": [
-                        { "type": "dept_group", "name": "OMEGA-GAME | Omega Game Dev", "manager": "Lê Đức O1", "employees": 240, "email": "o1@vng.com", "id": "omega-game", "children": [] },
-                        { "type": "dept_group", "name": "OMEGA-ART | Omega Art", "manager": "Trần Mỹ O2", "employees": 160, "email": "o2@vng.com", "id": "omega-art", "children": [] },
-                        { "type": "dept_group", "name": "OMEGA-QA | Omega QA", "manager": "Ngô Thị O3", "employees": 130, "email": "o3@vng.com", "id": "omega-qa", "children": [] },
-                        { "type": "dept_group", "name": "OMEGA-ENG | Omega Engineering", "manager": "Hoàng Văn O4", "employees": 180, "email": "o4@vng.com", "id": "omega-eng", "children": [] },
-                        { "type": "dept_group", "name": "OMEGA-MKT | Omega Marketing", "manager": "Phạm Thị O5", "employees": 150, "email": "o5@vng.com", "id": "omega-mkt", "children": [] }
+                        { "type": "dept_group", "name": "EPI Sub | Example Dept of EPI", "manager": "Lê Hữu EPI1", "employees": 210, "email": "episub@vng.com", "id": "epi-sub-level", "children": [] }
                     ]
                 }
             ]
@@ -561,65 +530,98 @@
                 </div>
             `;
         }
+function renderNode(node, level = 0) {
+    if (level === 0) return '';
+    const hasChildren = node.children && node.children.length > 0;
 
-        function renderNode(node, level = 0) {
-            if (level === 0) return ''; // Skip root
-            const hasChildren = node.children && node.children.length > 0;
-            // Color based on type, not level
-            let borderColor = 'gray-200';
-            let hoverColor = 'gray-300';
-            if (node.type === 'unit') {
-                borderColor = 'green-200';
-                hoverColor = 'green-300';
-            } else if (node.type === 'dept_group') {
-                borderColor = 'purple-200';
-                hoverColor = 'purple-300';
-            } else if (node.type === 'dept') {
-                borderColor = 'orange-200';
-                hoverColor = 'orange-300';
-            } else if (node.type === 'team') {
-                borderColor = 'red-200';
-                hoverColor = 'red-300';
-            }
-            // Size based on type
-            let sizeClass = 'p-5 text-base';
-            if (node.type === 'team') sizeClass = 'p-2 text-xs';
-            else if (node.type === 'dept') sizeClass = 'p-3 text-sm';
-            else if (node.type === 'dept_group') sizeClass = 'p-4 text-sm';
-            // Spacing based on level
-            const spaceX = level <= 2 ? 'space-x-8' : level === 3 ? 'space-x-4' : 'space-x-2';
-            const toggleSize = node.type === 'team' ? 'w-4 h-4 text-xs' : 'w-5 h-5 text-xs';
-            const lineH = node.type === 'team' ? 'h-6' : 'h-8';
-            const toggleBg = node.type === 'unit' ? 'green' : node.type === 'dept_group' ? 'purple' : node.type === 'dept' ? 'orange' : 'red';
-            const toggleBtn = hasChildren ? `<button onclick="toggleNode('${node.id}'); event.stopPropagation();" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${toggleSize} bg-${toggleBg}-500 text-white rounded-full shadow hover:shadow-lg z-10"><i class="fas fa-minus" id="${node.id.replace('-level', '-toggle')}"></i></button>` : '';
-            // For the last level (children of unit, i.e., dept_group), use grid with max 3 columns
-            let childrenContainerClass = `flex ${spaceX} flex-wrap hidden`;
-            if (node.type === 'unit') {
-                childrenContainerClass = 'grid grid-cols-3 gap-8 hidden justify-items-center';
-            }
-            const childrenHtml = hasChildren ? `<div class="w-px ${lineH} bg-gray-300"></div><div id="${node.id}" class="${childrenContainerClass}">${node.children.map(child => `<div class="flex flex-col items-center">${renderNode(child, level + 1)}</div>`).join('')}</div>` : '';
-            const title = node.name.split(' | ')[1] || node.name;
-            const email = node.email || `${node.manager.toLowerCase().replace(/[^a-z0-9]/g, '')}@vng.com`;
+    // 🎨 Màu sắc theo type
+    let borderColor = 'gray-200', hoverColor = 'gray-300';
+    if (node.type === 'unit') [borderColor, hoverColor] = ['green-200', 'green-300'];
+    else if (node.type === 'dept_group') [borderColor, hoverColor] = ['purple-200', 'purple-300'];
+    else if (node.type === 'dept') [borderColor, hoverColor] = ['orange-200', 'orange-300'];
+    else if (node.type === 'team') [borderColor, hoverColor] = ['red-200', 'red-300'];
 
-            return `
-                <div class="flex flex-col items-center">
-                    <div class="org-node bg-white border-2 border-${borderColor} ${sizeClass} rounded-lg shadow-md cursor-pointer relative hover:border-${hoverColor}" 
-                         onclick="toggleDetail(this);"
-                         data-name="${node.manager}" 
-                         data-email="${email}" 
-                         data-title="${title}" 
-                         data-employees="${node.employees}">
-                        <div class="text-center">
-                            <div class="font-semibold text-gray-800 mb-1">${node.name}</div>
-                            <div class="text-gray-600 text-xs mb-1"><i class="fas fa-user mr-1"></i>Manager: ${node.manager}</div>
-                            <div class="text-gray-600 text-xs"><i class="fas fa-users mr-1"></i>Employees: ${node.employees.toLocaleString()}</div>
-                        </div>
-                        ${toggleBtn}
+    // 📏 Kích thước giảm dần theo cấp
+    let sizeClass = 'p-5 text-base w-64';
+    if (node.type === 'dept_group') sizeClass = 'p-4 text-sm w-56';
+    else if (node.type === 'dept') sizeClass = 'p-3 text-xs w-48';
+    else if (node.type === 'team') sizeClass = 'p-2 text-[11px] w-40';
+
+    // 📐 Khoảng cách giữa node
+    const spaceX = level <= 2 ? 'space-x-8' : level === 3 ? 'space-x-4' : 'space-x-2';
+
+    // 🔘 Toggle button
+    const hasChildrenBtn = hasChildren
+        ? `<button onclick="toggleNode('${node.id}'); event.stopPropagation();"
+             class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-5 h-5 
+                    bg-${node.type === 'unit' ? 'green' : node.type === 'dept_group' ? 'purple' : node.type === 'dept' ? 'orange' : 'red'}-500 
+                    text-white rounded-full shadow hover:shadow-lg z-10">
+             <i class="fas fa-minus" id="${node.id.replace('-level', '-toggle')}"></i>
+           </button>`
+        : '';
+
+    // 🧱 Layout con
+    let childrenContainerClass = `flex ${spaceX} flex-wrap hidden`;
+    if (node.type === 'unit') {
+        if (node.children.length >= 3)
+            childrenContainerClass = 'grid grid-cols-3 gap-8 hidden justify-items-center';
+        else
+            childrenContainerClass = 'flex justify-center gap-8 hidden';
+    }
+
+    // 🧩 Thông tin node
+    const title = node.name.split(' | ')[1] || node.name;
+    const email = node.email || `${node.manager.toLowerCase().replace(/[^a-z0-9]/g, '')}@vng.com`;
+
+    const childrenHtml = hasChildren
+        ? `<div class="w-px h-8 bg-gray-300"></div>
+           <div id="${node.id}" class="${childrenContainerClass}">
+             ${node.children.map(child => `<div class="flex flex-col items-center">${renderNode(child, level + 1)}</div>`).join('')}
+           </div>`
+        : '';
+
+    // 🧠 Node chính
+    return `
+        <div class="flex flex-col items-center">
+            <div class="org-node bg-white border-2 border-${borderColor} ${sizeClass}
+                        rounded-lg shadow-md cursor-pointer relative hover:border-${hoverColor}
+                        group overflow-visible"
+                 onclick="toggleDetail(this);"
+                 data-name="${node.manager}"
+                 data-email="${email}"
+                 data-title="${title}"
+                 data-employees="${node.employees}">
+                 
+                <div class="text-center">
+                    <!-- Name -->
+                    <div class="font-semibold text-gray-800 mb-1 truncate max-w-full">${node.name}</div>
+                    <!-- Manager -->
+                    <div class="text-gray-600 text-xs mb-1 truncate max-w-full">
+                        <i class="fas fa-user mr-1"></i>Manager: ${node.manager}
                     </div>
-                    ${childrenHtml}
+                    <!-- Employees -->
+                    <div class="text-gray-600 text-xs">
+                        <i class="fas fa-users mr-1"></i>Employees: ${node.employees.toLocaleString()}
+                    </div>
                 </div>
-            `;
-        }
+
+                <!-- Tooltip hiển thị khi hover -->
+                <div class="tooltip hidden absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl 
+                            group-hover:block w-max left-1/2 -translate-x-1/2 -top-24 animate-fadeIn">
+                    <div class="text-sm text-left whitespace-nowrap">
+                        <div class="font-semibold">${node.manager}</div>
+                        <div class="text-gray-300">${email}</div>
+                        <div class="text-gray-300">${title}</div>
+                    </div>
+                </div>
+
+                ${hasChildrenBtn}
+            </div>
+            ${childrenHtml}
+        </div>
+    `;
+}
+
 
         function toggleNode(nodeId) {
             const node = document.getElementById(nodeId);
@@ -710,6 +712,10 @@
                         <div class="detail-section">
                             <div class="detail-label">Manager</div>
                             <div class="detail-value">${name} - ${title}</div>
+                        </div>
+                        <div class="detail-section">
+                            <div class="detail-label">Company Group</div>
+                            <div class="detail-value">VNG</div>
                         </div>
                         <div class="detail-section">
                             <div class="detail-label">Head Office</div>

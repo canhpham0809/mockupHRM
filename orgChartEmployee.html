@@ -277,7 +277,7 @@
                         document.getElementById('dateInput').value = new Date().toISOString().split('T')[0];
                     </script>
                     <div class="relative">
-                        <input type="text" placeholder="Search departments or managers..."
+                        <input type="text" placeholder="Search names or managers..."
                             class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                     </div>
@@ -376,87 +376,186 @@
         // Org Data JSON (full structure abbreviated for response; in production, expand all with manager/employees for TEAM)
         const orgData = {
             "type": "comp",
-            "name": "SMT | Senior Management Team",
-            "manager": "Nguyễn Văn CEO",
-            "employees": 5000,
-            "email": "ceo@vng.com",
+            "name": "Lê Hồng Minh - VG-00001",
+            "manager": "",
+            "employees": 50,
+            "email": "lehongminh@vng.com",
             "id": "comp",
             "children": [
-                // UNITS
                 {
                     "type": "unit",
-                    "name": "INCT | Incubator",
-                    "manager": "Trần Văn INCT",
-                    "employees": 500,
-                    "email": "inct@vng.com",
-                    "id": "inct-level",
+                    "name": "Trần Quốc Khánh - VG-00002",
+                    "manager": "Lê Hồng Minh - VG-00001",
+                    "employees": 15,
+                    "email": "tranquockhanh@vng.com",
+                    "id": "unit-1-level",
                     "children": [
-                        // DEPT under INCT
-                        { "type": "dept", "name": "Solution | VNG Solution", "manager": "Lê Văn Solution", "employees": 100, "email": "solution@vng.com", "id": "solution-level", "children": [] },
-                        { "type": "dept", "name": "INP | InstantiaPay", "manager": "Phạm Văn INP", "employees": 150, "email": "inp@vng.com", "id": "inp-level", "children": [] },
                         {
-                            "type": "dept", "name": "A4B | App For Business", "manager": "Hoàng Văn A4B", "employees": 200, "email": "a4b@vng.com", "id": "a4b-level", "children": [
-                                // TEAM under A4B            
-                                { "type": "team", "name": "BE | Back-end", "manager": "Nguyễn Văn BE", "employees": 20, "email": "be@vng.com", "id": "be-level", "children": [] },
-                                { "type": "team", "name": "FE | Front-end", "manager": "Trần Thị FE", "employees": 18, "email": "fe@vng.com", "id": "fe-level", "children": [] },
-                                { "type": "team", "name": "QA | Quality Assurance", "manager": "Lê Văn QA", "employees": 10, "email": "qa@vng.com", "id": "qa-level", "children": [] },
-                                { "type": "team", "name": "DevOps | Infrastructure", "manager": "Phạm Quốc Ops", "employees": 8, "email": "devops@vng.com", "id": "devops-level", "children": [] },
-                                { "type": "team", "name": "PMO | Project Management", "manager": "Ngô Minh PM", "employees": 6, "email": "pmo@vng.com", "id": "pmo-level", "children": [] }
-
-                                // ... all 8 TEAM as in document
-                            ]
-                        },
-                        { "type": "dept", "name": "PRISM-B | PRISM Business", "manager": "Phạm Văn PRISM", "employees": 80, "email": "prism@vng.com", "id": "prism-b-level", "children": [] }
-                    ]
-                },
-                {
-                    "type": "unit",
-                    "name": "DB | Digital Business",
-                    "manager": "Hoàng Văn DB",
-                    "employees": 1200,
-                    "email": "db@vng.com",
-                    "id": "db-level",
-                    "children": [
-                        // DEPT_GROUP under DB, e.g. VBU, GTS, VCF, etc., with nested DEPT/TEAM as in document
-                        // Example for GTS
-                        {
-                            "type": "dept_group", "name": "GTS | GreenNode Technical Services", "manager": "Lê Văn GTS", "employees": 800, "email": "gts@vng.com", "id": "gts-level", "children": [
+                            "type": "dept_group",
+                            "name": "Nguyễn Văn A - VG-00005",
+                            "manager": "Trần Quốc Khánh - VG-00002",
+                            "employees": 8,
+                            "email": "nguyenvana@vng.com",
+                            "id": "deptgroup-1",
+                            "children": [
                                 {
-                                    "type": "dept", "name": "MSS | Managed Services & Support", "manager": "Phạm Văn MSS", "employees": 200, "email": "mss@vng.com", "id": "mss-level", "children": [
-                                        { "type": "team", "name": "MS | Managed Services", "manager": "Hoàng Văn MS", "employees": 70, "email": "ms@vng.com", "id": "ms-team-level", "children": [] },
-                                        // ... other TEAM under MSS
+                                    "type": "dept",
+                                    "name": "Lê Quốc Toàn - VG-00010",
+                                    "manager": "Nguyễn Văn A - VG-00005",
+                                    "employees": 4,
+                                    "email": "lequoctoan@vng.com",
+                                    "id": "dept-1-level",
+                                    "children": [
+                                        { "type": "team", "name": "Trần Thị Thu - VG-00020", "manager": "Lê Quốc Toàn - VG-00010", "employees": 1, "email": "tranthithu@vng.com", "id": "team-1", "children": [] },
+                                        { "type": "team", "name": "Phạm Minh Đức - VG-00021", "manager": "Lê Quốc Toàn - VG-00010", "employees": 1, "email": "phamminhduc@vng.com", "id": "team-2", "children": [] },
+                                        { "type": "team", "name": "Hoàng Bảo Long - VG-00022", "manager": "Lê Quốc Toàn - VG-00010", "employees": 1, "email": "hoangbaolong@vng.com", "id": "team-3", "children": [] },
+                                        { "type": "team", "name": "Vũ Thị Hà - VG-00023", "manager": "Lê Quốc Toàn - VG-00010", "employees": 1, "email": "vuthih@vng.com", "id": "team-4", "children": [] }
                                     ]
                                 },
-                                // ... other DEPT under GTS
+                                {
+                                    "type": "dept",
+                                    "name": "Phạm Thị Lan - VG-00011",
+                                    "manager": "Nguyễn Văn A - VG-00005",
+                                    "employees": 4,
+                                    "email": "phamthilan@vng.com",
+                                    "id": "dept-2-level",
+                                    "children": [
+                                        { "type": "team", "name": "Trịnh Thị Hòa - VG-00024", "manager": "Phạm Thị Lan - VG-00011", "employees": 1, "email": "trinithih@vng.com", "id": "team-5", "children": [] },
+                                        { "type": "team", "name": "Nguyễn Đức Quân - VG-00025", "manager": "Phạm Thị Lan - VG-00011", "employees": 1, "email": "nguyenducquan@vng.com", "id": "team-6", "children": [] },
+                                        { "type": "team", "name": "Lê Minh Quân - VG-00026", "manager": "Phạm Thị Lan - VG-00011", "employees": 1, "email": "leminhquan@vng.com", "id": "team-7", "children": [] },
+                                        { "type": "team", "name": "Đặng Bích Hạnh - VG-00027", "manager": "Phạm Thị Lan - VG-00011", "employees": 1, "email": "dangbichhanh@vng.com", "id": "team-8", "children": [] }
+                                    ]
+                                }
                             ]
                         },
-                        // ... other DEPT_GROUP like VCF, VRD, GBO, TrueID, GCL, GBU, GAI, GBM, Bshield
-                        // DEPT like CEOO
-                        { "type": "dept", "name": "CEOO | CEO Office", "manager": "Trần Văn CEOO", "employees": 50, "email": "ceoo@vng.com", "id": "ceoo-level", "children": [] }
+                        {
+                            "type": "dept_group",
+                            "name": "Hoàng Quốc Bảo - VG-00006",
+                            "manager": "Trần Quốc Khánh - VG-00002",
+                            "employees": 7,
+                            "email": "hoangquocbao@vng.com",
+                            "id": "deptgroup-2-level",
+                            "children": [
+                                {
+                                    "type": "dept",
+                                    "name": "Lê Minh Tuấn - VG-00012",
+                                    "manager": "Hoàng Quốc Bảo - VG-00006",
+                                    "employees": 4,
+                                    "email": "leminhtuan@vng.com",
+                                    "id": "dept-3-level",
+                                    "children": [
+                                        { "type": "team", "name": "Nguyễn Hải Đăng - VG-00028", "manager": "Lê Minh Tuấn - VG-00012", "employees": 1, "email": "nguyenhaidang@vng.com", "id": "team-9", "children": [] },
+                                        { "type": "team", "name": "Lê Mỹ Linh - VG-00029", "manager": "Lê Minh Tuấn - VG-00012", "employees": 1, "email": "lemylinh@vng.com", "id": "team-10", "children": [] },
+                                        { "type": "team", "name": "Phan Văn Lợi - VG-00030", "manager": "Lê Minh Tuấn - VG-00012", "employees": 1, "email": "phanvanloi@vng.com", "id": "team-11", "children": [] },
+                                        { "type": "team", "name": "Ngô Quốc An - VG-00031", "manager": "Lê Minh Tuấn - VG-00012", "employees": 1, "email": "ngoquocan@vng.com", "id": "team-12", "children": [] }
+                                    ]
+                                },
+                                {
+                                    "type": "dept",
+                                    "name": "Phạm Đức Long - VG-00013",
+                                    "manager": "Hoàng Quốc Bảo - VG-00006",
+                                    "employees": 3,
+                                    "email": "phamduclong@vng.com",
+                                    "id": "dept-4-level",
+                                    "children": [
+                                        { "type": "team", "name": "Nguyễn Bảo - VG-00032", "manager": "Phạm Đức Long - VG-00013", "employees": 1, "email": "nguyenbao@vng.com", "id": "team-13", "children": [] },
+                                        { "type": "team", "name": "Phạm Văn Đạt - VG-00033", "manager": "Phạm Đức Long - VG-00013", "employees": 1, "email": "phamvandat@vng.com", "id": "team-14", "children": [] },
+                                        { "type": "team", "name": "Đoàn Thị Mai - VG-00034", "manager": "Phạm Đức Long - VG-00013", "employees": 1, "email": "doanthimai@vng.com", "id": "team-15", "children": [] }
+                                    ]
+                                }
+                            ]
+                        }
                     ]
                 },
-                // ... other UNITS: PY, Zalo, BO, ZPS, VNGG with full nested from document
-                // Direct DEPT under COMP
                 {
-                    "type": "dept", "name": "DC-Campus | Data Center - Campus", "manager": "Lê Văn DCCampus", "employees": 50, "email": "dccampus@vng.com", "id": "dccampus-level", "children": [
-                        { "type": "team", "name": "FAC | Facility", "manager": "Phạm Văn FAC", "employees": 50, "email": "fac@vng.com", "id": "fac-level", "children": [] }
-                    ]
-                },
-                {
-                    "type": "dept", "name": "DC-STT | Data Center - STT", "manager": "Hoàng Văn DCSTT", "employees": 100, "email": "dcstt@vng.com", "id": "dcstt-level", "children": [
-                        { "type": "team", "name": "NOC | Network Operation Center", "manager": "Nguyễn Văn NOC", "employees": 30, "email": "noc@vng.com", "id": "noc-level", "children": [] },
-                        // ... other TEAM
-                    ]
-                },
-                { "type": "dept", "name": "PMO | Project Management Office", "manager": "Hoàng Văn PMO", "employees": 50, "email": "pmo@vng.com", "id": "pmo-level", "children": [] },
-                {
-                    "type": "dept", "name": "MT | Management Team", "manager": "Nguyễn Văn MT", "employees": 100, "email": "mt@vng.com", "id": "mt-level", "children": [
-                        { "type": "team", "name": "SMT Support | SMT Support", "manager": "Trần Văn SMTSupport", "employees": 20, "email": "smtsupport@vng.com", "id": "smtsupport-level", "children": [] },
-                        // ... other TEAM
+                    "type": "unit",
+                    "name": "Nguyễn Hoàng Anh - VG-00003",
+                    "manager": "Lê Hồng Minh - VG-00001",
+                    "employees": 18,
+                    "email": "nguyenhoanganh@vng.com",
+                    "id": "unit-2-level",
+                    "children": [
+                        {
+                            "type": "dept_group",
+                            "name": "Lê Minh Quang - VG-00007",
+                            "manager": "Nguyễn Hoàng Anh - VG-00003",
+                            "employees": 9,
+                            "email": "leminhquang@vng.com",
+                            "id": "deptgroup-3-level",
+                            "children": [
+                                {
+                                    "type": "dept",
+                                    "name": "Trần Quốc Dũng - VG-00014",
+                                    "manager": "Lê Minh Quang - VG-00007",
+                                    "employees": 4,
+                                    "email": "tranquocdung@vng.com",
+                                    "id": "dept-5-level",
+                                    "children": [
+                                        { "type": "team", "name": "Phạm Văn Cường - VG-00035", "manager": "Trần Quốc Dũng - VG-00014", "employees": 1, "email": "phamvancuong@vng.com", "id": "team-16", "children": [] },
+                                        { "type": "team", "name": "Bùi Thanh Tú - VG-00036", "manager": "Trần Quốc Dũng - VG-00014", "employees": 1, "email": "buithanhtu@vng.com", "id": "team-17", "children": [] },
+                                        { "type": "team", "name": "Vũ Thị Yến - VG-00037", "manager": "Trần Quốc Dũng - VG-00014", "employees": 1, "email": "vuthiyen@vng.com", "id": "team-18", "children": [] },
+                                        { "type": "team", "name": "Lê Tấn Phát - VG-00038", "manager": "Trần Quốc Dũng - VG-00014", "employees": 1, "email": "letanphat@vng.com", "id": "team-19", "children": [] }
+                                    ]
+                                },
+                                {
+                                    "type": "dept",
+                                    "name": "Ngô Minh Hoàng - VG-00015",
+                                    "manager": "Lê Minh Quang - VG-00007",
+                                    "employees": 5,
+                                    "email": "ngominhhoang@vng.com",
+                                    "id": "dept-6-level",
+                                    "children": [
+                                        { "type": "team", "name": "Trần Đức Phát - VG-00039", "manager": "Ngô Minh Hoàng - VG-00015", "employees": 1, "email": "tranducphat@vng.com", "id": "team-20", "children": [] },
+                                        { "type": "team", "name": "Lê Thị Nhung - VG-00040", "manager": "Ngô Minh Hoàng - VG-00015", "employees": 1, "email": "lethingung@vng.com", "id": "team-21", "children": [] },
+                                        { "type": "team", "name": "Đặng Hoàng Anh - VG-00041", "manager": "Ngô Minh Hoàng - VG-00015", "employees": 1, "email": "danghoanganh@vng.com", "id": "team-22", "children": [] },
+                                        { "type": "team", "name": "Phạm Hải Yến - VG-00042", "manager": "Ngô Minh Hoàng - VG-00015", "employees": 1, "email": "phamhaiyen@vng.com", "id": "team-23", "children": [] },
+                                        { "type": "team", "name": "Nguyễn Bích Ngọc - VG-00043", "manager": "Ngô Minh Hoàng - VG-00015", "employees": 1, "email": "nguyenbichngoc@vng.com", "id": "team-24", "children": [] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "dept_group",
+                            "name": "Phạm Bảo Trung - VG-00008",
+                            "manager": "Nguyễn Hoàng Anh - VG-00003",
+                            "employees": 9,
+                            "email": "phambaotrung@vng.com",
+                            "id": "deptgroup-4-level",
+                            "children": [
+                                {
+                                    "type": "dept",
+                                    "name": "Nguyễn Thanh Tùng - VG-00016",
+                                    "manager": "Phạm Bảo Trung - VG-00008",
+                                    "employees": 4,
+                                    "email": "nguyenthanhtung@vng.com",
+                                    "id": "dept-7-level",
+                                    "children": [
+                                        { "type": "team", "name": "Vũ Hải Yến - VG-00044", "manager": "Nguyễn Thanh Tùng - VG-00016", "employees": 1, "email": "vuhaiyen@vng.com", "id": "team-25", "children": [] },
+                                        { "type": "team", "name": "Trần Bích Ngọc - VG-00045", "manager": "Nguyễn Thanh Tùng - VG-00016", "employees": 1, "email": "tranbichngoc@vng.com", "id": "team-26", "children": [] },
+                                        { "type": "team", "name": "Phạm Minh Phương - VG-00046", "manager": "Nguyễn Thanh Tùng - VG-00016", "employees": 1, "email": "phammanhphuong@vng.com", "id": "team-27", "children": [] },
+                                        { "type": "team", "name": "Ngô Quốc Bảo - VG-00047", "manager": "Nguyễn Thanh Tùng - VG-00016", "employees": 1, "email": "ngoquocbao@vng.com", "id": "team-28", "children": [] }
+                                    ]
+                                },
+                                {
+                                    "type": "dept",
+                                    "name": "Đỗ Văn Dũng - VG-00017",
+                                    "manager": "Phạm Bảo Trung - VG-00008",
+                                    "employees": 5,
+                                    "email": "dovandung@vng.com",
+                                    "id": "dept-8-level",
+                                    "children": [
+                                        { "type": "team", "name": "Phạm Hoài Nam - VG-00048", "manager": "Đỗ Văn Dũng - VG-00017", "employees": 1, "email": "phamhoainam@vng.com", "id": "team-29", "children": [] },
+                                        { "type": "team", "name": "Lê Hồng Anh - VG-00049", "manager": "Đỗ Văn Dũng - VG-00017", "employees": 1, "email": "lehonganh@vng.com", "id": "team-30", "children": [] },
+                                        { "type": "team", "name": "Trịnh Hồng Ngọc - VG-00050", "manager": "Đỗ Văn Dũng - VG-00017", "employees": 1, "email": "trinhhongngoc@vng.com", "id": "team-31", "children": [] }
+                                    ]
+                                }
+                            ]
+                        }
                     ]
                 }
             ]
-        };
+        }
+            ;
 
         let currentZoom = 100;
         let selectedNode = null;
@@ -510,63 +609,98 @@
             `;
         }
 
-        function renderNode(node, level = 0) {
-            if (level === 0) return ''; // Skip root
-            const hasChildren = node.children && node.children.length > 0;
-            // Color based on type, not level
-            let borderColor = 'gray-200';
-            let hoverColor = 'gray-300';
-            if (node.type === 'unit') {
-                borderColor = 'green-200';
-                hoverColor = 'green-300';
-            } else if (node.type === 'dept_group') {
-                borderColor = 'purple-200';
-                hoverColor = 'purple-300';
-            } else if (node.type === 'dept') {
-                borderColor = 'orange-200';
-                hoverColor = 'orange-300';
-            } else if (node.type === 'team') {
-                borderColor = 'red-200';
-                hoverColor = 'red-300';
-            }
-            // Size based on type
-            let sizeClass = 'p-5 text-base';
-            if (node.type === 'team') sizeClass = 'p-2 text-xs';
-            else if (node.type === 'dept') sizeClass = 'p-3 text-sm';
-            else if (node.type === 'dept_group') sizeClass = 'p-4 text-sm';
-            // Spacing based on level
-            const spaceX = level <= 2 ? 'space-x-8' : level === 3 ? 'space-x-4' : 'space-x-2';
-            const toggleSize = node.type === 'team' ? 'w-4 h-4 text-xs' : 'w-5 h-5 text-xs';
-            const lineH = node.type === 'team' ? 'h-6' : 'h-8';
-            const toggleBg = node.type === 'unit' ? 'green' : node.type === 'dept_group' ? 'purple' : node.type === 'dept' ? 'orange' : 'red';
-            const toggleBtn = hasChildren ? `<button onclick="toggleNode('${node.id}'); event.stopPropagation();" class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 ${toggleSize} bg-${toggleBg}-500 text-white rounded-full shadow hover:shadow-lg z-10"><i class="fas fa-minus" id="${node.id.replace('-level', '-toggle')}"></i></button>` : '';
-            let childrenContainerClass = `flex ${spaceX} flex-wrap hidden`;
-            if (node.type === 'dept') {
-                childrenContainerClass = 'grid grid-cols-3 gap-8 hidden justify-items-center';
-            }
-            const childrenHtml = hasChildren ? `<div class="w-px ${lineH} bg-gray-300"></div><div id="${node.id}" class="${childrenContainerClass}">${node.children.map(child => `<div class="flex flex-col items-center">${renderNode(child, level + 1)}</div>`).join('')}</div>` : '';
-            const title = node.name.split(' | ')[1] || node.name;
-            const email = node.email || `${node.manager.toLowerCase().replace(/[^a-z0-9]/g, '')}@vng.com`;
+    function renderNode(node, level = 0) {
+    if (level === 0) return '';
+    const hasChildren = node.children && node.children.length > 0;
 
-            return `
-                <div class="flex flex-col items-center">
-                    <div class="org-node bg-white border-2 border-${borderColor} ${sizeClass} rounded-lg shadow-md cursor-pointer relative hover:border-${hoverColor}" 
-                         onclick="toggleDetail(this);"
-                         data-name="${node.manager}" 
-                         data-email="${email}" 
-                         data-title="${title}" 
-                         data-employees="${node.employees}">
-                        <div class="text-center">
-                            <div class="font-semibold text-gray-800 mb-1">${node.name}</div>
-                            <div class="text-gray-600 text-xs mb-1"><i class="fas fa-user mr-1"></i>Manager: ${node.manager}</div>
-                            <div class="text-gray-600 text-xs"><i class="fas fa-users mr-1"></i>Employees: ${node.employees.toLocaleString()}</div>
-                        </div>
-                        ${toggleBtn}
+    // 🎨 Màu sắc theo type
+    let borderColor = 'gray-200', hoverColor = 'gray-300';
+    if (node.type === 'unit') [borderColor, hoverColor] = ['green-200', 'green-300'];
+    else if (node.type === 'dept_group') [borderColor, hoverColor] = ['purple-200', 'purple-300'];
+    else if (node.type === 'dept') [borderColor, hoverColor] = ['orange-200', 'orange-300'];
+    else if (node.type === 'team') [borderColor, hoverColor] = ['red-200', 'red-300'];
+
+    // 📏 Kích thước giảm dần theo cấp
+    let sizeClass = 'p-5 text-base w-64';
+    if (node.type === 'dept_group') sizeClass = 'p-4 text-sm w-56';
+    else if (node.type === 'dept') sizeClass = 'p-3 text-xs w-48';
+    else if (node.type === 'team') sizeClass = 'p-2 text-[11px] w-40';
+
+    // 📐 Khoảng cách giữa node
+    const spaceX = level <= 2 ? 'space-x-8' : level === 3 ? 'space-x-4' : 'space-x-2';
+
+    // 🔘 Toggle button
+    const hasChildrenBtn = hasChildren
+        ? `<button onclick="toggleNode('${node.id}'); event.stopPropagation();"
+             class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-5 h-5 
+                    bg-${node.type === 'unit' ? 'green' : node.type === 'dept_group' ? 'purple' : node.type === 'dept' ? 'orange' : 'red'}-500 
+                    text-white rounded-full shadow hover:shadow-lg z-10">
+             <i class="fas fa-minus" id="${node.id.replace('-level', '-toggle')}"></i>
+           </button>`
+        : '';
+
+    // 🧱 Layout con
+    let childrenContainerClass = `flex ${spaceX} flex-wrap hidden`;
+    if (node.type === 'dept') {
+        if (node.children.length >= 3)
+            childrenContainerClass = 'grid grid-cols-3 gap-8 hidden justify-items-center';
+        else
+            childrenContainerClass = 'flex justify-center gap-8 hidden';
+    }
+
+    // 🧩 Thông tin node
+    const title = node.name.split(' | ')[1] || node.name;
+    const email = node.email || `${node.manager.toLowerCase().replace(/[^a-z0-9]/g, '')}@vng.com`;
+
+    const childrenHtml = hasChildren
+        ? `<div class="w-px h-8 bg-gray-300"></div>
+           <div id="${node.id}" class="${childrenContainerClass}">
+             ${node.children.map(child => `<div class="flex flex-col items-center">${renderNode(child, level + 1)}</div>`).join('')}
+           </div>`
+        : '';
+
+    // 🧠 Node chính
+    return `
+        <div class="flex flex-col items-center">
+            <div class="org-node bg-white border-2 border-${borderColor} ${sizeClass}
+                        rounded-lg shadow-md cursor-pointer relative hover:border-${hoverColor}
+                        group overflow-visible"
+                 onclick="toggleDetail(this);"
+                 data-name="${node.manager}"
+                 data-email="${email}"
+                 data-title="${title}"
+                 data-employees="${node.employees}">
+                 
+                <div class="text-center">
+                    <!-- Name -->
+                    <div class="font-semibold text-gray-800 mb-1 truncate max-w-full">${node.name}</div>
+                    <!-- Manager -->
+                    <div class="text-gray-600 text-xs mb-1 truncate max-w-full">
+                        <i class="fas fa-user mr-1"></i>Manager: ${node.manager}
                     </div>
-                    ${childrenHtml}
+                    <!-- Employees -->
+                    <div class="text-gray-600 text-xs">
+                        <i class="fas fa-users mr-1"></i>Employees: ${node.employees.toLocaleString()}
+                    </div>
                 </div>
-            `;
-        }
+
+                <!-- Tooltip hiển thị khi hover -->
+                <div class="tooltip hidden absolute z-50 bg-gray-900 text-white p-3 rounded-lg shadow-xl 
+                            group-hover:block w-max left-1/2 -translate-x-1/2 -top-24 animate-fadeIn">
+                    <div class="text-sm text-left whitespace-nowrap">
+                        <div class="font-semibold">${node.manager}</div>
+                        <div class="text-gray-300">${email}</div>
+                        <div class="text-gray-300">${title}</div>
+                    </div>
+                </div>
+
+                ${hasChildrenBtn}
+            </div>
+            ${childrenHtml}
+        </div>
+    `;
+}
+
 
         function toggleNode(nodeId) {
             const node = document.getElementById(nodeId);
@@ -659,12 +793,12 @@
                             <div class="detail-value">${name} - ${title}</div>
                         </div>
                         <div class="detail-section">
-                            <div class="detail-label">Cost Center</div>
-                            <div class="detail-value">0374</div>
+                            <div class="detail-label">Start Date</div>
+                            <div class="detail-value">dd/mm/yyyy</div>
                         </div>
                         <div class="detail-section">
-                            <div class="detail-label">Description</div>
-                            <div class="detail-value">Note</div>
+                            <div class="detail-label">Senerio </div>
+                            <div class="detail-value">2 Years 4 months 12 days</div>
                         </div>
                         <div class="detail-section">
                             <div class="detail-label">Total Employee</div>
