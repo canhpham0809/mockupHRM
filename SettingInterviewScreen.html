@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Extended with Action Modal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F05A28',
+                        success: '#28C76F',
+                        danger: '#EA5455',
+                        warning: '#FFE082',
+                        gray: {
+                            50: '#F5F7FA',
+                            100: '#F0F2F5',
+                            200: '#E4E7EB',
+                            300: '#D1D5DB',
+                            400: '#9CA3AF',
+                            500: '#6B7280',
+                            600: '#4B5563',
+                            700: '#374151',
+                            800: '#1F2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Roboto', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <script>window.FontAwesomeConfig = { autoReplaceSvg: 'nest' };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <style>
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .custom-checkbox {
+            accent-color: #90EE90;
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+
+        /* Animation cho modal */
+        #paging-modal,
+        #assignment-modal {
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen overflow-hidden" id="main-container">
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col transition-all duration-300">
+            <div class="h-16 flex items-center px-6 border-b border-gray-200" id="sidebar-logo">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">VNG</span>
+                    </div>
+                    <span class="font-semibold text-gray-800 text-lg">VNG ATS</span>
+                </div>
+            </div>
+            <nav class="flex-1 overflow-y-auto py-4" id="sidebar-nav">
+                <ul class="space-y-1 px-3">
+                    <li><a href="#"
+                            class="flex items-center px-3 py-2.5 text-white bg-primary rounded-lg font-medium text-sm"><i
+                                class="w-5 fa-solid fa-house"></i><span class="ml-3">Home</span></a></li>
+                    <li>
+                        <div
+                            class="flex items-center justify-between px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer font-medium text-sm">
+                            <div class="flex items-center">
+                                <i class="w-5 text-gray-600 fa-solid fa-file-lines"></i>
+                                <span class="ml-3">Request</span>
+                            </div>
+                            <i class="text-xs text-gray-400 fa-solid fa-chevron-down"></i>
+                        </div>
+                    </li>
+                    <li><a href="#"
+                            class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i
+                                class="w-5 text-gray-600 fa-solid fa-briefcase"></i><span class="ml-3">Jobs</span></a>
+                    </li>
+                    <li><a href="#"
+                            class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i
+                                class="w-5 text-gray-600 fa-solid fa-users"></i><span class="ml-3">Candidates</span></a>
+                    </li>
+                    <li><a href="#"
+                            class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i
+                                class="w-5 text-gray-600 fa-solid fa-calendar-check"></i><span
+                                class="ml-3">Interviews</span></a></li>
+                    <li><a href="#"
+                            class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i
+                                class="w-5 text-gray-600 fa-solid fa-chart-line"></i><span
+                                class="ml-3">Reports</span></a></li>
+                    <li><a href="#"
+                            class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i
+                                class="w-5 text-gray-600 fa-solid fa-gear"></i><span class="ml-3">Settings</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden" id="main-content">
+            <header id="header" class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+                <div class="flex items-center space-x-2 text-sm" id="breadcrumb">
+                    <span class="text-gray-500">Task</span>
+                    <i class="text-xs text-gray-400 fa-solid fa-chevron-right"></i>
+                    <span class="text-gray-800 font-medium">Approval</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-600 hover:text-gray-800">
+                        <i class="text-xl fa-regular fa-bell"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full"></span>
+                    </button>
+                    <div class="flex items-center space-x-3 pl-4 border-l border-gray-200">
+                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                            alt="User" class="w-9 h-9 rounded-full object-cover">
+                        <div>
+                            <div class="text-sm font-medium text-gray-800">John Doe</div>
+                            <div class="text-xs text-gray-500">HR Manager</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-8" id="dashboard-main">
+                <div>
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6" id="info-card">
+                        <div class="border-b border-gray-200">
+                            <div class="flex space-x-8 px-8">
+                                <button class="py-4 border-b-2 border-primary text-primary font-medium text-sm">Request
+                                    Information</button>
+                                <button
+                                    class="py-4 border-b-2 border-transparent text-gray-600 font-medium text-sm hover:text-gray-800">Approval
+                                    History</button>
+                                <button
+                                    class="py-4 border-b-2 border-transparent text-gray-600 font-medium text-sm hover:text-gray-800">History
+                                    Edited</button>
+                            </div>
+                        </div>
+                        <div class="p-8" id="job-details">
+                            <div class="grid grid-cols-3 gap-6">
+                                <div><label class="text-xs text-gray-500 font-medium">Type</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">OFFICIAL</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Job Code</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">25-PGE-0034</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Job Title</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">Associate Software Manager</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Job Level</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">3.1</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Quantity</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">1</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Line Manager</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">huyvha - Võ Huỳnh Anh Huy</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6 relative"
+                        id="applicants-section">
+                        <div class="border-b border-gray-200 flex justify-between items-center pr-6">
+                            <div class="flex items-center space-x-4 px-6 py-4">
+                                <button
+                                    class="px-6 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium text-sm hover:bg-gray-50">
+                                    Applicant
+                                </button>
+                                <button
+                                    class="px-6 py-2 bg-[#FFE082] border border-[#FFE082] rounded-lg text-gray-900 font-medium text-sm">
+                                    Candidate
+                                </button>
+                            </div>
+                            <button onclick="toggleExpand()"
+                                class="text-gray-500 hover:text-primary transition-colors p-2" title="Expand View">
+                                <i class="fa-solid fa-expand text-lg"></i>
+                            </button>
+                        </div>
+
+                        <div id="content-wrapper" class="flex flex-col h-full">
+                            <div class="p-6 flex-1 flex flex-col min-h-0" id="table-controls">
+                                <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="relative">
+                                            <input type="text"
+                                                placeholder="Search by SDB, name, email, phone number, school, student ID"
+                                                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary w-96">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center h-4 w-4">
+                                                <i class="text-gray-400 text-sm fa-solid fa-magnifying-glass"></i>
+                                            </span>
+                                        </div>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                            <i class="mr-2 fa-solid fa-filter"></i>Filter
+                                        </button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                            <i class="mr-2 fa-solid fa-chevron-down"></i>Stage
+                                        </button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                            <i class="mr-2 fa-solid fa-chevron-down"></i>Result
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            Excel</button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            CV</button>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="overflow-x-auto overflow-y-auto flex-1 pb-2 border border-gray-100 rounded-lg">
+                                    <div class="min-w-[1800px]">
+                                        <table class="w-full">
+                                            <thead class="bg-gray-50 sticky top-0 z-10">
+                                                <tr class="border-b border-gray-200">
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50">
+                                                        <input type="checkbox" id="header-checkbox"
+                                                            class="custom-checkbox rounded border-gray-300">
+                                                    </th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        CV</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        Attachment</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        File</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        SDB</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        Full Name</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        Email</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        Phone Number</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        School</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        StudentID</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        GPA</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        Stage</th>
+                                                    <th
+                                                        class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">
+                                                        Result</th>
+                                                    <th
+                                                        class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">
+                                                        Do you usually play game?</th>
+                                                    <th
+                                                        class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">
+                                                        Which type game you usually play?</th>
+                                                    <th
+                                                        class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">
+                                                        Do you use AI in your studies?</th>
+                                                    <th
+                                                        class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">
+                                                        Handle By</th>
+                                                    <th
+                                                        class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">
+                                                        Update Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-100">
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần
+                                                        Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn
+                                                        Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao
+                                                        đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm
+                                                        Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần
+                                                        Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn
+                                                        Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao
+                                                        đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm
+                                                        Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần
+                                                        Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn
+                                                        Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao
+                                                        đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm
+                                                        Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Waiting</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần
+                                                        Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Waiting</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn
+                                                        Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao
+                                                        đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Waiting</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox"
+                                                            class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4"><i
+                                                            class="text-gray-600 text-lg fa-regular fa-file-lines"></i>
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm
+                                                        Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">
+                                                        Interview 1</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Pass
+                                                    </td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025
+                                                        16:32:11</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between mt-auto p-4 border-t border-gray-200 bg-white flex-shrink-0"
+                                    id="pagination-footer">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <span class="mr-2">Show</span>
+                                        <select id="rowsPerPage"
+                                            class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-primary cursor-pointer">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                        </select>
+                                        <span class="ml-2">rows per page</span>
+                                        <span class="mx-4 text-gray-300">|</span>
+                                        <span id="pageInfo">Showing 1-5 of 12</span>
+                                    </div>
+
+                                    <div class="flex items-center space-x-1" id="paginationControls">
+                                        <button id="btnPrev"
+                                            class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                                        </button>
+
+                                        <div id="pageNumbers" class="flex space-x-1"></div>
+
+                                        <button id="btnNext"
+                                            class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="flex justify-end space-x-3 mt-0 p-6 pt-4 border-t border-gray-200 bg-white rounded-b-lg flex-shrink-0">
+                                <button id="nextStage-button"
+                                    class="hidden min-w-[110px] px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">
+                                    Next Stage
+                                </button>
+
+                                <button id="import-button"
+                                    class="hidden min-w-[110px] px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">
+                                    Import
+                                </button>
+                                <button id="pass-button"
+                                    class="hidden min-w-[110px] px-5 py-2.5 bg-green-500 text-white rounded-lg font-medium text-sm hover:bg-green-600 shadow-sm">
+                                    Interview Setting
+                                </button>
+
+                                <button
+                                    class="min-w-[110px] px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm">
+                                    Match
+                                </button>
+
+                                <button
+                                    class="min-w-[110px] px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm">
+                                    Close
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="paging-modal"
+        class="fixed inset-0 z-50 hidden bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div
+            class="bg-white w-full h-full max-w-[98vw] max-h-[96vh] rounded-xl shadow-2xl flex flex-col overflow-hidden relative animate-fade-in">
+            <div class="px-6 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 flex-shrink-0">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-expand text-primary"></i>
+                    <h3 class="font-bold text-gray-800 text-lg">Expanded Data View</h3>
+                </div>
+                <button onclick="toggleExpand()"
+                    class="text-gray-500 hover:text-danger p-2 rounded-full hover:bg-gray-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div id="modal-body-target" class="flex-1 overflow-hidden flex flex-col bg-white"></div>
+        </div>
+    </div>
+
+    <div id="confirm-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-80 animate-fade-in transform transition-all scale-100">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-circle-question text-yellow-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Confirmation</h3>
+                <p class="text-gray-600 mb-6 text-sm">Do you confirm to screen these candidates?</p>
+                <div class="flex justify-center space-x-3 w-full">
+                    <button id="btn-confirm-no"
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">No</button>
+                    <button id="btn-confirm-yes"
+                        class="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors shadow-sm">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="import-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-96 animate-fade-in transform transition-all scale-100">
+            <div class="flex flex-col text-center">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Import Applicants</h3>
+                <p class="text-gray-600 mb-4 text-sm">You can download template is here: <a href="#"
+                        class="text-primary hover:underline">Template Upload</a></p>
+                <div class="mb-4">
+                    <label for="file-upload"
+                        class="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                        <span class="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M7 16a4 4 0 01-4-4V7a4 4 0 014-4h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V16a4 4 0 01-4 4H7z" />
+                            </svg>
+                            <span id="file-upload-text" class="font-medium text-gray-600">
+                                Drop files excel to Attach
+                            </span>
+                        </span>
+                        <input type="file" id="file-upload" name="file-upload" class="hidden" accept=".xlsx">
+                    </label>
+                </div>
+                <div class="flex justify-center space-x-3 w-full">
+                    <button id="btn-import-cancel"
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">Cancel</button>
+                    <button id="btn-import-confirm"
+                        class="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors shadow-sm">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div id="setting-interview-modal"
+            class="bg-white rounded-xl shadow-2xl w-[70%] max-h-[90vh] overflow-hidden flex flex-col">
+            <div id="modal-header"
+                class="px-8 py-6 border-b border-gray-200 flex items-center justify-between bg-primary">
+                <h2 class="text-2xl font-bold text-white">Setting Interview</h2>
+                <button onclick="closeModal()" class="text-white hover:text-gray-200 transition-colors">
+                    <i class="text-xl" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true"
+                            focusable="false" data-prefix="fas" data-icon="xmark" role="img"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg="">
+                            <path fill="currentColor"
+                                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z">
+                            </path>
+                        </svg></i>
+                </button>
+            </div>
+
+            <div id="modal-body" class="overflow-y-auto flex-1 px-8 py-6">
+
+                <div id="selected-candidates-section" class="mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                        <i class="text-primary mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-users"
+                                aria-hidden="true" focusable="false" data-prefix="fas" data-icon="users" role="img"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg="">
+                                <path fill="currentColor"
+                                    d="M144 0a80 80 0 1 1 0 160A80 80 0 1 1 144 0zM512 0a80 80 0 1 1 0 160A80 80 0 1 1 512 0zM0 298.7C0 239.8 47.8 192 106.7 192h42.7c15.9 0 31 3.5 44.6 9.7c-1.3 7.2-1.9 14.7-1.9 22.3c0 38.2 16.8 72.5 43.3 96c-.2 0-.4 0-.7 0H21.3C9.6 320 0 310.4 0 298.7zM405.3 320c-.2 0-.4 0-.7 0c26.6-23.5 43.3-57.8 43.3-96c0-7.6-.7-15-1.9-22.3c13.6-6.3 28.7-9.7 44.6-9.7h42.7C592.2 192 640 239.8 640 298.7c0 11.8-9.6 21.3-21.3 21.3H405.3zM224 224a96 96 0 1 1 192 0 96 96 0 1 1 -192 0zM128 485.3C128 411.7 187.7 352 261.3 352H378.7C452.3 352 512 411.7 512 485.3c0 14.7-11.9 26.7-26.7 26.7H154.7c-14.7 0-26.7-11.9-26.7-26.7z">
+                                </path>
+                            </svg></i>
+                        Selected Candidates
+                    </h3>
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <div id="candidate-list" class="flex flex-wrap gap-2">
+                            <span
+                                class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD001</span>
+                            <span
+                                class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD002</span>
+                            <span
+                                class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD003</span>
+                            <span
+                                class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD004</span>
+                            <span
+                                class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD005</span>
+                            <span id="hidden-candidates" class="contents">
+                                <span
+                                    class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD006</span>
+                                <span
+                                    class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD007</span>
+                                <span
+                                    class="px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">SBD008</span>
+                            </span>
+                            <button id="expand-btn" onclick="toggleCandidates()"
+                                class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 transition-colors">Show
+                                less</button>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">Total: <span id="candidate-count" class="font-semibold">0 candidates</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="interview-panels-section" class="mb-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <i class="text-primary mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-user-tie"
+                                    aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user-tie"
+                                    role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                    data-fa-i2svg="">
+                                    <path fill="currentColor"
+                                        d="M224 256A128 128 0 1 1 224 0a128 128 0 1 1 0 256zM209.1 359.2l-18.6-31c-6.4-10.7 1.3-24.2 13.7-24.2H224h19.7c12.4 0 20.1 13.6 13.7 24.2l-18.6 31 33.4 123.9 36-146.9c2-8.1 9.8-13.4 17.9-11.3c70.1 17.6 121.9 81 121.9 156.4c0 17-13.8 30.7-30.7 30.7H285.5c-2.1 0-4-.4-5.8-1.1l.3 1.1H168l.3-1.1c-1.8 .7-3.8 1.1-5.8 1.1H30.7C13.8 512 0 498.2 0 481.3c0-75.5 51.9-138.9 121.9-156.4c8.1-2 15.9 3.3 17.9 11.3l36 146.9 33.4-123.9z">
+                                    </path>
+                                </svg></i>
+                            Interview Panels
+                        </h3>
+                        <button onclick="addPanel()"
+                            class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary transition-colors flex items-center">
+                            <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-plus" aria-hidden="true"
+                                    focusable="false" data-prefix="fas" data-icon="plus" role="img"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                    <path fill="currentColor"
+                                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z">
+                                    </path>
+                                </svg></i>Add Panel
+                        </button>
+                    </div>
+
+                    <div id="panels-container" class="space-y-3">
+                        <div class="panel-item border border-gray-200 rounded-lg bg-white">
+                            <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                                onclick="togglePanel(1)">
+                                <div class="flex items-center">
+                                    <i id="panel-icon-1"
+                                        class="text-gray-400 mr-3 transition-transform fa-chevron-down"
+                                        data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true"
+                                            focusable="false" data-prefix="fas" data-icon="chevron-down" role="img"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                            <path fill="currentColor"
+                                                d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z">
+                                            </path>
+                                        </svg></i>
+                                    <h4 class="font-semibold text-gray-800">Panel 1</h4>
+                                    <span class="ml-3 text-sm text-gray-500">(2 interviewers)</span>
+                                </div>
+                            </div>
+                            <div id="panel-content-1" class="px-4 pb-4 space-y-2">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg"
+                                            class="w-10 h-10 rounded-full mr-3">
+                                        <div>
+                                            <p class="font-medium text-gray-800">John Anderson</p>
+                                            <p class="text-sm text-gray-500">john.anderson@company.com</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-red-500 hover:text-red-700 transition-colors">
+                                        <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                                focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                                </path>
+                                            </svg></i>
+                                    </button>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg"
+                                            class="w-10 h-10 rounded-full mr-3">
+                                        <div>
+                                            <p class="font-medium text-gray-800">Sarah Mitchell</p>
+                                            <p class="text-sm text-gray-500">sarah.mitchell@company.com</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-red-500 hover:text-red-700 transition-colors">
+                                        <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                                focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                                </path>
+                                            </svg></i>
+                                    </button>
+                                </div>
+                                <button
+                                    class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-primary-400 hover:text-primary-600 transition-colors flex items-center justify-center">
+                                    <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-plus"
+                                            aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
+                                            role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                            data-fa-i2svg="">
+                                            <path fill="currentColor"
+                                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z">
+                                            </path>
+                                        </svg></i>Add Interviewer
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="panel-item border border-gray-200 rounded-lg bg-white">
+                            <div class="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                                onclick="togglePanel(2)">
+                                <div class="flex items-center">
+                                    <i id="panel-icon-2"
+                                        class="text-gray-400 mr-3 transition-transform fa-chevron-down"
+                                        data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-right" aria-hidden="true"
+                                            focusable="false" data-prefix="fas" data-icon="chevron-right" role="img"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" data-fa-i2svg="">
+                                            <path fill="currentColor"
+                                                d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z">
+                                            </path>
+                                        </svg></i>
+                                    <h4 class="font-semibold text-gray-800">Panel 2</h4>
+                                    <span class="ml-3 text-sm text-gray-500">(1 interviewer)</span>
+                                </div>
+                                <button class="text-red-500 hover:text-red-700 transition-colors">
+                                        <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                                focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                                </path>
+                                            </svg></i>
+                                    </button>
+                            </div>
+                            <div id="panel-content-2" class="px-4 pb-4 space-y-2">
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                    <div class="flex items-center">
+                                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-8.jpg"
+                                            class="w-10 h-10 rounded-full mr-3">
+                                        <div>
+                                            <p class="font-medium text-gray-800">Michael Chen</p>
+                                            <p class="text-sm text-gray-500">michael.chen@company.com</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-red-500 hover:text-red-700 transition-colors">
+                                        <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                                focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                                </path>
+                                            </svg></i>
+                                    </button>
+                                </div>
+                                <button
+                                    class="w-full py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-primary-400 hover:text-primary-600 transition-colors flex items-center justify-center">
+                                    <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-plus"
+                                            aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus"
+                                            role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                                            data-fa-i2svg="">
+                                            <path fill="currentColor"
+                                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z">
+                                            </path>
+                                        </svg></i>Add Interviewer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="interview-slots-section" class="mb-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+                            <i class="text-primary mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-clock"
+                                    aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img"
+                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                    <path fill="currentColor"
+                                        d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z">
+                                    </path>
+                                </svg></i>
+                            Interview Slots
+                        </h3>
+                        <div class="flex gap-2">
+                            <button onclick="addSlot()"
+                                class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary transition-colors flex items-center">
+                                <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-plus" aria-hidden="true"
+                                        focusable="false" data-prefix="fas" data-icon="plus" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                        <path fill="currentColor"
+                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z">
+                                        </path>
+                                    </svg></i>Add Slot
+                            </button>
+                            <button onclick="randomizeAssignments()"
+                                class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary transition-colors flex items-center">
+                                <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-shuffle"
+                                        aria-hidden="true" focusable="false" data-prefix="fas" data-icon="shuffle"
+                                        role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                        data-fa-i2svg="">
+                                        <path fill="currentColor"
+                                            d="M403.8 34.4c12-5 25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V160H352c-10.1 0-19.6 4.7-25.6 12.8L284 229.3 244 176l31.2-41.6C293.3 110.2 321.8 96 352 96h32V64c0-12.9 7.8-24.6 19.8-29.6zM164 282.7L204 336l-31.2 41.6C154.7 401.8 126.2 416 96 416H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c10.1 0 19.6-4.7 25.6-12.8L164 282.7zm274.6 188c-9.2 9.2-22.9 11.9-34.9 6.9s-19.8-16.6-19.8-29.6V416H352c-30.2 0-58.7-14.2-76.8-38.4L121.6 172.8c-6-8.1-15.5-12.8-25.6-12.8H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H96c30.2 0 58.7 14.2 76.8 38.4L326.4 339.2c6 8.1 15.5 12.8 25.6 12.8h32V320c0-12.9 7.8-24.6 19.8-29.6s25.7-2.2 34.9 6.9l64 64c6 6 9.4 14.1 9.4 22.6s-3.4 16.6-9.4 22.6l-64 64z">
+                                        </path>
+                                    </svg></i>Random
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="slots-container" class="space-y-2">
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <span class="text-sm font-medium text-gray-700 w-20">Slot 1</span>
+                            <input type="time" value="09:00"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <span class="text-gray-400">to</span>
+                            <input type="time" value="10:00"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <input type="date" value="2024-01-15"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button class="text-red-500 hover:text-red-700 transition-colors ml-auto">
+                                <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                        focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                        <path fill="currentColor"
+                                            d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                        </path>
+                                    </svg></i>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <span class="text-sm font-medium text-gray-700 w-20">Slot 2</span>
+                            <input type="time" value="10:30"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <span class="text-gray-400">to</span>
+                            <input type="time" value="11:30"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <input type="date" value="2024-01-15"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button class="text-red-500 hover:text-red-700 transition-colors ml-auto">
+                                <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                        focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                        <path fill="currentColor"
+                                            d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                        </path>
+                                    </svg></i>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                            <span class="text-sm font-medium text-gray-700 w-20">Slot 3</span>
+                            <input type="time" value="14:00"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <span class="text-gray-400">to</span>
+                            <input type="time" value="15:00"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <input type="date" value="2024-01-15"
+                                class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <button class="text-red-500 hover:text-red-700 transition-colors ml-auto">
+                                <i data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true"
+                                        focusable="false" data-prefix="fas" data-icon="trash" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                                        <path fill="currentColor"
+                                            d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z">
+                                        </path>
+                                    </svg></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="preview-table-section" class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                        <i class="text-primary mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-table"
+                                aria-hidden="true" focusable="false" data-prefix="fas" data-icon="table" role="img"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                <path fill="currentColor"
+                                    d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z">
+                                </path>
+                            </svg></i>
+                        Assignment Preview
+                    </h3>
+                    <div class="mb-4 flex items-center space-x-4">
+                        <div class="flex-1">
+                            <input type="text" id="assignment-search" placeholder="Search by SBD, Name, or Email..."
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <select id="panel-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">All Panels</option>
+                            </select>
+                            <select id="slot-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="">All Slots</option>
+                            </select>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            <span id="assignment-total-count">0</span> assignments
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="w-full">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">SBD</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Candidate Name
+                                    </th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Panel</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Slot</th>
+                                    <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="preview-table-body" class="divide-y divide-gray-200">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm text-gray-800">SBD001</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">alice.johnson@email.com</td>
+                                    <td class="px-4 py-3 text-sm text-gray-800">Alice Johnson</td>
+                                    <td class="px-4 py-3">
+                                        <select
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                            <option>Panel 1</option>
+                                            <option>Panel 2</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <select
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                            <option>Slot 1 (09:00-10:00)</option>
+                                            <option>Slot 2 (10:30-11:30)</option>
+                                            <option>Slot 3 (14:00-15:00)</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <input type="date" value="2024-01-15"
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm text-gray-800">SBD002</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">bob.smith@email.com</td>
+                                    <td class="px-4 py-3 text-sm text-gray-800">Bob Smith</td>
+                                    <td class="px-4 py-3">
+                                        <select
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                            <option>Panel 1</option>
+                                            <option selected="">Panel 2</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <select
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                            <option>Slot 1 (09:00-10:00)</option>
+                                            <option selected="">Slot 2 (10:30-11:30)</option>
+                                            <option>Slot 3 (14:00-15:00)</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <input type="date" value="2024-01-15"
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-3 text-sm text-gray-800">SBD003</td>
+                                    <td class="px-4 py-3 text-sm text-gray-600">carol.white@email.com</td>
+                                    <td class="px-4 py-3 text-sm text-gray-800">Carol White</td>
+                                    <td class="px-4 py-3">
+                                        <select
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                            <option selected="">Panel 1</option>
+                                            <option>Panel 2</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <select
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                            <option>Slot 1 (09:00-10:00)</option>
+                                            <option>Slot 2 (10:30-11:30)</option>
+                                            <option selected="">Slot 3 (14:00-15:00)</option>
+                                        </select>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <input type="date" value="2024-01-15"
+                                            class="px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="modal-footer"
+                class="px-8 py-5 border-t border-gray-200 bg-gray-50 flex items-center justify-end gap-3 flex-shrink-0">
+                <button onclick="closeModal()"
+                    class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                    Close
+                </button>
+                <button
+                    class="px-6 py-2.5 bg-gray-700 text-white rounded-lg font-medium hover:bg-gray-800 transition-colors flex items-center">
+                    <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-floppy-disk" aria-hidden="true"
+                            focusable="false" data-prefix="fas" data-icon="floppy-disk" role="img"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">
+                            <path fill="currentColor"
+                                d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z">
+                            </path>
+                        </svg></i>Save
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="next-stage-modal"
+        class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-96 animate-fade-in transform transition-all scale-100">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Next Stage</h3>
+                <button id="btn-next-stage-close"
+                    class="text-gray-500 hover:text-danger p-2 rounded-full hover:bg-gray-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label for="next-stage-select" class="text-sm font-medium text-gray-700">Select Next Stage</label>
+                    <select id="next-stage-select"
+                        class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                        <option>Interview</option>
+                        <option>Offer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 pt-6">
+                <button id="btn-next-stage-cancel"
+                    class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm">Cancel</button>
+                <button id="btn-next-stage-confirm"
+                    class="px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const applicantsSection = document.getElementById('applicants-section');
+            if (applicantsSection) {
+                setTimeout(() => {
+                    applicantsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+            initPagination();
+            initCheckboxLogic();
+        });
+
+        // --- CHECKBOX LOGIC ---
+        function initCheckboxLogic() {
+            const headerCheckbox = document.getElementById('header-checkbox');
+            const checkboxes = document.querySelectorAll('tbody .custom-checkbox');
+            const nextStageButton = document.getElementById('nextStage-button');
+            const passButton = document.getElementById('pass-button');
+            const failButton = document.getElementById('fail-button');
+
+            function updateImportButtonVisibility() {
+                const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+                const selectedNumberEl = document.getElementById('selected-number');
+                if (selectedNumberEl) {
+                    selectedNumberEl.textContent = checkedCount;
+                }
+                const anyChecked = checkedCount > 0 || headerCheckbox.checked;
+                importButton.classList.toggle('hidden', !anyChecked);
+                nextStageButton.classList.toggle('hidden', !anyChecked);
+
+                passButton.classList.toggle('hidden', !anyChecked);
+                failButton.classList.toggle('hidden', !anyChecked);
+
+            }
+
+            headerCheckbox.addEventListener('change', (e) => {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = e.target.checked;
+                });
+                updateImportButtonVisibility();
+            });
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    if (!checkbox.checked) {
+                        headerCheckbox.checked = false;
+                    } else {
+                        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                        headerCheckbox.checked = allChecked;
+                    }
+                    updateImportButtonVisibility();
+                });
+            });
+
+            // Initial check
+            updateImportButtonVisibility();
+        }
+
+        // --- GLOBAL VARIABLES ---
+        let isExpanded = false;
+        // Modal Elements
+        const contentWrapper = document.getElementById('content-wrapper');
+        const originalParent = document.getElementById('applicants-section');
+        const modalTarget = document.getElementById('modal-body-target');
+        const modal = document.getElementById('paging-modal');
+
+        // Confirm Modal Elements
+        const confirmModal = document.getElementById('confirm-modal');
+        const btnConfirmNo = document.getElementById('btn-confirm-no');
+        const btnConfirmYes = document.getElementById('btn-confirm-yes');
+
+        // Import Modal Elements
+        const importModal = document.getElementById('import-modal');
+        const importButton = document.getElementById('import-button');
+        const btnImportCancel = document.getElementById('btn-import-cancel');
+        const btnImportConfirm = document.getElementById('btn-import-confirm');
+        const fileUpload = document.getElementById('file-upload');
+        const fileUploadText = document.getElementById('file-upload-text');
+
+
+
+        // Next Stage Modal Elements
+        const nextStageModal = document.getElementById('next-stage-modal');
+        const nextStageButton = document.getElementById('nextStage-button');
+        const btnNextStageClose = document.getElementById('btn-next-stage-close');
+        const btnNextStageCancel = document.getElementById('btn-next-stage-cancel');
+
+
+
+        // Pagination Elements
+        const tableBody = document.querySelector('tbody');
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        const rowsPerPageSelect = document.getElementById('rowsPerPage');
+        const pageInfo = document.getElementById('pageInfo');
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const paginationFooter = document.getElementById('pagination-footer');
+
+        let currentPage = 1;
+        let rowsPerPage = 5;
+        let totalRows = rows.length;
+
+
+        // --- EVENT LISTENERS ---
+
+
+        nextStageButton.addEventListener('click', () => {
+            nextStageModal.classList.remove('hidden');
+        });
+
+        btnNextStageClose.addEventListener('click', () => {
+            nextStageModal.classList.add('hidden');
+        });
+
+        btnNextStageCancel.addEventListener('click', () => {
+            nextStageModal.classList.add('hidden');
+        });
+
+        nextStageModal.addEventListener('click', function (e) {
+            if (e.target === nextStageModal) {
+                nextStageModal.classList.add('hidden');
+            }
+        });
+
+
+
+        btnConfirmNo.addEventListener('click', () => {
+            confirmModal.classList.add('hidden');
+        });
+
+
+        btnConfirmYes.addEventListener('click', () => {
+            // TODO: Implement the actual "Screen" logic here
+            console.log('Submission confirmed!');
+            confirmModal.classList.add('hidden');
+        });
+
+        // Import Modal Logic
+        importButton.addEventListener('click', () => {
+            importModal.classList.remove('hidden');
+        });
+
+        btnImportCancel.addEventListener('click', () => {
+            importModal.classList.add('hidden');
+        });
+
+        btnImportConfirm.addEventListener('click', () => {
+            if (fileUpload.files.length > 0) {
+                console.log(`Importing file: ${fileUpload.files[0].name}`);
+                // Implement actual import logic here
+            } else {
+                console.log('No file selected.');
+            }
+            importModal.classList.add('hidden');
+        });
+
+        fileUpload.addEventListener('change', () => {
+            if (fileUpload.files.length > 0) {
+                fileUploadText.textContent = `File: ${fileUpload.files[0].name}`;
+            } else {
+                fileUploadText.innerHTML = `
+                                Drop files to Attach, or
+                                <span class="text-blue-600 underline">browse</span>
+                            `;
+            }
+        });
+
+        importModal.addEventListener('click', function (e) {
+            if (e.target === importModal) {
+                importModal.classList.add('hidden');
+            }
+        });
+
+        // --- EXPAND / COLLAPSE LOGIC ---
+        function toggleExpand() {
+            if (!isExpanded) {
+                // EXPAND
+                modalTarget.appendChild(contentWrapper);
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                isExpanded = true;
+                paginationFooter.style.display = 'none'; // Ẩn phân trang
+                renderTable(); // Show all rows
+            } else {
+                // COLLAPSE
+                originalParent.appendChild(contentWrapper);
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+                isExpanded = false;
+                paginationFooter.style.display = ''; // Hiện phân trang
+                renderTable(); // Show paged rows
+            }
+        }
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) toggleExpand();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                // Ưu tiên đóng confirm modal trước nếu nó đang mở
+                if (!confirmModal.classList.contains('hidden')) {
+                    confirmModal.classList.add('hidden');
+                } else if (!nextStageModal.classList.contains('hidden')) {
+                    nextStageModal.classList.add('hidden');
+                } else if (isExpanded) {
+                    toggleExpand();
+                }
+            }
+        });
+
+        // --- PAGINATION LOGIC ---
+        function initPagination() {
+            if (!rows.length) return;
+
+            rowsPerPageSelect.addEventListener('change', (e) => {
+                rowsPerPage = parseInt(e.target.value);
+                currentPage = 1;
+                renderTable();
+                renderPaginationControls();
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                    renderPaginationControls();
+                }
+            });
+
+            btnNext.addEventListener('click', () => {
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                    renderPaginationControls();
+                }
+            });
+
+            renderTable();
+            renderPaginationControls();
+        }
+
+        function renderTable() {
+            // Nếu đang Expanded -> Hiển thị hết
+            if (isExpanded) {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
+
+            // Nếu KHÔNG Expanded -> Phân trang
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            const showStart = totalRows === 0 ? 0 : start + 1;
+            const showEnd = Math.min(end, totalRows);
+            pageInfo.textContent = `Showing ${showStart}-${showEnd} of ${totalRows}`;
+        }
+
+        function renderPaginationControls() {
+            if (isExpanded) return;
+
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            pageNumbersContainer.innerHTML = '';
+
+            btnPrev.disabled = currentPage === 1;
+            btnNext.disabled = currentPage === totalPages || totalPages === 0;
+
+            const activeClass = 'bg-primary text-white border-primary';
+            const normalClass = 'text-gray-600 hover:bg-gray-100 bg-white border-transparent';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = `px-3 py-1 rounded text-sm font-medium border transition-colors ${i === currentPage ? activeClass : normalClass
+                    }`;
+                btn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable();
+                    renderPaginationControls();
+                });
+                pageNumbersContainer.appendChild(btn);
+            }
+        }
+
+        // --- INTERVIEW SETTING MODAL LOGIC ---
+        const interviewSettingButton = document.getElementById('pass-button');
+        const settingModalOverlay = document.getElementById('modal-overlay');
+        let selectedCandidatesData = [];
+
+        function openInterviewModal() {
+            const checkedCheckboxes = document.querySelectorAll('tbody .custom-checkbox:checked');
+            if (checkedCheckboxes.length === 0) {
+                alert('Please select at least one candidate to set up an interview.');
+                return;
+            }
+
+            // Clear previous data
+            selectedCandidatesData = [];
+            const candidateListContainer = document.getElementById('candidate-list');
+            const candidateCountEl = document.getElementById('candidate-count');
+            const previewTableBody = document.getElementById('preview-table-body');
+            candidateListContainer.innerHTML = '';
+            previewTableBody.innerHTML = '';
+
+
+            checkedCheckboxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const sbd = row.cells[4].textContent;
+                const name = row.cells[5].textContent;
+                const email = row.cells[6].textContent;
+                selectedCandidatesData.push({ sbd, name, email });
+            });
+
+            // Populate candidate list in modal
+            selectedCandidatesData.forEach(candidate => {
+                const span = document.createElement('span');
+                span.className = 'px-3 py-1.5 bg-primary-100 text-primary-700 rounded-full text-sm font-medium';
+                span.textContent = candidate.sbd;
+                candidateListContainer.appendChild(span);
+            });
+
+            // Update total count
+            candidateCountEl.textContent = `${selectedCandidatesData.length} candidates`;
+
+
+            settingModalOverlay.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            settingModalOverlay.classList.add('hidden');
+        }
+
+        let currentAssignments = [];
+        let assignmentCurrentPage = 1;
+        let assignmentSearchTerm = '';
+        let assignmentPanelFilter = '';
+        let assignmentSlotFilter = '';
+        const itemsPerPage = 10;
+
+        function randomizeAssignments() {
+            const panelsContainer = document.getElementById('panels-container');
+            const slotsContainer = document.getElementById('slots-container');
+
+            const availablePanels = Array.from(panelsContainer.querySelectorAll('.panel-item h4')).map(p => p.textContent);
+            if (availablePanels.length === 0) {
+                availablePanels = ['Panel 1'];
+            }
+            const availableSlots = Array.from(slotsContainer.querySelectorAll('.flex.items-center.gap-3')).map(slotEl => {
+                const timeStart = slotEl.querySelector('input[type="time"]:first-of-type')?.value || '09:00';
+                const timeEnd = slotEl.querySelector('input[type="time"]:last-of-type')?.value || '10:00';
+                const date = slotEl.querySelector('input[type="date"]')?.value || '2024-01-15';
+                const slotLabel = slotEl.querySelector('span.w-20')?.textContent || 'Slot 1';
+                return { label: slotLabel, timeStart, timeEnd, date, display: `${slotLabel} (${timeStart}-${timeEnd})` };
+            });
+            if (availableSlots.length === 0) {
+                availableSlots = [{ label: 'Slot 1', timeStart: '09:00', timeEnd: '10:00', date: '2024-01-15', display: 'Slot 1 (09:00-10:00)' }];
+            }
+
+            if (selectedCandidatesData.length === 0) {
+                alert("No candidates selected.");
+                return;
+            }
+            if (availablePanels.length === 0) {
+                alert("Please add at least one interview panel.");
+                return;
+            }
+            if (availableSlots.length === 0) {
+                alert("Please add at least one interview slot.");
+                return;
+            }
+
+            currentAssignments = selectedCandidatesData.map(candidate => {
+                const randomPanel = availablePanels[Math.floor(Math.random() * availablePanels.length)];
+                const randomSlot = availableSlots[Math.floor(Math.random() * availableSlots.length)];
+                return {
+                    sbd: candidate.sbd,
+                    email: candidate.email,
+                    name: candidate.name,
+                    panel: randomPanel,
+                    slot: randomSlot
+                };
+            });
+
+            renderAssignmentsPage(1);
+        }
+
+        // Add search functionality
+        const searchInput = document.getElementById('assignment-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                assignmentSearchTerm = this.value;
+                renderAssignmentsPage(1);
+            });
+        }
+
+        // Add filter functionality
+        const panelFilter = document.getElementById('panel-filter');
+        if (panelFilter) {
+            panelFilter.addEventListener('change', function() {
+                assignmentPanelFilter = this.value;
+                renderAssignmentsPage(1);
+            });
+        }
+
+        const slotFilter = document.getElementById('slot-filter');
+        if (slotFilter) {
+            slotFilter.addEventListener('change', function() {
+                assignmentSlotFilter = this.value;
+                renderAssignmentsPage(1);
+            });
+        }
+
+        function renderAssignmentsPage(page) {
+            assignmentCurrentPage = page;
+
+            // Filter assignments based on search term and filters
+            const filteredAssignments = currentAssignments.filter(assignment => {
+                const searchLower = assignmentSearchTerm.toLowerCase();
+                const matchesSearch = assignment.sbd.toLowerCase().includes(searchLower) ||
+                                    assignment.name.toLowerCase().includes(searchLower) ||
+                                    assignment.email.toLowerCase().includes(searchLower);
+                const matchesPanel = !assignmentPanelFilter || assignment.panel === assignmentPanelFilter;
+                const matchesSlot = !assignmentSlotFilter || assignment.slot.label === assignmentSlotFilter;
+                return matchesSearch && matchesPanel && matchesSlot;
+            });
+
+            // Update total count
+            const totalCountEl = document.getElementById('assignment-total-count');
+            if (totalCountEl) {
+                totalCountEl.textContent = filteredAssignments.length;
+            }
+
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageAssignments = filteredAssignments.slice(startIndex, endIndex);
+
+            const panelsContainer = document.getElementById('panels-container');
+            const slotsContainer = document.getElementById('slots-container');
+            const availablePanels = Array.from(panelsContainer.querySelectorAll('.panel-item h4')).map(p => p.textContent);
+            if (availablePanels.length === 0) {
+                availablePanels = ['Panel 1'];
+            }
+            const availableSlots = Array.from(slotsContainer.querySelectorAll('.flex.items-center.gap-3')).map(slotEl => {
+                const timeStart = slotEl.querySelector('input[type="time"]:first-of-type')?.value || '09:00';
+                const timeEnd = slotEl.querySelector('input[type="time"]:last-of-type')?.value || '10:00';
+                const date = slotEl.querySelector('input[type="date"]')?.value || '2024-01-15';
+                const slotLabel = slotEl.querySelector('span.w-20')?.textContent || 'Slot 1';
+                return { label: slotLabel, timeStart, timeEnd, date, display: `${slotLabel} (${timeStart}-${timeEnd})` };
+            });
+            if (availableSlots.length === 0) {
+                availableSlots = [{ label: 'Slot 1', timeStart: '09:00', timeEnd: '10:00', date: '2024-01-15', display: 'Slot 1 (09:00-10:00)' }];
+            }
+
+            // Populate filter dropdowns
+            const panelFilter = document.getElementById('panel-filter');
+            const slotFilter = document.getElementById('slot-filter');
+            
+            if (panelFilter) {
+                const currentPanelValue = panelFilter.value;
+                panelFilter.innerHTML = '<option value="">All Panels</option>';
+                availablePanels.forEach(panel => {
+                    const option = document.createElement('option');
+                    option.value = panel;
+                    option.textContent = panel;
+                    if (panel === currentPanelValue) option.selected = true;
+                    panelFilter.appendChild(option);
+                });
+            }
+            
+            if (slotFilter) {
+                const currentSlotValue = slotFilter.value;
+                slotFilter.innerHTML = '<option value="">All Slots</option>';
+                availableSlots.forEach(slot => {
+                    const option = document.createElement('option');
+                    option.value = slot.label;
+                    option.textContent = slot.display;
+                    if (slot.label === currentSlotValue) option.selected = true;
+                    slotFilter.appendChild(option);
+                });
+            }
+
+            let assignmentsHTML = '';
+            pageAssignments.forEach((assignment, index) => {
+                const originalIndex = currentAssignments.indexOf(assignment);
+                const panelOptions = availablePanels.map(panel => 
+                    `<option value="${panel}" ${panel === assignment.panel ? 'selected' : ''}>${panel}</option>`
+                ).join('');
+                const slotOptions = availableSlots.map(slot => 
+                    `<option value="${slot.label}" ${slot.label === assignment.slot.label ? 'selected' : ''}>${slot.display}</option>`
+                ).join('');
+
+                assignmentsHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm text-gray-800">${assignment.sbd}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${assignment.email}</td>
+                        <td class="px-4 py-3 text-sm text-gray-800">${assignment.name}</td>
+                        <td class="px-4 py-3">
+                            <select class="panel-select px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500" data-index="${originalIndex}">
+                                ${panelOptions}
+                            </select>
+                        </td>
+                        <td class="px-4 py-3">
+                            <select class="slot-select px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500" data-index="${originalIndex}">
+                                ${slotOptions}
+                            </select>
+                        </td>
+                        <td class="px-4 py-3">
+                            <input type="date" value="${assignment.slot.date}" class="date-input px-2 py-1 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-primary-500" data-index="${originalIndex}" readonly>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            const previewTableBody = document.getElementById('preview-table-body');
+            previewTableBody.innerHTML = assignmentsHTML;
+
+            // Add event listeners
+            document.querySelectorAll('.slot-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const selectedSlotLabel = this.value;
+                    const slotsContainer = document.getElementById('slots-container');
+                    const availableSlots = Array.from(slotsContainer.querySelectorAll('.flex.items-center.gap-3')).map(slotEl => {
+                        const timeStart = slotEl.querySelector('input[type="time"]:first-of-type').value;
+                        const timeEnd = slotEl.querySelector('input[type="time"]:last-of-type').value;
+                        const date = slotEl.querySelector('input[type="date"]').value;
+                        const slotLabel = slotEl.querySelector('span.w-20').textContent;
+                        return { label: slotLabel, timeStart, timeEnd, date, display: `${slotLabel} (${timeStart}-${timeEnd})` };
+                    });
+                    const selectedSlot = availableSlots.find(slot => slot.label === selectedSlotLabel);
+                    if (selectedSlot) {
+                        currentAssignments[index].slot = selectedSlot;
+                        const dateInput = document.querySelector(`.date-input[data-index="${index}"]`);
+                        dateInput.value = selectedSlot.date;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.panel-select').forEach(select => {
+                select.addEventListener('change', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    currentAssignments[index].panel = this.value;
+                });
+            });
+
+            renderAssignmentPagination(filteredAssignments.length);
+        }
+
+        function renderAssignmentPagination(totalCount) {
+            const totalPages = Math.ceil(totalCount / itemsPerPage);
+            let paginationHTML = '';
+
+            if (totalPages > 1) {
+                paginationHTML += '<div class="flex justify-center items-center space-x-2 mt-4">';
+                
+                // Previous button
+                if (assignmentCurrentPage > 1) {
+                    paginationHTML += `<button onclick="renderAssignmentsPage(${assignmentCurrentPage - 1})" class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">Previous</button>`;
+                }
+
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === assignmentCurrentPage) {
+                        paginationHTML += `<span class="px-3 py-1 bg-primary-600 text-white rounded text-sm">${i}</span>`;
+                    } else {
+                        paginationHTML += `<button onclick="renderAssignmentsPage(${i})" class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">${i}</button>`;
+                    }
+                }
+
+                // Next button
+                if (assignmentCurrentPage < totalPages) {
+                    paginationHTML += `<button onclick="renderAssignmentsPage(${assignmentCurrentPage + 1})" class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">Next</button>`;
+                }
+
+                paginationHTML += '</div>';
+            }
+
+            const paginationContainer = document.getElementById('assignment-pagination-container');
+            if (paginationContainer) {
+                paginationContainer.innerHTML = paginationHTML;
+            } else {
+                // Add pagination container after the table
+                const tableContainer = document.querySelector('#preview-table-section .overflow-x-auto');
+                tableContainer.insertAdjacentHTML('afterend', `<div id="assignment-pagination-container">${paginationHTML}</div>`);
+            }
+        }
+
+        // Assign to window to be accessible from inline onclick attributes
+        window.closeModal = closeModal;
+        window.randomizeAssignments = randomizeAssignments;
+        window.renderAssignmentsPage = renderAssignmentsPage;
+
+        if (interviewSettingButton) {
+            interviewSettingButton.addEventListener('click', openInterviewModal);
+        }
+
+        // Close modal if clicking on the overlay itself
+        if (settingModalOverlay) {
+            settingModalOverlay.addEventListener('click', function (event) {
+                if (event.target === settingModalOverlay) {
+                    closeModal();
+                }
+            });
+        }
+    </script>
