@@ -860,7 +860,7 @@
     </div>
 
     <div id="import-modal"
-        class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        class="hidden fixed inset-0 z-[70] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
         <div class="bg-white rounded-lg shadow-xl p-6 w-96 animate-fade-in transform transition-all scale-100">
             <div class="flex flex-col text-center">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Import Applicants</h3>
@@ -1388,18 +1388,25 @@
     <div id="checkin-modal"
         class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
         <div class="bg-white rounded-lg shadow-xl w-[90%] max-h-[90vh] overflow-hidden flex flex-col">
-            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 class="text-lg font-semibold text-gray-800">Checkin Data View</h3>
-                <button onclick="closeCheckinModal()" class="text-gray-500 hover:text-gray-700 transition-colors">
-                    <i class="text-xl fa-solid fa-xmark"></i>
-                </button>
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Checkin Data View</h3>
+                    <button onclick="closeCheckinModal()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                        <i class="text-xl fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
             <div class="flex-1 overflow-y-auto p-6">
                 <div class="mb-4 flex items-center space-x-4">
                     <div class="w-80">
-                        <input type="text" id="checkin-search" placeholder="Search..." class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <input type="text" id="checkin-search" placeholder="Search by SDB, name, phone..." class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
                     </div>
                     <div class="flex items-center space-x-2">
+                        <select id="interview-round-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">All Interview Rounds</option>
+                            <option value="Interview 1">Interview 1</option>
+                            <option value="Interview 2">Interview 2</option>
+                        </select>
                         <select id="panel-expect-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
                             <option value="">All Panels</option>
                         </select>
@@ -1409,6 +1416,15 @@
                         <select id="email-status-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
                             <option value="">All Status</option>
                         </select>
+                        <select id="reply-status-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">All Reply Status</option>
+                        </select>
+                        <select id="checkin-status-filter" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">All Checkin</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        
                     </div>
                     <div class="text-sm text-gray-600">
                         <span id="checkin-total-count">0</span> records
@@ -1418,16 +1434,16 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700"><input type="checkbox" id="checkin-header-checkbox"></th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Avatar</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">SBD</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Full Name</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Phone</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">School</th>
-                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">StudentID</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Interview Round</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Panel Expect</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Slot Expect</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Time checkin</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Email Status</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Reply Status</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">Note</th>
                         </tr>
                     </thead>
@@ -1469,7 +1485,7 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
@@ -1508,7 +1524,7 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
@@ -1547,7 +1563,7 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
@@ -1586,7 +1602,7 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
@@ -1625,7 +1641,7 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
@@ -1664,7 +1680,7 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
@@ -1703,14 +1719,13 @@
                             <td class="py-3 px-4 text-sm text-gray-800">Panel 1</td>
                             <td class="py-3 px-4 text-sm text-gray-800">Slot 1 (10:30 - 10:00)</td>
                             <td class="py-3 px-4 text-sm text-gray-800">11/12/2025 14:00:00</td>
-                            <td class="py-3 px-4 text-sm text-red-500">Pending</td>
+                            <td class="py-3 px-4 text-sm text-red-500">Unsent</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3" id="checkin-modal-footer">
-                <button id="send-email-interview-btn" class="px-4 py-2 bg-primary text-white rounded-lg">Send Email Interview</button>
-                <button id="send-email-candidate-btn" class="px-4 py-2 bg-primary text-white rounded-lg">Send Email Candidate</button>
+
                 <button onclick="closeCheckinModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg">Close</button>
             </div>
         </div>
@@ -1742,6 +1757,18 @@
             </div>
             <div class="space-y-4">
                 <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Avatar</label>
+                    <div class="mt-1 flex items-center">
+                        <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                            <img id="avatar-preview" src="https://via.placeholder.com/150" alt="Avatar preview" class="h-full w-full object-cover">
+                        </span>
+                        <label for="avatar-upload" class="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary cursor-pointer">
+                            <span>Upload PNG</span>
+                            <input id="avatar-upload" name="avatar-upload" type="file" class="sr-only" accept=".png, .jpg, .jpeg">
+                        </label>
+                    </div>
+                </div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Panel Expect</label>
                     <select id="update-panel-expect" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
                         <option value="">Select Panel</option>
@@ -1769,6 +1796,110 @@
         </div>
     </div>
 
+    <!-- Avatar Zoom Modal -->
+    <div id="avatar-zoom-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-70">
+        <div class="relative">
+            <button onclick="closeAvatarZoom()" class="absolute -top-4 -right-4 bg-white rounded-full shadow p-2">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="avatar-zoom-image" src="" alt="Avatar" class="max-h-[80vh] max-w-[90vw] rounded-lg shadow-2xl object-contain bg-white">
+        </div>
+    </div>
+
+    <!-- Send Email Interview Modal -->
+    <div id="send-email-interview-modal" class="hidden fixed inset-0 z-[80] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-[600px] max-h-[90vh] overflow-y-auto animate-fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Send Email Interview</h3>
+                <button onclick="closeSendEmailModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="text-xl fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                    <input type="text" id="email-subject" value="Invitation Interview" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">To</label>
+                    <div id="email-to" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-lg p-2">
+                        <div id="email-to-tags" class="flex flex-wrap gap-2"></div>
+                        <input id="email-to-input" type="text" placeholder="Search and add people..." class="flex-1 min-w-[150px] outline-none text-sm">
+                    </div>
+                    <div id="email-to-suggestions" class="mt-1 border border-gray-200 rounded-lg shadow bg-white hidden max-h-40 overflow-auto"></div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Cc</label>
+                    <div id="email-cc" class="flex flex-wrap items-center gap-2 border border-gray-300 rounded-lg p-2">
+                        <div id="email-cc-tags" class="flex flex-wrap gap-2"></div>
+                        <input id="email-cc-input" type="text" placeholder="Search and add people..." class="flex-1 min-w-[150px] outline-none text-sm">
+                    </div>
+                    <div id="email-cc-suggestions" class="mt-1 border border-gray-200 rounded-lg shadow bg-white hidden max-h-40 overflow-auto"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">From Date Time</label>
+                        <input type="datetime-local" id="email-from-datetime" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">To Date Time</label>
+                        <input type="datetime-local" id="email-to-datetime" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+                <div class="flex flex-col justify-end space-y-2">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is-booking-room" class="w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary">
+                            <label for="is-booking-room" class="ml-2 text-sm font-medium text-gray-700">Is Booking Room?</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is-online-meeting" class="w-4 h-4 text-primary rounded focus:ring-2 focus:ring-primary">
+                            <label for="is-online-meeting" class="ml-2 text-sm font-medium text-gray-700">Is Online Meeting?</label>
+                        </div>
+                    </div>
+                <div>
+                <div id="physical-fields" class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Office</label>
+                        <select id="email-office" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Select Office</option>
+                            <option value="VNG Campus">VNG Campus</option>
+                            <option value="Sala Campus">Sala Campus</option>
+                            <option value="HN Campus">HN Campus</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Room</label>
+                        <select id="email-room" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Select Room</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="online-fields" class="grid grid-cols-2 gap-4 hidden">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Channel</label>
+                        <select id="email-channel" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                            <option value="">Select Channel</option>
+                            <option value="Teams">Teams</option>
+                            <option value="Zoom">Zoom</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Link</label>
+                        <input type="text" id="email-link" placeholder="Enter meeting link" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent">
+                    </div>
+                </div>
+                
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Body</label>
+                    <textarea id="email-body" placeholder="Enter email body..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent resize-none" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="closeSendEmailModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg">Cancel</button>
+                <button onclick="sendEmailInterview()" class="px-4 py-2 bg-primary text-white rounded-lg">Send</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const applicantsSection = document.getElementById('applicants-section');
@@ -1779,6 +1910,22 @@
             }
             initPagination();
             initCheckboxLogic();
+
+            const avatarUpload = document.getElementById('avatar-upload');
+            const avatarPreview = document.getElementById('avatar-preview');
+
+            if (avatarUpload && avatarPreview) {
+                avatarUpload.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            avatarPreview.src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
         });
 
         // --- CHECKBOX LOGIC ---
@@ -2116,6 +2263,9 @@
         let checkinPanelFilter = '';
         let checkinSlotFilter = '';
         let checkinEmailStatusFilter = '';
+        let checkinReplyStatusFilter = '';
+        let checkinStatusFilter = '';
+        let checkinInterviewRoundFilter = '';
 
         function openCheckinModal() {
             const selectedRows = Array.from(document.querySelectorAll('tbody input[type="checkbox"]:checked')).map(cb => cb.closest('tr'));
@@ -2127,56 +2277,55 @@
                     const cells = row.querySelectorAll('td');
                     const sbd = cells[4].textContent.trim();
                     const name = cells[5].textContent.trim();
-                    const email = cells[6].textContent.trim();
-                    const phone = cells[7].textContent.trim();
-                    const school = cells[8].textContent.trim();
-                    const studentId = cells[9].textContent.trim();
+                    const phone = cells[6].textContent.trim();
+                    const interviewRound = cells[7].textContent.trim() || 'Interview 1';
                     const panelExpect = 'Panel 1'; // Dummy
                     const slotExpect = 'Slot 1'; // Dummy
                     const timeCheckin = new Date().toLocaleString();
                     const emailStatus = 'Sent'; // Dummy
+                    const replyStatus = emailStatus === 'Sent' ? ['Accept', 'Reject', 'Change Time', 'Pending'][Math.floor(Math.random() * 4)] : '';
+                    const note = replyStatus === 'Reject' ? ['Tôi không tham gia được', 'Em không muốn tham gia'][Math.floor(Math.random() * 2)] :
+                                replyStatus === 'Change Time' ? ['Slot 2 (10h00 - 12h00 12/12/2020)', 'Slot 1 (10h00 - 12h00 12/12/2020)'][Math.floor(Math.random() * 2)] : '';
                     const data = {
-                        sbd, name, email, phone, school, studentId, panelExpect, slotExpect, timeCheckin, emailStatus, note: ''
+                        sbd, name, phone, interviewRound, panelExpect, slotExpect, timeCheckin, emailStatus, replyStatus, note
                     };
                     currentCheckinData.push(data);
                 });
             } else {
                 // Fake data
                 currentCheckinData = [
-  { sbd: 'EV2919', name: 'Trần Thị Bích', email: 'trantb@hcmut.edu.vn', phone: '0901323188', school: 'HCMUT', studentId: '18520001', panelExpect: 'Panel 1', slotExpect: 'Slot 1 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2920', name: 'Nguyễn Văn A', email: 'nguyenvana@example.com', phone: '0903223499', school: 'HCMUT', studentId: '18520002', panelExpect: 'Panel 2', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2921', name: 'Lê Thị C', email: 'lethic@example.com', phone: '090333277', school: 'HCMUT', studentId: '18520003', panelExpect: 'Panel 1', slotExpect: 'Slot 3 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2922', name: 'Phạm Quốc D', email: 'phamqd@hcmut.edu.vn', phone: '0904112233', school: 'HCMUT', studentId: '18520004', panelExpect: 'Panel 3', slotExpect: 'Slot 1 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2923', name: 'Võ Thị E', email: 'vothie@example.com', phone: '0905122334', school: 'HCMUT', studentId: '18520005', panelExpect: 'Panel 1', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2924', name: 'Đỗ Trung F', email: 'dotrungf@example.com', phone: '0906233445', school: 'HCMUT', studentId: '18520006', panelExpect: 'Panel 2', slotExpect: 'Slot 3 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2925', name: 'Nguyễn Tấn G', email: 'nguyentg@example.com', phone: '0907344556', school: 'HCMUT', studentId: '18520007', panelExpect: 'Panel 3', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2926', name: 'Phan Thành H', email: 'phanth@example.com', phone: '0908455667', school: 'HCMUT', studentId: '18520008', panelExpect: 'Panel 2', slotExpect: 'Slot 1 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2927', name: 'Hoàng Mỹ I', email: 'hoangmi@example.com', phone: '0909566778', school: 'HCMUT', studentId: '18520009', panelExpect: 'Panel 1', slotExpect: 'Slot 4 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2928', name: 'Lý Quốc J', email: 'lyquocj@example.com', phone: '0910677889', school: 'HCMUT', studentId: '18520010', panelExpect: 'Panel 3', slotExpect: 'Slot 3 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
+  { sbd: 'EV2919', name: 'Trần Thị Bích', phone: '0901323188', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 1 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Accept', note: '' },
+  { sbd: 'EV2920', name: 'Nguyễn Văn A', phone: '0903223499', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '', note: '' },
+  { sbd: 'EV2921', name: 'Lê Thị C', phone: '090333277', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 3 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Reject', note: 'Tôi không tham gia được' },
+  { sbd: 'EV2922', name: 'Phạm Quốc D', phone: '0904112233', interviewRound: 'Interview 2', panelExpect: 'Panel 3', slotExpect: 'Slot 1 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'ReSent', replyStatus: 'Change Time', note: 'Slot 2 (10h00 - 12h00 12/12/2020)' },
+  { sbd: 'EV2923', name: 'Võ Thị E', phone: '0905122334', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '', note: '' },
+  { sbd: 'EV2924', name: 'Đỗ Trung F', phone: '0906233445', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 3 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Pending', note: '' },
+  { sbd: 'EV2925', name: 'Nguyễn Tấn G', phone: '0907344556', interviewRound: 'Interview 1', panelExpect: 'Panel 3', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Reject', note: 'Em không muốn tham gia' },
+  { sbd: 'EV2926', name: 'Phan Thành H', phone: '0908455667', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 1 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '' },
+  { sbd: 'EV2927', name: 'Hoàng Mỹ I', phone: '0909566778', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 4 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Change Time', note: 'Slot 1 (10h00 - 12h00 12/12/2020)' },
+  { sbd: 'EV2928', name: 'Lý Quốc J', phone: '0910677889', interviewRound: 'Interview 2', panelExpect: 'Panel 3', slotExpect: 'Slot 3 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '' },
+  { sbd: 'EV2929', name: 'Trịnh Thị K', phone: '0911788990', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'ReSent', replyStatus: 'Pending', note: '' },
+  { sbd: 'EV2930', name: 'Đặng Hoàng L', phone: '0912899001', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 5 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '' },
+  { sbd: 'EV2931', name: 'Ngọc Mai M', phone: '0913900112', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 6 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Reject', note: 'Tôi không tham gia được' },
+  { sbd: 'EV2932', name: 'Lương Văn N', phone: '0914111223', interviewRound: 'Interview 2', panelExpect: 'Panel 3', slotExpect: 'Slot 4 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '' },
+  { sbd: 'EV2933', name: 'Huỳnh Gia O', phone: '0915222334', interviewRound: 'Interview 1', panelExpect: 'Panel 2', slotExpect: 'Slot 6 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'ReSent', replyStatus: 'Change Time', note: 'Slot 2 (10h00 - 12h00 12/12/2020)' },
 
-  { sbd: 'EV2929', name: 'Trịnh Thị K', email: 'trinhtk@example.com', phone: '0911788990', school: 'HCMUT', studentId: '18520011', panelExpect: 'Panel 1', slotExpect: 'Slot 2 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2930', name: 'Đặng Hoàng L', email: 'danghl@example.com', phone: '0912899001', school: 'HCMUT', studentId: '18520012', panelExpect: 'Panel 2', slotExpect: 'Slot 5 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2931', name: 'Ngọc Mai M', email: 'ngocm@example.com', phone: '0913900112', school: 'HCMUT', studentId: '18520013', panelExpect: 'Panel 1', slotExpect: 'Slot 6 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2932', name: 'Lương Văn N', email: 'luongvn@example.com', phone: '0914111223', school: 'HCMUT', studentId: '18520014', panelExpect: 'Panel 3', slotExpect: 'Slot 4 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2933', name: 'Huỳnh Gia O', email: 'huynhgo@example.com', phone: '0915222334', school: 'HCMUT', studentId: '18520015', panelExpect: 'Panel 2', slotExpect: 'Slot 6 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
+  { sbd: 'EV2934', name: 'Bùi Thị P', phone: '0916333445', interviewRound: 'Interview 2', panelExpect: 'Panel 1', slotExpect: 'Slot 7 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Pending', note: '' },
+  { sbd: 'EV2935', name: 'Tạ Quốc Q', phone: '0917444556', interviewRound: 'Interview 1', panelExpect: 'Panel 3', slotExpect: 'Slot 5 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '' },
+  { sbd: 'EV2936', name: 'Văn Minh R', phone: '0918555667', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 7 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Reject', note: 'Em không muốn tham gia' },
+  { sbd: 'EV2937', name: 'Nguyễn Tố S', phone: '0919666778', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 8 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '' },
+  { sbd: 'EV2938', name: 'Lâm Chí T', phone: '0920777889', interviewRound: 'Interview 2', panelExpect: 'Panel 3', slotExpect: 'Slot 6 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'ReSent', replyStatus: 'Change Time', note: 'Slot 1 (10h00 - 12h00 12/12/2020)' },
 
-  { sbd: 'EV2934', name: 'Bùi Thị P', email: 'buithip@example.com', phone: '0916333445', school: 'HCMUT', studentId: '18520016', panelExpect: 'Panel 1', slotExpect: 'Slot 7 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2935', name: 'Tạ Quốc Q', email: 'taqq@example.com', phone: '0917444556', school: 'HCMUT', studentId: '18520017', panelExpect: 'Panel 3', slotExpect: 'Slot 5 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2936', name: 'Văn Minh R', email: 'vanmr@example.com', phone: '0918555667', school: 'HCMUT', studentId: '18520018', panelExpect: 'Panel 2', slotExpect: 'Slot 7 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2937', name: 'Nguyễn Tố S', email: 'nguyents@example.com', phone: '0919666778', school: 'HCMUT', studentId: '18520019', panelExpect: 'Panel 1', slotExpect: 'Slot 8 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2938', name: 'Lâm Chí T', email: 'lamct@example.com', phone: '0920777889', school: 'HCMUT', studentId: '18520020', panelExpect: 'Panel 3', slotExpect: 'Slot 6 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-
-  { sbd: 'EV2939', name: 'Trần Kiệt U', email: 'tranku@example.com', phone: '0921888990', school: 'HCMUT', studentId: '18520021', panelExpect: 'Panel 2', slotExpect: 'Slot 8 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2940', name: 'Đinh Tuyết V', email: 'dinhtv@example.com', phone: '0922999001', school: 'HCMUT', studentId: '18520022', panelExpect: 'Panel 1', slotExpect: 'Slot 9 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2941', name: 'Ngô Song W', email: 'ngosw@example.com', phone: '0923000112', school: 'HCMUT', studentId: '18520023', panelExpect: 'Panel 3', slotExpect: 'Slot 7 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2942', name: 'Trương Hải X', email: 'truonghx@example.com', phone: '0924111223', school: 'HCMUT', studentId: '18520024', panelExpect: 'Panel 2', slotExpect: 'Slot 9 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2943', name: 'Cao Mỹ Y', email: 'caomy@example.com', phone: '0925222334', school: 'HCMUT', studentId: '18520025', panelExpect: 'Panel 1', slotExpect: 'Slot 10 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-
-  { sbd: 'EV2944', name: 'Phùng Gia Z', email: 'phunggz@example.com', phone: '0926333445', school: 'HCMUT', studentId: '18520026', panelExpect: 'Panel 3', slotExpect: 'Slot 8 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2945', name: 'Hồ Quốc AA', email: 'hoquocaa@example.com', phone: '0927444556', school: 'HCMUT', studentId: '18520027', panelExpect: 'Panel 2', slotExpect: 'Slot 10 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' },
-  { sbd: 'EV2946', name: 'Trần Gia AB', email: 'trangiaab@example.com', phone: '0928555667', school: 'HCMUT', studentId: '18520028', panelExpect: 'Panel 1', slotExpect: 'Slot 11 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2947', name: 'Nguyễn Hà AC', email: 'nguyenhaac@example.com', phone: '0929666778', school: 'HCMUT', studentId: '18520029', panelExpect: 'Panel 3', slotExpect: 'Slot 9 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent' },
-  { sbd: 'EV2948', name: 'Lê Minh AD', email: 'leminhad@example.com', phone: '0930777889', school: 'HCMUT', studentId: '18520030', panelExpect: 'Panel 2', slotExpect: 'Slot 11 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Pending' }
+  { sbd: 'EV2939', name: 'Trần Kiệt U', phone: '0921888990', interviewRound: 'Interview 1', panelExpect: 'Panel 2', slotExpect: 'Slot 8 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Pending', note: '' },
+  { sbd: 'EV2940', name: 'Đinh Tuyết V', phone: '0922999001', interviewRound: 'Interview 2', panelExpect: 'Panel 1', slotExpect: 'Slot 9 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '', note: '' },
+  { sbd: 'EV2941', name: 'Ngô Song W', phone: '0923000112', interviewRound: 'Interview 1', panelExpect: 'Panel 3', slotExpect: 'Slot 7 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Reject', note: 'Tôi không tham gia được' },
+  { sbd: 'EV2942', name: 'Trương Hải X', phone: '0924111223', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 9 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Change Time', note: 'Slot 2 (10h00 - 12h00 12/12/2020)' },
+  { sbd: 'EV2943', name: 'Cao Mỹ Y', phone: '0925222334', interviewRound: 'Interview 1', panelExpect: 'Panel 1', slotExpect: 'Slot 10 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '', note: '' },
+  { sbd: 'EV2944', name: 'Phùng Gia Z', phone: '0926333445', interviewRound: 'Interview 2', panelExpect: 'Panel 3', slotExpect: 'Slot 8 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'ReSent', replyStatus: 'Pending', note: '' },
+  { sbd: 'EV2945', name: 'Hồ Quốc AA', phone: '0927444556', interviewRound: 'Interview 1', panelExpect: 'Panel 2', slotExpect: 'Slot 10 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '', note: '' },
+  { sbd: 'EV2946', name: 'Trần Gia AB', phone: '0928555667', interviewRound: 'Interview 2', panelExpect: 'Panel 1', slotExpect: 'Slot 11 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Sent', replyStatus: 'Reject', note: 'Em không muốn tham gia' },
+  { sbd: 'EV2947', name: 'Nguyễn Hà AC', phone: '0929666778', interviewRound: 'Interview 1', panelExpect: 'Panel 3', slotExpect: 'Slot 9 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'ReSent', replyStatus: 'Change Time', note: 'Slot 1 (10h00 - 12h00 12/12/2020)' },
+  { sbd: 'EV2948', name: 'Lê Minh AD', phone: '0930777889', interviewRound: 'Interview 2', panelExpect: 'Panel 2', slotExpect: 'Slot 11 (10h00 - 12h00 12/12/2020)', timeCheckin: '', emailStatus: 'Unsent', replyStatus: '', note: '' }
 ];;
             }
             populateCheckinFilters();
@@ -2218,7 +2367,8 @@
             const checkedBoxes = document.querySelectorAll('#checkin-table-body input[type="checkbox"]:checked');
             checkedBoxes.forEach(cb => {
                 const row = cb.closest('tr');
-                const sbd = row.cells[1].textContent.trim();
+                // With Avatar column added, SBD is at index 2
+                const sbd = row.cells[2].textContent.trim();
                 const data = currentCheckinData.find(d => d.sbd === sbd);
                 if (data) {
                     data.timeCheckin = currentTime;
@@ -2227,39 +2377,69 @@
             renderCheckinPage();
         }
 
-        function openUpdateModal() {
-            // Populate the dropdowns with unique values from current data
-            const panelSelect = document.getElementById('update-panel-expect');
-            const slotSelect = document.getElementById('update-slot-expect');
+            let updateAvatarDataURL = null;
 
-            const panels = [...new Set(currentCheckinData.map(d => d.panelExpect))].filter(p => p);
-            const slots = [...new Set(currentCheckinData.map(d => d.slotExpect))].filter(s => s);
+            function openUpdateModal() {
+                // Populate the dropdowns with unique values from current data
+                const panelSelect = document.getElementById('update-panel-expect');
+                const slotSelect = document.getElementById('update-slot-expect');
 
-            panelSelect.innerHTML = '<option value="">Select Panel</option>' + panels.map(p => `<option value="${p}">${p}</option>`).join('');
-            slotSelect.innerHTML = '<option value="">Select Slot</option>' + slots.map(s => `<option value="${s}">${s}</option>`).join('');
+                const panels = [...new Set(currentCheckinData.map(d => d.panelExpect))].filter(p => p);
+                const slots = [...new Set(currentCheckinData.map(d => d.slotExpect))].filter(s => s);
 
-            // Get the first checked record to populate the form
-            const checkedBoxes = document.querySelectorAll('#checkin-table-body input[type="checkbox"]:checked');
-            if (checkedBoxes.length > 0) {
-                const row = checkedBoxes[0].closest('tr');
-                const sbd = row.cells[1].textContent.trim();
-                const data = currentCheckinData.find(d => d.sbd === sbd);
-                if (data) {
-                    document.getElementById('update-panel-expect').value = data.panelExpect || '';
-                    document.getElementById('update-slot-expect').value = data.slotExpect || '';
-                    // Convert timeCheckin to datetime-local format if it's a string
-                    if (data.timeCheckin) {
-                        const date = new Date(data.timeCheckin);
-                        const datetimeLocal = date.toISOString().slice(0, 16);
-                        document.getElementById('update-time-checkin').value = datetimeLocal;
-                    } else {
-                        document.getElementById('update-time-checkin').value = '';
+                panelSelect.innerHTML = '<option value="">Select Panel</option>' + panels.map(p => `<option value="${p}">${p}</option>`).join('');
+                slotSelect.innerHTML = '<option value="">Select Slot</option>' + slots.map(s => `<option value="${s}">${s}</option>`).join('');
+
+                // Get the first checked record to populate the form
+                const checkedBoxes = document.querySelectorAll('#checkin-table-body input[type="checkbox"]:checked');
+                if (checkedBoxes.length > 0) {
+                    const row = checkedBoxes[0].closest('tr');
+                    // With Avatar column added, SBD is at index 2
+                    const sbd = row.cells[2].textContent.trim();
+                    const data = currentCheckinData.find(d => d.sbd === sbd);
+                    if (data) {
+                        document.getElementById('update-panel-expect').value = data.panelExpect || '';
+                        document.getElementById('update-slot-expect').value = data.slotExpect || '';
+                        // Convert timeCheckin to datetime-local format if it's a string
+                        if (data.timeCheckin) {
+                            const date = new Date(data.timeCheckin);
+                            const datetimeLocal = date.toISOString().slice(0, 16);
+                            document.getElementById('update-time-checkin').value = datetimeLocal;
+                        } else {
+                            document.getElementById('update-time-checkin').value = '';
+                        }
+                        document.getElementById('update-note').value = data.note || '';
+
+                        // Set avatar preview to existing avatar or placeholder
+                        const preview = document.getElementById('avatar-preview');
+                        if (data.avatar) {
+                            preview.src = data.avatar;
+                        } else {
+                            preview.src = 'https://via.placeholder.com/150';
+                        }
+                        updateAvatarDataURL = null;
                     }
-                    document.getElementById('update-note').value = data.note || '';
                 }
+                // Wire up file input change to preview and store base64
+                const avatarInput = document.getElementById('avatar-upload');
+                avatarInput.onchange = (e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (!file) return;
+                    if (!file.type.match(/^image\/(png|jpg|jpeg)$/)) {
+                        alert('Please upload a PNG or JPG image.');
+                        e.target.value = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        updateAvatarDataURL = reader.result;
+                        const preview = document.getElementById('avatar-preview');
+                        preview.src = updateAvatarDataURL;
+                    };
+                    reader.readAsDataURL(file);
+                };
+                document.getElementById('update-modal').classList.remove('hidden');
             }
-            document.getElementById('update-modal').classList.remove('hidden');
-        }
 
         function closeUpdateModal() {
             document.getElementById('update-modal').classList.add('hidden');
@@ -2268,6 +2448,268 @@
             document.getElementById('update-slot-expect').value = '';
             document.getElementById('update-time-checkin').value = '';
             document.getElementById('update-note').value = '';
+        }
+
+        // Inline avatar upload without opening Update modal
+        function openAvatarUpload(sbd) {
+            // Create (or reuse) a hidden file input for inline upload
+            let input = document.getElementById('avatar-upload-inline');
+            if (!input) {
+                input = document.createElement('input');
+                input.type = 'file';
+                input.id = 'avatar-upload-inline';
+                input.accept = '.png, .jpg, .jpeg';
+                input.className = 'sr-only';
+                document.body.appendChild(input);
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files && e.target.files[0];
+                    if (!file) return;
+                    if (!file.type.match(/^image\/(png|jpg|jpeg)$/)) {
+                        alert('Please upload a PNG or JPG image.');
+                        e.target.value = '';
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        const data = currentCheckinData.find(d => d.sbd === input.dataset.sbd);
+                        if (data) {
+                            data.avatar = reader.result;
+                            renderCheckinPage();
+                        }
+                        input.value = '';
+                        input.dataset.sbd = '';
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+            input.dataset.sbd = sbd;
+            input.click();
+        }
+
+        function openAvatarZoom(sbd) {
+            const data = currentCheckinData.find(d => d.sbd === sbd);
+            if (!data || !data.avatar) return;
+            const img = document.getElementById('avatar-zoom-image');
+            img.src = data.avatar;
+            document.getElementById('avatar-zoom-modal').classList.remove('hidden');
+        }
+
+        function closeAvatarZoom() {
+            document.getElementById('avatar-zoom-modal').classList.add('hidden');
+            const img = document.getElementById('avatar-zoom-image');
+            img.src = '';
+        }
+
+        // Send Email Interview Modal Functions
+        let selectedInterviewers = [];
+        let selectedCcs = [];
+
+        function renderTags(prefix, selected) {
+            const tagsEl = document.getElementById(prefix + '-tags');
+            tagsEl.innerHTML = selected.map(n => `
+                <span class="inline-flex items-center px-2 py-1 bg-primary-100 text-primary-700 rounded-full text-xs">
+                    ${n}
+                    <button type="button" class="ml-2" onclick="${prefix === 'email-to' ? 'removeTo' : 'removeCc'}('${n}')"><i class="fa-solid fa-xmark"></i></button>
+                </span>
+            `).join('');
+        }
+
+        function addTag(prefix, name) {
+            if (prefix === 'email-to') {
+                if (!selectedInterviewers.includes(name)) selectedInterviewers.push(name);
+                renderTags('email-to', selectedInterviewers);
+            } else {
+                if (!selectedCcs.includes(name)) selectedCcs.push(name);
+                renderTags('email-cc', selectedCcs);
+            }
+            const input = document.getElementById(prefix + '-input');
+            if (input) input.value = '';
+        }
+
+        function removeTo(name) {
+            selectedInterviewers = selectedInterviewers.filter(n => n !== name);
+            renderTags('email-to', selectedInterviewers);
+        }
+        function removeCc(name) {
+            selectedCcs = selectedCcs.filter(n => n !== name);
+            renderTags('email-cc', selectedCcs);
+        }
+
+        function setupMultiSelect(prefix, dataList, selected) {
+            renderTags(prefix, selected);
+            const input = document.getElementById(prefix + '-input');
+            const suggestions = document.getElementById(prefix + '-suggestions');
+            if (!input || !suggestions) return;
+            input.oninput = () => {
+                const term = input.value.trim().toLowerCase();
+                const options = dataList.filter(n => n.toLowerCase().includes(term) && !selected.includes(n));
+                if (options.length === 0) {
+                    suggestions.classList.add('hidden');
+                    suggestions.innerHTML = '';
+                    return;
+                }
+                suggestions.innerHTML = options.map(n => `<button type=\"button\" class=\"w-full text-left px-3 py-2 hover:bg-gray-100 text-sm\" onclick=\"addTag('${prefix}','${n}')\">${n}</button>`).join('');
+                suggestions.classList.remove('hidden');
+            };
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const first = suggestions.querySelector('button');
+                    if (first) first.click();
+                }
+            };
+            input.onblur = () => {
+                setTimeout(() => suggestions.classList.add('hidden'), 150);
+            };
+        }
+
+        function openSendEmailModal() {
+            const interviewers = ['People 1', 'People 2', 'People 3', 'People 4', 'People 5'];
+            // Default selections
+            selectedInterviewers = ['People 1', 'People 2'];
+            selectedCcs = ['People 3', 'People 4'];
+            setupMultiSelect('email-to', interviewers, selectedInterviewers);
+            setupMultiSelect('email-cc', interviewers, selectedCcs);
+
+            // Set default body
+            const bodyTextarea = document.getElementById('email-body');
+            bodyTextarea.value = `Dear Candidate,\n\nWe are pleased to invite you to an interview session. Please check the details below:\n\nInterviewers: [Interviewer List]\nFrom: [From Date Time]\nTo: [To Date Time]\nOffice: [Office]\nRoom: [Room]\nOnline Meeting: [Is Online Meeting]\n\nPlease confirm your attendance.\n\nBest regards,\nHR Team`;
+
+            // Update room list based on booking checkbox
+            updateRoomList();
+
+            // Set up checkbox listener
+            document.getElementById('is-booking-room').addEventListener('change', updateRoomList);
+            document.getElementById('is-online-meeting').addEventListener('change', toggleOnlineMeetingFields);
+
+            // Initialize fields visibility based on current checkbox state
+            toggleOnlineMeetingFields();
+
+            document.getElementById('send-email-interview-modal').classList.remove('hidden');
+        }
+
+        function closeSendEmailModal() {
+            document.getElementById('send-email-interview-modal').classList.add('hidden');
+            // Clear form
+            document.getElementById('email-subject').value = 'Invitation Interview';
+            document.getElementById('email-from-datetime').value = '';
+            document.getElementById('email-to-datetime').value = '';
+            document.getElementById('email-office').value = '';
+            document.getElementById('is-booking-room').checked = false;
+            document.getElementById('is-online-meeting').checked = false;
+            document.getElementById('email-room').value = '';
+            const channelEl = document.getElementById('email-channel');
+            const linkEl = document.getElementById('email-link');
+            if (channelEl) channelEl.value = '';
+            if (linkEl) linkEl.value = '';
+            document.getElementById('email-body').value = '';
+            // Reset field visibility
+            const physical = document.getElementById('physical-fields');
+            const online = document.getElementById('online-fields');
+            if (physical) physical.classList.remove('hidden');
+            if (online) online.classList.add('hidden');
+            const bookingEl = document.getElementById('is-booking-room');
+            if (bookingEl) bookingEl.disabled = false;
+            selectedInterviewers = [];
+            selectedCcs = [];
+            const toTags = document.getElementById('email-to-tags');
+            const ccTags = document.getElementById('email-cc-tags');
+            if (toTags) toTags.innerHTML = '';
+            if (ccTags) ccTags.innerHTML = '';
+            const toInput = document.getElementById('email-to-input');
+            const ccInput = document.getElementById('email-cc-input');
+            if (toInput) toInput.value = '';
+            if (ccInput) ccInput.value = '';
+        }
+
+        function updateRoomList() {
+            const isBooking = document.getElementById('is-booking-room').checked;
+            const roomSelect = document.getElementById('email-room');
+            
+            if (isBooking) {
+                // Show available rooms (with " - Free")
+                roomSelect.innerHTML = `
+                    <option value="">Select Room</option>
+                    <option value="Harvard - Free">Harvard - Free</option>
+                    <option value="Oxford - Free">Oxford - Free</option>
+                    <option value="Sydney - Free">Sydney - Free</option>
+                `;
+            } else {
+                // Show all rooms without availability
+                roomSelect.innerHTML = `
+                    <option value="">Select Room</option>
+                    <option value="Harvard">Harvard</option>
+                    <option value="Oxford">Oxford</option>
+                    <option value="Sydney">Sydney</option>
+                `;
+            }
+            roomSelect.value = '';
+        }
+
+        function toggleOnlineMeetingFields() {
+            const isOnline = document.getElementById('is-online-meeting').checked;
+            const physical = document.getElementById('physical-fields');
+            const online = document.getElementById('online-fields');
+            const bookingEl = document.getElementById('is-booking-room');
+            const officeEl = document.getElementById('email-office');
+            const roomEl = document.getElementById('email-room');
+
+            if (isOnline) {
+                // Show online fields, hide physical fields, disable booking
+                if (physical) physical.classList.add('hidden');
+                if (online) online.classList.remove('hidden');
+                if (bookingEl) {
+                    bookingEl.checked = false;
+                    bookingEl.disabled = true;
+                }
+                if (officeEl) officeEl.value = '';
+                if (roomEl) roomEl.value = '';
+            } else {
+                // Show physical fields, hide online fields, enable booking
+                if (physical) physical.classList.remove('hidden');
+                if (online) online.classList.add('hidden');
+                if (bookingEl) bookingEl.disabled = false;
+                // Refresh room options when returning to physical mode
+                updateRoomList();
+            }
+        }
+
+        function sendEmailInterview() {
+            const subject = document.getElementById('email-subject').value.trim();
+            const fromDatetime = document.getElementById('email-from-datetime').value.trim();
+            const toDatetime = document.getElementById('email-to-datetime').value.trim();
+            const office = document.getElementById('email-office').value.trim();
+            const room = document.getElementById('email-room').value.trim();
+            const channel = (document.getElementById('email-channel')?.value || '').trim();
+            const link = (document.getElementById('email-link')?.value || '').trim();
+            const body = document.getElementById('email-body').value.trim();
+
+            const isOnlineMeeting = document.getElementById('is-online-meeting').checked;
+
+            if (isOnlineMeeting) {
+                if (!subject || selectedInterviewers.length === 0 || !fromDatetime || !toDatetime || !channel || !link || !body) {
+                    alert('Please fill in all required fields for Online Meeting (at least one To).');
+                    return;
+                }
+            } else {
+                if (!subject || selectedInterviewers.length === 0 || !fromDatetime || !toDatetime || !office || !room || !body) {
+                    alert('Please fill in all required fields for Physical Meeting (at least one To).');
+                    return;
+                }
+            }
+
+            // Validate that fromDatetime is before toDatetime
+            if (new Date(fromDatetime) >= new Date(toDatetime)) {
+                alert('From Date Time must be before To Date Time.');
+                return;
+            }
+
+            const isBookingRoom = document.getElementById('is-booking-room').checked;
+
+            console.log('Sending email interview:');
+            console.log({ subject, to: selectedInterviewers, cc: selectedCcs, fromDatetime, toDatetime, office, room, channel, link, isBookingRoom, isOnlineMeeting, body });
+            alert('Email sent successfully!');
+            closeSendEmailModal();
         }
 
         function saveUpdate() {
@@ -2286,13 +2728,15 @@
             const checkedBoxes = document.querySelectorAll('#checkin-table-body input[type="checkbox"]:checked');
             checkedBoxes.forEach(cb => {
                 const row = cb.closest('tr');
-                const sbd = row.cells[1].textContent.trim();
+                // With Avatar column added, SBD is at index 2
+                const sbd = row.cells[2].textContent.trim();
                 const data = currentCheckinData.find(d => d.sbd === sbd);
                 if (data) {
                     if (panelExpect) data.panelExpect = panelExpect;
                     if (slotExpect) data.slotExpect = slotExpect;
                     if (timeCheckin) data.timeCheckin = timeCheckin;
                     data.note = note;
+                    if (updateAvatarDataURL) data.avatar = updateAvatarDataURL;
                 }
             });
             renderCheckinPage();
@@ -2303,14 +2747,21 @@
             const panelFilter = document.getElementById('panel-expect-filter');
             const slotFilter = document.getElementById('slot-expect-filter');
             const emailStatusFilter = document.getElementById('email-status-filter');
+            const replyStatusFilter = document.getElementById('reply-status-filter');
+            const interviewRoundFilter = document.getElementById('interview-round-filter');
 
             const panels = [...new Set(currentCheckinData.map(d => d.panelExpect))];
             const slots = [...new Set(currentCheckinData.map(d => d.slotExpect))];
             const statuses = [...new Set(currentCheckinData.map(d => d.emailStatus))];
+            const replyStatuses = [...new Set(currentCheckinData.map(d => d.replyStatus).filter(s => s))];
+            const interviewRounds = [...new Set(currentCheckinData.map(d => d.interviewRound).filter(r => r))];
 
+            interviewRoundFilter.innerHTML = '<option value="">All Interview Rounds</option>' + interviewRounds.map(r => `<option value="${r}">${r}</option>`).join('');
             panelFilter.innerHTML = '<option value="">All Panels</option>' + panels.map(p => `<option value="${p}">${p}</option>`).join('');
             slotFilter.innerHTML = '<option value="">All Slots</option>' + slots.map(s => `<option value="${s}">${s}</option>`).join('');
-            emailStatusFilter.innerHTML = '<option value="">All Status</option>' + statuses.map(s => `<option value="${s}">${s}</option>`).join('');
+            emailStatusFilter.innerHTML = '<option value="">All Email Status</option>' + statuses.map(s => `<option value="${s}">${s}</option>`).join('');
+            replyStatusFilter.innerHTML = '<option value="">All Reply Status</option>' + replyStatuses.map(s => `<option value="${s}">${s}</option>`).join('');
+            
         }
 
         function renderCheckinPage() {
@@ -2320,13 +2771,14 @@
                 const matchesSearch = !searchTerm ||
                     data.sbd.toLowerCase().includes(searchTerm) ||
                     data.name.toLowerCase().includes(searchTerm) ||
-                    data.email.toLowerCase().includes(searchTerm) ||
-                    data.phone.toLowerCase().includes(searchTerm) ||
-                    data.studentId.toLowerCase().includes(searchTerm);
+                    data.phone.toLowerCase().includes(searchTerm);
                 const matchesPanel = !checkinPanelFilter || data.panelExpect === checkinPanelFilter;
                 const matchesSlot = !checkinSlotFilter || data.slotExpect === checkinSlotFilter;
                 const matchesStatus = !checkinEmailStatusFilter || data.emailStatus === checkinEmailStatusFilter;
-                return matchesSearch && matchesPanel && matchesSlot && matchesStatus;
+                const matchesReplyStatus = !checkinReplyStatusFilter || data.replyStatus === checkinReplyStatusFilter;
+                const matchesCheckinStatus = !checkinStatusFilter || (checkinStatusFilter === 'Yes' ? data.timeCheckin : !data.timeCheckin);
+                const matchesInterviewRound = !checkinInterviewRoundFilter || data.interviewRound === checkinInterviewRoundFilter;
+                return matchesSearch && matchesPanel && matchesSlot && matchesStatus && matchesReplyStatus && matchesCheckinStatus && matchesInterviewRound;
             });
 
             tbody.innerHTML = '';
@@ -2334,16 +2786,25 @@
                 tbody.innerHTML += `
                     <tr class="hover:bg-gray-50">
                         <td class="py-3 px-4"><input type="checkbox" class="checkin-checkbox"></td>
+                        <td class="py-3 px-4 text-sm text-gray-800">
+                            ${data.avatar
+                                ? `<button class="group" onclick=\"openAvatarZoom('${data.sbd}')\" title=\"View avatar\">` +
+                                  `<img src=\"${data.avatar}\" alt=\"Avatar\" class=\"h-6 w-6 rounded-full object-cover\">` +
+                                  `</button>`
+                                : `<button class=\"group\" onclick=\"openAvatarUpload('${data.sbd}')\" title=\"Upload avatar\">` +
+                                  `<i class=\"fa-regular fa-user text-gray-400 text-lg group-hover:text-gray-600\"></i>` +
+                                  `</button>`
+                            }
+                        </td>
                         <td class="py-3 px-4 text-sm text-gray-800">${data.sbd}</td>
                         <td class="py-3 px-4 text-sm text-gray-800">${data.name}</td>
-                        <td class="py-3 px-4 text-sm text-gray-600">${data.email}</td>
                         <td class="py-3 px-4 text-sm text-gray-600">${data.phone}</td>
-                        <td class="py-3 px-4 text-sm text-gray-600">${data.school}</td>
-                        <td class="py-3 px-4 text-sm text-gray-600">${data.studentId}</td>
+                        <td class="py-3 px-4 text-sm text-gray-800">${data.interviewRound || 'Interview 1'}</td>
                         <td class="py-3 px-4 text-sm text-gray-800">${data.panelExpect}</td>
                         <td class="py-3 px-4 text-sm text-gray-800">${data.slotExpect}</td>
                         <td class="py-3 px-4 text-sm text-gray-800">${data.timeCheckin}</td>
-                        <td class="py-3 px-4 text-sm text-green-500">${data.emailStatus}</td>
+                        <td class="py-3 px-4 text-sm ${data.emailStatus === 'Unsent' ? 'text-orange-500' : data.emailStatus === 'ReSent' ? 'text-blue-500' : 'text-green-500'}">${data.emailStatus}</td>
+                        <td class="py-3 px-4 text-sm ${data.replyStatus === 'Accept' ? 'text-green-500' : data.replyStatus === 'Reject' ? 'text-red-500' : data.replyStatus === 'Change Time' ? 'text-blue-500' : data.replyStatus === 'Pending' ? 'text-orange-500' : 'text-gray-600'}">${data.replyStatus || '-'}</td>
                         <td class="py-3 px-4 text-sm text-gray-600">${data.note || '-'}</td>
                     </tr>
                 `;
@@ -2360,13 +2821,17 @@
                 footer.innerHTML = `
                     <button onclick="performCheckin()" class="px-4 py-2 bg-green-500 text-white rounded-lg">Checkin</button>
                     <button onclick="openUpdateModal()" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Update</button>
-                    <button onclick="openNoteModal()" class="px-4 py-2 bg-gray-500 text-white rounded-lg">Note</button>
+        
+                    <button onclick="openSendEmailModal()" class="px-4 py-2 bg-primary text-white rounded-lg">Send Email Interview</button>
                     <button class="px-4 py-2 bg-primary text-white rounded-lg">Send Email Candidate</button>
+                    <button onclick="closeCheckinModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg">Close</button>
                 `;
             } else {
                 footer.innerHTML = `
-                    <button class="px-4 py-2 bg-primary text-white rounded-lg">Send Email Interview</button>
-                    <button class="px-4 py-2 bg-primary text-white rounded-lg">Send Email Candidate</button>
+                    <button id="import-button"
+                                    class="min-w-[110px] px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">
+                                    Import
+                                </button>
                     <button onclick="closeCheckinModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg">Close</button>
                 `;
             }
@@ -2402,6 +2867,25 @@
         document.getElementById('email-status-filter').addEventListener('change', (e) => {
             checkinEmailStatusFilter = e.target.value;
             renderCheckinPage();
+        });
+        document.getElementById('reply-status-filter').addEventListener('change', (e) => {
+            checkinReplyStatusFilter = e.target.value;
+            renderCheckinPage();
+        });
+        document.getElementById('checkin-status-filter').addEventListener('change', (e) => {
+            checkinStatusFilter = e.target.value;
+            renderCheckinPage();
+        });
+        document.getElementById('interview-round-filter').addEventListener('change', (e) => {
+            checkinInterviewRoundFilter = e.target.value;
+            renderCheckinPage();
+        });
+
+        // Import button in checkin modal
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'import-button') {
+                document.getElementById('import-modal').classList.remove('hidden');
+            }
         });
 
         let currentAssignments = [];
