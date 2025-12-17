@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Extended with Action Modal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F05A28',
+                        success: '#28C76F',
+                        danger: '#EA5455',
+                        warning: '#FFE082',
+                        gray: {
+                            50: '#F5F7FA',
+                            100: '#F0F2F5',
+                            200: '#E4E7EB',
+                            300: '#D1D5DB',
+                            400: '#9CA3AF',
+                            500: '#6B7280',
+                            600: '#4B5563',
+                            700: '#374151',
+                            800: '#1F2937',
+                            900: '#111827'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Roboto', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet">
+    <script>window.FontAwesomeConfig = { autoReplaceSvg: 'nest' };</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <style>
+        /* Tùy chỉnh thanh cuộn */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        .custom-checkbox { accent-color: #90EE90; width: 1.25rem; height: 1.25rem; cursor: pointer; }
+        
+        /* Animation cho modal */
+        #paging-modal, #assignment-modal { transition: opacity 0.3s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen overflow-hidden" id="main-container">
+        <aside id="sidebar" class="w-64 bg-white border-r border-gray-200 flex flex-col transition-all duration-300">
+            <div class="h-16 flex items-center px-6 border-b border-gray-200" id="sidebar-logo">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">VNG</span>
+                    </div>
+                    <span class="font-semibold text-gray-800 text-lg">VNG ATS</span>
+                </div>
+            </div>
+            <nav class="flex-1 overflow-y-auto py-4" id="sidebar-nav">
+                <ul class="space-y-1 px-3">
+                    <li><a href="#" class="flex items-center px-3 py-2.5 text-white bg-primary rounded-lg font-medium text-sm"><i class="w-5 fa-solid fa-house"></i><span class="ml-3">Home</span></a></li>
+                    <li>
+                        <div class="flex items-center justify-between px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg cursor-pointer font-medium text-sm">
+                            <div class="flex items-center">
+                                <i class="w-5 text-gray-600 fa-solid fa-file-lines"></i>
+                                <span class="ml-3">Request</span>
+                            </div>
+                            <i class="text-xs text-gray-400 fa-solid fa-chevron-down"></i>
+                        </div>
+                    </li>
+                    <li><a href="#" class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i class="w-5 text-gray-600 fa-solid fa-briefcase"></i><span class="ml-3">Jobs</span></a></li>
+                    <li><a href="#" class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i class="w-5 text-gray-600 fa-solid fa-users"></i><span class="ml-3">Candidates</span></a></li>
+                    <li><a href="#" class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i class="w-5 text-gray-600 fa-solid fa-calendar-check"></i><span class="ml-3">Interviews</span></a></li>
+                    <li><a href="#" class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i class="w-5 text-gray-600 fa-solid fa-chart-line"></i><span class="ml-3">Reports</span></a></li>
+                    <li><a href="#" class="flex items-center px-3 py-2.5 text-gray-700 hover:bg-gray-50 rounded-lg font-medium text-sm"><i class="w-5 text-gray-600 fa-solid fa-gear"></i><span class="ml-3">Settings</span></a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-hidden" id="main-content">
+            <header id="header" class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+                <div class="flex items-center space-x-2 text-sm" id="breadcrumb">
+                    <span class="text-gray-500">Task</span>
+                    <i class="text-xs text-gray-400 fa-solid fa-chevron-right"></i>
+                    <span class="text-gray-800 font-medium">Approval</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-600 hover:text-gray-800">
+                        <i class="text-xl fa-regular fa-bell"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full"></span>
+                    </button>
+                    <div class="flex items-center space-x-3 pl-4 border-l border-gray-200">
+                        <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="User" class="w-9 h-9 rounded-full object-cover">
+                        <div>
+                            <div class="text-sm font-medium text-gray-800">John Doe</div>
+                            <div class="text-xs text-gray-500">HR Manager</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto p-8" id="dashboard-main">
+                <div>
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6" id="info-card">
+                        <div class="border-b border-gray-200">
+                            <div class="flex space-x-8 px-8">
+                                <button class="py-4 border-b-2 border-primary text-primary font-medium text-sm">Request
+                                    Information</button>
+                                <button
+                                    class="py-4 border-b-2 border-transparent text-gray-600 font-medium text-sm hover:text-gray-800">Approval
+                                    History</button>
+                                <button
+                                    class="py-4 border-b-2 border-transparent text-gray-600 font-medium text-sm hover:text-gray-800">History
+                                    Edited</button>
+                            </div>
+                        </div>
+                        <div class="p-8" id="job-details">
+                            <div class="grid grid-cols-3 gap-6">
+                                <div><label class="text-xs text-gray-500 font-medium">Type</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">OFFICIAL</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Job Code</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">25-PGE-0034</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Job Title</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">Associate Software Manager</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Job Level</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">3.1</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Quantity</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">1</div>
+                                </div>
+                                <div><label class="text-xs text-gray-500 font-medium">Line Manager</label>
+                                    <div class="mt-1 text-sm text-gray-800 font-medium">huyvha - Võ Huỳnh Anh Huy</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mt-6 relative" id="applicants-section">
+                        <div class="border-b border-gray-200 flex justify-between items-center pr-6">
+                            <div class="flex space-x-4 px-6 py-4">
+                                <button
+                                    class="px-6 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium text-sm hover:bg-gray-50">
+                                    Applicant
+                                </button>
+                                <button
+                                    class="px-6 py-2 bg-[#FFE082] border border-[#FFE082] rounded-lg text-gray-900 font-medium text-sm">
+                                    Candidate
+                                </button>
+                            </div>
+                            <button onclick="toggleExpand()" class="text-gray-500 hover:text-primary transition-colors p-2" title="Expand View">
+                                <i class="fa-solid fa-expand text-lg"></i>
+                            </button>
+                        </div>
+
+                        <div id="content-wrapper" class="flex flex-col h-full">
+                            <div class="p-6 flex-1 flex flex-col min-h-0" id="table-controls">
+                                <div class="flex items-center justify-between mb-4 flex-shrink-0">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="relative">
+                                            <input type="text"
+                                                placeholder="Search by SDB, name, email, phone number, school, student ID"
+                                                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary w-96">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center h-4 w-4">
+                                                <i class="text-gray-400 text-sm fa-solid fa-magnifying-glass"></i>
+                                            </span>
+                                        </div>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                            <i class="mr-2 fa-solid fa-filter"></i>Filter
+                                        </button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                            <i class="mr-2 fa-solid fa-chevron-down"></i>Stage
+                                        </button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                            <i class="mr-2 fa-solid fa-chevron-down"></i>Result
+                                        </button>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            Excel</button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            CV</button>
+                                    </div>
+                                </div>
+
+                                <div class="overflow-x-auto overflow-y-auto flex-1 pb-2 border border-gray-100 rounded-lg">
+                                    <div class="min-w-[1800px]"> 
+                                        <table class="w-full">
+                                            <thead class="bg-gray-50 sticky top-0 z-10">
+                                                <tr class="border-b border-gray-200">
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider bg-gray-50">
+                                                        <input type="checkbox" id="header-checkbox" class="custom-checkbox rounded border-gray-300">
+                                                    </th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">CV</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">Attachment</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">File</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">SDB</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">Full Name</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">Email</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">Phone Number</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">School</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">StudentID</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">GPA</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">Stage</th>
+                                                    <th class="text-left py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-nowrap bg-gray-50">Result</th>
+                                                    <th class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">Do you usually play game?</th>
+                                                    <th class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">Which type game you usually play?</th>
+                                                    <th class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">Do you use AI in your studies?</th>
+                                                    <th class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">Handle By</th>
+                                                    <th class="text-center py-3 px-4 text-xs font-semibold text-gray-600 tracking-wider whitespace-normal min-w-[150px] align-top bg-gray-50">Update Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-100">
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap">Pass</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap">Pass</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap">Fail</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap">Pass</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap">Fail</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap">Fail</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-red-500 whitespace-nowrap">Fail</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-green-500 whitespace-nowrap">Pass</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Waiting</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap"></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV2919</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Trần Thị Bích</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">trantb@hcmut.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0901xxxx88</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">HCMUT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">18520001</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">1/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Waiting</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">MOBA</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Có</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV3020</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Lê Văn Cường</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">levanc@poly.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0989xxxx99</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Cao đẳng FPT</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">39888123</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">2/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Waiting</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">RPG</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                                 <tr class="hover:bg-gray-50">
+                                                    <td class="py-3 px-4"><input type="checkbox" class="custom-checkbox rounded"></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4"><i class="text-gray-600 text-lg fa-regular fa-file-lines"></i></td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">EV4121</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-800 whitespace-nowrap">Phạm Thanh Đạt</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">phamtd@ute.edu.vn</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">0978xxxx77</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">UTE</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">17133003</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">3/5</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Submission</td>
+                                                    <td class="py-3 px-4 text-sm text-gray-600 whitespace-nowrap">Pass</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">FPS</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">Không</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">system</td>
+                                                    <td class="py-3 px-4 text-sm text-center text-gray-800">11/12/2025 16:32:11</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between mt-auto p-4 border-t border-gray-200 bg-white flex-shrink-0" id="pagination-footer">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <span class="mr-2">Show</span>
+                                        <select id="rowsPerPage" class="border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-primary cursor-pointer">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                        </select>
+                                        <span class="ml-2">rows per page</span>
+                                        <span class="mx-4 text-gray-300">|</span>
+                                        <span id="pageInfo">Showing 1-5 of 12</span>
+                                    </div>
+                                
+                                    <div class="flex items-center space-x-1" id="paginationControls">
+                                        <button id="btnPrev" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <i class="fa-solid fa-chevron-left text-xs"></i>
+                                        </button>
+                                        
+                                        <div id="pageNumbers" class="flex space-x-1"></div>
+                                
+                                        <button id="btnNext" class="px-3 py-1 rounded hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed">
+                                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3 mt-0 p-6 pt-4 border-t border-gray-200 bg-white rounded-b-lg flex-shrink-0">
+                                <button id="nextStage-button"
+    class="hidden min-w-[110px] px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">
+    Next Stage
+</button>
+
+<button id="import-button"
+    class="hidden min-w-[110px] px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">
+    Import
+</button>
+<button id="pass-button"
+    class="hidden min-w-[110px] px-5 py-2.5 bg-green-500 text-white rounded-lg font-medium text-sm hover:bg-green-600 shadow-sm">
+    Next Interview
+</button>
+
+<button class="min-w-[110px] px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm">
+    Match
+</button>
+
+<button class="min-w-[110px] px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm">
+    Close
+</button>
+
+                            </div>
+                        </div>
+                        </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="paging-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full h-full max-w-[98vw] max-h-[96vh] rounded-xl shadow-2xl flex flex-col overflow-hidden relative animate-fade-in">
+            <div class="px-6 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 flex-shrink-0">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-expand text-primary"></i>
+                    <h3 class="font-bold text-gray-800 text-lg">Expanded Data View</h3>
+                </div>
+                <button onclick="toggleExpand()" class="text-gray-500 hover:text-danger p-2 rounded-full hover:bg-gray-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div id="modal-body-target" class="flex-1 overflow-hidden flex flex-col bg-white"></div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-80 animate-fade-in transform transition-all scale-100">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-circle-question text-yellow-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Confirmation</h3>
+                <p class="text-gray-600 mb-6 text-sm">Do you confirm to screen these candidates?</p>
+                <div class="flex justify-center space-x-3 w-full">
+                    <button id="btn-confirm-no" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">No</button>
+                    <button id="btn-confirm-yes" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors shadow-sm">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="import-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-96 animate-fade-in transform transition-all scale-100">
+            <div class="flex flex-col text-center">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Import Applicants</h3>
+                <p class="text-gray-600 mb-4 text-sm">You can download template is here: <a href="#" class="text-primary hover:underline">Template Upload</a></p>
+                <div class="mb-4">
+                    <label for="file-upload" class="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+                        <span class="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-4-4V7a4 4 0 014-4h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V16a4 4 0 01-4 4H7z" />
+                            </svg>
+                            <span id="file-upload-text" class="font-medium text-gray-600">
+                                Drop files excel to Attach 
+                            </span>
+                        </span>
+                        <input type="file" id="file-upload" name="file-upload" class="hidden" accept=".xlsx">
+                    </label>
+                </div>
+                <div class="flex justify-center space-x-3 w-full">
+                    <button id="btn-import-cancel" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">Cancel</button>
+                    <button id="btn-import-confirm" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors shadow-sm">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div id="next-stage-modal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-96 animate-fade-in transform transition-all scale-100">
+            <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Next Stage</h3>
+                <button id="btn-next-stage-close" class="text-gray-500 hover:text-danger p-2 rounded-full hover:bg-gray-200 transition-colors">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label for="next-stage-select" class="text-sm font-medium text-gray-700">Select Next Stage</label>
+                    <select id="next-stage-select" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                        <option>Interview</option>
+                        <option>Offer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 pt-6">
+                <button id="btn-next-stage-cancel" class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50 shadow-sm">Cancel</button>
+                <button id="btn-next-stage-confirm" class="px-5 py-2.5 bg-primary text-white rounded-lg font-medium text-sm hover:bg-opacity-90 shadow-sm">Confirm</button>
+            </div>
+        </div>
+    </div>
+    
+            <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const applicantsSection = document.getElementById('applicants-section');
+                if (applicantsSection) {
+                    setTimeout(() => {
+                        applicantsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+                initPagination();
+                initCheckboxLogic();
+            });
+    
+            // --- CHECKBOX LOGIC ---
+            function initCheckboxLogic() {
+                const headerCheckbox = document.getElementById('header-checkbox');
+                const checkboxes = document.querySelectorAll('tbody .custom-checkbox');
+                const nextStageButton = document.getElementById('nextStage-button');
+                const passButton = document.getElementById('pass-button');
+                const failButton = document.getElementById('fail-button');
+    
+                function updateImportButtonVisibility() {
+                    const anyChecked = Array.from(checkboxes).some(cb => cb.checked) || headerCheckbox.checked;
+                    importButton.classList.toggle('hidden', !anyChecked);
+                    nextStageButton.classList.toggle('hidden', !anyChecked);
+                   
+                    passButton.classList.toggle('hidden', !anyChecked);
+                    failButton.classList.toggle('hidden', !anyChecked);
+
+                }
+    
+                headerCheckbox.addEventListener('change', (e) => {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = e.target.checked;
+                    });
+                    updateImportButtonVisibility();
+                });
+    
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        if (!checkbox.checked) {
+                            headerCheckbox.checked = false;
+                        } else {
+                            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                            headerCheckbox.checked = allChecked;
+                        }
+                        updateImportButtonVisibility();
+                    });
+                });
+    
+                // Initial check
+                updateImportButtonVisibility();
+            }
+    
+            // --- GLOBAL VARIABLES ---
+            let isExpanded = false;        
+        // Modal Elements
+        const contentWrapper = document.getElementById('content-wrapper'); 
+        const originalParent = document.getElementById('applicants-section'); 
+        const modalTarget = document.getElementById('modal-body-target'); 
+        const modal = document.getElementById('paging-modal'); 
+
+        // Confirm Modal Elements
+        const confirmModal = document.getElementById('confirm-modal');
+        const btnConfirmNo = document.getElementById('btn-confirm-no');
+        const btnConfirmYes = document.getElementById('btn-confirm-yes');
+
+        // Import Modal Elements
+        const importModal = document.getElementById('import-modal');
+        const importButton = document.getElementById('import-button');
+        const btnImportCancel = document.getElementById('btn-import-cancel');
+        const btnImportConfirm = document.getElementById('btn-import-confirm');
+        const fileUpload = document.getElementById('file-upload');
+        const fileUploadText = document.getElementById('file-upload-text');
+
+
+
+        // Next Stage Modal Elements
+        const nextStageModal = document.getElementById('next-stage-modal');
+        const nextStageButton = document.getElementById('nextStage-button');
+        const btnNextStageClose = document.getElementById('btn-next-stage-close');
+        const btnNextStageCancel = document.getElementById('btn-next-stage-cancel');
+
+        // Pass Button Element
+        const passButton = document.getElementById('pass-button');
+
+        // Pagination Elements
+        const tableBody = document.querySelector('tbody');
+        const rows = Array.from(tableBody.querySelectorAll('tr')); 
+        const rowsPerPageSelect = document.getElementById('rowsPerPage');
+        const pageInfo = document.getElementById('pageInfo');
+        const pageNumbersContainer = document.getElementById('pageNumbers');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const paginationFooter = document.getElementById('pagination-footer');
+
+        let currentPage = 1;
+        let rowsPerPage = 5; 
+        let totalRows = rows.length;
+
+
+        // --- EVENT LISTENERS ---
+
+
+        nextStageButton.addEventListener('click', () => {
+            nextStageModal.classList.remove('hidden');
+        });
+
+        btnNextStageClose.addEventListener('click', () => {
+            nextStageModal.classList.add('hidden');
+        });
+
+        btnNextStageCancel.addEventListener('click', () => {
+            nextStageModal.classList.add('hidden');
+        });
+
+        nextStageModal.addEventListener('click', function(e) {
+            if (e.target === nextStageModal) {
+                nextStageModal.classList.add('hidden');
+            }
+        });
+
+        passButton.addEventListener('click', () => {
+            console.log('Next Interview button clicked!');
+            window.location.href = 'CheckinScreen.html';
+        });
+
+        btnConfirmNo.addEventListener('click', () => {
+            confirmModal.classList.add('hidden');
+        });
+
+
+        btnConfirmYes.addEventListener('click', () => {
+            // TODO: Implement the actual "Screen" logic here
+                        console.log('Submission confirmed!');
+                        confirmModal.classList.add('hidden');
+                    });
+            
+                    // Import Modal Logic
+                    importButton.addEventListener('click', () => {
+                        importModal.classList.remove('hidden');
+                    });
+            
+                    btnImportCancel.addEventListener('click', () => {
+                        importModal.classList.add('hidden');
+                    });
+            
+                    btnImportConfirm.addEventListener('click', () => {
+                        if (fileUpload.files.length > 0) {
+                            console.log(`Importing file: ${fileUpload.files[0].name}`);
+                            // Implement actual import logic here
+                        } else {
+                            console.log('No file selected.');
+                        }
+                        importModal.classList.add('hidden');
+                    });
+            
+                    fileUpload.addEventListener('change', () => {
+                        if (fileUpload.files.length > 0) {
+                            fileUploadText.textContent = `File: ${fileUpload.files[0].name}`;
+                        } else {
+                            fileUploadText.innerHTML = `
+                                Drop files to Attach, or
+                                <span class="text-blue-600 underline">browse</span>
+                            `;
+                        }
+                    });
+            
+                    importModal.addEventListener('click', function(e) {
+                        if (e.target === importModal) {
+                            importModal.classList.add('hidden');
+                        }
+                    });
+            
+                    // --- EXPAND / COLLAPSE LOGIC ---
+        function toggleExpand() {
+            if (!isExpanded) {
+                // EXPAND
+                modalTarget.appendChild(contentWrapper);
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; 
+                isExpanded = true;
+                paginationFooter.style.display = 'none'; // Ẩn phân trang
+                renderTable(); // Show all rows
+            } else {
+                // COLLAPSE
+                originalParent.appendChild(contentWrapper);
+                modal.classList.add('hidden');
+                document.body.style.overflow = ''; 
+                isExpanded = false;
+                paginationFooter.style.display = ''; // Hiện phân trang
+                renderTable(); // Show paged rows
+            }
+        }
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) toggleExpand();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Ưu tiên đóng confirm modal trước nếu nó đang mở
+                if(!confirmModal.classList.contains('hidden')) {
+                    confirmModal.classList.add('hidden');
+                } else if(!nextStageModal.classList.contains('hidden')) {
+                    nextStageModal.classList.add('hidden');
+                } else if (isExpanded) {
+                    toggleExpand();
+                }
+            }
+        });
+
+        // --- PAGINATION LOGIC ---
+        function initPagination() {
+            if(!rows.length) return;
+
+            rowsPerPageSelect.addEventListener('change', (e) => {
+                rowsPerPage = parseInt(e.target.value);
+                currentPage = 1;
+                renderTable();
+                renderPaginationControls();
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                    renderPaginationControls();
+                }
+            });
+
+            btnNext.addEventListener('click', () => {
+                const totalPages = Math.ceil(totalRows / rowsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                    renderPaginationControls();
+                }
+            });
+
+            renderTable();
+            renderPaginationControls();
+        }
+
+        function renderTable() {
+            // Nếu đang Expanded -> Hiển thị hết
+            if (isExpanded) {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
+
+            // Nếu KHÔNG Expanded -> Phân trang
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+
+            rows.forEach((row, index) => {
+                if (index >= start && index < end) {
+                    row.style.display = ''; 
+                } else {
+                    row.style.display = 'none'; 
+                }
+            });
+
+            const showStart = totalRows === 0 ? 0 : start + 1;
+            const showEnd = Math.min(end, totalRows);
+            pageInfo.textContent = `Showing ${showStart}-${showEnd} of ${totalRows}`;
+        }
+
+        function renderPaginationControls() {
+            if (isExpanded) return;
+
+            const totalPages = Math.ceil(totalRows / rowsPerPage);
+            pageNumbersContainer.innerHTML = ''; 
+
+            btnPrev.disabled = currentPage === 1;
+            btnNext.disabled = currentPage === totalPages || totalPages === 0;
+            
+            const activeClass = 'bg-primary text-white border-primary';
+            const normalClass = 'text-gray-600 hover:bg-gray-100 bg-white border-transparent';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i;
+                btn.className = `px-3 py-1 rounded text-sm font-medium border transition-colors ${
+                    i === currentPage ? activeClass : normalClass
+                }`;
+                btn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable();
+                    renderPaginationControls();
+                });
+                pageNumbersContainer.appendChild(btn);
+            }
+        }
+    </script>   
+</body>
