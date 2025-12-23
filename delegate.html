@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delegation Authorization - HRM System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF6B35',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- Header -->
+<header class="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <h1 class="text-2xl font-bold text-gray-900">HRM System</h1>
+            <nav class="hidden md:flex items-center space-x-2 text-sm text-gray-500">
+                <a href="#" class="hover:text-primary">Dashboard</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <a href="#" class="hover:text-primary">Delegation</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <span class="text-gray-900 font-medium">Create Authorization</span>
+            </nav>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button class="relative p-2 text-gray-400 hover:text-gray-600 transition">
+                <i class="fas fa-bell text-lg"></i>
+                <span class="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+            </button>
+            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" alt="Profile" class="w-9 h-9 rounded-full object-cover ring-2 ring-gray-200">
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Create Delegation Authorization</h2>
+        <p class="text-gray-600">Configure delegation permissions for workflows and tasks across departments</p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div class="p-6 sm:p-8">
+            <form id="delegation-form">
+                
+                <!-- Three Column Grid: Delegator, Delegatee, Department -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Delegator -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Delegator <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative" id="delegator-container">
+                            <input type="text" id="delegator-search" placeholder="Search delegator..." class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm" autocomplete="off">
+                            <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            <input type="hidden" id="delegator-select" name="delegator" required>
+                            <div id="delegator-dropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                <div class="delegator-option px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100 text-sm" data-value="minhlh" data-label="MinhLH - Manager">
+                                    <i class="fas fa-user text-primary mr-2"></i>MinhLH - Manager
+                                </div>
+                                <div class="delegator-option px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100 text-sm" data-value="tult" data-label="TuLT - Director">
+                                    <i class="fas fa-user text-primary mr-2"></i>TuLT - Director
+                                </div>
+                                <div class="delegator-option px-4 py-2.5 hover:bg-orange-50 cursor-pointer text-sm" data-value="kynt" data-label="KyNT - Team Lead">
+                                    <i class="fas fa-user text-primary mr-2"></i>KyNT - Team Lead
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delegatee -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Delegatee <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative" id="delegatee-container">
+                            <input type="text" id="delegatee-search" placeholder="Search delegatee..." class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm" autocomplete="off">
+                            <i class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            <input type="hidden" id="delegatee-select" name="delegatee" required>
+                            <div id="delegatee-dropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                <div class="delegatee-option px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100 text-sm" data-value="duongph" data-label="DuongPH - Associate">
+                                    <i class="fas fa-user text-primary mr-2"></i>DuongPH - Associate
+                                </div>
+                                <div class="delegatee-option px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100 text-sm" data-value="hanhtm2" data-label="HanhTM2 - Specialist">
+                                    <i class="fas fa-user text-primary mr-2"></i>HanhTM2 - Specialist
+                                </div>
+                                <div class="delegatee-option px-4 py-2.5 hover:bg-orange-50 cursor-pointer text-sm" data-value="longvp1" data-label="LongVP1 - Coordinator">
+                                    <i class="fas fa-user text-primary mr-2"></i>LongVP1 - Coordinator
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Department -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Department <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative" id="department-container">
+                            <div id="department-display" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm cursor-pointer bg-white">
+                                <span id="department-text" class="text-gray-700">All Departments (5)</span>
+                            </div>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            <div id="department-dropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                    <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary department-checkbox" data-department="Operations" checked>
+                                    <span class="ml-3 text-sm text-gray-700">
+                                        <i class="fas fa-building text-primary mr-1"></i>Operations
+                                    </span>
+                                </label>
+                                
+                                <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                    <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary department-checkbox" data-department="Finance" checked>
+                                    <span class="ml-3 text-sm text-gray-700">
+                                        <i class="fas fa-dollar-sign text-primary mr-1"></i>Finance
+                                    </span>
+                                </label>
+                                
+                                <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                    <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary department-checkbox" data-department="Human Resources" checked>
+                                    <span class="ml-3 text-sm text-gray-700">
+                                        <i class="fas fa-users text-primary mr-1"></i>Human Resources
+                                    </span>
+                                </label>
+                                
+                                <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                    <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary department-checkbox" data-department="Information Technology" checked>
+                                    <span class="ml-3 text-sm text-gray-700">
+                                        <i class="fas fa-laptop-code text-primary mr-1"></i>Information Technology
+                                    </span>
+                                </label>
+                                
+                                <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary department-checkbox" data-department="Marketing" checked>
+                                    <span class="ml-3 text-sm text-gray-700">
+                                        <i class="fas fa-bullhorn text-primary mr-1"></i>Marketing
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <!-- Time Period Section -->
+                <div class="mb-8">
+                    <h3 class="text-base font-bold text-gray-900 border-b pb-2 mb-4">
+                        <i class="fas fa-calendar-alt text-primary mr-2"></i>Time Period
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Start Date & Time <span class="text-red-500">*</span>
+                            </label>
+                            <input type="datetime-local" id="start-time" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                        </div>
+                        
+                        <div id="end-time-container">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                End Date & Time <span class="text-red-500" id="end-required">*</span>
+                            </label>
+                            <input type="datetime-local" id="end-time" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm" required>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                        <input type="checkbox" id="unlimited-checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                        <label for="unlimited-checkbox" class="ml-2 text-sm text-gray-700 cursor-pointer select-none">
+                            <i class="fas fa-infinity text-primary mr-1"></i>Unlimited delegation period
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Workflow and Task Section -->
+                <div class="mb-8">
+                    <h3 class="text-base font-bold text-gray-900 border-b pb-2 mb-4">
+                        <i class="fas fa-sitemap text-primary mr-2"></i>Workflows & Tasks <span class="text-red-500">*</span>
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Workflow Dropdown -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Select Workflows <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative" id="workflow-container">
+                                <div id="workflow-display" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm cursor-pointer bg-white">
+                                    <span id="workflow-text" class="text-gray-400">Select workflows...</span>
+                                </div>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                                <div id="workflow-dropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                    <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary workflow-checkbox" data-workflow="Approval Workflow">
+                                        <span class="ml-3 text-sm text-gray-700">
+                                            <i class="fas fa-check-circle text-primary mr-1"></i>Approval Workflow
+                                        </span>
+                                    </label>
+                                    
+                                    <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary workflow-checkbox" data-workflow="Review Workflow">
+                                        <span class="ml-3 text-sm text-gray-700">
+                                            <i class="fas fa-clipboard-check text-primary mr-1"></i>Review Workflow
+                                        </span>
+                                    </label>
+                                    
+                                    <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer border-b border-gray-100">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary workflow-checkbox" data-workflow="Budget Workflow">
+                                        <span class="ml-3 text-sm text-gray-700">
+                                            <i class="fas fa-dollar-sign text-primary mr-1"></i>Budget Workflow
+                                        </span>
+                                    </label>
+                                    
+                                    <label class="flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer">
+                                        <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary workflow-checkbox" data-workflow="HR Workflow">
+                                        <span class="ml-3 text-sm text-gray-700">
+                                            <i class="fas fa-users text-primary mr-1"></i>HR Workflow
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Task Dropdown -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Select Tasks <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative" id="task-container">
+                                <div id="task-display" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm cursor-pointer bg-white">
+                                    <span id="task-text" class="text-gray-400">Select workflows first...</span>
+                                </div>
+                                <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                                <div id="task-dropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                                    <!-- Tasks will be dynamically added here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- File Upload and Description -->
+                <div class="mb-8">
+                    <!-- File Upload -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">
+                            <i class="fas fa-paperclip mr-1"></i>File Upload <span class="text-gray-500 text-xs font-normal">(Optional)</span>
+                        </label>
+                        <div id="file-drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary hover:bg-orange-50 transition-all cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                            <p class="text-sm text-gray-600 mb-1">
+                                Drop files here or <button type="button" id="browse-btn" class="text-primary hover:underline font-medium">browse</button>
+                            </p>
+                            <p class="text-xs text-gray-500">PDF, DOC, DOCX (Max 10MB)</p>
+                            <input type="file" id="file-input" class="hidden" accept=".pdf,.doc,.docx">
+                        </div>
+                        <div id="file-preview" class="hidden mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200 animate-fade-in">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-file-pdf text-red-500 text-lg"></i>
+                                    <span class="text-sm text-gray-700 font-medium" id="file-name">document.pdf</span>
+                                </div>
+                                <button type="button" class="text-red-500 hover:text-red-600 transition" id="remove-file">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-900 mb-2">
+                            <i class="fas fa-align-left mr-1"></i>Description <span class="text-gray-500 text-xs font-normal">(Optional)</span>
+                        </label>
+                        <textarea id="description" rows="4" placeholder="Enter description, notes, or special instructions..." class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent resize-none text-sm"></textarea>
+                    </div>
+                </div>
+
+                <!-- Status Toggle -->
+                <div class="mb-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-900">
+                                <i class="fas fa-toggle-on text-green-600 mr-1"></i>Delegation Status
+                            </label>
+                            <p class="text-xs text-gray-600 mt-1">Enable or disable this delegation authorization</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="checkbox" id="active-toggle" checked class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            <label for="active-toggle" class="text-sm font-semibold text-green-600 cursor-pointer select-none">Active</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200">
+                    <button type="button" id="cancel-btn" class="px-6 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-orange-600 transition-colors font-medium shadow-sm hover:shadow-md">
+                        <i class="fas fa-check mr-2"></i>Create Delegation
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Delegatee selection
+    const delegateeSelect = document.getElementById('delegatee-select');
+    const delegateeInfo = document.getElementById('delegatee-info');
+    
+    delegateeSelect.addEventListener('change', function() {
+        if (this.value) {
+            delegateeInfo.classList.remove('hidden');
+        } else {
+            delegateeInfo.classList.add('hidden');
+        }
+    });
+
+    // Searchable Delegator Dropdown
+    const delegatorSearch = document.getElementById('delegator-search');
+    const delegatorDropdown = document.getElementById('delegator-dropdown');
+    const delegatorSelect = document.getElementById('delegator-select');
+    const delegatorOptions = document.querySelectorAll('.delegator-option');
+    
+    delegatorSearch.addEventListener('focus', function() {
+        delegatorDropdown.classList.remove('hidden');
+    });
+    
+    delegatorSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        delegatorOptions.forEach(option => {
+            const label = option.dataset.label.toLowerCase();
+            if (label.includes(searchTerm)) {
+                option.classList.remove('hidden');
+            } else {
+                option.classList.add('hidden');
+            }
+        });
+    });
+    
+    delegatorOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            delegatorSelect.value = this.dataset.value;
+            delegatorSearch.value = this.dataset.label;
+            delegatorDropdown.classList.add('hidden');
+        });
+    });
+    
+    // Searchable Delegatee Dropdown
+    const delegateeSearch = document.getElementById('delegatee-search');
+    const delegateeDropdown = document.getElementById('delegatee-dropdown');
+    const delegateeSelectHidden = document.getElementById('delegatee-select');
+    const delegateeOptions = document.querySelectorAll('.delegatee-option');
+    
+    delegateeSearch.addEventListener('focus', function() {
+        delegateeDropdown.classList.remove('hidden');
+    });
+    
+    delegateeSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        delegateeOptions.forEach(option => {
+            const label = option.dataset.label.toLowerCase();
+            if (label.includes(searchTerm)) {
+                option.classList.remove('hidden');
+            } else {
+                option.classList.add('hidden');
+            }
+        });
+    });
+    
+    delegateeOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            delegateeSelectHidden.value = this.dataset.value;
+            delegateeSearch.value = this.dataset.label;
+            delegateeDropdown.classList.add('hidden');
+        });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!document.getElementById('delegator-container').contains(e.target)) {
+            delegatorDropdown.classList.add('hidden');
+        }
+        if (!document.getElementById('delegatee-container').contains(e.target)) {
+            delegateeDropdown.classList.add('hidden');
+        }
+        if (!document.getElementById('department-container').contains(e.target)) {
+            document.getElementById('department-dropdown').classList.add('hidden');
+        }
+        if (document.getElementById('workflow-container') && !document.getElementById('workflow-container').contains(e.target)) {
+            document.getElementById('workflow-dropdown').classList.add('hidden');
+        }
+        if (document.getElementById('task-container') && !document.getElementById('task-container').contains(e.target)) {
+            document.getElementById('task-dropdown').classList.add('hidden');
+        }
+    });
+
+    // Department dropdown handling
+    const departmentDisplay = document.getElementById('department-display');
+    const departmentDropdown = document.getElementById('department-dropdown');
+    const departmentText = document.getElementById('department-text');
+    const departmentCheckboxes = document.querySelectorAll('.department-checkbox');
+    
+    departmentDisplay.addEventListener('click', function() {
+        departmentDropdown.classList.toggle('hidden');
+    });
+    
+    function updateDepartmentDisplay() {
+        const checkedDepartments = document.querySelectorAll('.department-checkbox:checked');
+        const count = checkedDepartments.length;
+        const total = departmentCheckboxes.length;
+        
+        if (count === 0) {
+            departmentText.textContent = 'Select departments...';
+            departmentText.classList.add('text-gray-400');
+        } else if (count === total) {
+            departmentText.textContent = `All Departments (${count})`;
+            departmentText.classList.remove('text-gray-400');
+        } else {
+            const names = Array.from(checkedDepartments).map(cb => cb.dataset.department).join(', ');
+            if (names.length > 40) {
+                departmentText.textContent = `${count} departments selected`;
+            } else {
+                departmentText.textContent = names;
+            }
+            departmentText.classList.remove('text-gray-400');
+        }
+    }
+    
+    departmentCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateDepartmentDisplay);
+    });
+    
+    // Initialize department display
+    updateDepartmentDisplay();
+
+    // Workflow tasks mapping - each workflow has 2 tasks
+    const workflowTasksMap = {
+        'Approval Workflow': [
+            { name: 'Document Approval', icon: 'file-check' },
+            { name: 'Request Approval', icon: 'check-circle' }
+        ],
+        'Review Workflow': [
+            { name: 'Performance Review', icon: 'user-check' },
+            { name: 'Content Review', icon: 'clipboard-check' }
+        ],
+        'Budget Workflow': [
+            { name: 'Budget Review', icon: 'chart-line' },
+            { name: 'Expense Approval', icon: 'dollar-sign' }
+        ],
+        'HR Workflow': [
+            { name: 'Staff Management', icon: 'users-cog' },
+            { name: 'Leave Approval', icon: 'calendar-check' }
+        ]
+    };
+
+    // Workflow dropdown handling
+    const workflowDisplay = document.getElementById('workflow-display');
+    const workflowDropdown = document.getElementById('workflow-dropdown');
+    const workflowText = document.getElementById('workflow-text');
+    const workflowCheckboxes = document.querySelectorAll('.workflow-checkbox');
+    
+    workflowDisplay.addEventListener('click', function() {
+        workflowDropdown.classList.toggle('hidden');
+    });
+    
+    function updateWorkflowDisplay() {
+        const checkedWorkflows = document.querySelectorAll('.workflow-checkbox:checked');
+        const count = checkedWorkflows.length;
+        
+        if (count === 0) {
+            workflowText.textContent = 'Select workflows...';
+            workflowText.classList.add('text-gray-400');
+        } else {
+            const names = Array.from(checkedWorkflows).map(cb => cb.dataset.workflow).join(', ');
+            if (names.length > 40) {
+                workflowText.textContent = `${count} workflows selected`;
+            } else {
+                workflowText.textContent = names;
+            }
+            workflowText.classList.remove('text-gray-400');
+        }
+    }
+    
+    workflowCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateWorkflowDisplay();
+            updateAvailableTasks();
+        });
+    });
+
+    // Task dropdown handling
+    const taskDisplay = document.getElementById('task-display');
+    const taskDropdown = document.getElementById('task-dropdown');
+    const taskText = document.getElementById('task-text');
+    
+    taskDisplay.addEventListener('click', function() {
+        const checkedWorkflows = document.querySelectorAll('.workflow-checkbox:checked');
+        if (checkedWorkflows.length > 0) {
+            taskDropdown.classList.toggle('hidden');
+        }
+    });
+
+    function updateAvailableTasks() {
+        const checkedWorkflows = document.querySelectorAll('.workflow-checkbox:checked');
+        taskDropdown.innerHTML = '';
+        
+        if (checkedWorkflows.length === 0) {
+            taskText.textContent = 'Select workflows first...';
+            taskText.classList.add('text-gray-400');
+            return;
+        }
+        
+        let allTasks = [];
+        checkedWorkflows.forEach(checkbox => {
+            const workflowName = checkbox.dataset.workflow;
+            const tasks = workflowTasksMap[workflowName] || [];
+            allTasks = allTasks.concat(tasks);
+        });
+        
+        // Create task checkboxes in dropdown
+        allTasks.forEach((task, index) => {
+            const label = document.createElement('label');
+            label.className = 'flex items-center px-4 py-2.5 hover:bg-orange-50 cursor-pointer' + (index < allTasks.length - 1 ? ' border-b border-gray-100' : '');
+            label.innerHTML = `
+                <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary task-checkbox" data-task="${task.name}">
+                <span class="ml-3 text-sm text-gray-700">
+                    <i class="fas fa-${task.icon} text-primary mr-1"></i>${task.name}
+                </span>
+            `;
+            taskDropdown.appendChild(label);
+            
+            // Add event listener to newly created checkbox
+            const taskCheckbox = label.querySelector('.task-checkbox');
+            taskCheckbox.addEventListener('change', updateTaskDisplay);
+        });
+        
+        updateTaskDisplay();
+    }
+    
+    function updateTaskDisplay() {
+        const checkedTasks = document.querySelectorAll('.task-checkbox:checked');
+        const count = checkedTasks.length;
+        const totalAvailable = document.querySelectorAll('.task-checkbox').length;
+        
+        if (totalAvailable === 0) {
+            taskText.textContent = 'Select workflows first...';
+            taskText.classList.add('text-gray-400');
+        } else if (count === 0) {
+            taskText.textContent = 'Select tasks...';
+            taskText.classList.add('text-gray-400');
+        } else {
+            const names = Array.from(checkedTasks).map(cb => cb.dataset.task).join(', ');
+            if (names.length > 40) {
+                taskText.textContent = `${count} tasks selected`;
+            } else {
+                taskText.textContent = names;
+            }
+            taskText.classList.remove('text-gray-400');
+        }
+    }
+
+    // Unlimited checkbox
+    const unlimitedCheckbox = document.getElementById('unlimited-checkbox');
+    const endTimeContainer = document.getElementById('end-time-container');
+    const endTimeInput = document.getElementById('end-time');
+    const endRequired = document.getElementById('end-required');
+    
+    unlimitedCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            endTimeContainer.style.opacity = '0.5';
+            endTimeInput.disabled = true;
+            endTimeInput.required = false;
+            endRequired.style.display = 'none';
+        } else {
+            endTimeContainer.style.opacity = '1';
+            endTimeInput.disabled = false;
+            endTimeInput.required = true;
+            endRequired.style.display = 'inline';
+        }
+    });
+
+    // File upload handling
+    const fileInput = document.getElementById('file-input');
+    const fileDropZone = document.getElementById('file-drop-zone');
+    const browseBtn = document.getElementById('browse-btn');
+    const filePreview = document.getElementById('file-preview');
+    const fileName = document.getElementById('file-name');
+    const removeFileBtn = document.getElementById('remove-file');
+    
+    browseBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        fileInput.click();
+    });
+    
+    fileDropZone.addEventListener('click', (e) => {
+        if (e.target !== browseBtn && !browseBtn.contains(e.target)) {
+            fileInput.click();
+        }
+    });
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            fileName.textContent = this.files[0].name;
+            filePreview.classList.remove('hidden');
+        }
+    });
+    
+    removeFileBtn.addEventListener('click', () => {
+        fileInput.value = '';
+        filePreview.classList.add('hidden');
+    });
+    
+    // Drag and drop
+    fileDropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileDropZone.classList.add('border-primary', 'bg-orange-50');
+    });
+    
+    fileDropZone.addEventListener('dragleave', () => {
+        fileDropZone.classList.remove('border-primary', 'bg-orange-50');
+    });
+    
+    fileDropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileDropZone.classList.remove('border-primary', 'bg-orange-50');
+        if (e.dataTransfer.files.length > 0) {
+            fileInput.files = e.dataTransfer.files;
+            fileName.textContent = e.dataTransfer.files[0].name;
+            filePreview.classList.remove('hidden');
+        }
+    });
+
+    // Form submission
+    const form = document.getElementById('delegation-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show success toast
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+        toast.innerHTML = '<i class="fas fa-check-circle mr-2"></i><span class="font-medium">Delegation created successfully!</span>';
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'fadeIn 0.3s ease-out reverse';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    });
+
+    // Cancel button
+    document.getElementById('cancel-btn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
+            window.history.back();
+        }
+    });
+});
+</script>
+
+</body>
+</html>
