@@ -90,6 +90,16 @@
         .animate-fade-in {
             animation: fadeIn 0.2s ease-out forwards;
         }
+
+        #candidate-email-preview a {
+            text-decoration: underline;
+            color: #F05A28;
+            cursor: pointer;
+        }
+
+        #candidate-email-preview a:hover {
+            color: #d94a1f;
+        }
     </style>
 </head>
 
@@ -255,11 +265,14 @@
                                             class="flex-1 min-w-[150px] px-4 py-2 bg-green-500 border border-green-500 rounded-lg text-sm text-white hover:bg-green-600">
                                             Checkin</button>
                                         <button
-                                            class="flex-1 min-w-[150px] px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
                                             Excel</button>
                                         <button
-                                            class="flex-1 min-w-[150px] px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
                                             CV</button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            File</button>
                                     </div>
                                 </div>
 
@@ -2022,8 +2035,8 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Body</label>
-                            <textarea id="candidate-email-body" placeholder="Enter email body..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent resize-none" rows="13"></textarea>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email Preview</label>
+                            <div id="candidate-email-preview" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 min-h-40 overflow-y-auto" style="white-space: pre-wrap; word-wrap: break-word;"></div>
                         </div>
                     </div>
                 </div>
@@ -2866,15 +2879,16 @@
             const slotEl = document.getElementById('candidate-email-slot');
             const officeEl = document.getElementById('candidate-email-office');
             const roomEl = document.getElementById('candidate-email-room');
-            const bodyEl = document.getElementById('candidate-email-body');
+            const previewEl = document.getElementById('candidate-email-preview');
 
             if (subjectEl) subjectEl.value = `Invitation - ${candidate.name}`;
             if (toEl) toEl.value = candidate.email;
             if (slotEl) slotEl.value = candidate.slot || 'Updating';
             if (officeEl) officeEl.value = office;
             if (roomEl) roomEl.value = room;
-            if (bodyEl) {
-                bodyEl.value = `Dear ${candidate.name},
+            
+            if (previewEl) {
+                const emailBody = `Dear ${candidate.name},
 
 We are pleased to inform you about your interview session. Please find the details below:
 
@@ -2882,10 +2896,11 @@ Slot: ${candidate.slot || 'Updating'}
 Office: ${office}
 Room: ${room}
 
-Please confirm your attendance.
+Please <a href="ResponseInterviewScreen.html" target="_blank">confirm </a> your attendance.
 
 Best regards,
 HR Team`;
+                previewEl.innerHTML = emailBody.replace(/\n/g, '<br>');
             }
         }
 
@@ -2901,7 +2916,6 @@ HR Team`;
             const slotEl = document.getElementById('candidate-email-slot');
             const officeEl = document.getElementById('candidate-email-office');
             const roomEl = document.getElementById('candidate-email-room');
-            const bodyEl = document.getElementById('candidate-email-body');
 
             if (listEl) listEl.innerHTML = '';
             if (subjectEl) subjectEl.value = 'Invitation - Candidate Interview';
@@ -2909,7 +2923,6 @@ HR Team`;
             if (slotEl) slotEl.value = '';
             if (officeEl) officeEl.value = '';
             if (roomEl) roomEl.value = '';
-            if (bodyEl) bodyEl.value = '';
         }
 
         function sendEmailCandidate() {
@@ -2923,12 +2936,14 @@ HR Team`;
             const slot = document.getElementById('candidate-email-slot').value.trim();
             const office = document.getElementById('candidate-email-office').value.trim();
             const room = document.getElementById('candidate-email-room').value.trim();
-            const body = document.getElementById('candidate-email-body').value.trim();
 
-            if (!subject || !to || !slot || !office || !room || !body) {
+            if (!subject || !to || !slot || !office || !room) {
                 alert('Please fill in all required fields.');
                 return;
             }
+
+            const previewEl = document.getElementById('candidate-email-preview');
+            const body = previewEl ? previewEl.innerHTML : '';
 
             console.log('Sending email candidate:', { subject, to, slot, office, room, body });
             alert('Email sent successfully!');

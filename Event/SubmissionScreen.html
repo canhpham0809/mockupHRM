@@ -200,6 +200,9 @@
                                         <button
                                             class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
                                             CV</button>
+                                        <button
+                                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Export
+                                            File</button>
                                     </div>
                                 </div>
 
@@ -604,7 +607,7 @@
             <div class="space-y-4">
                 <div>
                     <label for="assignment-description" class="text-sm font-medium text-gray-700">Description</label>
-                    <input type="text" id="assignment-description" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                    <textarea id="assignment-description" rows="4" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -641,10 +644,12 @@
                  <div>
                     <label class="text-sm font-medium text-gray-700">Email Template Preview</label>
                     <div class="mt-1 p-4 border border-gray-200 rounded-md bg-gray-50 h-32 overflow-y-auto">
+                        <img src="event_background.png" alt="Event Background" class="w-full mb-3 rounded">
                         <p class="text-sm text-gray-600">
                             Dear [Candidate Name],<br><br>
                             Thank you for your interest in the [Job Title] position. Please find the assignment details below.<br><br>
-                            ...<br><br>
+                            <br>
+                            Click this <a href="SubmitFormScreen.html" target="_blank" rel="noopener noreferrer" class="underline text-primary">link</a> to submit assignment<br>
                             Best regards,<br>
                             [Company Name]
                         </p>
