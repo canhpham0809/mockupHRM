@@ -140,24 +140,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Quy trình được ủy quyền <span class="text-red-500">*</span>
                             </label>
-                            <div class="relative">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer">
-                                    <option value="">+ Chọn quy trình</option>
-                                    <option value="1">Quy trình phê duyệt đơn hàng</option>
-                                    <option value="2">Quy trình phê duyệt nghỉ phép</option>
-                                    <option value="3">Quy trình thanh toán</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            <div class="relative multi-select-wrapper">
+                                <button type="button" class="multi-select-trigger w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer text-left flex items-center justify-between" onclick="toggleMultiSelect(this)">
+                                    <span class="text-gray-500">+ Chọn quy trình</span>
+                                    <i data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                                </button>
+                                <div class="multi-select-dropdown hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="1" data-label="Quy trình phê duyệt đơn hàng" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-blue')">
+                                            <span class="text-sm text-gray-700">Quy trình phê duyệt đơn hàng</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="2" data-label="Quy trình phê duyệt nghỉ phép" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-blue')">
+                                            <span class="text-sm text-gray-700">Quy trình phê duyệt nghỉ phép</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="3" data-label="Quy trình thanh toán" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-blue')">
+                                            <span class="text-sm text-gray-700">Quy trình thanh toán</span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-wrap mt-2">
-                                <span class="tag tag-blue">
-                                    Quy trình phê duyệt đơn hàng
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
-                                <span class="tag tag-blue">
-                                    Quy trình thanh toán
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
+                            <div class="flex flex-wrap mt-2 selected-tags-container">
                             </div>
                         </div>
 
@@ -165,28 +170,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Task được ủy quyền <span class="text-red-500">*</span>
                             </label>
-                            <div class="relative">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer">
-                                    <option value="">+ Chọn task</option>
-                                    <option value="1">Phê duyệt đơn hàng</option>
-                                    <option value="2">Xác nhận thanh toán</option>
-                                    <option value="3">Duyệt nghỉ phép</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            <div class="relative multi-select-wrapper">
+                                <button type="button" class="multi-select-trigger w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer text-left flex items-center justify-between" onclick="toggleMultiSelect(this)">
+                                    <span class="text-gray-500">+ Chọn task</span>
+                                    <i data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                                </button>
+                                <div class="multi-select-dropdown hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="1" data-label="Phê duyệt đơn hàng" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-green')">
+                                            <span class="text-sm text-gray-700">Phê duyệt đơn hàng</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="2" data-label="Xác nhận thanh toán" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-green')">
+                                            <span class="text-sm text-gray-700">Xác nhận thanh toán</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="3" data-label="Duyệt nghỉ phép" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-green')">
+                                            <span class="text-sm text-gray-700">Duyệt nghỉ phép</span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-wrap mt-2">
-                                <span class="tag tag-green">
-                                    Phê duyệt đơn hàng
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
-                                <span class="tag tag-green">
-                                    Xác nhận thanh toán
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
-                                <span class="tag tag-green">
-                                    Duyệt nghỉ phép
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
+                            <div class="flex flex-wrap mt-2 selected-tags-container">
                             </div>
                         </div>
 
@@ -194,24 +200,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Department <span class="text-red-500">*</span>
                             </label>
-                            <div class="relative">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer">
-                                    <option value="">+ Chọn department</option>
-                                    <option value="1">Phòng Kế Toán</option>
-                                    <option value="2">Phòng Nhân Sự</option>
-                                    <option value="3">Phòng Kinh Doanh</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            <div class="relative multi-select-wrapper">
+                                <button type="button" class="multi-select-trigger w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer text-left flex items-center justify-between" onclick="toggleMultiSelect(this)">
+                                    <span class="text-gray-500">+ Chọn department</span>
+                                    <i data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                                </button>
+                                <div class="multi-select-dropdown hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="1" data-label="Phòng Kế Toán" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-orange')">
+                                            <span class="text-sm text-gray-700">Phòng Kế Toán</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="2" data-label="Phòng Nhân Sự" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-orange')">
+                                            <span class="text-sm text-gray-700">Phòng Nhân Sự</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="3" data-label="Phòng Kinh Doanh" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-orange')">
+                                            <span class="text-sm text-gray-700">Phòng Kinh Doanh</span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-wrap mt-2">
-                                <span class="tag tag-orange">
-                                    Phòng Kế Toán
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
-                                <span class="tag tag-orange">
-                                    Phòng Kinh Doanh
-                                    <i class="ml-2 cursor-pointer" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
-                                </span>
+                            <div class="flex flex-wrap mt-2 selected-tags-container">
                             </div>
                         </div>
                     </div>
@@ -281,14 +292,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Quy trình được ủy quyền <span class="text-red-500">*</span>
                             </label>
-                            <div class="relative">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer">
-                                    <option value="">+ Chọn quy trình</option>
-                                    <option value="1">Quy trình phê duyệt đơn hàng</option>
-                                    <option value="2">Quy trình phê duyệt nghỉ phép</option>
-                                    <option value="3">Quy trình thanh toán</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            <div class="relative multi-select-wrapper">
+                                <button type="button" class="multi-select-trigger w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer text-left flex items-center justify-between" onclick="toggleMultiSelect(this)">
+                                    <span class="text-gray-500">+ Chọn quy trình</span>
+                                    <i data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                                </button>
+                                <div class="multi-select-dropdown hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="1" data-label="Quy trình phê duyệt đơn hàng" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-blue')">
+                                            <span class="text-sm text-gray-700">Quy trình phê duyệt đơn hàng</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="2" data-label="Quy trình phê duyệt nghỉ phép" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-blue')">
+                                            <span class="text-sm text-gray-700">Quy trình phê duyệt nghỉ phép</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="3" data-label="Quy trình thanh toán" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-blue')">
+                                            <span class="text-sm text-gray-700">Quy trình thanh toán</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mt-2 selected-tags-container">
                             </div>
                         </div>
 
@@ -296,14 +322,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Task được ủy quyền <span class="text-red-500">*</span>
                             </label>
-                            <div class="relative">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer">
-                                    <option value="">+ Chọn task</option>
-                                    <option value="1">Phê duyệt đơn hàng</option>
-                                    <option value="2">Xác nhận thanh toán</option>
-                                    <option value="3">Duyệt nghỉ phép</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            <div class="relative multi-select-wrapper">
+                                <button type="button" class="multi-select-trigger w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer text-left flex items-center justify-between" onclick="toggleMultiSelect(this)">
+                                    <span class="text-gray-500">+ Chọn task</span>
+                                    <i data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                                </button>
+                                <div class="multi-select-dropdown hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="1" data-label="Phê duyệt đơn hàng" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-green')">
+                                            <span class="text-sm text-gray-700">Phê duyệt đơn hàng</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="2" data-label="Xác nhận thanh toán" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-green')">
+                                            <span class="text-sm text-gray-700">Xác nhận thanh toán</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="3" data-label="Duyệt nghỉ phép" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-green')">
+                                            <span class="text-sm text-gray-700">Duyệt nghỉ phép</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mt-2 selected-tags-container">
                             </div>
                         </div>
 
@@ -311,14 +352,29 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Department <span class="text-red-500">*</span>
                             </label>
-                            <div class="relative">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white cursor-pointer">
-                                    <option value="">+ Chọn department</option>
-                                    <option value="1">Phòng Kế Toán</option>
-                                    <option value="2">Phòng Nhân Sự</option>
-                                    <option value="3">Phòng Kinh Doanh</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            <div class="relative multi-select-wrapper">
+                                <button type="button" class="multi-select-trigger w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white cursor-pointer text-left flex items-center justify-between" onclick="toggleMultiSelect(this)">
+                                    <span class="text-gray-500">+ Chọn department</span>
+                                    <i data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                                </button>
+                                <div class="multi-select-dropdown hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                                    <div class="p-2 space-y-1 max-h-60 overflow-y-auto">
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="1" data-label="Phòng Kế Toán" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-orange')">
+                                            <span class="text-sm text-gray-700">Phòng Kế Toán</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="2" data-label="Phòng Nhân Sự" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-orange')">
+                                            <span class="text-sm text-gray-700">Phòng Nhân Sự</span>
+                                        </label>
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="3" data-label="Phòng Kinh Doanh" class="w-4 h-4 text-blue-500 mr-3" onchange="updateSelection(this, 'tag-orange')">
+                                            <span class="text-sm text-gray-700">Phòng Kinh Doanh</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap mt-2 selected-tags-container">
                             </div>
                         </div>
                     </div>
@@ -339,5 +395,78 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Toggle multi-select dropdown
+        function toggleMultiSelect(trigger) {
+            const wrapper = trigger.closest('.multi-select-wrapper');
+            const dropdown = wrapper.querySelector('.multi-select-dropdown');
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.multi-select-dropdown').forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.add('hidden');
+                }
+            });
+            
+            // Toggle current dropdown
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Update selection when checkbox changes
+        function updateSelection(checkbox, tagClass) {
+            const wrapper = checkbox.closest('.multi-select-wrapper');
+            const tagsContainer = wrapper.parentElement.querySelector('.selected-tags-container');
+            const label = checkbox.getAttribute('data-label');
+            const value = checkbox.value;
+            
+            if (checkbox.checked) {
+                // Add tag
+                const tag = document.createElement('span');
+                tag.className = `tag ${tagClass}`;
+                tag.setAttribute('data-value', value);
+                tag.innerHTML = `
+                    ${label}
+                    <i class="ml-2 cursor-pointer" onclick="removeTag(this, '${value}')">
+                        <svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                            <path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path>
+                        </svg>
+                    </i>
+                `;
+                tagsContainer.appendChild(tag);
+            } else {
+                // Remove tag
+                const tag = tagsContainer.querySelector(`[data-value="${value}"]`);
+                if (tag) {
+                    tag.remove();
+                }
+            }
+        }
+
+        // Remove tag when clicking X
+        function removeTag(icon, value) {
+            const tag = icon.closest('.tag');
+            const tagsContainer = tag.parentElement;
+            const wrapper = tagsContainer.previousElementSibling;
+            
+            // Uncheck the corresponding checkbox
+            const checkbox = wrapper.querySelector(`input[value="${value}"]`);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+            
+            // Remove tag
+            tag.remove();
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.multi-select-wrapper')) {
+                document.querySelectorAll('.multi-select-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            }
+        });
+    </script>
 
 </body></html>
