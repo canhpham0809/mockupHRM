@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Preview changed functions",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-Content -Path 'g:\\mockupHRM\\mockupHRM\\delegate_v2.html' -TotalCount 0 | Out-String | Select-Object -First 1"
+			],
+			"isBackground": false
+		}
+	]
+}

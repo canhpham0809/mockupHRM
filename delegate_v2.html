@@ -14,7 +14,7 @@
         .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
         .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
         .tag-orange { background: #fff7e6; color: #faad14; border: 1px solid #ffd591; }
-        .delegation-card { border-left: 4px solid #d9d9d9; transition: all 0.3s; position: relative; z-index: 1; }
+        .delegation-card { border-left: 4px solid #d9d9d9; transition: all 0.3s; position: relative; z-index: auto; }
         .delegation-card.filled { border-left-color: #52c41a; }
         .delegation-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .delegation-card { overflow: visible; }
@@ -38,7 +38,7 @@
             border: 1px solid #d1d5db;
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
+            z-index: 9999;
             min-width: 250px;
             max-width: 350px;
         }
@@ -49,7 +49,7 @@
             padding: 8px;
         }
         .scope-table-wrapper { overflow: visible; position: relative; }
-        .scope-multi-select { position: relative; }
+        .scope-multi-select { position: relative; z-index: 20; }
         .scope-table-body td { 
             width: 150px !important;
             max-width: 150px !important;
@@ -126,7 +126,7 @@
             </div>
 
             <div id="delegation-cards-container" class="space-y-4">
-                <div class="delegation-card filled bg-gray-50 rounded-lg p-4">
+                <div class="delegation-card bg-gray-50 rounded-lg p-4">
                     <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
                         <div class="flex items-center flex-1 mr-4">
                             <i class="text-blue-500 text-xl mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-user" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path></svg></i>
@@ -165,9 +165,9 @@
                                 
                                 <div class="ml-7 space-y-2">
                                     <div class="flex items-center space-x-2">
-                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày">
+                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày" data-role="from-datetime" value="">
                                         <span class="text-gray-400">-</span>
-                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày">
+                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày" data-role="to-datetime">
                                     </div>
                                 </div>
 
@@ -193,7 +193,7 @@
 
                         <div class="authorization-scope">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Phạm vi ủy quyền <span class="text-red-500">*</span>
+                                Phạm vi ủy quyền <span class="text-green-500"></span>
                             </label>
                             <div class="mb-2 flex items-center justify-between">
                                 <label class="flex items-center cursor-pointer">
@@ -214,7 +214,7 @@
                                                 <th class="text-left px-3 py-2 font-medium">Workflow</th>
                                                 <th class="text-left px-3 py-2 font-medium">Task</th>
                                                 <th class="text-left px-3 py-2 font-medium">Department</th>
-                                                <th class="px-3 py-2 text-right font-medium w-20">Xóa</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody class="scope-table-body">
@@ -291,13 +291,51 @@
             return taskOptions.filter(task => taskIds.includes(task.value));
         }
 
-        function getSelectedWorkflows() {
+        function getSelectedWorkflows(rootSection = null) {
             const selectedWorkflows = new Set();
-            document.querySelectorAll('.scope-table-body tr').forEach(row => {
+            const container = rootSection ? rootSection : document;
+            container.querySelectorAll('.scope-table-body tr').forEach(row => {
                 const workflowCheckboxes = row.querySelectorAll('.scope-multi-select[data-type="workflow"] input[type="checkbox"]:checked');
                 workflowCheckboxes.forEach(cb => selectedWorkflows.add(cb.value));
             });
             return selectedWorkflows;
+        }
+
+        // Helpers: time range detection and overlap
+        function getCardTimeInfo(card) {
+            const radios = card.querySelectorAll('input[type="radio"]');
+            let timeType = 'Có thời hạn';
+            radios.forEach(r => { if (r.checked) timeType = r.parentElement.textContent.trim(); });
+            if (timeType.includes('Vô thời hạn')) return { type: 'infinite' };
+            const inputs = card.querySelectorAll('input[type="datetime-local"]');
+            if (inputs.length < 2 || !inputs[0].value || !inputs[1].value) return { type: 'unknown' };
+            const start = new Date(inputs[0].value);
+            const end = new Date(inputs[1].value);
+            return { type: 'finite', start, end };
+        }
+
+        function isTimeOverlapping(a, b) {
+            if (a.type === 'unknown' || b.type === 'unknown') return true; // conservative: lock until defined
+            if (a.type === 'infinite' || b.type === 'infinite') return true;
+            // finite ranges
+            return (a.start <= b.end) && (b.start <= a.end);
+        }
+
+        function getOverlappingWorkflows(section) {
+            const card = section.closest('.delegation-card');
+            const currentInfo = getCardTimeInfo(card);
+            const container = document.getElementById('delegation-cards-container');
+            const disabled = new Set();
+            container.querySelectorAll('.delegation-card').forEach(otherCard => {
+                if (otherCard === card) return;
+                const otherInfo = getCardTimeInfo(otherCard);
+                if (isTimeOverlapping(currentInfo, otherInfo)) {
+                    const otherScope = otherCard.querySelector('.authorization-scope');
+                    const wf = getSelectedWorkflows(otherScope);
+                    wf.forEach(v => disabled.add(v));
+                }
+            });
+            return disabled;
         }
 
         function renderScopeOptions(type, disabledValues = new Set(), autoSelect = false, filteredOptions = null) {
@@ -330,13 +368,15 @@
             `;
         }
 
-        function createScopeRow() {
+        function createScopeRow(section) {
             const row = document.createElement('tr');
             row.className = 'border-t';
-            const selectedWorkflows = getSelectedWorkflows();
+            const selectedWorkflows = getSelectedWorkflows(section);
+            const overlappingWorkflows = getOverlappingWorkflows(section);
+            const disabledWorkflows = new Set([...selectedWorkflows, ...overlappingWorkflows]);
             row.innerHTML = `
                 <td class="px-3 py-2 align-top">
-                    ${createScopeDropdown('workflow', 'w-64', selectedWorkflows)}
+                    ${createScopeDropdown('workflow', 'w-64', disabledWorkflows)}
                 </td>
                 <td class="px-3 py-2 align-top">
                     ${createScopeDropdown('task', 'w-64', new Set())}
@@ -358,6 +398,32 @@
             
             return row;
         }
+
+        // Refresh disabled workflow options when time changes
+        function refreshSectionWorkflowLocks(section) {
+            const tbody = section.querySelector('.scope-table-body');
+            if (!tbody) return;
+            const selectedWorkflows = getSelectedWorkflows(section);
+            const overlappingWorkflows = getOverlappingWorkflows(section);
+            const disabledWorkflows = new Set([...selectedWorkflows, ...overlappingWorkflows]);
+            tbody.querySelectorAll('.scope-multi-select[data-type="workflow"]').forEach(wrapper => {
+                const row = wrapper.closest('tr');
+                // preserve current selection and allow it even if disabled set contains it
+                const currentSelectedChecks = wrapper.querySelectorAll('input[type="checkbox"]:checked');
+                const currentSelectedValues = new Set(Array.from(currentSelectedChecks).map(cb => cb.value));
+                // Build a local disabled set that excludes this row's current selection
+                const localDisabled = new Set([...disabledWorkflows].filter(v => !currentSelectedValues.has(v)));
+                const cell = wrapper.parentElement;
+                cell.innerHTML = createScopeDropdown('workflow', 'w-64', localDisabled);
+                const newWrapper = row.querySelector('.scope-multi-select[data-type="workflow"]');
+                // Re-check previous selection
+                currentSelectedValues.forEach(val => {
+                    const cb = newWrapper.querySelector(`input[type="checkbox"][value="${val}"]`);
+                    if (cb) cb.checked = true;
+                });
+                updateScopeSelectedText(newWrapper);
+            });
+        }
         
 
         function toggleCustomTable(checkbox) {
@@ -371,7 +437,7 @@
                 defaultText.classList.add('hidden');
 
                 if (!tbody.children.length) {
-                    tbody.appendChild(createScopeRow());
+                    tbody.appendChild(createScopeRow(section));
                 }
             } else {
                 tableWrapper.classList.add('hidden');
@@ -382,7 +448,7 @@
         function addScopeRow(button) {
             const section = button.closest('.authorization-scope');
             const tbody = section.querySelector('.scope-table-body');
-            tbody.appendChild(createScopeRow());
+            tbody.appendChild(createScopeRow(section));
         }
 
         function deleteScopeRow(button) {
@@ -399,6 +465,13 @@
         }
 
         let openScopeDropdown = null;
+
+        function closeOpenScopeDropdown() {
+            if (openScopeDropdown) {
+                openScopeDropdown.classList.add('hidden');
+                openScopeDropdown = null;
+            }
+        }
 
         function toggleScopeDropdown(trigger) {
             const wrapper = trigger.closest('.scope-multi-select');
@@ -498,10 +571,45 @@
 
         document.addEventListener('click', (event) => {
             if (!event.target.closest('.scope-multi-select')) {
-                if (openScopeDropdown) {
-                    openScopeDropdown.classList.add('hidden');
-                    openScopeDropdown = null;
-                }
+                closeOpenScopeDropdown();
+            }
+        });
+
+        // Close any open dropdown on focus change to non-scope elements
+        document.addEventListener('focusin', (event) => {
+            if (!event.target.closest('.scope-multi-select')) {
+                closeOpenScopeDropdown();
+            }
+        });
+
+        // Close dropdown on scroll anywhere (captures scrollable parents)
+        document.addEventListener('scroll', () => {
+            closeOpenScopeDropdown();
+        }, true);
+
+        // Set default from-date for existing cards on load
+        function initDefaultFromDates() {
+            document.querySelectorAll('.delegation-card').forEach(card => setDefaultFromDatetime(card));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDefaultFromDates();
+        });
+        if (document.readyState !== 'loading') {
+            initDefaultFromDates();
+        }
+
+        // Listen for time changes to re-evaluate workflow locks per section
+        document.addEventListener('change', (event) => {
+            const target = event.target;
+            if (!target) return;
+            if (
+                (target.matches('input[type="datetime-local"]') || target.matches('input[type="radio"]')) &&
+                target.closest('.delegation-card')
+            ) {
+                const card = target.closest('.delegation-card');
+                const section = card.querySelector('.authorization-scope');
+                refreshSectionWorkflowLocks(section);
             }
         });
 
@@ -509,6 +617,7 @@
         // Add new delegation card
         function addNewDelegationCard() {
             const container = document.getElementById('delegation-cards-container');
+            closeOpenScopeDropdown();
             delegationCardCounter++;
             const radioGroupName = `time-type-${delegationCardCounter}`;
             
@@ -552,11 +661,11 @@
                             </label>
                             
                             <div class="ml-7 space-y-2">
-                                <div class="flex items-center space-x-2">
-                                    <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày">
-                                    <span class="text-gray-400">-</span>
-                                    <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày">
-                                </div>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày" data-role="from-datetime">
+                                        <span class="text-gray-400">-</span>
+                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày" data-role="to-datetime">
+                                    </div>
                             </div>
 
                             <label class="flex items-center cursor-pointer">
@@ -602,7 +711,7 @@
                                             <th class="text-left px-3 py-2 font-medium">Workflow</th>
                                             <th class="text-left px-3 py-2 font-medium">Task</th>
                                             <th class="text-left px-3 py-2 font-medium">Department</th>
-                                            <th class="px-3 py-2 text-right font-medium w-20">Xóa</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody class="scope-table-body">
@@ -615,11 +724,23 @@
             `;
             
             container.appendChild(newCard);
+            setDefaultFromDatetime(newCard);
             
             // Scroll to the new card
             setTimeout(() => {
                 newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 100);
+        }
+
+        // Set default "from" datetime to current system time for a card
+        function setDefaultFromDatetime(card) {
+            const fromInput = card.querySelector('input[data-role="from-datetime"]');
+            if (!fromInput) return;
+            const now = new Date();
+            // Format YYYY-MM-DDTHH:MM for datetime-local
+            const pad = (n) => n.toString().padStart(2, '0');
+            const formatted = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+            fromInput.value = formatted;
         }
 
         // Save delegation card
@@ -639,15 +760,18 @@
                     timeType = radio.parentElement.textContent.trim();
                 }
             });
+            const currentTimeInfo = getCardTimeInfo(card);
             
             // Get datetime inputs if "Có thời hạn" is selected
             if (timeType.includes('Có thời hạn')) {
                 const dateInputs = card.querySelectorAll('input[type="datetime-local"]');
-                if (dateInputs.length >= 2) {
-                    const fromDate = dateInputs[0].value || 'Chưa chọn';
-                    const toDate = dateInputs[1].value || 'Chưa chọn';
-                    timeDetails = ` (${fromDate} - ${toDate})`;
+                if (dateInputs.length < 2 || !dateInputs[0].value || !dateInputs[1].value) {
+                    alert('Vui lòng chọn đầy đủ thời gian ủy quyền (từ ngày / đến ngày)!');
+                    return;
                 }
+                const fromDate = dateInputs[0].value;
+                const toDate = dateInputs[1].value;
+                timeDetails = ` (${fromDate} - ${toDate})`;
             }
 
             // Get scope selections (workflow / task / department)
@@ -680,6 +804,16 @@
                     scopeSelections.push(`${workflowText} • ${taskText} • ${departmentText}`);
                 }
             } else {
+                // Full scope selected; validate no time overlap with other cards
+                const container = document.getElementById('delegation-cards-container');
+                const otherCards = Array.from(container.querySelectorAll('.delegation-card')).filter(c => c !== card);
+                for (const other of otherCards) {
+                    const otherInfo = getCardTimeInfo(other);
+                    if (isTimeOverlapping(currentTimeInfo, otherInfo)) {
+                        alert('❌ Thời gian ủy quyền bị trùng lắp với người được ủy quyền khác khi chọn toàn bộ Workflow. Vui lòng điều chỉnh thời gian hoặc dùng Custom để giới hạn phạm vi.');
+                        return;
+                    }
+                }
                 scopeSelections.push('All Workflow • All Task • All Department');
             }
             
@@ -709,12 +843,6 @@
             button.style.backgroundColor = '#10b981';
             button.style.borderColor = '#10b981';
             button.style.color = 'white';
-            
-            setTimeout(() => {
-                button.style.backgroundColor = '';
-                button.style.borderColor = '';
-                button.style.color = '';
-            }, 1000);
         }
 
         // Delete delegation card
