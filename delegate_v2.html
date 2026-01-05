@@ -80,6 +80,59 @@
             min-width: 120px !important;
             padding: 10px 32px !important;
         }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(2px);
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .dynamic-field-dropdown {
+            position: absolute;
+            z-index: 100;
+        }
+        .scope-table-body tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .scope-table-body tr:hover {
+            background-color: #f9fafb;
+        }
+        .hidden {
+            display: none !important;
+        }
     </style>
 <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.absolute{position:absolute}.relative{position:relative}.left-4{left:1rem}.right-3{right:0.75rem}.right-4{right:1rem}.top-1\/2{top:50%}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-3{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:0.5rem}.ml-3{margin-left:0.75rem}.ml-7{margin-left:1.75rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mr-4{margin-right:1rem}.mt-1{margin-top:0.25rem}.mt-2{margin-top:0.5rem}.mt-5{margin-top:1.25rem}.block{display:block}.flex{display:flex}.h-10{height:2.5rem}.h-4{height:1rem}.w-10{width:2.5rem}.w-4{width:1rem}.w-full{width:100%}.max-w-\[1200px\]{max-width:1200px}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.appearance-none{-webkit-appearance:none;appearance:none}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded-lg{border-radius:0.5rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-dashed{border-style:dashed}.border-blue-400{--tw-border-opacity:1;border-color:rgb(96 165 250 / var(--tw-border-opacity, 1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219 / var(--tw-border-opacity, 1))}.border-red-300{--tw-border-opacity:1;border-color:rgb(252 165 165 / var(--tw-border-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-4{padding:1.25rem}.p-6{padding:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-3{padding-bottom:0.75rem}.pb-3{padding-bottom:1rem}.pl-11{padding-left:2.75rem}.pr-4{padding-right:1rem}.text-center{text-align:center}.text-right{text-align:right}.text-xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-6xl{font-size:3.75rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-30{opacity:0.3}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-blue-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.hover\:bg-red-50:hover{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.focus\:border-transparent:focus{border-color:transparent}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-blue-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}</style></head>
 <body class="bg-gray-50">
@@ -117,37 +170,21 @@
         </div>
 
         <div id="delegation-list-card" class="bg-white rounded-lg shadow-sm p-4">
-            <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+            <div class="mb-3 pb-2 border-b border-gray-200">
                 <h2 class="text-lg font-semibold text-gray-800">DANH SÁCH NGƯỜI ĐƯỢC ỦY QUYỀN</h2>
-                <button onclick="addNewDelegationCard()" class="px-3 py-1.5 border-2 border-dashed border-blue-400 text-blue-500 rounded-lg font-medium hover:bg-blue-50 transition-colors flex items-center text-sm">
-                    <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-plus" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"></path></svg></i>
-                    Thêm người
-                </button>
             </div>
 
             <div id="delegation-cards-container" class="space-y-4">
                 <div class="delegation-card bg-gray-50 rounded-lg p-4">
-                    <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
-                        <div class="flex items-center flex-1 mr-4">
-                            <i class="text-blue-500 text-xl mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-user" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path></svg></i>
-                            <div class="relative flex-1 max-w-md">
-                                <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer text-sm">
-                                    <option value="">Chọn người được ủy quyền...</option>
-                                    <option value="1" selected="">Phạm Văn D - Phòng Kỹ Thuật</option>
-                                    <option value="2">Hoàng Thị E - Phòng Marketing</option>
-                                </select>
-                                <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="saveDelegationCard(this)" class="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors flex items-center">
-                                <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-floppy-disk" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="floppy-disk" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"></path></svg></i>
-                                Lưu
-                            </button>
-                            <button class="px-4 py-2 border border-red-300 text-red-500 rounded-lg hover:bg-red-50 transition-colors flex items-center">
-                                <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></i>
-                                Xóa
-                            </button>
+                    <div class="flex items-center mb-3 pb-3 border-b border-gray-200">
+                        <i class="text-blue-500 text-xl mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-user" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path></svg></i>
+                        <div class="relative flex-1 max-w-md">
+                            <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer text-sm">
+                                <option value="">Chọn người được ủy quyền...</option>
+                                <option value="1" selected="">Phạm Văn D - Phòng Kỹ Thuật</option>
+                                <option value="2">Hoàng Thị E - Phòng Marketing</option>
+                            </select>
+                            <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
                         </div>
                     </div>
 
@@ -157,25 +194,27 @@
                                 Thời gian ủy quyền <span class="text-red-500">*</span>
                             </label>
                             <div class="space-y-2">
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="time-type-1" class="w-4 h-4 text-blue-500" checked="">
-                                    <i class="ml-3 mr-2 text-blue-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-clock" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"></path></svg></i>
-                                    <span class="text-sm font-medium text-gray-700">Có thời hạn</span>
-                                </label>
+                                <div class="flex items-center space-x-6">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="time-type-1" class="w-4 h-4 text-blue-500 time-type-radio" data-type="finite" checked="" onchange="toggleDateTimeInputs(this)">
+                                        <i class="ml-3 mr-2 text-blue-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-clock" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"></path></svg></i>
+                                        <span class="text-sm font-medium text-gray-700">Có thời hạn</span>
+                                    </label>
+                                    
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="time-type-1" class="w-4 h-4 text-blue-500 time-type-radio" data-type="infinite" onchange="toggleDateTimeInputs(this)">
+                                        <i class="ml-3 mr-2 text-gray-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-infinity" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="infinity" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M0 241.1C0 161 65 96 145.1 96c38.5 0 75.4 15.3 102.6 42.5L320 210.7l72.2-72.2C419.5 111.3 456.4 96 494.9 96C575 96 640 161 640 241.1v29.7C640 351 575 416 494.9 416c-38.5 0-75.4-15.3-102.6-42.5L320 301.3l-72.2 72.2C220.5 400.7 183.6 416 145.1 416C65 416 0 351 0 270.9V241.1zM274.7 256l-72.2-72.2c-15.2-15.2-35.9-23.8-57.4-23.8C100.3 160 64 196.3 64 241.1v29.7c0 44.8 36.3 81.1 81.1 81.1c21.5 0 42.2-8.5 57.4-23.8L274.7 256zm90.5 0l72.2 72.2c15.2 15.2 35.9 23.8 57.4 23.8c44.8 0 81.1-36.3 81.1-81.1V241.1c0-44.8-36.3-81.1-81.1-81.1c-21.5 0-42.2 8.5-57.4 23.8L365.3 256z"></path></svg></i>
+                                        <span class="text-sm font-medium text-gray-700">Vô thời hạn</span>
+                                    </label>
+                                </div>
                                 
-                                <div class="ml-7 space-y-2">
+                                <div class="datetime-inputs-wrapper">
                                     <div class="flex items-center space-x-2">
                                         <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày" data-role="from-datetime" value="">
                                         <span class="text-gray-400">-</span>
                                         <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày" data-role="to-datetime">
                                     </div>
                                 </div>
-
-                                <label class="flex items-center cursor-pointer">
-                                    <input type="radio" name="time-type-1" class="w-4 h-4 text-blue-500">
-                                    <i class="ml-3 mr-2 text-gray-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-infinity" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="infinity" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M0 241.1C0 161 65 96 145.1 96c38.5 0 75.4 15.3 102.6 42.5L320 210.7l72.2-72.2C419.5 111.3 456.4 96 494.9 96C575 96 640 161 640 241.1v29.7C640 351 575 416 494.9 416c-38.5 0-75.4-15.3-102.6-42.5L320 301.3l-72.2 72.2C220.5 400.7 183.6 416 145.1 416C65 416 0 351 0 270.9V241.1zM274.7 256l-72.2-72.2c-15.2-15.2-35.9-23.8-57.4-23.8C100.3 160 64 196.3 64 241.1v29.7c0 44.8 36.3 81.1 81.1 81.1c21.5 0 42.2-8.5 57.4-23.8L274.7 256zm90.5 0l72.2 72.2c15.2 15.2 35.9 23.8 57.4 23.8c44.8 0 81.1-36.3 81.1-81.1V241.1c0-44.8-36.3-81.1-81.1-81.1c-21.5 0-42.2 8.5-57.4 23.8L365.3 256z"></path></svg></i>
-                                    <span class="text-sm font-medium text-gray-700">Vô thời hạn</span>
-                                </label>
                             </div>
                         </div>
 
@@ -191,20 +230,34 @@
                             <p class="text-xs text-gray-500 mt-2">Tải lên văn bản/email phê duyệt ủy quyền (nếu có)</p>
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Mô tả
+                            </label>
+                            <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Nhập mô tả thêm về ủy quyền..."></textarea>
+                        </div>
+
+                        <div>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" class="w-4 h-4 text-blue-500 rounded" checked>
+                                <span class="ml-2 text-sm font-medium text-gray-700">Kích hoạt</span>
+                            </label>
+                        </div>
+
                         <div class="authorization-scope">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Phạm vi ủy quyền <span class="text-green-500"></span>
+                                Phạm vi ủy quyền <span class="text-red-500">*</span>
                             </label>
                             <div class="mb-2 flex items-center justify-between">
                                 <label class="flex items-center cursor-pointer">
                                     <input type="checkbox" class="scope-custom-checkbox w-4 h-4 text-blue-500 mr-2" onchange="toggleCustomTable(this)">
                                     <span class="text-sm text-gray-600">Custom (Tùy chọn)</span>
                                 </label>
-                                <span class="text-sm text-gray-500 scope-default">All Workflow • All Task • All Department</span>
+                                <span class="text-sm text-gray-500 scope-default">All Workflow • All Task</span>
                             </div>
                             <div class="scope-table-wrapper hidden border border-gray-200 rounded-lg">
                                 <div class="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-gray-50 rounded-t-lg">
-                                    <span class="text-sm font-medium text-gray-700">Bảng Workflow / Task / Department</span>
+                                    <span class="text-sm font-medium text-gray-700">Bảng Workflow / Task</span>
                                     <button type="button" class="px-3 py-1 text-sm border border-blue-500 text-blue-500 rounded hover:bg-blue-50 transition-colors" onclick="addScopeRow(this)">+ Thêm dòng</button>
                                 </div>
                                 <div style="overflow: visible;">
@@ -213,8 +266,8 @@
                                             <tr>
                                                 <th class="text-left px-3 py-2 font-medium">Workflow</th>
                                                 <th class="text-left px-3 py-2 font-medium">Task</th>
-                                                <th class="text-left px-3 py-2 font-medium">Department</th>
-                                                
+                                                <th class="text-left px-3 py-2 font-medium">Other Options</th>
+                                                <th class="text-right px-3 py-2 font-medium"></th>
                                             </tr>
                                         </thead>
                                         <tbody class="scope-table-body">
@@ -224,19 +277,89 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Card Footer with Action Buttons -->
+
                 </div>
+            </div>
+            
+            <!-- Add Person Button -->
+
         </div>
 
         <!-- Action Buttons at Bottom -->
         <div class="bg-white rounded-lg shadow-sm p-8 mt-6">
             <div class="flex items-center justify-end space-x-2 action-buttons">
-                <button class="px-4 py-1.5 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors text-sm">
-                    Đóng
+                <button onclick="cancelAndReturn()" class="px-4 py-1.5 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors text-sm">
+                    Close
                 </button>
-                <!--<button class="px-4 py-1.5 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center text-sm">
+                <button onclick="saveAllAndReturn()" class="px-4 py-1.5 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center text-sm">
                     <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-floppy-disk" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="floppy-disk" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"></path></svg></i>
-                    Lưu
-                </button>-->
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Popup for Adding Scope Row -->
+    <div id="scopeModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle" class="text-lg font-semibold text-gray-800">Thêm Phạm Vi Ủy Quyền</h3>
+                <button onclick="closeScopeModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors">
+                    <i class="text-gray-600" data-fa-i2svg=""><svg class="svg-inline--fa fa-xmark" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" data-fa-i2svg=""><path fill="currentColor" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"></path></svg></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <!-- Workflow Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Workflow <span class="text-red-500">*</span>
+                        </label>
+                        <select id="modalWorkflow" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white" onchange="updateModalTasks()">
+                            <option value="">Chọn workflow...</option>
+                        </select>
+                    </div>
+
+                    <!-- Task Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Task <span class="text-red-500">*</span>
+                        </label>
+                        <div>
+                            <label class="flex items-center mb-2">
+                                <input type="checkbox" id="modalAllTasks" class="w-4 h-4 text-blue-500 mr-2" onchange="toggleModalAllTasks()">
+                                <span class="text-sm text-gray-700 font-medium">All Tasks</span>
+                            </label>
+                            <div id="modalTaskList" class="border border-gray-200 rounded-lg p-3 max-h-40 overflow-y-auto space-y-2">
+                                <!-- Tasks will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Fields -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Other Options
+                        </label>
+                        <div id="dynamicFieldsContainer" class="space-y-3">
+                            <!-- Dynamic fields will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modalDeleteBtn" onclick="deleteCurrentScopeRow()" class="px-4 py-2 border border-red-300 text-red-500 rounded-lg hover:bg-red-50 transition-colors hidden">
+                    Xóa
+                </button>
+                <div class="flex-1"></div>
+                <button onclick="closeScopeModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                    Hủy
+                </button>
+                <button id="modalSaveBtn" onclick="saveModalScope()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    Thêm
+                </button>
             </div>
         </div>
     </div>
@@ -244,6 +367,19 @@
     <script>
         // Counter for unique radio button names
         let delegationCardCounter = 1;
+        
+        // Toggle datetime inputs visibility based on radio selection
+        function toggleDateTimeInputs(radio) {
+            const card = radio.closest('.delegation-card');
+            const dateTimeWrapper = card.querySelector('.datetime-inputs-wrapper');
+            const dataType = radio.getAttribute('data-type');
+            
+            if (dataType === 'infinite') {
+                dateTimeWrapper.style.display = 'none';
+            } else {
+                dateTimeWrapper.style.display = 'block';
+            }
+        }
 
         const workflowOptions = [
             { value: '1', label: 'Quy trình phê duyệt đơn hàng' },
@@ -274,31 +410,35 @@
             '4': ['9', '10', '11']        // Workflow 4: Tasks 9, 10, 11
         };
 
-        const departmentOptions = [
-            { value: '1', label: 'A4B' },
-            { value: '2', label: 'VNGG' },
-            { value: '3', label: 'ZPS' }
-        ];
+        // Dynamic Field Options
+        const dynamicFieldOptions = {
+            'Department': [
+                { value: 'A4B', label: 'A4B' },
+                { value: 'VNGG', label: 'VNGG' },
+                { value: 'ZPS', label: 'ZPS' },
+            ],
+            'Office': [
+                { value: 'VNG_CAMPUS', label: 'VNG Campus' },
+                { value: 'DINH_TIEN_HOANG', label: 'Sala' },
+            ],
+            'Employee Type': [
+                { value: 'FULLTIME', label: 'Full-time' },
+                { value: 'PARTTIME', label: 'Part-time' },
+                { value: 'INTERN', label: 'Intern' }
+            ]
+        };
 
-        const scopePlaceholders = {
-            workflow: 'Chọn workflow',
-            task: 'Chọn task',
-            department: 'Chọn department'
+        // Workflow Dynamic Fields Mapping
+        const workflowDynamicFields = {
+            '1': ['Department', 'Office'],           // Quy trình phê duyệt đơn hàng
+            '2': ['Department', 'Employee Type'],    // Quy trình phê duyệt nghỉ phép
+            '3': ['Department', 'Office'],           // Quy trình thanh toán hóa đơn
+            '4': ['Department']                       // Quy trình cấp phép nhân viên
         };
 
         function getTasksByWorkflow(workflowValue) {
             const taskIds = workflowTaskMapping[workflowValue] || [];
             return taskOptions.filter(task => taskIds.includes(task.value));
-        }
-
-        function getSelectedWorkflows(rootSection = null) {
-            const selectedWorkflows = new Set();
-            const container = rootSection ? rootSection : document;
-            container.querySelectorAll('.scope-table-body tr').forEach(row => {
-                const workflowCheckboxes = row.querySelectorAll('.scope-multi-select[data-type="workflow"] input[type="checkbox"]:checked');
-                workflowCheckboxes.forEach(cb => selectedWorkflows.add(cb.value));
-            });
-            return selectedWorkflows;
         }
 
         // Helpers: time range detection and overlap
@@ -320,272 +460,398 @@
             // finite ranges
             return (a.start <= b.end) && (b.start <= a.end);
         }
-
-        function getOverlappingWorkflows(section) {
-            const card = section.closest('.delegation-card');
-            const currentInfo = getCardTimeInfo(card);
-            const container = document.getElementById('delegation-cards-container');
-            const disabled = new Set();
-            container.querySelectorAll('.delegation-card').forEach(otherCard => {
-                if (otherCard === card) return;
-                const otherInfo = getCardTimeInfo(otherCard);
-                if (isTimeOverlapping(currentInfo, otherInfo)) {
-                    const otherScope = otherCard.querySelector('.authorization-scope');
-                    const wf = getSelectedWorkflows(otherScope);
-                    wf.forEach(v => disabled.add(v));
-                }
-            });
-            return disabled;
-        }
-
-        function renderScopeOptions(type, disabledValues = new Set(), autoSelect = false, filteredOptions = null) {
-            const source = filteredOptions ? filteredOptions : (type === 'workflow' ? workflowOptions : type === 'task' ? taskOptions : departmentOptions);
-            return source.map(opt => {
-                const isDisabled = disabledValues.has(opt.value);
-                const isChecked = autoSelect ? 'checked' : '';
-                return `
-                <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer ${isDisabled ? 'opacity-50' : ''}">
-                    <input type="checkbox" value="${opt.value}" data-label="${opt.label}" class="w-4 h-4 text-blue-500 mr-3" onchange="handleScopeOptionChange(this)" ${isChecked} ${isDisabled ? 'disabled' : ''}>
-                    <span class="text-sm text-gray-700 ${isDisabled ? 'text-gray-400' : ''}">${opt.label}${isDisabled ? '' : ''}</span>
-                </label>
-            `;
-            }).join('');
-        }
-
-        function createScopeDropdown(type, widthClass = 'w-64', disabledValues = new Set(), filteredOptions = null) {
-            return `
-                <div class="scope-multi-select relative" data-type="${type}">
-                    <button type="button" class="scope-select-trigger w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-left flex items-center justify-between" onclick="toggleScopeDropdown(this)">
-                        <span class="scope-selected-text text-gray-500">${scopePlaceholders[type]}</span>
-                        <i class="text-gray-400" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
-                    </button>
-                    <div class="scope-select-dropdown hidden">
-                        <div class="space-y-1">
-                            ${renderScopeOptions(type, disabledValues, false, filteredOptions)}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function createScopeRow(section) {
-            const row = document.createElement('tr');
-            row.className = 'border-t';
-            const selectedWorkflows = getSelectedWorkflows(section);
-            const overlappingWorkflows = getOverlappingWorkflows(section);
-            const disabledWorkflows = new Set([...selectedWorkflows, ...overlappingWorkflows]);
-            row.innerHTML = `
-                <td class="px-3 py-2 align-top">
-                    ${createScopeDropdown('workflow', 'w-64', disabledWorkflows)}
-                </td>
-                <td class="px-3 py-2 align-top">
-                    ${createScopeDropdown('task', 'w-64', new Set())}
-                </td>
-                <td class="px-3 py-2 align-top">
-                    ${createScopeDropdown('department', 'w-64', new Set())}
-                </td>
-                <td class="px-3 py-2 text-right align-top">
-                    <button type="button" class="text-sm text-red-500 hover:text-red-600" onclick="deleteScopeRow(this)">Xóa</button>
-                </td>
-            `;
-            
-            // Update selected text for auto-checked task and department
-            setTimeout(() => {
-                row.querySelectorAll('.scope-multi-select').forEach(wrapper => {
-                    updateScopeSelectedText(wrapper);
-                });
-            }, 0);
-            
-            return row;
-        }
-
-        // Refresh disabled workflow options when time changes
-        function refreshSectionWorkflowLocks(section) {
-            const tbody = section.querySelector('.scope-table-body');
-            if (!tbody) return;
-            const selectedWorkflows = getSelectedWorkflows(section);
-            const overlappingWorkflows = getOverlappingWorkflows(section);
-            const disabledWorkflows = new Set([...selectedWorkflows, ...overlappingWorkflows]);
-            tbody.querySelectorAll('.scope-multi-select[data-type="workflow"]').forEach(wrapper => {
-                const row = wrapper.closest('tr');
-                // preserve current selection and allow it even if disabled set contains it
-                const currentSelectedChecks = wrapper.querySelectorAll('input[type="checkbox"]:checked');
-                const currentSelectedValues = new Set(Array.from(currentSelectedChecks).map(cb => cb.value));
-                // Build a local disabled set that excludes this row's current selection
-                const localDisabled = new Set([...disabledWorkflows].filter(v => !currentSelectedValues.has(v)));
-                const cell = wrapper.parentElement;
-                cell.innerHTML = createScopeDropdown('workflow', 'w-64', localDisabled);
-                const newWrapper = row.querySelector('.scope-multi-select[data-type="workflow"]');
-                // Re-check previous selection
-                currentSelectedValues.forEach(val => {
-                    const cb = newWrapper.querySelector(`input[type="checkbox"][value="${val}"]`);
-                    if (cb) cb.checked = true;
-                });
-                updateScopeSelectedText(newWrapper);
-            });
-        }
         
 
         function toggleCustomTable(checkbox) {
             const section = checkbox.closest('.authorization-scope');
             const tableWrapper = section.querySelector('.scope-table-wrapper');
             const defaultText = section.querySelector('.scope-default');
-            const tbody = section.querySelector('.scope-table-body');
 
             if (checkbox.checked) {
                 tableWrapper.classList.remove('hidden');
                 defaultText.classList.add('hidden');
-
-                if (!tbody.children.length) {
-                    tbody.appendChild(createScopeRow(section));
-                }
             } else {
                 tableWrapper.classList.add('hidden');
                 defaultText.classList.remove('hidden');
             }
         }
 
+        let currentScopeSection = null;
+        let currentEditMode = false;
+        let currentEditRow = null;
+
         function addScopeRow(button) {
-            const section = button.closest('.authorization-scope');
-            const tbody = section.querySelector('.scope-table-body');
-            tbody.appendChild(createScopeRow(section));
+            currentScopeSection = button.closest('.authorization-scope');
+            currentEditMode = false;
+            currentEditRow = null;
+            openScopeModal();
         }
 
-        function deleteScopeRow(button) {
-            const row = button.closest('tr');
-            const tbody = row.parentElement;
+        function openScopeModal() {
+            const modal = document.getElementById('scopeModal');
+            modal.classList.remove('hidden');
+            
+            // Update modal title and buttons based on mode
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSaveBtn = document.getElementById('modalSaveBtn');
+            const modalDeleteBtn = document.getElementById('modalDeleteBtn');
+            
+            if (currentEditMode) {
+                modalTitle.textContent = 'Cập Nhật Phạm Vi Ủy Quyền';
+                modalSaveBtn.textContent = 'Cập nhật';
+                modalDeleteBtn.classList.remove('hidden');
+            } else {
+                modalTitle.textContent = 'Thêm Phạm Vi Ủy Quyền';
+                modalSaveBtn.textContent = 'Thêm';
+                modalDeleteBtn.classList.add('hidden');
+            }
+            
+            // Reset or populate modal
+            if (!currentEditMode) {
+                document.getElementById('modalWorkflow').value = '';
+                document.getElementById('modalAllTasks').checked = false;
+                document.getElementById('modalTaskList').innerHTML = '';
+                document.getElementById('dynamicFieldsContainer').innerHTML = '<p class="text-sm text-gray-500"></p>';
+            } else {
+                loadRowDataToModal(currentEditRow);
+            }
+            
+            // Populate workflow options (exclude already selected workflows in add mode)
+            const workflowSelect = document.getElementById('modalWorkflow');
+            workflowSelect.innerHTML = '<option value="">Chọn workflow...</option>';
+            
+            if (!currentEditMode && currentScopeSection) {
+                // Get already selected workflows from the table
+                const tbody = currentScopeSection.querySelector('.scope-table-body');
+                const selectedWorkflows = Array.from(tbody.querySelectorAll('tr'))
+                    .map(row => row.__scopeData?.workflowValue)
+                    .filter(val => val);
+                
+                // Only show workflows that haven't been selected
+                workflowOptions.forEach(opt => {
+                    if (!selectedWorkflows.includes(opt.value)) {
+                        workflowSelect.innerHTML += `<option value="${opt.value}">${opt.label}</option>`;
+                    }
+                });
+            } else {
+                // In edit mode, show all workflows
+                workflowOptions.forEach(opt => {
+                    workflowSelect.innerHTML += `<option value="${opt.value}">${opt.label}</option>`;
+                });
+            }
+        }
 
-            if (tbody.children.length <= 1) {
-                row.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-                row.querySelectorAll('.scope-multi-select').forEach(updateScopeSelectedText);
+        function closeScopeModal() {
+            const modal = document.getElementById('scopeModal');
+            modal.classList.add('hidden');
+            currentScopeSection = null;
+            currentEditMode = false;
+            currentEditRow = null;
+        }
+
+        function loadRowDataToModal(row) {
+            if (!row) return;
+            
+            const rowData = row.__scopeData;
+            if (!rowData) return;
+            
+            // Set workflow
+            document.getElementById('modalWorkflow').value = rowData.workflowValue;
+            
+            // Trigger workflow change to load tasks and dynamic fields
+            updateModalTasks();
+            
+            // Set tasks after a short delay to ensure they're loaded
+            setTimeout(() => {
+                // Check if all tasks
+                if (rowData.allTasks) {
+                    document.getElementById('modalAllTasks').checked = true;
+                    document.querySelectorAll('.modal-task-checkbox').forEach(cb => cb.checked = true);
+                } else {
+                    // Check specific tasks
+                    rowData.taskValues.forEach(taskValue => {
+                        const checkbox = document.querySelector(`.modal-task-checkbox[value="${taskValue}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+                }
+                
+                // Set dynamic fields
+                if (rowData.dynamicFields) {
+                    rowData.dynamicFields.forEach(field => {
+                        const fieldItem = document.querySelector(`.dynamic-field-item[data-field-name="${field.name}"]`);
+                        if (fieldItem) {
+                            field.values.forEach(value => {
+                                const checkbox = fieldItem.querySelector(`.dynamic-field-checkbox[value="${value}"]`);
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                    updateDynamicFieldSelected(checkbox);
+                                }
+                            });
+                        }
+                    });
+                }
+            }, 100);
+        }
+
+        function updateModalTasks() {
+            const workflowValue = document.getElementById('modalWorkflow').value;
+            const taskList = document.getElementById('modalTaskList');
+            const dynamicFieldsContainer = document.getElementById('dynamicFieldsContainer');
+            
+            if (!workflowValue) {
+                taskList.innerHTML = '<p class="text-sm text-gray-500">Vui lòng chọn workflow trước</p>';
+                dynamicFieldsContainer.innerHTML = '<p class="text-sm text-gray-500">Chọn workflow để hiển thị dynamic fields</p>';
                 return;
             }
-
-            row.remove();
-        }
-
-        let openScopeDropdown = null;
-
-        function closeOpenScopeDropdown() {
-            if (openScopeDropdown) {
-                openScopeDropdown.classList.add('hidden');
-                openScopeDropdown = null;
+            
+            // Update tasks
+            const tasks = getTasksByWorkflow(workflowValue);
+            taskList.innerHTML = tasks.map(task => `
+                <label class="flex items-center">
+                    <input type="checkbox" value="${task.value}" data-label="${task.label}" class="modal-task-checkbox w-4 h-4 text-blue-500 mr-2" checked>
+                    <span class="text-sm text-gray-700">${task.label}</span>
+                </label>
+            `).join('');
+            
+            // Auto-select "All Tasks" checkbox
+            document.getElementById('modalAllTasks').checked = true;
+            
+            // Update dynamic fields based on workflow
+            const fieldNames = workflowDynamicFields[workflowValue] || [];
+            if (fieldNames.length === 0) {
+                dynamicFieldsContainer.innerHTML = '<p class="text-sm text-gray-400 italic">Workflow này không có dynamic fields</p>';
+                return;
             }
+            
+            dynamicFieldsContainer.innerHTML = fieldNames.map(fieldName => {
+                const options = dynamicFieldOptions[fieldName] || [];
+                return `
+                    <div class="dynamic-field-item" data-field-name="${fieldName}">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            ${fieldName}
+                        </label>
+                        <div class="relative">
+                            <button type="button" class="dynamic-field-trigger w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-left flex items-center justify-between" onclick="toggleDynamicFieldDropdown(this)">
+                                <span class="dynamic-field-selected text-gray-500 text-sm">Chọn ${fieldName}...</span>
+                                <i class="text-gray-400" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
+                            </button>
+                            <div class="dynamic-field-dropdown hidden absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+                                <div class="p-2 space-y-1">
+                                    ${options.map(opt => `
+                                        <label class="flex items-center p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                            <input type="checkbox" value="${opt.value}" data-label="${opt.label}" class="dynamic-field-checkbox w-4 h-4 text-blue-500 mr-2" onchange="updateDynamicFieldSelected(this)">
+                                            <span class="text-sm text-gray-700">${opt.label}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function toggleScopeDropdown(trigger) {
-            const wrapper = trigger.closest('.scope-multi-select');
-            if (!wrapper) return;
-            const dropdown = wrapper.querySelector('.scope-select-dropdown');
-            if (!dropdown) return;
+        function toggleModalAllTasks() {
+            const allTasksChecked = document.getElementById('modalAllTasks').checked;
+            const taskCheckboxes = document.querySelectorAll('.modal-task-checkbox');
+            taskCheckboxes.forEach(cb => cb.checked = allTasksChecked);
+        }
 
+        let currentOpenDynamicDropdown = null;
+
+        function toggleDynamicFieldDropdown(trigger) {
+            const dropdown = trigger.nextElementSibling;
+            
             // Close other dropdowns
-            if (openScopeDropdown && openScopeDropdown !== dropdown) {
-                openScopeDropdown.classList.add('hidden');
+            if (currentOpenDynamicDropdown && currentOpenDynamicDropdown !== dropdown) {
+                currentOpenDynamicDropdown.classList.add('hidden');
             }
-
+            
             const isHidden = dropdown.classList.contains('hidden');
             if (isHidden) {
                 dropdown.classList.remove('hidden');
-                openScopeDropdown = dropdown;
+                currentOpenDynamicDropdown = dropdown;
             } else {
                 dropdown.classList.add('hidden');
-                if (openScopeDropdown === dropdown) {
-                    openScopeDropdown = null;
-                }
+                currentOpenDynamicDropdown = null;
             }
         }
 
-        function handleScopeOptionChange(checkbox) {
-            const wrapper = checkbox.closest('.scope-multi-select');
-            const type = wrapper.getAttribute('data-type');
+        function updateDynamicFieldSelected(checkbox) {
+            const fieldItem = checkbox.closest('.dynamic-field-item');
+            const trigger = fieldItem.querySelector('.dynamic-field-trigger');
+            const selectedText = trigger.querySelector('.dynamic-field-selected');
+            const allCheckboxes = fieldItem.querySelectorAll('.dynamic-field-checkbox:checked');
+            const fieldName = fieldItem.getAttribute('data-field-name');
             
-            // If workflow checkbox changed, only allow single selection
-            if (type === 'workflow') {
-                const row = wrapper.closest('tr');
-                
-                if (checkbox.checked) {
-                    // Uncheck all other workflow checkboxes in the same row
-                    const allWorkflowCheckboxes = wrapper.querySelectorAll('input[type="checkbox"]');
-                    allWorkflowCheckboxes.forEach(cb => {
-                        if (cb !== checkbox) {
-                            cb.checked = false;
-                        }
-                    });
-                    
-                    const workflowValue = checkbox.value;
-                    const taskWrapper = row.querySelector('[data-type="task"]');
-                    const deptWrapper = row.querySelector('[data-type="department"]');
-                    
-                    // When workflow is selected, rebuild task dropdown with only tasks of that workflow
-                    const tasksForWorkflow = getTasksByWorkflow(workflowValue);
-                    const taskDropdownHTML = createScopeDropdown('task', 'w-64', new Set(), tasksForWorkflow);
-                    
-                    if (taskWrapper) {
-                        taskWrapper.parentElement.innerHTML = taskDropdownHTML;
-                        const newTaskWrapper = row.querySelector('[data-type="task"]');
-                        
-                        // Auto-check all tasks in the filtered list
-                        const taskCheckboxes = newTaskWrapper.querySelectorAll('input[type="checkbox"]');
-                        taskCheckboxes.forEach(cb => cb.checked = true);
-                        updateScopeSelectedText(newTaskWrapper);
-                    }
-                    
-                    // Auto-check all departments
-                    if (deptWrapper) {
-                        const deptCheckboxes = deptWrapper.querySelectorAll('input[type="checkbox"]');
-                        deptCheckboxes.forEach(cb => cb.checked = true);
-                        updateScopeSelectedText(deptWrapper);
-                    }
-                    
-                    // Close the dropdown after selection
-                    const dropdown = wrapper.querySelector('.scope-select-dropdown');
-                    if (dropdown && !dropdown.classList.contains('hidden')) {
-                        dropdown.classList.add('hidden');
-                        if (openScopeDropdown === dropdown) {
-                            openScopeDropdown = null;
-                        }
-                    }
-                }
-            }
-            
-            updateScopeSelectedText(wrapper);
-        }
-
-        function updateScopeSelectedText(wrapper) {
-            const type = wrapper.getAttribute('data-type');
-            const triggerText = wrapper.querySelector('.scope-selected-text');
-            const checked = wrapper.querySelectorAll('input[type="checkbox"]:checked');
-
-            if (!checked.length) {
-                triggerText.textContent = scopePlaceholders[type];
-                triggerText.classList.add('text-gray-500');
-                triggerText.classList.remove('text-gray-800', 'font-medium');
+            if (allCheckboxes.length === 0) {
+                selectedText.textContent = `Chọn ${fieldName}...`;
+                selectedText.classList.add('text-gray-500');
+                selectedText.classList.remove('text-gray-800', 'font-medium');
             } else {
-                const labels = Array.from(checked).map(cb => cb.getAttribute('data-label'));
-                triggerText.textContent = labels.join(', ');
-                triggerText.classList.remove('text-gray-500');
-                triggerText.classList.add('text-gray-800', 'font-medium');
+                const labels = Array.from(allCheckboxes).map(cb => cb.getAttribute('data-label'));
+                selectedText.textContent = labels.join(', ');
+                selectedText.classList.remove('text-gray-500');
+                selectedText.classList.add('text-gray-800', 'font-medium');
             }
         }
 
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('.scope-multi-select')) {
-                closeOpenScopeDropdown();
+        // Close dynamic field dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dynamic-field-item') && currentOpenDynamicDropdown) {
+                currentOpenDynamicDropdown.classList.add('hidden');
+                currentOpenDynamicDropdown = null;
             }
         });
 
-        // Close any open dropdown on focus change to non-scope elements
-        document.addEventListener('focusin', (event) => {
-            if (!event.target.closest('.scope-multi-select')) {
-                closeOpenScopeDropdown();
+        function saveModalScope() {
+            const workflowValue = document.getElementById('modalWorkflow').value;
+            const workflowLabel = document.getElementById('modalWorkflow').selectedOptions[0]?.text;
+            
+            if (!workflowValue) {
+                alert('Vui lòng chọn Workflow!');
+                return;
+            }
+            
+            // Get selected tasks
+            const taskCheckboxes = document.querySelectorAll('.modal-task-checkbox:checked');
+            if (taskCheckboxes.length === 0) {
+                alert('Vui lòng chọn ít nhất một Task!');
+                return;
+            }
+            
+            const allTasksChecked = document.getElementById('modalAllTasks').checked;
+            const taskLabels = allTasksChecked ? ['All Tasks'] : Array.from(taskCheckboxes).map(cb => cb.getAttribute('data-label'));
+            
+            // Get dynamic fields
+            const dynamicFields = [];
+            const dynamicFieldsData = []; // For storing in row data
+            const fieldItems = document.querySelectorAll('#dynamicFieldsContainer .dynamic-field-item');
+            fieldItems.forEach(item => {
+                const fieldName = item.getAttribute('data-field-name');
+                const selectedCheckboxes = item.querySelectorAll('.dynamic-field-checkbox:checked');
+                if (selectedCheckboxes.length > 0) {
+                    const values = Array.from(selectedCheckboxes).map(cb => cb.getAttribute('data-label'));
+                    const valueIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+                    dynamicFields.push({ name: fieldName, value: values.join(', ') });
+                    dynamicFieldsData.push({ name: fieldName, values: valueIds });
+                }
+            });
+            
+            // Build dynamic fields display
+            let dynamicFieldsHTML = '';
+            if (dynamicFields.length > 0) {
+                dynamicFieldsHTML = dynamicFields.map(f => `<div class="mb-1"><span class="font-medium">${f.name}:</span> ${f.value}</div>`).join('');
+            } else {
+                dynamicFieldsHTML = '<span class="text-gray-400 text-xs">Không có</span>';
+            }
+            
+            // Store data for editing later
+            const rowData = {
+                workflowValue: workflowValue,
+                workflowLabel: workflowLabel,
+                allTasks: allTasksChecked,
+                taskValues: Array.from(taskCheckboxes).map(cb => cb.value),
+                taskLabels: taskLabels,
+                dynamicFields: dynamicFieldsData
+            };
+            
+            if (currentEditMode && currentEditRow) {
+                // Update existing row
+                currentEditRow.innerHTML = `
+                    <td class="px-3 py-2 align-top">
+                        <div class="text-sm text-gray-800">${workflowLabel}</div>
+                    </td>
+                    <td class="px-3 py-2 align-top">
+                        <div class="text-sm text-gray-800">${taskLabels.join(', ')}</div>
+                    </td>
+                    <td class="px-3 py-2 align-top">
+                        <div class="text-sm text-gray-800">${dynamicFieldsHTML}</div>
+                    </td>
+                    <td class="px-3 py-2 text-right align-top">
+                        <button type="button" class="text-sm text-red-500 hover:text-red-600" onclick="deleteScopeRow(this)">Xóa</button>
+                    </td>
+                `;
+                currentEditRow.__scopeData = rowData;
+                makeRowClickable(currentEditRow);
+            } else {
+                // Create new row in table
+                if (currentScopeSection) {
+                    const tbody = currentScopeSection.querySelector('.scope-table-body');
+                    const row = document.createElement('tr');
+                    row.className = 'border-t';
+                    
+                    row.innerHTML = `
+                        <td class="px-3 py-2 align-top">
+                            <div class="text-sm text-gray-800">${workflowLabel}</div>
+                        </td>
+                        <td class="px-3 py-2 align-top">
+                            <div class="text-sm text-gray-800">${taskLabels.join(', ')}</div>
+                        </td>
+                        <td class="px-3 py-2 align-top">
+                            <div class="text-sm text-gray-800">${dynamicFieldsHTML}</div>
+                        </td>
+                        <td class="px-3 py-2 text-right align-top">
+                            <button type="button" class="text-sm text-red-500 hover:text-red-600" onclick="deleteScopeRow(this)">Xóa</button>
+                        </td>
+                    `;
+                    
+                    // Store data in row for later editing
+                    row.__scopeData = rowData;
+                    
+                    tbody.appendChild(row);
+                    makeRowClickable(row);
+                }
+            }
+            
+            closeScopeModal();
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('scopeModal');
+            if (e.target === modal) {
+                closeScopeModal();
             }
         });
 
-        // Close dropdown on scroll anywhere (captures scrollable parents)
-        document.addEventListener('scroll', () => {
-            closeOpenScopeDropdown();
-        }, true);
+        function deleteScopeRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        function makeRowClickable(row) {
+            row.addEventListener('click', function(e) {
+                // Don't trigger if clicking the delete button
+                if (e.target.closest('button')) return;
+                
+                currentEditMode = true;
+                currentEditRow = row;
+                currentScopeSection = row.closest('.authorization-scope');
+                openScopeModal();
+            });
+        }
+
+        function deleteCurrentScopeRow() {
+            if (currentEditRow && confirm('Bạn có chắc chắn muốn xóa dòng này?')) {
+                currentEditRow.remove();
+                closeScopeModal();
+            }
+        }
+
+        function toggleCustomTable(checkbox) {
+            const section = checkbox.closest('.authorization-scope');
+            const tableWrapper = section.querySelector('.scope-table-wrapper');
+            const defaultText = section.querySelector('.scope-default');
+
+            if (checkbox.checked) {
+                tableWrapper.classList.remove('hidden');
+                defaultText.classList.add('hidden');
+            } else {
+                tableWrapper.classList.add('hidden');
+                defaultText.classList.remove('hidden');
+            }
+        }
 
         // Set default from-date for existing cards on load
         function initDefaultFromDates() {
@@ -599,80 +865,53 @@
             initDefaultFromDates();
         }
 
-        // Listen for time changes to re-evaluate workflow locks per section
-        document.addEventListener('change', (event) => {
-            const target = event.target;
-            if (!target) return;
-            if (
-                (target.matches('input[type="datetime-local"]') || target.matches('input[type="radio"]')) &&
-                target.closest('.delegation-card')
-            ) {
-                const card = target.closest('.delegation-card');
-                const section = card.querySelector('.authorization-scope');
-                refreshSectionWorkflowLocks(section);
-            }
-        });
-
-
         // Add new delegation card
         function addNewDelegationCard() {
             const container = document.getElementById('delegation-cards-container');
-            closeOpenScopeDropdown();
             delegationCardCounter++;
             const radioGroupName = `time-type-${delegationCardCounter}`;
             
             const newCard = document.createElement('div');
             newCard.className = 'delegation-card bg-gray-50 rounded-lg p-4';
             newCard.innerHTML = `
-                <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
-                    <div class="flex items-center flex-1 mr-4">
-                        <i class="text-gray-400 text-xl mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-user" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path></svg></i>
-                        <div class="relative flex-1 max-w-md">
-                            <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer">
-                                <option value="">Chọn người được ủy quyền...</option>
-                                <option value="1">Phạm Văn D - Phòng Kỹ Thuật</option>
-                                <option value="2">Hoàng Thị E - Phòng Marketing</option>
-                            </select>
-                            <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="saveDelegationCard(this)" class="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors flex items-center">
-                            <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-floppy-disk" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="floppy-disk" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"></path></svg></i>
-                            Lưu
-                        </button>
-                        <button onclick="deleteDelegationCard(this)" class="px-4 py-2 border border-red-300 text-red-500 rounded-lg hover:bg-red-50 transition-colors flex items-center">
-                            <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></i>
-                            Xóa
-                        </button>
+                <div class="flex items-center mb-3 pb-3 border-b border-gray-200">
+                    <i class="text-gray-400 text-xl mr-3" data-fa-i2svg=""><svg class="svg-inline--fa fa-user" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path></svg></i>
+                    <div class="relative flex-1 max-w-md">
+                        <select class="w-full px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white cursor-pointer">
+                            <option value="">Chọn người được ủy quyền...</option>
+                            <option value="1">Phạm Văn D - Phòng Kỹ Thuật</option>
+                            <option value="2">Hoàng Thị E - Phòng Marketing</option>
+                        </select>
+                        <i class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" data-fa-i2svg=""><svg class="svg-inline--fa fa-chevron-down" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></i>
                     </div>
                 </div>
-
                 <div class="space-y-3">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Thời gian ủy quyền <span class="text-red-500">*</span>
                         </label>
                         <div class="space-y-2">
-                            <label class="flex items-center cursor-pointer">
-                                <input type="radio" name="${radioGroupName}" class="w-4 h-4 text-blue-500" checked>
-                                <i class="ml-3 mr-2 text-blue-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-clock" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"></path></svg></i>
-                                <span class="text-sm font-medium text-gray-700">Có thời hạn</span>
-                            </label>
-                            
-                            <div class="ml-7 space-y-2">
-                                    <div class="flex items-center space-x-2">
-                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày" data-role="from-datetime">
-                                        <span class="text-gray-400">-</span>
-                                        <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày" data-role="to-datetime">
-                                    </div>
+                            <div class="flex items-center space-x-6">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="${radioGroupName}" class="w-4 h-4 text-blue-500 time-type-radio" data-type="finite" checked onchange="toggleDateTimeInputs(this)">
+                                    <i class="ml-3 mr-2 text-blue-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-clock" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="clock" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"></path></svg></i>
+                                    <span class="text-sm font-medium text-gray-700">Có thời hạn</span>
+                                </label>
+                                
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="${radioGroupName}" class="w-4 h-4 text-blue-500 time-type-radio" data-type="infinite" onchange="toggleDateTimeInputs(this)">
+                                    <i class="ml-3 mr-2 text-gray-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-infinity" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="infinity" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M0 241.1C0 161 65 96 145.1 96c38.5 0 75.4 15.3 102.6 42.5L320 210.7l72.2-72.2C419.5 111.3 456.4 96 494.9 96C575 96 640 161 640 241.1v29.7C640 351 575 416 494.9 416c-38.5 0-75.4-15.3-102.6-42.5L320 301.3l-72.2 72.2C220.5 400.7 183.6 416 145.1 416C65 416 0 351 0 270.9V241.1zM274.7 256l-72.2-72.2c-15.2-15.2-35.9-23.8-57.4-23.8C100.3 160 64 196.3 64 241.1v29.7c0 44.8 36.3 81.1 81.1 81.1c21.5 0 42.2-8.5 57.4-23.8L274.7 256zm90.5 0l72.2 72.2c15.2 15.2 35.9 23.8 57.4 23.8c44.8 0 81.1-36.3 81.1-81.1V241.1c0-44.8-36.3-81.1-81.1-81.1c-21.5 0-42.2 8.5-57.4 23.8L365.3 256z"></path></svg></i>
+                                    <span class="text-sm font-medium text-gray-700">Vô thời hạn</span>
+                                </label>
                             </div>
-
-                            <label class="flex items-center cursor-pointer">
-                                <input type="radio" name="${radioGroupName}" class="w-4 h-4 text-blue-500">
-                                <i class="ml-3 mr-2 text-gray-500" data-fa-i2svg=""><svg class="svg-inline--fa fa-infinity" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="infinity" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M0 241.1C0 161 65 96 145.1 96c38.5 0 75.4 15.3 102.6 42.5L320 210.7l72.2-72.2C419.5 111.3 456.4 96 494.9 96C575 96 640 161 640 241.1v29.7C640 351 575 416 494.9 416c-38.5 0-75.4-15.3-102.6-42.5L320 301.3l-72.2 72.2C220.5 400.7 183.6 416 145.1 416C65 416 0 351 0 270.9V241.1zM274.7 256l-72.2-72.2c-15.2-15.2-35.9-23.8-57.4-23.8C100.3 160 64 196.3 64 241.1v29.7c0 44.8 36.3 81.1 81.1 81.1c21.5 0 42.2-8.5 57.4-23.8L274.7 256zm90.5 0l72.2 72.2c15.2 15.2 35.9 23.8 57.4 23.8c44.8 0 81.1-36.3 81.1-81.1V241.1c0-44.8-36.3-81.1-81.1-81.1c-21.5 0-42.2 8.5-57.4 23.8L365.3 256z"></path></svg></i>
-                                <span class="text-sm font-medium text-gray-700">Vô thời hạn</span>
-                            </label>
+                            
+                            <div class="datetime-inputs-wrapper">
+                                <div class="flex items-center space-x-2">
+                                    <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Từ ngày" data-role="from-datetime">
+                                    <span class="text-gray-400">-</span>
+                                    <input type="datetime-local" class="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" placeholder="Đến ngày" data-role="to-datetime">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -688,6 +927,20 @@
                         <p class="text-xs text-gray-500 mt-2">Tải lên văn bản/email phê duyệt ủy quyền (nếu có)</p>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Mô tả
+                        </label>
+                        <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" rows="3" placeholder="Nhập mô tả thêm về ủy quyền..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 text-blue-500 rounded" checked>
+                            <span class="ml-2 text-sm font-medium text-gray-700">Kích hoạt</span>
+                        </label>
+                    </div>
+
                     <div class="authorization-scope">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Phạm vi ủy quyền <span class="text-red-500">*</span>
@@ -697,11 +950,11 @@
                                 <input type="checkbox" class="scope-custom-checkbox w-4 h-4 text-blue-500 mr-2" onchange="toggleCustomTable(this)">
                                 <span class="text-sm text-gray-600">Custom (Tùy chọn)</span>
                             </label>
-                            <span class="text-sm text-gray-500 scope-default">All Workflow • All Task • All Department</span>
+                            <span class="text-sm text-gray-500 scope-default">All Workflow • All Task</span>
                         </div>
                         <div class="scope-table-wrapper hidden border border-gray-200 rounded-lg">
                             <div class="flex items-center justify-between px-3 py-2 border-b border-gray-200 bg-gray-50 rounded-t-lg">
-                                <span class="text-sm font-medium text-gray-700">Bảng Workflow / Task / Department</span>
+                                <span class="text-sm font-medium text-gray-700">Bảng Workflow / Task</span>
                                 <button type="button" class="px-3 py-1 text-sm border border-blue-500 text-blue-500 rounded hover:bg-blue-50 transition-colors" onclick="addScopeRow(this)">+ Thêm dòng</button>
                             </div>
                             <div class="overflow-visible">
@@ -710,8 +963,9 @@
                                         <tr>
                                             <th class="text-left px-3 py-2 font-medium">Workflow</th>
                                             <th class="text-left px-3 py-2 font-medium">Task</th>
-                                            <th class="text-left px-3 py-2 font-medium">Department</th>
-                                            
+                                            <th class="text-left px-3 py-2 font-medium">Dynamic Fields</th>
+                                            <th class="text-right px-3 py-2 font-medium"></th><th class="text-left px-3 py-2 font-medium">Dynamic Fields</th>
+                                            <th class="text-right px-3 py-2 font-medium"></th>
                                         </tr>
                                     </thead>
                                     <tbody class="scope-table-body">
@@ -720,6 +974,18 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Card Footer with Action Buttons -->
+                <div class="flex items-center justify-end space-x-2 mt-4 pt-4 border-t border-gray-200">
+                    <button onclick="saveDelegationCard(this)" class="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors flex items-center">
+                        <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-floppy-disk" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="floppy-disk" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V173.3c0-17-6.7-33.3-18.7-45.3L352 50.7C340 38.7 323.7 32 306.7 32H64zm0 96c0-17.7 14.3-32 32-32H288c17.7 0 32 14.3 32 32v64c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V128zM224 288a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"></path></svg></i>
+                        Lưu
+                    </button>
+                    <button onclick="deleteDelegationCard(this)" class="px-4 py-2 border border-red-300 text-red-500 rounded-lg hover:bg-red-50 transition-colors flex items-center">
+                        <i class="mr-2" data-fa-i2svg=""><svg class="svg-inline--fa fa-trash" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg></i>
+                        Xóa
+                    </button>
                 </div>
             `;
             
@@ -774,7 +1040,7 @@
                 timeDetails = ` (${fromDate} - ${toDate})`;
             }
 
-            // Get scope selections (workflow / task / department)
+            // Get scope selections (workflow / task)
             const scopeSection = card.querySelector('.authorization-scope');
             const scopeSelections = [];
             const isCustomScope = scopeSection.querySelector('.scope-custom-checkbox').checked;
@@ -783,25 +1049,26 @@
                 const rows = scopeSection.querySelectorAll('.scope-table-body tr');
 
                 if (!rows.length) {
-                    alert('Vui lòng thêm ít nhất một dòng Workflow/Task/Department!');
+                    alert('Vui lòng thêm ít nhất một dòng Workflow/Task!');
                     return;
                 }
 
                 for (const row of rows) {
-                    const workflowChecks = row.querySelectorAll('.scope-multi-select[data-type="workflow"] input[type="checkbox"]:checked');
-                    const taskChecks = row.querySelectorAll('.scope-multi-select[data-type="task"] input[type="checkbox"]:checked');
-                    const departmentChecks = row.querySelectorAll('.scope-multi-select[data-type="department"] input[type="checkbox"]:checked');
+                    // Get workflow text (directly from cell content)
+                    const workflowCell = row.cells[0];
+                    const taskCell = row.cells[1];
+                    const dynamicFieldsCell = row.cells[2];
+                    
+                    const workflowText = workflowCell?.textContent.trim() || '';
+                    const taskText = taskCell?.textContent.trim() || '';
+                    const dynamicFieldsText = dynamicFieldsCell?.textContent.trim() || 'Không có';
 
-                    if (!workflowChecks.length || !taskChecks.length || !departmentChecks.length) {
-                        alert('Vui lòng chọn đầy đủ Workflow, Task và Department cho từng dòng!');
+                    if (!workflowText || !taskText) {
+                        alert('Vui lòng chọn đầy đủ Workflow và Task cho từng dòng!');
                         return;
                     }
 
-                    const workflowText = Array.from(workflowChecks).map(cb => cb.getAttribute('data-label')).join(', ');
-                    const taskText = Array.from(taskChecks).map(cb => cb.getAttribute('data-label')).join(', ');
-                    const departmentText = Array.from(departmentChecks).map(cb => cb.getAttribute('data-label')).join(', ');
-
-                    scopeSelections.push(`${workflowText} • ${taskText} • ${departmentText}`);
+                    scopeSelections.push(`${workflowText} • ${taskText} • Dynamic: ${dynamicFieldsText}`);
                 }
             } else {
                 // Full scope selected; validate no time overlap with other cards
@@ -814,7 +1081,7 @@
                         return;
                     }
                 }
-                scopeSelections.push('All Workflow • All Task • All Department');
+                scopeSelections.push('All Workflow • All Task');
             }
             
             // Validate
@@ -865,6 +1132,126 @@
             setTimeout(() => {
                 card.remove();
             }, 300);
+        }
+
+        // Save all and return to list
+        function saveAllAndReturn() {
+            // Get delegator info
+            const delegatorSelect = document.querySelector('#general-info-card select');
+            const delegatorText = delegatorSelect.options[delegatorSelect.selectedIndex]?.text || '';
+            
+            if (!delegatorText || delegatorText === 'Tìm kiếm người ủy quyền...') {
+                alert('Vui lòng chọn người ủy quyền!');
+                return;
+            }
+            
+            // Extract only name (before " - ")
+            const delegator = delegatorText.split(' - ')[0];
+
+            // Get all delegation cards
+            const cards = document.querySelectorAll('.delegation-card');
+            const delegations = [];
+            
+            for (const card of cards) {
+                // Get delegatee
+                const personSelect = card.querySelector('select');
+                const delegateeText = personSelect.options[personSelect.selectedIndex]?.text || '';
+                
+                if (!delegateeText || delegateeText === 'Chọn người được ủy quyền...') {
+                    alert('Vui lòng chọn người được ủy quyền cho tất cả các card!');
+                    return;
+                }
+                
+                // Extract only name (before " - ")
+                const delegatee = delegateeText.split(' - ')[0];
+                
+                // Get time info
+                const timeRadios = card.querySelectorAll('input[type="radio"]');
+                let timeType = 'finite';
+                for (const radio of timeRadios) {
+                    if (radio.checked && radio.getAttribute('data-type') === 'infinite') {
+                        timeType = 'infinite';
+                    }
+                }
+                
+                let startDate = null;
+                let endDate = null;
+                
+                if (timeType === 'finite') {
+                    const dateInputs = card.querySelectorAll('input[type="datetime-local"]');
+                    if (dateInputs.length < 2 || !dateInputs[0].value || !dateInputs[1].value) {
+                        alert('Vui lòng chọn đầy đủ thời gian ủy quyền (từ ngày / đến ngày) cho tất cả các card!');
+                        return;
+                    }
+                    startDate = dateInputs[0].value;
+                    endDate = dateInputs[1].value;
+                }
+                
+                // Get workflows
+                const scopeSection = card.querySelector('.authorization-scope');
+                const isCustomScope = scopeSection.querySelector('.scope-custom-checkbox').checked;
+                const workflows = [];
+                
+                if (isCustomScope) {
+                    const rows = scopeSection.querySelectorAll('.scope-table-body tr');
+                    if (!rows.length) {
+                        alert('Vui lòng thêm ít nhất một dòng Workflow/Task cho phạm vi custom!');
+                        return;
+                    }
+                    
+                    rows.forEach(row => {
+                        const workflowText = row.cells[0]?.textContent.trim() || '';
+                        if (workflowText) {
+                            workflows.push(workflowText);
+                        }
+                    });
+                } else {
+                    workflows.push('All Workflows');
+                }
+                
+                delegations.push({
+                    delegatee,
+                    timeType,
+                    startDate,
+                    endDate,
+                    workflows
+                });
+            }
+            
+            // Save to localStorage
+            const stored = localStorage.getItem('delegationData');
+            const allDelegations = stored ? JSON.parse(stored) : [];
+            
+            const now = new Date().toISOString();
+            const newId = allDelegations.length > 0 ? Math.max(...allDelegations.map(d => d.id)) + 1 : 1;
+            
+            // Add each delegation
+            delegations.forEach(delegation => {
+                allDelegations.push({
+                    id: newId,
+                    delegator: delegator,
+                    delegatee: delegation.delegatee,
+                    timeType: delegation.timeType,
+                    startDate: delegation.startDate,
+                    endDate: delegation.endDate,
+                    workflows: delegation.workflows,
+                    createdDate: now,
+                    updatedDate: now,
+                    updatedBy: delegator
+                });
+            });
+            
+            localStorage.setItem('delegationData', JSON.stringify(allDelegations));
+            
+            // Redirect to list page
+            window.location.href = 'delegate_list.html?refresh=true&message=Đã lưu thành công';
+        }
+
+        // Cancel and return
+        function cancelAndReturn() {
+            if (confirm('Bạn có chắc chắn muốn hủy? Các thay đổi chưa lưu sẽ bị mất.')) {
+                window.location.href = 'delegate_list.html';
+            }
         }
 
     </script>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách ủy quyền - HRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .status-active {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+        .status-expired {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .status-infinite {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .table-row {
+            transition: background-color 0.2s;
+        }
+        .table-row:hover {
+            background-color: #f9fafb;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .empty-state i {
+            font-size: 64px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="main-container" class="max-w-[1400px] mx-auto p-4">
+        <!-- Header -->
+        <header id="page-header" class="bg-white rounded-lg shadow-sm p-4 mb-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <button onclick="goBack()" class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors mr-4">
+                        <i class="fas fa-arrow-left text-gray-600"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800">DANH SÁCH ỦY QUYỀN</h1>
+                </div>
+                <button onclick="createNew()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tạo mới
+                </button>
+            </div>
+        </header>
+
+        <!-- Filter Section -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Người ủy quyền</label>
+                    <input type="text" id="filterDelegator" placeholder="Tìm kiếm..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Người được ủy quyền</label>
+                    <input type="text" id="filterDelegatee" placeholder="Tìm kiếm..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Trạng thái</label>
+                    <select id="filterStatus" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                        <option value="">Tất cả</option>
+                        <option value="active">Còn hạn</option>
+                        <option value="expired">Hết hạn</option>
+                        <option value="infinite">Vô thời hạn</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="applyFilters()" class="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                        <i class="fas fa-filter mr-2"></i>
+                        Lọc
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người ủy quyền</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người được ủy quyền</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thời gian ủy quyền</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quy trình</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kích hoạt</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hiệu lực</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tạo</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Người cập nhật</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thời gian cập nhật</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state hidden">
+                <i class="fas fa-inbox"></i>
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Chưa có dữ liệu</h3>
+                <p class="text-gray-500 mb-4">Bạn chưa có ủy quyền nào. Nhấn "Tạo mới" để bắt đầu.</p>
+                <button onclick="createNew()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors inline-flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tạo ủy quyền đầu tiên
+                </button>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination" class="bg-white rounded-lg shadow-sm p-4 mt-4 flex items-center justify-between">
+            <div class="text-sm text-gray-600">
+                Hiển thị <span id="showingFrom">0</span> - <span id="showingTo">0</span> trong tổng số <span id="totalRecords">0</span> bản ghi
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="previousPage()" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span class="text-sm text-gray-600">Trang <span id="currentPage">1</span> / <span id="totalPages">1</span></span>
+                <button onclick="nextPage()" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" style="backdrop-filter: blur(4px);">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mr-4">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Xác nhận xóa</h3>
+                        <p class="text-sm text-gray-600">Bạn có chắc chắn muốn xóa ủy quyền này?</p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 mb-4">
+                    <p class="text-sm text-gray-700" id="deleteRecordInfo"></p>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                        Hủy
+                    </button>
+                    <button onclick="confirmDelete()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                        Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data structure
+        let delegations = [];
+        let filteredDelegations = [];
+        let currentPage = 1;
+        let recordsPerPage = 10;
+        let deleteTargetId = null;
+
+        // Mock data for demonstration
+        const mockData = [
+            {
+                id: 1,
+                delegator: 'Nguyễn Văn A',
+                delegatee: 'Phạm Văn D',
+                timeType: 'finite',
+                startDate: '2026-01-01T08:00',
+                endDate: '2026-12-31T18:00',
+                workflows: ['Quy trình phê duyệt đơn hàng', 'Quy trình thanh toán hóa đơn'],
+                active: true,
+                createdDate: '2026-01-01T10:00:00',
+                updatedDate: '2026-01-03T14:30:00',
+                updatedBy: 'Nguyễn Văn A'
+            },
+            {
+                id: 2,
+                delegator: 'Trần Thị B',
+                delegatee: 'Hoàng Thị E',
+                timeType: 'infinite',
+                startDate: null,
+                endDate: null,
+                workflows: ['Quy trình phê duyệt nghỉ phép'],
+                active: true,
+                createdDate: '2025-12-15T09:00:00',
+                updatedDate: '2025-12-15T09:00:00',
+                updatedBy: 'Trần Thị B'
+            },
+            {
+                id: 3,
+                delegator: 'Lê Văn C',
+                delegatee: 'Phạm Văn D',
+                timeType: 'finite',
+                startDate: '2025-11-01T08:00',
+                endDate: '2025-12-31T18:00',
+                workflows: ['Quy trình cấp phép nhân viên'],
+                active: false,
+                createdDate: '2025-10-25T11:00:00',
+                updatedDate: '2025-10-25T11:00:00',
+                updatedBy: 'Lê Văn C'
+            }
+        ];
+
+        // Initialize
+        function init() {
+            loadDataFromStorage();
+            renderTable();
+        }
+
+        // Load data from localStorage
+        function loadDataFromStorage() {
+            const stored = localStorage.getItem('delegationData');
+            if (stored) {
+                delegations = JSON.parse(stored);
+            } else {
+                // Use mock data if no stored data
+                delegations = mockData;
+                saveDataToStorage();
+            }
+            filteredDelegations = [...delegations];
+        }
+
+        // Save data to localStorage
+        function saveDataToStorage() {
+            localStorage.setItem('delegationData', JSON.stringify(delegations));
+        }
+
+        // Calculate status
+        function calculateStatus(delegation) {
+            if (delegation.timeType === 'infinite') {
+                return 'infinite';
+            }
+            
+            const now = new Date();
+            const endDate = new Date(delegation.endDate);
+            
+            if (endDate < now) {
+                return 'expired';
+            }
+            return 'active';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Format time range
+        function formatTimeRange(delegation) {
+            if (delegation.timeType === 'infinite') {
+                return '<span class="text-blue-600 font-medium">Vô thời hạn</span>';
+            }
+            const start = formatDate(delegation.startDate);
+            const end = formatDate(delegation.endDate);
+            return `${start} - ${end}`;
+        }
+
+        // Get status badge
+        function getStatusBadge(status) {
+            if (status === 'active') {
+                return '<span class="status-badge status-active"><i class="fas fa-check-circle mr-1"></i>Còn hạn</span>';
+            } else if (status === 'expired') {
+                return '<span class="status-badge status-expired"><i class="fas fa-times-circle mr-1"></i>Hết hạn</span>';
+            } else {
+                return '<span class="status-badge status-infinite"><i class="fas fa-infinity mr-1"></i>Vô thời hạn</span>';
+            }
+        }
+
+        // Get active badge
+        function getActiveBadge(active) {
+            if (active) {
+                return '<span class="status-badge status-active"><i class="fas fa-check-circle mr-1"></i>Kích hoạt</span>';
+            } else {
+                return '<span class="status-badge status-expired"><i class="fas fa-times-circle mr-1"></i>Không kích hoạt</span>';
+            }
+        }
+
+        // Render table
+        function renderTable() {
+            const tableBody = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filteredDelegations.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                document.getElementById('pagination').classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            document.getElementById('pagination').classList.remove('hidden');
+
+            const startIndex = (currentPage - 1) * recordsPerPage;
+            const endIndex = Math.min(startIndex + recordsPerPage, filteredDelegations.length);
+            const pageData = filteredDelegations.slice(startIndex, endIndex);
+
+            let html = '';
+            pageData.forEach((item, index) => {
+                const status = calculateStatus(item);
+                const globalIndex = startIndex + index + 1;
+                
+                html += `
+                    <tr class="table-row">
+                        <td class="px-4 py-3 text-sm text-gray-900">${globalIndex}</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">${item.delegator}</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">${item.delegatee}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${formatTimeRange(item)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">
+                            ${item.workflows.map(w => `<div class="mb-1">• ${w}</div>`).join('')}
+                        </td>
+                        <td class="px-4 py-3 text-sm">${getActiveBadge(item.active)}</td>
+                        <td class="px-4 py-3 text-sm">${getStatusBadge(status)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${formatDate(item.createdDate)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${item.updatedBy}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700">${formatDate(item.updatedDate)}</td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+            updatePaginationInfo();
+        }
+
+        // Update pagination info
+        function updatePaginationInfo() {
+            const totalPages = Math.ceil(filteredDelegations.length / recordsPerPage);
+            const startIndex = (currentPage - 1) * recordsPerPage + 1;
+            const endIndex = Math.min(startIndex + recordsPerPage - 1, filteredDelegations.length);
+
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('totalPages').textContent = totalPages;
+            document.getElementById('showingFrom').textContent = startIndex;
+            document.getElementById('showingTo').textContent = endIndex;
+            document.getElementById('totalRecords').textContent = filteredDelegations.length;
+
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const delegatorFilter = document.getElementById('filterDelegator').value.toLowerCase();
+            const delegateeFilter = document.getElementById('filterDelegatee').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
+
+            filteredDelegations = delegations.filter(item => {
+                const matchDelegator = !delegatorFilter || item.delegator.toLowerCase().includes(delegatorFilter);
+                const matchDelegatee = !delegateeFilter || item.delegatee.toLowerCase().includes(delegateeFilter);
+                const status = calculateStatus(item);
+                const matchStatus = !statusFilter || status === statusFilter;
+
+                return matchDelegator && matchDelegatee && matchStatus;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Pagination
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredDelegations.length / recordsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        }
+
+        // Actions
+        function createNew() {
+            window.location.href = 'delegate_v2.html';
+        }
+
+        function editRecord(id) {
+            window.location.href = `delegate_v2.html?id=${id}`;
+        }
+
+        function viewRecord(id) {
+            const record = delegations.find(d => d.id === id);
+            if (record) {
+                alert(`Chi tiết ủy quyền #${id}\n\nNgười ủy quyền: ${record.delegator}\nNgười được ủy quyền: ${record.delegatee}\nQuy trình: ${record.workflows.join(', ')}`);
+            }
+        }
+
+        function deleteRecord(id) {
+            const record = delegations.find(d => d.id === id);
+            if (record) {
+                deleteTargetId = id;
+                document.getElementById('deleteRecordInfo').innerHTML = `
+                    <strong>Người ủy quyền:</strong> ${record.delegator}<br>
+                    <strong>Người được ủy quyền:</strong> ${record.delegatee}
+                `;
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.getElementById('deleteModal').classList.add('flex');
+            }
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').classList.remove('flex');
+            deleteTargetId = null;
+        }
+
+        function confirmDelete() {
+            if (deleteTargetId) {
+                delegations = delegations.filter(d => d.id !== deleteTargetId);
+                saveDataToStorage();
+                filteredDelegations = filteredDelegations.filter(d => d.id !== deleteTargetId);
+                renderTable();
+                closeDeleteModal();
+            }
+        }
+
+        function goBack() {
+            // Navigate to previous page or home
+            window.history.back();
+        }
+
+        // Check if returning from delegate_v2.html
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('refresh') === 'true') {
+                // Show success message
+                const message = urlParams.get('message');
+                if (message) {
+                    // You can add a toast notification here
+                    console.log('Success:', message);
+                }
+            }
+        });
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
