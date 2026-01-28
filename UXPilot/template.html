@@ -1,607 +1,424 @@
 
 <!DOCTYPE html>
-<html lang="vi">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outlook Template Builder (Design Tokens Edition)</title>
+    <title>Email Template Builder</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0078d4;
-            --border: #e2e8f0;
-            --bg: #f3f4f6;
-            --code-bg: #1e293b;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            padding: 15px;
-            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
             height: 100vh;
-            box-sizing: border-box;
-            overflow: hidden;
         }
 
-        .layout {
+        .container {
             display: grid;
-            grid-template-columns: 1.2fr 300px 1.2fr;
-            gap: 15px;
-            height: calc(100vh - 30px);
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            height: calc(100vh - 40px);
+        }
         }
 
         .panel {
             background: white;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid #d1d5db;
+            min-height: 0;
         }
 
-        /* Header & Tabs */
         .panel-header {
-            background: #f8fafc;
-            border-bottom: 1px solid var(--border);
-            padding: 0;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fafafa;
+            font-weight: 600;
+            color: #333;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 42px;
+            flex-shrink: 0;
         }
 
-        .tabs {
-            display: flex;
-            height: 100%;
-        }
-
-        .tab-btn {
-            padding: 0 20px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-weight: 600;
-            color: #64748b;
-            border-right: 1px solid var(--border);
-            transition: all 0.2s;
-            height: 100%;
-            font-size: 13px;
-        }
-
-        .tab-btn.active {
-            background: white;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-        }
-
-        .tab-btn:hover {
-            background: #e2e8f0;
-        }
-
-        /* --- Line Height Control --- */
-        .lh-control {
+        .width-control {
             display: flex;
             align-items: center;
-            padding-right: 15px;
+            gap: 10px;
+            padding: 8px 15px;
+            background: #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+            flex-shrink: 0;
         }
 
-        .lh-control select {
-            padding: 4px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 12px;
-            outline: none;
-            width: auto;
-            background: white;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .lh-label {
-            font-size: 12px;
-            color: #64748b;
-            margin-right: 8px;
-            font-weight: 600;
-        }
-
-        .header-title {
-            padding-left: 15px;
-            font-weight: 600;
-            color: #334155;
-            font-size: 14px;
-        }
-
-        .actions {
-            padding-right: 10px;
-        }
-
-        .btn-copy {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .btn-copy:hover {
-            opacity: 0.9;
-        }
-
-        /* Editors */
-        .editor-wrapper {
-            flex: 1;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- CUSTOM QUILL TOOLBAR LABELS --- 
-           Đây là phần CSS trick để đổi tên H1, H2 thành XL, L... trong dropdown
-        */
-        .ql-snow .ql-picker.ql-header {
-            width: 180px;
-        }
-
-        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
-        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
-            content: "XL - Divider (32px)";
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
-        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
-            content: "L - CTA / OTP (24px)";
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
-        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
-            content: "M - Section (16px Bold)";
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
-        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
-            content: "S - Note (12px)";
-            font-size: 12px;
-            color: #666;
-        }
-
-        .ql-snow .ql-picker.ql-header .ql-picker-label::before,
-        .ql-snow .ql-picker.ql-header .ql-picker-item::before {
-            content: "Normal (16px)";
-        }
-
-        /* Editor Font Styles Visualization (trong lúc soạn thảo) */
-        #quill-container h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #ccc;
-        }
-
-        #quill-container h2 {
-            font-size: 24px;
-            color: #0078d4;
-        }
-
-        #quill-container h3 {
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        #quill-container h4 {
-            font-size: 12px;
-            color: #666;
-        }
-
-        #quill-container p {
-            font-size: 16px;
-            margin-bottom: 0;
-        }
-
-        #quill-container {
-            border: none !important;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 16px;
-        }
-
-        #html-source {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--code-bg);
-            color: #e2e8f0;
-            border: none;
-            padding: 15px;
-            box-sizing: border-box;
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
-            line-height: 1.5;
-            resize: none;
-            display: none;
-        }
-
-        #html-source.active {
-            display: block;
-        }
-
-        /* Form & Preview */
-        .content-area {
-            padding: 15px;
-            overflow-y: auto;
-            flex: 1;
-            background: #fff;
-        }
-
-        .field-group {
-            margin-bottom: 12px;
-        }
-
-        .field-group label {
-            display: block;
-            margin-bottom: 4px;
+        .width-control label {
             font-size: 12px;
             font-weight: 600;
             color: #475569;
+            min-width: 50px;
         }
 
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 6px 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 13px;
-            font-family: 'Segoe UI', sans-serif;
+        .width-control input[type="range"] {
+            flex: 1;
+            cursor: pointer;
         }
 
-        select {
-            background: #f8fafc;
+        .width-control span {
+            font-size: 12px;
+            color: #64748b;
+            min-width: 50px;
+            text-align: right;
         }
 
-        input:focus,
-        select:focus {
-            outline: 2px solid var(--primary);
-            border-color: transparent;
-        }
-
-        /* PREVIEW STYLE */
-        #preview-container {
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            height: 100%;
+        }
+
+        #editor {
+            height: 100%;
+            background: white;
+        }
+
+        #preview {
             background: #e5e5e5;
+            padding: 15px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            min-height: 0;
+            height: 100%;
+            scrollbar-width: thin;
+        }
+
+        .preview-frame {
+            background: white;
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            flex-shrink: 0;
+            width: 100%;
+        }
+
+        .preview-frame p {
+            font-family: Segoe UI;
+            font-size: 12pt;
+            line-height: 1.15;
+            color: #000;
+            margin: 0 0 8pt 0;
+        }
+
+        .preview-frame ul {
+            font-family: Segoe UI;
+            font-size: 12pt;
+            line-height: 1.15;
+            color: #000;
+            margin: 0 0 8pt 0;
+            padding-left: 40px;
+        }
+
+        .preview-frame li {
+            margin-bottom: 4pt;
+        }
+
+        .preview-frame a {
+            color: #0563C1;
+            text-decoration: underline;
+        }
+
+        .preview-frame b, .preview-frame strong {
+            font-weight: bold;
+        }
+
+        .preview-frame pre {
+            font-family: Segoe UI;
+            font-size: 12pt;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0 0 8pt 0;
+        }
+
+        .btn-copy {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: #106ebe;
+        }
+
+        .ql-container {
+            font-size: 14px;
+        }
+
+        .ql-editor {
+            min-height: 400px;
+        }
+
+        #preview {
             display: flex;
             justify-content: center;
         }
 
-        .email-frame {
-            background: white;
+        .preview-frame {
             width: 100%;
-            max-width: 640px;
-            min-height: 100%;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .var-highlight {
-            background: #e0f2fe;
-            color: #0369a1;
-            border-bottom: 1px dotted #0284c7;
-            padding: 0 2px;
-        }
-
-        .var-empty {
-            color: #cbd5e1;
-            border-bottom: 1px dashed #cbd5e1;
+            transition: max-width 0.2s ease;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="layout">
+    <div class="container">
+        <!-- Editor Panel -->
         <div class="panel">
             <div class="panel-header">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchMode('visual', this)">Visual Editor</button>
-                    <button class="tab-btn" onclick="switchMode('source', this)">HTML Source</button>
-                </div>
-                <div class="lh-control">
-                    <span class="lh-label">Dãn dòng:</span>
-                    <select id="lh-mode" onchange="updateView()">
-                        <option value="zero">0</option>
-                        <option value="half">0.5</option>
-                        <option value="one">1</option>
-                        <option value="compact" selected>1.15</option>
-                    </select>
-                </div>
+                Visual Editor
             </div>
-            <div class="editor-wrapper">
-                <div id="quill-container"></div>
-                <textarea id="html-source" spellcheck="false" placeholder="Paste HTML code here..."></textarea>
-            </div>
-            <div
-                style="padding: 5px 15px; background: #f1f5f9; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
-                Design Tokens: <b>Segoe UI</b> | Base: <b>16px</b> | Max-width: <b>640px</b>
+            <div class="panel-content">
+                <div id="editor"></div>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="panel-header"><span class="header-title">Input Fields</span></div>
-            <div id="form-container" class="content-area">
-                <div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size: 13px;">Chưa có biến nào...
-                </div>
-            </div>
-        </div>
-
+        <!-- Preview Panel -->
         <div class="panel">
             <div class="panel-header">
-                <span class="header-title">Preview (Max 640px)</span>
-                <div class="actions">
-                    <button class="btn-copy" onclick="copyOutlookCode()">Copy Outlook HTML</button>
-                </div>
+                <span>Preview</span>
+                <button class="btn-copy" onclick="copyHTML()">Copy HTML</button>
             </div>
-            <div id="preview-container" class="content-area"></div>
+            <div class="width-control">
+                <label>Width:</label>
+                <input type="range" id="widthSlider" min="320" max="1200" value="640" onchange="updatePreviewWidth()">
+                <span id="widthDisplay">640px</span>
+            </div>
+            <div id="preview" class="panel-content"></div>
         </div>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // --- 1. CONFIGURATION (Design Tokens) ---
-
-        // Config cho Line Height toàn cục
-        const LINE_HEIGHTS = {
-            zero: "0",
-            half: "0.5",
-            one: "1",
-            compact: "1.15"
-        };
-
-        // STYLE MAPPING: Quy định CSS Inline cho từng loại Block
-        // H1 -> XL, H2 -> L, H3 -> M, H4 -> S
-        const BLOCK_STYLES = {
-            h1: "font-size: 32px; line-height: 1.15; font-weight: normal; margin-top: 0; margin-bottom: 24px; border-bottom: 1px solid #eeeeee; padding-bottom: 8px;", // XL - Divider
-            h2: "font-size: 24px; line-height: 1.15; font-weight: bold; color: #0078d4; margin-top: 0; margin-bottom: 16px;", // L - OTP/CTA
-            h3: "font-size: 16px; line-height: 1.15; font-weight: bold; text-transform: uppercase; margin-top: 0; margin-bottom: 12px; color: #2e2e2e;", // M - Section
-            h4: "font-size: 12px; line-height: 1.15; color: #666666; margin-top: 0; margin-bottom: 12px;", // S - Note
-            p: "font-size: 16px; margin-top: 0; margin-bottom: 12px;", // Normal
-            ul: "font-size: 16px; margin-top: 0; margin-bottom: 12px; padding-left: 24px;",
-            li: "margin-bottom: 4px;",
-            a: "color: #0563C1; text-decoration: underline;"
-        };
-
-        const quill = new Quill('#quill-container', {
+        // Initialize Quill Editor
+        const quill = new Quill('#editor', {
             theme: 'snow',
-            placeholder: 'Soạn thảo email...',
+            placeholder: 'Soạn nội dung email...',
             modules: {
                 toolbar: [
-                    // Custom Header Dropdown (đã được CSS rename ở trên)
-                    [{ 'header': [1, 2, 3, 4, false] }],
                     ['bold', 'italic', 'underline'],
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                    [{ 'align': [] }, { 'color': [] }, { 'background': [] }],
-                    ['link', 'clean']
-                ]
+                    ['link'],
+                    ['clean']
+                ],
+                keyboard: {
+                    bindings: {
+                        linebreak: {
+                            key: 13,
+                            shiftKey: false,
+                            handler: function(range) {
+                                // Insert <br> when Enter is pressed
+                                this.quill.insertText(range.index, '\n');
+                                this.quill.setSelection(range.index + 1);
+                                return false;
+                            }
+                        },
+                        tab: {
+                            key: 9,
+                            handler: function(range) {
+                                // Insert 4 non-breaking spaces when Tab is pressed
+                                this.quill.insertText(range.index, '\t');
+                                this.quill.setSelection(range.index + 1);
+                                return false;
+                            }
+                        }
+                    }
+                }
             }
         });
 
-        const sourceArea = document.getElementById('html-source');
-        const formArea = document.getElementById('form-container');
-        const previewArea = document.getElementById('preview-container');
-        const lhSelect = document.getElementById('lh-mode');
+        const previewDiv = document.getElementById('preview');
 
-        let formData = {};
-        let currentMode = 'visual';
+        // Update preview when content changes
+        quill.on('text-change', function() {
+            updatePreview();
+        });
 
-        const regexText = /\{\{(.*?)\}\}/g;
-        const regexSelect = /\[(.*?)\]/g;
-
-        // --- 2. CORE PROCESS ---
-
-        function processContent() {
-            let rawHtml = '';
-            if (currentMode === 'visual') {
-                rawHtml = quill.root.innerHTML;
-            } else {
-                rawHtml = sourceArea.value;
-            }
-
-            // 1. Parse Fields
-            const fields = parseFields(rawHtml);
-            renderForm(fields);
-
-            // 2. Render Preview
-            const lhKey = lhSelect.value;
-            const currentLH = LINE_HEIGHTS[lhKey];
-
-            const visualHtml = replaceVariables(rawHtml, true);
-
-            // Wrapper tổng (Technical Constraint: 640px)
-            // Lưu ý: Line-height được set ở wrapper tổng, nhưng các thẻ H sẽ có line-height riêng trong BLOCK_STYLES
-            const wrapperStyle = `font-family: 'Segoe UI', system-ui, sans-serif; font-size: 16px; line-height: ${currentLH}; color: #000000; max-width: 640px; margin: 0 auto;`;
-
-            previewArea.innerHTML = `
-                <div class="email-frame">
-                    <div style="${wrapperStyle}">
-                        ${injectDesignTokens(visualHtml, currentLH)}
-                    </div>
-                </div>`;
+        function updatePreview() {
+            const html = quill.root.innerHTML;
+            const width = document.getElementById('widthSlider').value;
+            // Convert tab characters to 4 non-breaking spaces for display
+            const htmlWithTabs = html.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+            previewDiv.innerHTML = `<div class="preview-frame" style="max-width: ${width}px;">${htmlWithTabs}</div>`;
         }
 
-        // --- 3. INJECT STYLES LOGIC ---
-
-        function injectDesignTokens(html, globalLH) {
-            const div = document.createElement('div');
-            div.innerHTML = html;
-
-            // Bơm style cho các thẻ Header (Spacing Scale mapped to Headers)
-            div.querySelectorAll('h1').forEach(el => addStyle(el, BLOCK_STYLES.h1));
-            div.querySelectorAll('h2').forEach(el => addStyle(el, BLOCK_STYLES.h2));
-            div.querySelectorAll('h3').forEach(el => addStyle(el, BLOCK_STYLES.h3));
-            div.querySelectorAll('h4').forEach(el => addStyle(el, BLOCK_STYLES.h4));
-
-            // Bơm style cho Text thường (Normal)
-            // Text thường sẽ ăn theo globalLH user chọn
-            // Tuy nhiên, ta vẫn cần set margin-bottom để đảm bảo spacing
-            const pStyle = `${BLOCK_STYLES.p} line-height: ${globalLH};`;
-            div.querySelectorAll('p').forEach(el => addStyle(el, pStyle));
-
-            const listStyle = `${BLOCK_STYLES.ul} line-height: ${globalLH};`;
-            div.querySelectorAll('ul, ol').forEach(el => addStyle(el, listStyle));
-            div.querySelectorAll('li').forEach(el => addStyle(el, BLOCK_STYLES.li));
-
-            // Common
-            div.querySelectorAll('a').forEach(el => addStyle(el, BLOCK_STYLES.a));
-            div.querySelectorAll('table').forEach(el => addStyle(el, "border-collapse: collapse; width: 100%;"));
-            div.querySelectorAll('td').forEach(el => addStyle(el, "padding: 0;"));
-
-            return div.innerHTML;
+        function updatePreviewWidth() {
+            const width = document.getElementById('widthSlider').value;
+            document.getElementById('widthDisplay').textContent = width + 'px';
+            updatePreview();
         }
 
-        function addStyle(el, strStyle) {
-            const old = el.getAttribute('style') || '';
-            el.setAttribute('style', old + ' ' + strStyle);
-        }
+        function copyHTML() {
+            const editorHtml = quill.root.innerHTML;
+            
+            // Build complete HTML document with gray background wrapper
+            const completeHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Template</title>
+</head>
+<body style="
+    font-family: Segoe UI, sans-serif;
+    font-size: 12pt;
+    line-height: 1.15;
+    color: #000;
+    background: #e5e5e5;
+    margin: 0;
+    padding: 20px;
+">
 
-        // --- 4. EXPORT ---
-
-        window.copyOutlookCode = function () {
-            let rawHtml = currentMode === 'visual' ? quill.root.innerHTML : sourceArea.value;
-
-            const lhKey = lhSelect.value;
-            const currentLH = LINE_HEIGHTS[lhKey];
-
-            // Transform content
-            const contentWithStyles = injectDesignTokens(rawHtml, currentLH);
-
-            // Constraint Wrapper
-            const finalHtml = `
-<div style="width:100%;background-color:#ffffff;">
-    <div style="font-family:'Segoe UI', sans-serif; font-size:16px; line-height:${currentLH}; color:#000000; max-width:640px; margin:0 auto;">
-        ${contentWithStyles}
+    <div style="
+        background: white;
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        border-radius: 4px;
+    ">
+${formatHtml(editorHtml, 2)}
     </div>
-</div>`;
 
-            navigator.clipboard.writeText(finalHtml).then(() => {
-                alert('Đã Copy Outlook HTML!');
+</body>
+</html>`;
+
+            navigator.clipboard.writeText(completeHtml).then(() => {
+                alert('✓ HTML đã được copy!');
+            }).catch(err => {
+                console.error('Copy failed:', err);
             });
         }
 
-        // --- 5. EVENTS & UTILS ---
+        function formatHtml(html, indent = 0) {
+            const indentStr = '    ';
+            let result = '';
 
-        function parseFields(html) {
-            const fields = [];
-            const seen = new Set();
-            const add = (key, type, opts = []) => {
-                if (!seen.has(key)) { seen.add(key); fields.push({ key, type, opts }); }
-            };
-            [...html.matchAll(regexText)].forEach(m => add(m[1].trim(), 'text'));
-            [...html.matchAll(regexSelect)].forEach(m => {
-                const parts = m[1].trim().split(':');
-                add(parts[0].trim(), parts.length > 1 ? 'select' : 'text', parts.length > 1 ? parts[1].split(',') : []);
-            });
-            return fields;
-        }
+            // Convert tab characters to 4 non-breaking spaces
+            html = html.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 
-        function renderForm(fields) {
-            const currentLen = formArea.querySelectorAll('.field-group').length;
-            if (currentLen === fields.length && currentLen > 0) return;
+            // Parse HTML and clean it
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
 
-            if (fields.length === 0) {
-                formArea.innerHTML = '<div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size:13px">Không tìm thấy biến {{...}}</div>';
-                return;
-            }
-
-            let html = '';
-            fields.forEach(f => {
-                const val = formData[f.key] || '';
-                html += `<div class="field-group"><label>${capitalize(f.key)}</label>`;
-                if (f.type === 'select') {
-                    html += `<select onchange="updateData('${f.key}', this.value)"><option value="" disabled ${val === '' ? 'selected' : ''}>-- Chọn --</option>`;
-                    f.opts.forEach(o => html += `<option value="${o.trim()}" ${val === o.trim() ? 'selected' : ''}>${o.trim()}</option>`);
-                    html += `</select>`;
-                } else {
-                    html += `<input type="text" value="${val}" oninput="updateData('${f.key}', this.value)" placeholder="...">`;
+            // Remove ONLY truly empty <p> tags (not ones with <br>)
+            tempDiv.querySelectorAll('p').forEach(p => {
+                const hasOnlyBr = p.innerHTML.trim() === '<br>';
+                const isEmpty = !p.textContent.trim() && !hasOnlyBr;
+                if (isEmpty) {
+                    p.remove();
                 }
-                html += `</div>`;
             });
-            formArea.innerHTML = html;
-        }
 
-        function replaceVariables(html, highlight = false) {
-            let res = html;
-            res = res.replace(regexText, (match, key) => {
-                const val = formData[key.trim()];
-                if (highlight) return val ? `<span class="var-highlight">${val}</span>` : `<span class="var-empty">${match}</span>`;
-                return val || match;
+            // Remove empty <ul> tags
+            tempDiv.querySelectorAll('ul').forEach(ul => {
+                if (!ul.querySelector('li')) {
+                    ul.remove();
+                }
             });
-            res = res.replace(regexSelect, (match, content) => {
-                const key = content.split(':')[0].trim();
-                const val = formData[key];
-                if (highlight) return val ? `<span class="var-highlight">${val}</span>` : `<span class="var-empty">${match}</span>`;
-                return val || match;
+
+            // Add inline styles to all elements (removed p margin)
+            tempDiv.querySelectorAll('ul').forEach(ul => {
+                ul.setAttribute('style', 'margin: 0 0 8pt 0; padding-left: 40px;');
             });
-            return res;
-        }
 
-        window.updateView = function () {
-            processContent();
-        }
+            tempDiv.querySelectorAll('li').forEach(li => {
+                li.setAttribute('style', 'margin-bottom: 4pt;');
+            });
 
-        window.updateData = function (key, val) {
-            formData[key] = val;
-            processContent();
-        };
+            tempDiv.querySelectorAll('a').forEach(a => {
+                a.setAttribute('style', 'color: #0563C1; text-decoration: underline;');
+            });
 
-        window.switchMode = function (mode, btn) {
-            if (mode === currentMode) return;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            function formatNode(node, level) {
+                const indentSpace = indentStr.repeat(level);
 
-            if (mode === 'source') {
-                const html = quill.root.innerHTML;
-                sourceArea.value = html_beautify(html);
-                sourceArea.classList.add('active');
-            } else {
-                const html = sourceArea.value;
-                quill.clipboard.dangerouslyPasteHTML(html);
-                sourceArea.classList.remove('active');
+                if (node.nodeType === 3) { // Text node
+                    const text = node.textContent.trim();
+                    if (text) {
+                        result += indentSpace + text + '\n';
+                    }
+                } else if (node.nodeType === 1) { // Element node
+                    const tag = node.tagName.toLowerCase();
+                    const attrs = Array.from(node.attributes)
+                        .map(attr => `${attr.name}="${attr.value}"`)
+                        .join(' ');
+
+                    const hasChildren = node.childNodes.length > 0;
+
+                    if (hasChildren) {
+                        result += indentSpace + `<${tag}${attrs ? ' ' + attrs : ''}>`;
+                        
+                        // Check if children are all inline
+                        const children = Array.from(node.childNodes);
+                        let allInline = true;
+                        
+                        for (let child of children) {
+                            if (child.nodeType === 1 && ['P', 'UL', 'OL', 'DIV', 'BLOCKQUOTE'].includes(child.tagName)) {
+                                allInline = false;
+                                break;
+                            }
+                        }
+
+                        if (allInline) {
+                            result += node.innerHTML + `</${tag}>\n`;
+                        } else {
+                            result += '\n';
+                            children.forEach(child => formatNode(child, level + 1));
+                            result += indentSpace + `</${tag}>\n`;
+                        }
+                    } else {
+                        result += indentSpace + `<${tag}${attrs ? ' ' + attrs : ''}></${tag}>\n`;
+                    }
+                }
             }
-            currentMode = mode;
-            processContent();
-        }
 
-        quill.on('text-change', () => { if (currentMode === 'visual') processContent(); });
-        sourceArea.addEventListener('input', () => { if (currentMode === 'source') processContent(); });
-
-        function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
-        function html_beautify(html) {
-            let formatted = '';
-            let indent = '';
-            html.split(/>\s*</).forEach(function (element) {
-                if (element.match(/^\/\w/)) indent = indent.substring(2);
-                formatted += indent + '<' + element + '>\r\n';
-                if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("input") && !element.startsWith("img") && !element.startsWith("br")) indent += '  ';
+            // Add blank line between top-level elements
+            const children = Array.from(tempDiv.children);
+            children.forEach((node, index) => {
+                formatNode(node, indent);
+                if (index < children.length - 1) {
+                    result += '\n';
+                }
             });
-            return formatted.substring(1, formatted.length - 3);
+
+            return result.trim();
         }
 
-        // Init
-        processContent();
-
+        // Initialize preview on load
+        updatePreview();
     </script>
 </body>
-
 </html>
