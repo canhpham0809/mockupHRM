@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlook Template Builder (Design Tokens Edition)</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0078d4;
+            --border: #e2e8f0;
+            --bg: #f3f4f6;
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background: var(--bg);
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.2fr 300px 1.2fr;
+            gap: 15px;
+            height: calc(100vh - 30px);
+        }
+
+        .panel {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #d1d5db;
+        }
+
+        /* Header & Tabs */
+        .panel-header {
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 42px;
+        }
+
+        .tabs {
+            display: flex;
+            height: 100%;
+        }
+
+        .tab-btn {
+            padding: 0 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748b;
+            border-right: 1px solid var(--border);
+            transition: all 0.2s;
+            height: 100%;
+            font-size: 13px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-btn:hover {
+            background: #e2e8f0;
+        }
+
+        /* --- Line Height Control --- */
+        .lh-control {
+            display: flex;
+            align-items: center;
+            padding-right: 15px;
+        }
+
+        .lh-control select {
+            padding: 4px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 12px;
+            outline: none;
+            width: auto;
+            background: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .lh-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .header-title {
+            padding-left: 15px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .actions {
+            padding-right: 10px;
+        }
+
+        .btn-copy {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-copy:hover {
+            opacity: 0.9;
+        }
+
+        /* Editors */
+        .editor-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- CUSTOM QUILL TOOLBAR LABELS --- 
+           Đây là phần CSS trick để đổi tên H1, H2 thành XL, L... trong dropdown
+        */
+        .ql-snow .ql-picker.ql-header {
+            width: 180px;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+            content: "XL - Divider (32px)";
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+            content: "L - CTA / OTP (24px)";
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+            content: "M - Section (16px Bold)";
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
+            content: "S - Note (12px)";
+            font-size: 12px;
+            color: #666;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+            content: "Normal (16px)";
+        }
+
+        /* Editor Font Styles Visualization (trong lúc soạn thảo) */
+        #quill-container h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #quill-container h2 {
+            font-size: 24px;
+            color: #0078d4;
+        }
+
+        #quill-container h3 {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #quill-container h4 {
+            font-size: 12px;
+            color: #666;
+        }
+
+        #quill-container p {
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
+        #quill-container {
+            border: none !important;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 16px;
+        }
+
+        #html-source {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--code-bg);
+            color: #e2e8f0;
+            border: none;
+            padding: 15px;
+            box-sizing: border-box;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: none;
+            display: none;
+        }
+
+        #html-source.active {
+            display: block;
+        }
+
+        /* Form & Preview */
+        .content-area {
+            padding: 15px;
+            overflow-y: auto;
+            flex: 1;
+            background: #fff;
+        }
+
+        .field-group {
+            margin-bottom: 12px;
+        }
+
+        .field-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 13px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        select {
+            background: #f8fafc;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid var(--primary);
+            border-color: transparent;
+        }
+
+        /* PREVIEW STYLE */
+        #preview-container {
+            padding: 20px;
+            background: #e5e5e5;
+            display: flex;
+            justify-content: center;
+        }
+
+        .email-frame {
+            background: white;
+            width: 100%;
+            max-width: 640px;
+            min-height: 100%;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .var-highlight {
+            background: #e0f2fe;
+            color: #0369a1;
+            border-bottom: 1px dotted #0284c7;
+            padding: 0 2px;
+        }
+
+        .var-empty {
+            color: #cbd5e1;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchMode('visual', this)">Visual Editor</button>
+                    <button class="tab-btn" onclick="switchMode('source', this)">HTML Source</button>
+                </div>
+                <div class="lh-control">
+                    <span class="lh-label">Dãn dòng:</span>
+                    <select id="lh-mode" onchange="updateView()">
+                        <option value="zero">0</option>
+                        <option value="half">0.5</option>
+                        <option value="one">1</option>
+                        <option value="compact" selected>1.15</option>
+                    </select>
+                </div>
+            </div>
+            <div class="editor-wrapper">
+                <div id="quill-container"></div>
+                <textarea id="html-source" spellcheck="false" placeholder="Paste HTML code here..."></textarea>
+            </div>
+            <div
+                style="padding: 5px 15px; background: #f1f5f9; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
+                Design Tokens: <b>Segoe UI</b> | Base: <b>16px</b> | Max-width: <b>640px</b>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header"><span class="header-title">Input Fields</span></div>
+            <div id="form-container" class="content-area">
+                <div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size: 13px;">Chưa có biến nào...
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <span class="header-title">Preview (Max 640px)</span>
+                <div class="actions">
+                    <button class="btn-copy" onclick="copyOutlookCode()">Copy Outlook HTML</button>
+                </div>
+            </div>
+            <div id="preview-container" class="content-area"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        // --- 1. CONFIGURATION (Design Tokens) ---
+
+        // Config cho Line Height toàn cục
+        const LINE_HEIGHTS = {
+            zero: "0",
+            half: "0.5",
+            one: "1",
+            compact: "1.15"
+        };
+
+        // STYLE MAPPING: Quy định CSS Inline cho từng loại Block
+        // H1 -> XL, H2 -> L, H3 -> M, H4 -> S
+        const BLOCK_STYLES = {
+            h1: "font-size: 32px; line-height: 1.15; font-weight: normal; margin-top: 0; margin-bottom: 24px; border-bottom: 1px solid #eeeeee; padding-bottom: 8px;", // XL - Divider
+            h2: "font-size: 24px; line-height: 1.15; font-weight: bold; color: #0078d4; margin-top: 0; margin-bottom: 16px;", // L - OTP/CTA
+            h3: "font-size: 16px; line-height: 1.15; font-weight: bold; text-transform: uppercase; margin-top: 0; margin-bottom: 12px; color: #2e2e2e;", // M - Section
+            h4: "font-size: 12px; line-height: 1.15; color: #666666; margin-top: 0; margin-bottom: 12px;", // S - Note
+            p: "font-size: 16px; margin-top: 0; margin-bottom: 12px;", // Normal
+            ul: "font-size: 16px; margin-top: 0; margin-bottom: 12px; padding-left: 24px;",
+            li: "margin-bottom: 4px;",
+            a: "color: #0563C1; text-decoration: underline;"
+        };
+
+        const quill = new Quill('#quill-container', {
+            theme: 'snow',
+            placeholder: 'Soạn thảo email...',
+            modules: {
+                toolbar: [
+                    // Custom Header Dropdown (đã được CSS rename ở trên)
+                    [{ 'header': [1, 2, 3, 4, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }, { 'color': [] }, { 'background': [] }],
+                    ['link', 'clean']
+                ]
+            }
+        });
+
+        const sourceArea = document.getElementById('html-source');
+        const formArea = document.getElementById('form-container');
+        const previewArea = document.getElementById('preview-container');
+        const lhSelect = document.getElementById('lh-mode');
+
+        let formData = {};
+        let currentMode = 'visual';
+
+        const regexText = /\{\{(.*?)\}\}/g;
+        const regexSelect = /\[(.*?)\]/g;
+
+        // --- 2. CORE PROCESS ---
+
+        function processContent() {
+            let rawHtml = '';
+            if (currentMode === 'visual') {
+                rawHtml = quill.root.innerHTML;
+            } else {
+                rawHtml = sourceArea.value;
+            }
+
+            // 1. Parse Fields
+            const fields = parseFields(rawHtml);
+            renderForm(fields);
+
+            // 2. Render Preview
+            const lhKey = lhSelect.value;
+            const currentLH = LINE_HEIGHTS[lhKey];
+
+            const visualHtml = replaceVariables(rawHtml, true);
+
+            // Wrapper tổng (Technical Constraint: 640px)
+            // Lưu ý: Line-height được set ở wrapper tổng, nhưng các thẻ H sẽ có line-height riêng trong BLOCK_STYLES
+            const wrapperStyle = `font-family: 'Segoe UI', system-ui, sans-serif; font-size: 16px; line-height: ${currentLH}; color: #000000; max-width: 640px; margin: 0 auto;`;
+
+            previewArea.innerHTML = `
+                <div class="email-frame">
+                    <div style="${wrapperStyle}">
+                        ${injectDesignTokens(visualHtml, currentLH)}
+                    </div>
+                </div>`;
+        }
+
+        // --- 3. INJECT STYLES LOGIC ---
+
+        function injectDesignTokens(html, globalLH) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+
+            // Bơm style cho các thẻ Header (Spacing Scale mapped to Headers)
+            div.querySelectorAll('h1').forEach(el => addStyle(el, BLOCK_STYLES.h1));
+            div.querySelectorAll('h2').forEach(el => addStyle(el, BLOCK_STYLES.h2));
+            div.querySelectorAll('h3').forEach(el => addStyle(el, BLOCK_STYLES.h3));
+            div.querySelectorAll('h4').forEach(el => addStyle(el, BLOCK_STYLES.h4));
+
+            // Bơm style cho Text thường (Normal)
+            // Text thường sẽ ăn theo globalLH user chọn
+            // Tuy nhiên, ta vẫn cần set margin-bottom để đảm bảo spacing
+            const pStyle = `${BLOCK_STYLES.p} line-height: ${globalLH};`;
+            div.querySelectorAll('p').forEach(el => addStyle(el, pStyle));
+
+            const listStyle = `${BLOCK_STYLES.ul} line-height: ${globalLH};`;
+            div.querySelectorAll('ul, ol').forEach(el => addStyle(el, listStyle));
+            div.querySelectorAll('li').forEach(el => addStyle(el, BLOCK_STYLES.li));
+
+            // Common
+            div.querySelectorAll('a').forEach(el => addStyle(el, BLOCK_STYLES.a));
+            div.querySelectorAll('table').forEach(el => addStyle(el, "border-collapse: collapse; width: 100%;"));
+            div.querySelectorAll('td').forEach(el => addStyle(el, "padding: 0;"));
+
+            return div.innerHTML;
+        }
+
+        function addStyle(el, strStyle) {
+            const old = el.getAttribute('style') || '';
+            el.setAttribute('style', old + ' ' + strStyle);
+        }
+
+        // --- 4. EXPORT ---
+
+        window.copyOutlookCode = function () {
+            let rawHtml = currentMode === 'visual' ? quill.root.innerHTML : sourceArea.value;
+
+            const lhKey = lhSelect.value;
+            const currentLH = LINE_HEIGHTS[lhKey];
+
+            // Transform content
+            const contentWithStyles = injectDesignTokens(rawHtml, currentLH);
+
+            // Constraint Wrapper
+            const finalHtml = `
+<div style="width:100%;background-color:#ffffff;">
+    <div style="font-family:'Segoe UI', sans-serif; font-size:16px; line-height:${currentLH}; color:#000000; max-width:640px; margin:0 auto;">
+        ${contentWithStyles}
+    </div>
+</div>`;
+
+            navigator.clipboard.writeText(finalHtml).then(() => {
+                alert('Đã Copy Outlook HTML!');
+            });
+        }
+
+        // --- 5. EVENTS & UTILS ---
+
+        function parseFields(html) {
+            const fields = [];
+            const seen = new Set();
+            const add = (key, type, opts = []) => {
+                if (!seen.has(key)) { seen.add(key); fields.push({ key, type, opts }); }
+            };
+            [...html.matchAll(regexText)].forEach(m => add(m[1].trim(), 'text'));
+            [...html.matchAll(regexSelect)].forEach(m => {
+                const parts = m[1].trim().split(':');
+                add(parts[0].trim(), parts.length > 1 ? 'select' : 'text', parts.length > 1 ? parts[1].split(',') : []);
+            });
+            return fields;
+        }
+
+        function renderForm(fields) {
+            const currentLen = formArea.querySelectorAll('.field-group').length;
+            if (currentLen === fields.length && currentLen > 0) return;
+
+            if (fields.length === 0) {
+                formArea.innerHTML = '<div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size:13px">Không tìm thấy biến {{...}}</div>';
+                return;
+            }
+
+            let html = '';
+            fields.forEach(f => {
+                const val = formData[f.key] || '';
+                html += `<div class="field-group"><label>${capitalize(f.key)}</label>`;
+                if (f.type === 'select') {
+                    html += `<select onchange="updateData('${f.key}', this.value)"><option value="" disabled ${val === '' ? 'selected' : ''}>-- Chọn --</option>`;
+                    f.opts.forEach(o => html += `<option value="${o.trim()}" ${val === o.trim() ? 'selected' : ''}>${o.trim()}</option>`);
+                    html += `</select>`;
+                } else {
+                    html += `<input type="text" value="${val}" oninput="updateData('${f.key}', this.value)" placeholder="...">`;
+                }
+                html += `</div>`;
+            });
+            formArea.innerHTML = html;
+        }
+
+        function replaceVariables(html, highlight = false) {
+            let res = html;
+            res = res.replace(regexText, (match, key) => {
+                const val = formData[key.trim()];
+                if (highlight) return val ? `<span class="var-highlight">${val}</span>` : `<span class="var-empty">${match}</span>`;
+                return val || match;
+            });
+            res = res.replace(regexSelect, (match, content) => {
+                const key = content.split(':')[0].trim();
+                const val = formData[key];
+                if (highlight) return val ? `<span class="var-highlight">${val}</span>` : `<span class="var-empty">${match}</span>`;
+                return val || match;
+            });
+            return res;
+        }
+
+        window.updateView = function () {
+            processContent();
+        }
+
+        window.updateData = function (key, val) {
+            formData[key] = val;
+            processContent();
+        };
+
+        window.switchMode = function (mode, btn) {
+            if (mode === currentMode) return;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (mode === 'source') {
+                const html = quill.root.innerHTML;
+                sourceArea.value = html_beautify(html);
+                sourceArea.classList.add('active');
+            } else {
+                const html = sourceArea.value;
+                quill.clipboard.dangerouslyPasteHTML(html);
+                sourceArea.classList.remove('active');
+            }
+            currentMode = mode;
+            processContent();
+        }
+
+        quill.on('text-change', () => { if (currentMode === 'visual') processContent(); });
+        sourceArea.addEventListener('input', () => { if (currentMode === 'source') processContent(); });
+
+        function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+        function html_beautify(html) {
+            let formatted = '';
+            let indent = '';
+            html.split(/>\s*</).forEach(function (element) {
+                if (element.match(/^\/\w/)) indent = indent.substring(2);
+                formatted += indent + '<' + element + '>\r\n';
+                if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("input") && !element.startsWith("img") && !element.startsWith("br")) indent += '  ';
+            });
+            return formatted.substring(1, formatted.length - 3);
+        }
+
+        // Init
+        processContent();
+
+    </script>
+</body>
+
+</html>
