@@ -1,0 +1,1737 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlook Template Builder (Fixed Layout)</title>
+    <!-- Quill 2.0 -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <!-- Quill Better Table CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/quill-better-table@1.2.10/dist/quill-better-table.min.css"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0078d4;
+            --border: #e2e8f0;
+            --bg: #f3f4f6;
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background: var(--bg);
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            /* FIX: Chặn scroll body */
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.2fr 300px 1.2fr;
+            gap: 15px;
+            height: calc(100vh - 30px);
+        }
+
+        .panel {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            /* FIX: Quan trọng để nội dung con cuộn được */
+            border: 1px solid #d1d5db;
+        }
+
+        /* Header & Tabs */
+        .panel-header {
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 42px;
+            flex-shrink: 0;
+            /* FIX: Giữ chiều cao header cố định */
+        }
+
+        .tabs {
+            display: flex;
+            height: 100%;
+        }
+
+        .tab-btn {
+            padding: 0 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748b;
+            border-right: 1px solid var(--border);
+            transition: all 0.2s;
+            height: 100%;
+            font-size: 13px;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .lh-control {
+            display: flex;
+            align-items: center;
+            padding-right: 15px;
+        }
+
+        .lh-control select {
+            padding: 4px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 12px;
+            outline: none;
+            width: auto;
+            background: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .lh-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .header-title {
+            padding-left: 15px;
+            font-weight: 600;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .actions {
+            padding-right: 10px;
+        }
+
+        .btn-copy {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-copy:hover {
+            opacity: 0.9;
+        }
+
+        /* --- FIX SCROLL EDITOR --- */
+        .editor-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            /* Chặn tràn */
+            min-height: 0;
+        }
+
+        #quill-container {
+            border: none !important;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Class mặc định của Quill Editor - Thêm scroll vào đây */
+        .ql-editor {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            line-height: 1.15;
+            /* Sync với Compact mặc định */
+        }
+
+        /* Toolbar Labels (Giữ nguyên logic của bạn) */
+        .ql-snow .ql-picker.ql-header {
+            width: 180px;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+            content: "XL - Divider (32px)";
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+            content: "L - CTA / OTP (24px)";
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+            content: "M - Section (16px Bold)";
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
+            content: "S - Note (12px)";
+            font-size: 12px;
+            color: #666;
+        }
+
+        .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+            content: "Normal (16px)";
+        }
+
+        /* Styles Visual Editor */
+        #quill-container h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #quill-container h2 {
+            font-size: 24px;
+            color: #0078d4;
+        }
+
+        #quill-container h3 {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #quill-container h4 {
+            font-size: 12px;
+            color: #666;
+        }
+
+        #quill-container p {
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+
+        /* Quill Better Table - Column Resize */
+        #quill-container table {
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        #quill-container td,
+        #quill-container th {
+            border: 1px solid #d1d5db;
+            padding: 8px 12px;
+            min-width: 50px;
+            position: relative;
+        }
+
+        /* Column resize handle */
+        .qlbt-col-tool {
+            cursor: col-resize !important;
+        }
+
+        .qlbt-col-tool .qlbt-col-tool-cell-holder {
+            background: #3b82f6 !important;
+        }
+
+        /* Row resize handle */
+        .quill-better-table-wrapper .qlbt-operation-menu {
+            z-index: 9999;
+        }
+
+        /* CTA Button inside editor - override link defaults */
+        #quill-container .cta-button-p {
+            margin: 10px 0;
+        }
+
+        #quill-container .cta-btn,
+        #quill-container a.cta-btn {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            display: inline-block !important;
+            cursor: pointer;
+        }
+
+        #quill-container .cta-btn:hover,
+        #quill-container a.cta-btn:hover {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            opacity: 0.9;
+        }
+
+        /* CTA button in preview */
+        .email-frame a.cta-btn,
+        #preview-container a.cta-btn {
+            color: #ffffff !important;
+            text-decoration: none !important;
+        }
+
+        /* Legacy table-based CTA buttons */
+        #quill-container table[role="presentation"] td a {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            display: block;
+            text-align: center;
+        }
+
+        #quill-container table[role="presentation"] td a:hover {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            opacity: 0.9;
+        }
+
+        #quill-container table[role="presentation"] {
+            cursor: pointer;
+        }
+
+        /* CTA Button toolbar icon */
+        .ql-cta-button {
+            width: auto !important;
+            padding: 0 5px !important;
+        }
+
+        .ql-cta-button::after {
+            content: '🔘';
+            font-size: 14px;
+        }
+
+        .ql-toolbar .ql-cta-button:hover {
+            color: #E86C25;
+        }
+
+        /* CTA Button Tooltip */
+        #cta-tooltip {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            padding: 10px 15px;
+            z-index: 9999;
+            display: none;
+            font-size: 13px;
+        }
+
+        #cta-tooltip.show {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        #cta-tooltip label {
+            font-size: 12px;
+            color: #666;
+            margin-right: 4px;
+        }
+
+        #cta-tooltip input {
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        #cta-tooltip input[type="text"] {
+            width: 120px;
+        }
+
+        #cta-tooltip input[type="color"] {
+            width: 30px;
+            height: 26px;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        #cta-tooltip button {
+            padding: 4px 12px;
+            background: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #cta-tooltip button:hover {
+            background: #005a9e;
+        }
+
+        #cta-tooltip .close-btn {
+            background: #dc3545;
+            padding: 4px 8px;
+        }
+
+        #html-source {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--code-bg);
+            color: #e2e8f0;
+            border: none;
+            padding: 15px;
+            box-sizing: border-box;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            resize: none;
+            display: none;
+            overflow-y: auto;
+        }
+
+        #html-source.active {
+            display: block;
+        }
+
+        /* --- FIX SCROLL INPUT --- */
+        .content-area {
+            padding: 15px;
+            overflow-y: auto;
+            flex: 1;
+            background: #fff;
+        }
+
+        .field-group {
+            margin-bottom: 12px;
+        }
+
+        .field-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 13px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        select {
+            background: #f8fafc;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid var(--primary);
+            border-color: transparent;
+        }
+
+        /* --- FIX PREVIEW WIDTH & SCROLL --- */
+        #preview-container {
+            flex: 1;
+            min-height: 0;
+            padding: 20px;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            overflow-y: auto;
+            align-items: flex-start;
+        }
+
+        #preview-container .preview-frame {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        #preview-container .preview-frame > div {
+            width: 100%;
+            max-width: 640px;
+        }
+
+        #preview-container .quill-better-table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        #preview-container .quill-better-table {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        #preview-container td,
+        #preview-container p,
+        #preview-container li,
+        #preview-container a {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        #preview-container.hidden {
+            display: none;
+        }
+
+        #preview-html-code {
+            flex: 1;
+            min-height: 0;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            display: none;
+        }
+
+        #preview-html-code.active {
+            display: block;
+        }
+
+        .var-highlight {
+            background: #e0f2fe;
+            color: #0369a1;
+            border-bottom: 1px dotted #0284c7;
+            padding: 0 2px;
+        }
+
+        .var-empty {
+            color: #cbd5e1;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+
+        /* Autocomplete Styles */
+        .autocomplete-wrapper {
+            position: relative;
+        }
+
+        .autocomplete-input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 2px solid #f59e0b;
+            border-radius: 4px;
+            background: #fffbeb;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+
+        .autocomplete-input.mapped {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .autocomplete-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .autocomplete-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+        }
+
+        .autocomplete-dropdown.show {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.highlighted {
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+
+        .autocomplete-item.suggestion {
+            background: #fef3c7;
+            font-weight: 600;
+        }
+
+        .autocomplete-item.suggestion:hover,
+        .autocomplete-item.suggestion.highlighted {
+            background: #fcd34d;
+        }
+
+        .autocomplete-group {
+            padding: 4px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #6b7280;
+            background: #f9fafb;
+            text-transform: uppercase;
+        }
+
+        .autocomplete-hint {
+            padding: 4px 10px;
+            font-size: 10px;
+            color: #9ca3af;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchMode('visual', this)">Visual Editor</button>
+                    <button class="tab-btn" onclick="switchMode('source', this)">HTML Source</button>
+                </div>
+                <div class="lh-control">
+                    <label
+                        style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; cursor: pointer;">
+                        <input type="checkbox" id="show-border" checked onchange="updateView()">
+                        <span>Hiện border table</span>
+                    </label>
+                </div>
+                <div class="lh-control">
+                    <span class="lh-label">Dãn dòng:</span>
+                    <select id="lh-mode" onchange="updateView()">
+                        <option value="compact" selected>Compact (1.15)</option>
+                        <option value="normal">Normal (1.4)</option>
+                        <option value="large">Relaxed (1.6)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="editor-wrapper">
+                <div id="quill-container"></div>
+                <textarea id="html-source" spellcheck="false" placeholder="Paste HTML code here..."></textarea>
+            </div>
+            <div
+                style="padding: 5px 15px; background: #f1f5f9; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; flex-shrink: 0;">
+                Design Tokens: <b>Segoe UI</b> | <b>16px</b> | <b>640px</b> ·
+                <span style="color: #94a3b8;">Table: Click vào cột header để resize | Right-click để thêm/xóa
+                    row/column</span>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header"><span class="header-title">Input Fields</span></div>
+            <div id="form-container" class="content-area">
+                <div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size: 13px;">Chưa có biến nào...
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchPreviewMode('preview', this)">Preview</button>
+                    <button class="tab-btn" onclick="switchPreviewMode('html', this)">Output HTML</button>
+                </div>
+                <div class="lh-control">
+                    <span class="lh-label">Width:</span>
+                    <select id="preview-width" onchange="updatePreviewWidth()">
+                        <option value="480">Mobile (480px)</option>
+                        <option value="640" selected>Email (640px)</option>
+                        <option value="768">Tablet (768px)</option>
+                        <option value="1024">Desktop (1024px)</option>
+                        <option value="full">Full Width</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button class="btn-copy" style="background: #059669;" onclick="copyTestHtml()">📧 Copy Test</button>
+                    <button class="btn-copy" onclick="copyTemplateHtml()">📋 Copy Template</button>
+                </div>
+            </div>
+            <div id="preview-container"></div>
+            <div id="preview-html-code"></div>
+        </div>
+    </div>
+
+    <!-- Quill 2.0 -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <!-- Quill Better Table JS -->
+    <script src="https://cdn.jsdelivr.net/npm/quill-better-table@1.2.10/dist/quill-better-table.min.js"></script>
+    <script>
+        // --- 1. CONFIGURATION (Design Tokens) ---
+
+        const LINE_HEIGHTS = { compact: "1.15", normal: "1.4", large: "1.6" };
+
+        const BLOCK_STYLES = {
+            h1: "font-size: 32px; font-weight: normal; margin-top: 0; margin-bottom: 0; border-bottom: 1px solid #eeeeee; padding-bottom: 8px;", // XL
+            h2: "font-size: 24px; font-weight: bold; color: #0078d4; margin-top: 0; margin-bottom: 0;", // L
+            h3: "font-size: 16px; font-weight: bold; text-transform: uppercase; margin-top: 0; margin-bottom: 0; color: #2e2e2e;", // M
+            h4: "font-size: 12px; color: #666666; margin-top: 0; margin-bottom: 0;", // S
+            p: "font-size: 16px; margin-top: 0; margin-bottom: 0;", // Normal - sync với Quill
+            ul: "font-size: 16px; margin-top: 0; margin-bottom: 0; padding-left: 40px; list-style-type: disc;",
+            ol: "font-size: 16px; margin-top: 0; margin-bottom: 0; padding-left: 40px; list-style-type: decimal;",
+            li: "margin-bottom: 4px;",
+            a: "color: #0563C1; text-decoration: underline;",
+            hr: "border: none; border-top: 1px solid #cccccc; margin: 12pt 0; height: 0;",
+            "ul ul": "font-size: 14px; margin-top: 0; margin-bottom: 0; padding-left: 30px; list-style-type: circle;",
+            "ol ol": "font-size: 14px; margin-top: 0; margin-bottom: 0; padding-left: 30px; list-style-type: lower-alpha;",
+            "ul ol": "font-size: 14px; margin-top: 0; margin-bottom: 0; padding-left: 30px; list-style-type: decimal;",
+            "ol ul": "font-size: 14px; margin-top: 0; margin-bottom: 0; padding-left: 30px; list-style-type: circle;"
+        };
+
+        // --- VARIABLE REPOSITORY ---
+        const VARIABLE_REPO = [
+            "actor.domain", "cancel.fullName", "cancel.jobTitle", "career.link",
+            "candidate.fullName", "candidate.fullname", "candidate.firstName", "candidate.name",
+            "candidate.department", "candidate.displayStatus", "candidate.email",
+            "candidate.lineManagerName", "candidate.lineManagerDomain", "candidate.noteCnB",
+            "candidate.title", "candidate.startDate", "candidate.offerDate", "candidate.quantity",
+            "candidate.url", "candidate.recommenderDomain", "candidateNumber",
+            "change", "change.department", "change.lineManagerName", "change.onboardingDate",
+            "change.status", "change.title", "contentWithHtml", "contentFirebaseWithHtml", "contractType",
+            "department.displayCode", "department.displayPathDept", "erp.url",
+            "fullname.en", "fullname.vi", "hrhcm", "hrhn", "hrdn",
+            "interview.round", "interview.dateTime", "interview.dateTimeWitTimezone",
+            "interview.meetingRoom", "interview.venueAddress", "interview.googleMapLink",
+            "interview.linkmeeting", "interviewer.fullName", "interviewer.designation",
+            "interviewers.fullname", "job.title", "job.nameVI", "job.nameEN", "job.code",
+            "job.jdLink", "job.department", "job.startDate", "job.contractType",
+            "job.lineManager.fullName", "job.lineManager.email", "job.location", "job.locationEN",
+            "job.date", "job.link", "job.candidates.fullname", "job.candidate.jobTitle",
+            "job.candidate.link", "link.en", "link.vn", "offer.position", "offer.confirmationTime",
+            "offer.startDate", "offerLetter.url", "onboardingDate", "otp.code", "otp.expireInMin",
+            "payment.money", "payment.periodDate", "recipient.dearList", "recruiter.domain",
+            "recruiter.fullName", "recruiter.name", "recruiter.email", "recruiter.phone",
+            "recruiterChange.fullNameList", "recruiterRemove.fullNameList", "referrer.domain",
+            "referrer.email", "reportTo.fullName", "requisition.displayPathDept",
+            "requisition.requestForDepartment", "requisition.requestQuantity", "requisition.code",
+            "request.code", "request.title", "request.jobTitle", "request.displayPathDept",
+            "request.quantity", "request.infos", "request.infos.link", "request.info.handleByName",
+            "request.info.handleByQuantity", "requester.domain", "requester.fullName",
+            "rejecter.domain", "rejecter.fullName", "surveyUrl", "surveyResult.url", "subject",
+            "summaryFirebase", "task.role", "task.url", "task.dearList", "task.comment",
+            "task.oldQuantity", "task.newQuantity", "task.startDate", "task.candidateName",
+            "task.candidateDomain", "task.hrbpDomain", "task.recruiterName", "task.decisionMakerName"
+        ];
+
+        // Build lookup map: key after last "." => full variable names
+        const REPO_SUFFIX_MAP = {};
+        VARIABLE_REPO.forEach(v => {
+            const parts = v.split('.');
+            const suffix = parts[parts.length - 1].toLowerCase();
+            if (!REPO_SUFFIX_MAP[suffix]) REPO_SUFFIX_MAP[suffix] = [];
+            REPO_SUFFIX_MAP[suffix].push(v);
+        });
+
+        // Register table module
+        Quill.register({
+            'modules/better-table': quillBetterTable
+        }, true);
+
+        // Create custom CTA Button Blot
+        const BlockEmbed = Quill.import('blots/block/embed');
+
+        class CtaButtonBlot extends BlockEmbed {
+            static create(value) {
+                const node = super.create();
+                const link = document.createElement('a');
+                link.setAttribute('href', value.url || '#');
+                link.setAttribute('target', '_blank');
+                link.setAttribute('rel', 'noopener');
+                link.setAttribute('class', 'cta-btn');
+                link.textContent = value.text || 'Click Here';
+
+                // Apply button styles
+                const bgColor = value.color || '#E86C25';
+                const isFullWidth = value.fullWidth === true;
+
+                // Base styles
+                let styles = `
+                    padding: 12px 30px;
+                    font-family: 'Segoe UI', sans-serif;
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: #ffffff;
+                    text-decoration: none;
+                    text-align: center;
+                    border-radius: 6px;
+                    background-color: ${bgColor};
+                    line-height: 1.2;
+                `;
+
+                // Full width styles
+                if (isFullWidth) {
+                    styles += `
+                        display: block;
+                        width: 100%;
+                        box-sizing: border-box;
+                    `;
+                } else {
+                    styles += `
+                        display: inline-block;
+                    `;
+                }
+
+                link.style.cssText = styles.replace(/\s+/g, ' ').trim();
+
+                node.appendChild(link);
+                node.setAttribute('class', 'cta-button-p');
+                node.setAttribute('data-cta-url', value.url || '#');
+                node.setAttribute('data-cta-color', bgColor);
+                node.setAttribute('data-cta-fullwidth', isFullWidth ? 'true' : 'false');
+                return node;
+            }
+
+            static value(node) {
+                const link = node.querySelector('a');
+                return {
+                    url: node.getAttribute('data-cta-url') || (link ? link.getAttribute('href') : '#'),
+                    text: link ? link.textContent : 'Click Here',
+                    color: node.getAttribute('data-cta-color') || '#E86C25',
+                    fullWidth: node.getAttribute('data-cta-fullwidth') === 'true'
+                };
+            }
+        }
+
+        CtaButtonBlot.blotName = 'cta-button';
+        CtaButtonBlot.tagName = 'p';
+        CtaButtonBlot.className = 'cta-button-p';
+
+        Quill.register(CtaButtonBlot);
+
+        // Create custom Divider Blot
+        class DividerBlot extends BlockEmbed {
+            static create() {
+                const node = super.create();
+                node.setAttribute('style', 'border: none; border-top: 1px solid #cccccc; margin: 12pt 0; height: 0;');
+                return node;
+            }
+        }
+
+        DividerBlot.blotName = 'divider';
+        DividerBlot.tagName = 'hr';
+        Quill.register(DividerBlot);
+
+        const quill = new Quill('#quill-container', {
+            theme: 'snow',
+            placeholder: 'Soạn thảo email...',
+            modules: {
+                toolbar: {
+                    container: [
+                        [{ 'header': [1, 2, 3, 4, false] }],
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'indent': '-1' }, { 'indent': '+1' }],
+                        [{ 'align': [] }, { 'color': [] }, { 'background': [] }],
+                        ['link', 'clean'],
+                        ['table', 'cta-button']
+                    ],
+                    handlers: {
+                        'table': function () {
+                            this.quill.getModule('better-table').insertTable(3, 3);
+                        },
+                        'cta-button': function () {
+                            insertCtaButton(this.quill);
+                        }
+                    }
+                },
+                'better-table': {
+                    operationMenu: {
+                        items: {
+                            insertColumnRight: { text: 'Insert column right' },
+                            insertColumnLeft: { text: 'Insert column left' },
+                            insertRowUp: { text: 'Insert row above' },
+                            insertRowDown: { text: 'Insert row below' },
+                            mergeCells: { text: 'Merge cells' },
+                            unmergeCells: { text: 'Unmerge cells' },
+                            deleteColumn: { text: 'Delete column' },
+                            deleteRow: { text: 'Delete row' },
+                            deleteTable: { text: 'Delete table' }
+                        }
+                    }
+                },
+                keyboard: {
+                    bindings: {
+                        ...quillBetterTable.keyboardBindings,
+                        tab: {
+                            key: 9,
+                            handler: function() {
+                                const range = quill.getSelection();
+                                if (range) {
+                                    // Insert 4 spaces instead of tab
+                                    quill.insertText(range.index, '    ');
+                                    quill.setSelection(range.index + 4, 0);
+                                    // Trigger preview update immediately
+                                    setTimeout(() => {
+                                        processContent();
+                                    }, 0);
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add custom CTA button icon to toolbar
+        const ctaButtonIcon = document.querySelector('.ql-cta-button');
+        if (ctaButtonIcon) {
+            ctaButtonIcon.innerHTML = '🔘';
+            ctaButtonIcon.title = 'Insert CTA Button';
+        }
+
+        // Create CTA tooltip element
+        const ctaTooltip = document.createElement('div');
+        ctaTooltip.id = 'cta-tooltip';
+        ctaTooltip.innerHTML = `
+            <label>Label:</label>
+            <input type="text" id="cta-label" placeholder="Button text" value="Click Here">
+            <label>URL:</label>
+            <input type="text" id="cta-url" placeholder="https://..." value="https://">
+            <label>Màu:</label>
+            <input type="color" id="cta-color" value="#E86C25">
+            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                <input type="checkbox" id="cta-fullwidth" style="width: auto; margin: 0;">
+                <span>Full Width</span>
+            </label>
+            <button onclick="insertCtaFromTooltip()">Insert</button>
+            <button class="close-btn" onclick="hideCtaTooltip()">×</button>
+        `;
+        document.body.appendChild(ctaTooltip);
+
+        let ctaCursorPosition = 0;
+
+        // Function to show CTA tooltip
+        function showCtaTooltip(quillInstance) {
+            const range = quillInstance.getSelection(true);
+            ctaCursorPosition = range ? range.index : 0;
+
+            // Position tooltip below toolbar
+            const toolbar = document.querySelector('.ql-toolbar');
+            const rect = toolbar.getBoundingClientRect();
+            ctaTooltip.style.top = (rect.bottom + 5) + 'px';
+            ctaTooltip.style.left = rect.left + 'px';
+            ctaTooltip.classList.add('show');
+
+            // Focus on label input
+            document.getElementById('cta-label').focus();
+            document.getElementById('cta-label').select();
+        }
+
+        window.hideCtaTooltip = function () {
+            ctaTooltip.classList.remove('show');
+        }
+
+        window.insertCtaFromTooltip = function () {
+            const buttonText = document.getElementById('cta-label').value || 'Click Here';
+            const buttonUrl = document.getElementById('cta-url').value || '#';
+            const bgColor = document.getElementById('cta-color').value || '#E86C25';
+            const isFullWidth = document.getElementById('cta-fullwidth').checked;
+
+            // Get cursor position from saved position or current selection
+            const range = quill.getSelection(true);
+            const index = ctaCursorPosition !== null ? ctaCursorPosition : (range ? range.index : quill.getLength());
+
+            // Insert the CTA button using the custom Blot
+            quill.insertEmbed(index, 'cta-button', {
+                url: buttonUrl,
+                text: buttonText,
+                color: bgColor,
+                fullWidth: isFullWidth
+            }, Quill.sources.USER);
+
+            // Move cursor after the button
+            quill.setSelection(index + 1, Quill.sources.SILENT);
+
+            // Trigger content update
+            setTimeout(() => {
+                processContent();
+            }, 50);
+
+            hideCtaTooltip();
+        }
+
+        // Function to insert CTA button (called from toolbar)
+        function insertCtaButton(quillInstance) {
+            showCtaTooltip(quillInstance);
+        }
+
+        // Handle Enter key in tooltip
+        document.addEventListener('keydown', function (e) {
+            if (ctaTooltip.classList.contains('show')) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    insertCtaFromTooltip();
+                } else if (e.key === 'Escape') {
+                    hideCtaTooltip();
+                }
+            }
+        });
+
+        const sourceArea = document.getElementById('html-source');
+        const formArea = document.getElementById('form-container');
+        const previewArea = document.getElementById('preview-container');
+        const lhSelect = document.getElementById('lh-mode');
+
+        let formData = {};
+        let variableMapping = {}; // Lưu mapping: originalVar -> repoVar
+        let currentMode = 'visual';
+        let isConverting = false; // Flag để prevent recursion khi auto-convert divider
+
+        const regexText = /\{\{(.*?)\}\}/g;
+        const regexSelect = /\[(.*?)\]/g;
+
+        let previewMode = 'preview'; // 'preview' or 'html'
+        const htmlCodeArea = document.getElementById('preview-html-code');
+        let currentPreviewWidth = 640; // Current preview width in px
+
+        function processContent() {
+            let rawHtml = currentMode === 'visual' ? quill.root.innerHTML : sourceArea.value;
+
+            // 1. Parse Fields (deduplicated)
+            const fields = parseFields(rawHtml);
+            renderForm(fields);
+
+            // 2. Generate Output HTML (with table wrapper 640px, inline CSS)
+            const lhKey = lhSelect.value;
+            const currentLH = LINE_HEIGHTS[lhKey];
+
+            // For preview: use mapped variables with ${} format (same as copy template)
+            const mappedHtml = applyVariableMapping(rawHtml);
+            const contentWithStyles = injectDesignTokens(mappedHtml, currentLH);
+
+            // Full HTML output with table wrapper (same as copy output)
+            const outputHtml = generateOutputHtml(contentWithStyles, currentLH);
+
+            // Render preview - directly inject the output HTML so user sees exactly what they get
+            previewArea.innerHTML = `<div class="preview-frame">${outputHtml}</div>`;
+
+            // Apply preview width
+            updatePreviewFrameWidth();
+
+            // Render HTML code tab
+            htmlCodeArea.textContent = formatHtml(outputHtml);
+        }
+
+        function generateOutputHtml(content, lineHeight) {
+            return `<div style="width:100%; background-color:#f3f4f6; padding: 20px 0;">
+    <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="640" border="0" cellspacing="0" cellpadding="0" style="width:640px; max-width:640px; background-color:#ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <tr>
+                        <td align="left" style="font-family:'Segoe UI', sans-serif; font-size:16px; line-height:${lineHeight}; color:#000000; padding:30px 40px;">
+                            ${content}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>`;
+        }
+
+        function formatHtml(html) {
+            // Simple HTML formatter for display
+            let formatted = html
+                .replace(/></g, '>\n<')
+                .replace(/\n\s*\n/g, '\n');
+            return formatted;
+        }
+
+        window.switchPreviewMode = function (mode, btn) {
+            if (mode === previewMode) return;
+            previewMode = mode;
+
+            // Update tabs
+            btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (mode === 'preview') {
+                previewArea.classList.remove('hidden');
+                previewArea.style.display = 'flex';
+                htmlCodeArea.classList.remove('active');
+            } else {
+                previewArea.classList.add('hidden');
+                previewArea.style.display = 'none';
+                htmlCodeArea.classList.add('active');
+            }
+        };
+
+        window.updatePreviewWidth = function () {
+            const widthSelect = document.getElementById('preview-width');
+            const selectedValue = widthSelect.value;
+            
+            if (selectedValue === 'full') {
+                currentPreviewWidth = null; // Full width
+            } else {
+                currentPreviewWidth = parseInt(selectedValue, 10);
+            }
+            
+            updatePreviewFrameWidth();
+        };
+
+        function updatePreviewFrameWidth() {
+            const frame = previewArea.querySelector('.preview-frame');
+            if (frame && frame.firstChild) {
+                if (currentPreviewWidth === null) {
+                    frame.firstChild.style.maxWidth = '100%';
+                    frame.firstChild.style.width = '100%';
+                } else {
+                    frame.firstChild.style.maxWidth = currentPreviewWidth + 'px';
+                    frame.firstChild.style.width = '100%';
+                }
+            }
+        }
+
+        function updateView() {
+            processContent();
+        }
+
+        function cleanWordHtml(html) {
+            // Remove Word/Office specific inline styles that can break layout
+            html = html.replace(/color:\s*windowtext;?/gi, '');
+            html = html.replace(/background-color:\s*transparent;?/gi, '');
+            html = html.replace(/mso-[^:]+:[^;"]+;?/gi, '');
+            html = html.replace(/\s*style="\s*"/gi, '');
+            return html;
+        }
+
+        function convertIndentToNested(div) {
+            // Convert Quill's indent-based structure to proper nested lists
+            const lists = div.querySelectorAll('ul, ol');
+            
+            lists.forEach(list => {
+                let liItems = Array.from(list.children).filter(el => el.tagName === 'LI');
+                
+                for (let i = 0; i < liItems.length; i++) {
+                    const li = liItems[i];
+                    const style = li.getAttribute('style') || '';
+                    const levelMatch = style.match(/margin-left:\s*(\d+)/);
+                    
+                    if (levelMatch) {
+                        const marginLeft = parseInt(levelMatch[1], 10);
+                        const level = Math.floor(marginLeft / 40); // Each level is ~40px
+                        
+                        if (level > 0) {
+                            // This is a nested item
+                            // Find if previous li exists
+                            const prevLi = li.previousElementSibling;
+                            
+                            if (prevLi && prevLi.tagName === 'LI') {
+                                // Create nested list inside previous li
+                                const nested = document.createElement(list.tagName);
+                                nested.className = list.className;
+                                
+                                // Move this and following same-level items into nested list
+                                let moveItem = li;
+                                while (moveItem && moveItem.tagName === 'LI') {
+                                    const moveStyle = moveItem.getAttribute('style') || '';
+                                    const moveMatch = moveStyle.match(/margin-left:\s*(\d+)/);
+                                    const moveLevel = moveMatch ? Math.floor(parseInt(moveMatch[1], 10) / 40) : 0;
+                                    
+                                    if (moveLevel === level) {
+                                        const nextItem = moveItem.nextElementSibling;
+                                        moveItem.removeAttribute('style');
+                                        nested.appendChild(moveItem);
+                                        moveItem = nextItem;
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                
+                                prevLi.appendChild(nested);
+                            }
+                        } else {
+                            // Remove indent styles
+                            li.removeAttribute('style');
+                        }
+                    }
+                }
+            });
+        }
+
+        function injectDesignTokens(html, globalLH) {
+            // Convert 4 spaces to &nbsp; for tab indentation FIRST
+            html = html.replace(/    /g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+
+            // Cleanup Word/Office pasted HTML artifacts
+            html = cleanWordHtml(html);
+            
+            // Remove redundant default inline styles from Quill
+            html = html.replace(/style="color:\s*rgb\(0,\s*0,\s*0\);?\s*"/gi, '');
+            html = html.replace(/style="background-color:\s*rgb\(255,\s*255,\s*255\);?\s*"/gi, '');
+            html = html.replace(/style="color:\s*rgb\(0,\s*0,\s*0\);\s*background-color:\s*rgb\(255,\s*255,\s*255\);?\s*"/gi, '');
+            html = html.replace(/style="background-color:\s*rgb\(255,\s*255,\s*255\);\s*color:\s*rgb\(0,\s*0,\s*0\);?\s*"/gi, '');
+            html = html.replace(/\s*style=""\s*/gi, ''); // Remove empty style attributes
+            
+            const div = document.createElement('div');
+            div.innerHTML = html;
+
+            // Convert Quill indent to proper nested lists
+            convertIndentToNested(div);
+
+            // Convert <p> containing only dashes to <hr> (divider)
+            div.querySelectorAll('p').forEach(p => {
+                const text = p.textContent.trim();
+                if (text.match(/^-{4,}$/)) {
+                    const hr = document.createElement('hr');
+                    hr.setAttribute('style', BLOCK_STYLES.hr);
+                    p.replaceWith(hr);
+                }
+            });
+
+            // Quill 2.0 uses <ol> for BOTH bullet and ordered lists
+            // Differentiate by data-list attribute on <li>
+            // Convert bullet lists to <ul> for proper semantic HTML
+            div.querySelectorAll('ol').forEach(ol => {
+                const firstLi = ol.querySelector('li');
+                if (firstLi && firstLi.getAttribute('data-list') === 'bullet') {
+                    // This is actually a bullet list, convert to <ul>
+                    const ul = document.createElement('ul');
+                    // Copy attributes
+                    Array.from(ol.attributes).forEach(attr => {
+                        ul.setAttribute(attr.name, attr.value);
+                    });
+                    // Move children
+                    while (ol.firstChild) {
+                        ul.appendChild(ol.firstChild);
+                    }
+                    ol.parentNode.replaceChild(ul, ol);
+                }
+            });
+
+            div.querySelectorAll('h1').forEach(el => addStyle(el, BLOCK_STYLES.h1));
+            div.querySelectorAll('h2').forEach(el => addStyle(el, BLOCK_STYLES.h2));
+            div.querySelectorAll('h3').forEach(el => addStyle(el, BLOCK_STYLES.h3));
+            div.querySelectorAll('h4').forEach(el => addStyle(el, BLOCK_STYLES.h4));
+
+            const pStyle = `${BLOCK_STYLES.p} line-height: ${globalLH};`;
+            div.querySelectorAll('p').forEach(el => addStyle(el, pStyle));
+
+            const ulStyle = `${BLOCK_STYLES.ul} line-height: ${globalLH};`;
+            div.querySelectorAll('ul').forEach(el => addStyle(el, ulStyle));
+
+            // Apply nested list styles
+            div.querySelectorAll('ul ul').forEach(el => addStyle(el, `${BLOCK_STYLES["ul ul"]} line-height: ${globalLH};`));
+            div.querySelectorAll('ul ol').forEach(el => addStyle(el, `${BLOCK_STYLES["ul ol"]} line-height: ${globalLH};`));
+
+            const olStyle = `${BLOCK_STYLES.ol} line-height: ${globalLH};`;
+            div.querySelectorAll('ol').forEach(el => addStyle(el, olStyle));
+            
+            // Apply nested list styles
+            div.querySelectorAll('ol ol').forEach(el => addStyle(el, `${BLOCK_STYLES["ol ol"]} line-height: ${globalLH};`));
+            div.querySelectorAll('ol ul').forEach(el => addStyle(el, `${BLOCK_STYLES["ol ul"]} line-height: ${globalLH};`));
+            
+            div.querySelectorAll('li').forEach(el => addStyle(el, BLOCK_STYLES.li));
+
+            // Apply link styles but exclude CTA buttons (they have their own inline styles)
+            div.querySelectorAll('a:not(.cta-btn)').forEach(el => addStyle(el, BLOCK_STYLES.a));
+
+            // Apply divider (hr) styles
+            div.querySelectorAll('hr').forEach(el => addStyle(el, BLOCK_STYLES.hr));
+
+            // Table styling with border option
+            const showBorder = document.getElementById('show-border')?.checked ?? true;
+            const borderStyle = showBorder ? '1px solid #d1d5db' : '0';
+
+            div.querySelectorAll('table').forEach(el => {
+                addStyle(el, `border-collapse: collapse; border: ${borderStyle};`);
+            });
+            div.querySelectorAll('td, th').forEach(el => {
+                addStyle(el, `padding: 8px 12px; border: ${borderStyle}; vertical-align: top; word-break: break-word;`);
+            });
+
+            return div.innerHTML;
+        }
+
+        function addStyle(el, strStyle) {
+            const old = el.getAttribute('style') || '';
+            el.setAttribute('style', old + ' ' + strStyle);
+        }
+
+        // --- 3. VARIABLE MATCHING ---
+
+        function findRepoMatch(varKey) {
+            // Exact match first
+            if (VARIABLE_REPO.includes(varKey)) return varKey;
+
+            // Try suffix matching (after last ".")
+            const parts = varKey.split('.');
+            const suffix = parts[parts.length - 1].toLowerCase();
+            const matches = REPO_SUFFIX_MAP[suffix] || [];
+
+            // Return first match or null
+            return matches.length > 0 ? matches[0] : null;
+        }
+
+        function getSuggestions(varKey) {
+            const parts = varKey.split('.');
+            const suffix = parts[parts.length - 1].toLowerCase();
+            return REPO_SUFFIX_MAP[suffix] || [];
+        }
+
+        // Minify HTML - remove unnecessary whitespace
+        function minifyHtml(html) {
+            return html
+                .replace(/\n\s*/g, '') // Remove newlines and spaces after them
+                .replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
+                .replace(/> </g, '><') // Remove spaces between tags
+                .trim();
+        }
+
+        // --- 4. EXPORT ---
+
+        // Copy Template: với mapped variables (cho việc lưu template)
+        window.copyTemplateHtml = function () {
+            let rawHtml = currentMode === 'visual' ? quill.root.innerHTML : sourceArea.value;
+            const lhKey = lhSelect.value;
+            const currentLH = LINE_HEIGHTS[lhKey];
+
+            // Thay thế variable gốc bằng mapped variable từ repo
+            const mappedHtml = applyVariableMapping(rawHtml);
+            const contentWithStyles = injectDesignTokens(mappedHtml, currentLH);
+            const finalHtml = generateOutputHtml(contentWithStyles, currentLH);
+            const minifiedHtml = minifyHtml(finalHtml);
+
+            navigator.clipboard.writeText(minifiedHtml).then(() => {
+                alert('✅ Đã copy Template HTML (minified)!\n\nVariables được map theo repo với format ${variable}.');
+            });
+        }
+
+        // Copy Test: với test values đã nhập (cho việc test send email)
+        window.copyTestHtml = function () {
+            let rawHtml = currentMode === 'visual' ? quill.root.innerHTML : sourceArea.value;
+            const lhKey = lhSelect.value;
+            const currentLH = LINE_HEIGHTS[lhKey];
+
+            // Thay thế variables bằng test values
+            const filledHtml = replaceVariables(rawHtml, false);
+            const contentWithStyles = injectDesignTokens(filledHtml, currentLH);
+            const finalHtml = generateOutputHtml(contentWithStyles, currentLH);
+            const minifiedHtml = minifyHtml(finalHtml);
+
+            navigator.clipboard.writeText(minifiedHtml).then(() => {
+                alert('✅ Đã copy Test HTML (minified)!\n\nVariables được thay bằng giá trị test.\nDùng để test send email.');
+            });
+        }
+
+        // Thay thế variable gốc bằng mapped variable với format ${...}
+        function applyVariableMapping(html) {
+            let res = html;
+            res = res.replace(regexText, (match, key) => {
+                const originalKey = key.trim();
+                const nKey = originalKey.toLowerCase();
+                const mappedKey = variableMapping[nKey] || originalKey;
+                return `\${${mappedKey}}`;
+            });
+            // Keep [] format as-is, only convert if explicitly mapped
+            res = res.replace(regexSelect, (match, content) => {
+                const parts = content.split(':');
+                const originalKey = parts[0].trim();
+                const nKey = originalKey.toLowerCase();
+                
+                // Only convert if there's a mapping
+                if (variableMapping[nKey]) {
+                    const mappedKey = variableMapping[nKey];
+                    return `\${${mappedKey}}`;
+                }
+                
+                // Keep original [] format
+                return match;
+            });
+            return res;
+        }
+
+        // --- 5. EVENTS & UTILS ---
+
+        function parseFields(html) {
+            const fields = [];
+            const seen = new Set(); // Normalized keys (lowercase)
+            const keyVariants = {}; // Track all variants: normalized -> [original1, original2, ...]
+
+            const add = (key, type, opts = []) => {
+                const normalizedKey = key.toLowerCase().trim();
+
+                // Track all variants
+                if (!keyVariants[normalizedKey]) {
+                    keyVariants[normalizedKey] = [];
+                }
+                if (!keyVariants[normalizedKey].includes(key)) {
+                    keyVariants[normalizedKey].push(key);
+                }
+
+                // Deduplicate by normalized key
+                if (!seen.has(normalizedKey)) {
+                    seen.add(normalizedKey);
+                    const repoMatch = findRepoMatch(key);
+                    const suggestions = getSuggestions(key);
+                    // Auto-set mapping nếu chưa có
+                    if (!variableMapping[normalizedKey] && repoMatch) {
+                        variableMapping[normalizedKey] = repoMatch;
+                    }
+                    fields.push({
+                        key, // Original key for display
+                        normalizedKey, // Normalized key for dedup & mapping
+                        type,
+                        opts,
+                        repoMatch,
+                        suggestions
+                    });
+                }
+            };
+
+            [...html.matchAll(regexText)].forEach(m => add(m[1].trim(), 'text'));
+            [...html.matchAll(regexSelect)].forEach(m => {
+                const parts = m[1].trim().split(':');
+                add(parts[0].trim(), parts.length > 1 ? 'select' : 'text', parts.length > 1 ? parts[1].split(',') : []);
+            });
+
+            // Store variants for reference
+            fields.forEach(f => {
+                f.variants = keyVariants[f.normalizedKey] || [f.key];
+            });
+
+            return fields;
+        }
+
+        function renderForm(fields) {
+            const currentLen = formArea.querySelectorAll('.field-group').length;
+            if (currentLen === fields.length && currentLen > 0) return;
+
+            if (fields.length === 0) {
+                formArea.innerHTML = '<div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size:13px">Không tìm thấy biến {...}</div>';
+                return;
+            }
+
+            let html = '';
+            fields.forEach((f, idx) => {
+                const nKey = f.normalizedKey;
+                const testVal = formData[nKey] || '';
+                const mappedVal = variableMapping[nKey] || '';
+                const hasSuggestion = f.suggestions.length > 0;
+
+                // Show variants if more than 1
+                const variantInfo = f.variants && f.variants.length > 1
+                    ? `<span style="font-size:9px; color:#6b7280; margin-left:4px;">(+${f.variants.length - 1} variants)</span>`
+                    : '';
+
+                // Status badge
+                let statusBadge = '';
+                if (mappedVal && VARIABLE_REPO.includes(mappedVal)) {
+                    statusBadge = `<span style="font-size:10px; background:#dcfce7; color:#166534; padding:1px 4px; border-radius:3px; margin-left:6px;">✓ Mapped</span>`;
+                } else if (hasSuggestion) {
+                    statusBadge = `<span style="font-size:10px; background:#fef3c7; color:#92400e; padding:1px 4px; border-radius:3px; margin-left:6px;">⚠ Cần chọn</span>`;
+                } else {
+                    statusBadge = `<span style="font-size:10px; background:#fee2e2; color:#991b1b; padding:1px 4px; border-radius:3px; margin-left:6px;">✗ Không có trong repo</span>`;
+                }
+
+                html += `<div class="field-group" style="margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e5e7eb;">
+                    <label style="font-weight: 700; display: flex; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
+                        <span style="color: #374151;">{${f.key}}</span>${variantInfo}${statusBadge}
+                    </label>
+                    
+                    <div style="margin-bottom: 6px;">
+                        <label style="font-size: 11px; color: #6b7280; font-weight: 600; margin-bottom: 3px; display: block;">Map tới biến repo:</label>
+                        <div class="autocomplete-wrapper" id="ac-wrapper-${idx}">
+                            <input type="text" 
+                                class="autocomplete-input ${mappedVal ? 'mapped' : ''}" 
+                                id="ac-input-${idx}"
+                                data-key="${nKey}"
+                                data-idx="${idx}"
+                                value="${mappedVal}"
+                                placeholder="Gõ để tìm biến... (Tab để chọn)"
+                                onfocus="showAutocomplete(${idx}, '${nKey}')"
+                                oninput="filterAutocomplete(${idx}, '${nKey}', this.value)"
+                                onkeydown="handleAutocompleteKey(event, ${idx}, '${nKey}')">
+                            <div class="autocomplete-dropdown" id="ac-dropdown-${idx}"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label style="font-size: 11px; color: #9ca3af; font-weight: 500; margin-bottom: 3px; display: block;">Giá trị test (xem layout):</label>
+                        <input type="text" value="${testVal}" oninput="updateData('${nKey}', this.value)" 
+                            placeholder="Nhập giá trị để xem preview..." 
+                            style="width: 100%; padding: 5px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px; color: #6b7280;">
+                    </div>
+                </div>`;
+            });
+            formArea.innerHTML = html;
+        }
+
+        // --- AUTOCOMPLETE FUNCTIONS ---
+        let currentHighlightIdx = -1;
+        let currentDropdownItems = [];
+
+        function showAutocomplete(idx, key) {
+            filterAutocomplete(idx, key, document.getElementById(`ac-input-${idx}`).value);
+        }
+
+        function filterAutocomplete(idx, key, query) {
+            const dropdown = document.getElementById(`ac-dropdown-${idx}`);
+            const input = document.getElementById(`ac-input-${idx}`);
+            const field = parseFields(currentMode === 'visual' ? quill.root.innerHTML : sourceArea.value).find(f => f.key === key);
+            const suggestions = field ? field.suggestions : [];
+
+            const q = query.toLowerCase().trim();
+            let items = [];
+
+            // Filter and prioritize
+            if (q === '') {
+                // Show suggestions first, then all
+                items = [...suggestions, ...VARIABLE_REPO.filter(v => !suggestions.includes(v))];
+            } else {
+                // Filter by query - prioritize starts with, then contains
+                const startsWith = VARIABLE_REPO.filter(v => v.toLowerCase().startsWith(q));
+                const contains = VARIABLE_REPO.filter(v => v.toLowerCase().includes(q) && !v.toLowerCase().startsWith(q));
+                items = [...startsWith, ...contains];
+            }
+
+            currentDropdownItems = items.slice(0, 30); // Limit to 30 items
+            currentHighlightIdx = items.length > 0 ? 0 : -1;
+
+            renderDropdown(dropdown, currentDropdownItems, suggestions, idx, key, currentHighlightIdx);
+            dropdown.classList.add('show');
+        }
+
+        function renderDropdown(dropdown, items, suggestions, idx, key, highlightIdx) {
+            if (items.length === 0) {
+                dropdown.innerHTML = '<div class="autocomplete-hint">Không tìm thấy biến nào</div>';
+                return;
+            }
+
+            let html = '';
+            let lastPrefix = '';
+
+            items.forEach((item, i) => {
+                const isSuggestion = suggestions.includes(item);
+                const prefix = item.includes('.') ? item.split('.')[0] : '_other';
+
+                // Add group header if prefix changes (only when not filtering)
+                if (prefix !== lastPrefix && !isSuggestion) {
+                    html += `<div class="autocomplete-group">${capitalize(prefix)}</div>`;
+                    lastPrefix = prefix;
+                }
+
+                const highlightClass = i === highlightIdx ? 'highlighted' : '';
+                const suggestionClass = isSuggestion ? 'suggestion' : '';
+
+                html += `<div class="autocomplete-item ${highlightClass} ${suggestionClass}" 
+                    onclick="selectAutocomplete(${idx}, '${key}', '${item}')"
+                    onmouseenter="setHighlight(${i})">
+                    ${isSuggestion ? '💡 ' : ''}${item}
+                </div>`;
+            });
+
+            html += '<div class="autocomplete-hint">↑↓ di chuyển • Tab/Enter chọn • Esc đóng</div>';
+            dropdown.innerHTML = html;
+        }
+
+        function setHighlight(idx) {
+            currentHighlightIdx = idx;
+        }
+
+        function handleAutocompleteKey(event, idx, key) {
+            const dropdown = document.getElementById(`ac-dropdown-${idx}`);
+            const isOpen = dropdown.classList.contains('show');
+
+            if (!isOpen) return;
+
+            switch (event.key) {
+                case 'ArrowDown':
+                    event.preventDefault();
+                    currentHighlightIdx = Math.min(currentHighlightIdx + 1, currentDropdownItems.length - 1);
+                    updateHighlight(dropdown);
+                    break;
+                case 'ArrowUp':
+                    event.preventDefault();
+                    currentHighlightIdx = Math.max(currentHighlightIdx - 1, 0);
+                    updateHighlight(dropdown);
+                    break;
+                case 'Tab':
+                case 'Enter':
+                    event.preventDefault();
+                    if (currentHighlightIdx >= 0 && currentDropdownItems[currentHighlightIdx]) {
+                        selectAutocomplete(idx, key, currentDropdownItems[currentHighlightIdx]);
+                    }
+                    break;
+                case 'Escape':
+                    hideAllDropdowns();
+                    break;
+            }
+        }
+
+        function updateHighlight(dropdown) {
+            dropdown.querySelectorAll('.autocomplete-item').forEach((item, i) => {
+                item.classList.toggle('highlighted', i === currentHighlightIdx);
+            });
+            // Scroll into view
+            const highlighted = dropdown.querySelector('.autocomplete-item.highlighted');
+            if (highlighted) highlighted.scrollIntoView({ block: 'nearest' });
+        }
+
+        function selectAutocomplete(idx, key, value) {
+            const input = document.getElementById(`ac-input-${idx}`);
+            input.value = value;
+            input.classList.add('mapped');
+            hideAllDropdowns();
+            updateMapping(key, value);
+        }
+
+        function hideAllDropdowns() {
+            document.querySelectorAll('.autocomplete-dropdown').forEach(d => d.classList.remove('show'));
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.autocomplete-wrapper')) {
+                hideAllDropdowns();
+            }
+        });
+
+        function replaceVariables(html, highlight = false) {
+            let res = html;
+
+            // Helper function to replace only in text content, not inside attributes
+            const replaceInTextOnly = (str, regex, replacer) => {
+                // Split by HTML tags to separate tags from text content
+                const parts = str.split(/(<[^>]+>)/g);
+                return parts.map(part => {
+                    // If it's a tag (starts with <), don't replace inside it
+                    if (part.startsWith('<')) {
+                        return part;
+                    }
+                    // It's text content, safe to replace
+                    return part.replace(regex, replacer);
+                }).join('');
+            };
+
+            if (highlight) {
+                // Only highlight in text content, not in attributes
+                res = replaceInTextOnly(res, regexText, (match, key) => {
+                    const nKey = key.trim().toLowerCase();
+                    const val = formData[nKey];
+                    return val ? `<span class="var-highlight">${val}</span>` : `<span class="var-empty">${match}</span>`;
+                });
+                res = replaceInTextOnly(res, regexSelect, (match, content) => {
+                    const key = content.split(':')[0].trim();
+                    const nKey = key.toLowerCase();
+                    const val = formData[nKey];
+                    return val ? `<span class="var-highlight">${val}</span>` : `<span class="var-empty">${match}</span>`;
+                });
+            } else {
+                // For non-highlighting (output), replace everywhere
+                res = res.replace(regexText, (match, key) => {
+                    const nKey = key.trim().toLowerCase();
+                    const val = formData[nKey];
+                    return val || match;
+                });
+                res = res.replace(regexSelect, (match, content) => {
+                    const key = content.split(':')[0].trim();
+                    const nKey = key.toLowerCase();
+                    const val = formData[nKey];
+                    return val || match;
+                });
+            }
+            return res;
+        }
+
+        window.updateView = function () { processContent(); }
+        window.updateData = function (key, val) { formData[key] = val; processContent(); };
+        window.updateMapping = function (key, val) {
+            variableMapping[key] = val;
+            // Force re-render form to update status
+            formArea.innerHTML = '';
+            processContent();
+        };
+        window.switchMode = function (mode, btn) {
+            if (mode === currentMode) return;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            if (mode === 'source') { sourceArea.value = html_beautify(quill.root.innerHTML); sourceArea.classList.add('active'); }
+            else { quill.clipboard.dangerouslyPasteHTML(sourceArea.value); sourceArea.classList.remove('active'); }
+            currentMode = mode; processContent();
+        }
+
+        quill.on('text-change', function(delta, oldDelta, source) {
+            if (currentMode === 'visual' && source === 'user') {
+                // Auto-convert paragraphs with 4+ dashes to dividers
+                setTimeout(() => {
+                    const text = quill.getText();
+                    const lines = text.split('\n');
+                    let offset = 0;
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        const line = lines[i].trim();
+                        
+                        if (line.match(/^-{4,}$/)) {
+                            // Found dashes, delete this line and insert divider
+                            const lineLength = lines[i].length;
+                            
+                            // Delete the line content
+                            quill.deleteText(offset, lineLength, 'silent');
+                            
+                            // Insert divider blot
+                            quill.insertEmbed(offset, 'divider', true, 'silent');
+                            
+                            // Move cursor after divider
+                            quill.setSelection(offset + 1, 0, 'silent');
+                            break;
+                        }
+                        offset += lines[i].length + 1; // +1 for newline
+                    }
+                }, 10);
+            }
+            
+            if (currentMode === 'visual') processContent();
+        });
+        sourceArea.addEventListener('input', () => { if (currentMode === 'source') processContent(); });
+        function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+        function html_beautify(html) {
+            let formatted = ''; let indent = '';
+            html.split(/>\s*</).forEach(function (element) {
+                if (element.match(/^\/\w/)) indent = indent.substring(2);
+                formatted += indent + '<' + element + '>\r\n';
+                if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("input") && !element.startsWith("img") && !element.startsWith("br")) indent += '  ';
+            });
+            return formatted.substring(1, formatted.length - 3);
+        }
+
+        // Init
+        processContent();
+    </script>
+</body>
+
+</html>
