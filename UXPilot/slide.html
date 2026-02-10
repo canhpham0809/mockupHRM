@@ -1,719 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UX Pilot vs Figma vs Axure: So sánh cho BA</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-      <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
-        }
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #1f2937;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .table-container {
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        th {
-            background-color: #1f2937;
-            color: white;
-            font-weight: 600;
-        }
-        td {
-            background-color: #f9fafb;
-        }
-        .highlight {
-            background-color: #e0f2fe;
-            font-weight: 500;
-        }
-        .flow-diagram {
-            background: #e0f2fe;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .flow-step {
-            margin: 0.5rem 0;
-            padding: 0.75rem;
-            background: white;
-            border-radius: 0.25rem;
-            display: inline-block;
-        }
-        .conclusion-card {
-            background: #1f2937;
-            color: white;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 2rem;
-        }
-        .prompt-section {
-            background: #fef3c7;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .prompt-section pre {
-            background: #1f2937;
-            color: #f9fafb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-        }
-        .mockup-section {
-            background: white;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .mockup-section button {
-            background-color: #2563eb;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            transition: background-color 0.3s;
-            margin: 0 0.5rem;
-        }
-        .mockup-section button:hover {
-            background-color: #1d4ed8;
-        }
-        .mockup-section iframe {
-            display: none;
-            width: 100%;
-            height: 1024px;
-            border: 2px solid #d1d5db;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-        .mockup-section iframe.visible {
-            display: block;
-        }
-        .mockup-section img {
-            display: none;
-            max-width: 100%;
-            height: auto;
-            border: 2px solid #d1d5db;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-        .mockup-section img.visible {
-            display: block;
-        }
-        .intro-section {
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-    </style>
-</head>
-<body class="p-8">
-    <div class="max-w-6xl mx-auto">
-        <h1 class="section-title">Tool AI UX Pilot cho BA</h1>
-
-        <!-- UX Pilot Introduction -->
-        <div class="intro-section">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Giới thiệu về UX Pilot</h2>
-            <h3 class="text-xl font-medium text-gray-700 mb-2">UX Pilot là gì?</h3>
-            <p class="text-gray-600 mb-4">UX Pilot là một công cụ hỗ trợ tích hợp AI, có khả năng tạo mockup ứng dụng nhanh chóng:</p>
-            <ul class="list-disc pl-5 space-y-2 text-gray-600">
-                <li>Tạo khung lưới và thiết kế giao diện người dùng có độ trung thực cao một cách nhanh chóng và đáng tin cậy</li>
-                <li>Tối ưu hóa quy trình phát triển sản phẩm và UX ứng dụng</li>
-                <li>Tích hợp và thích ứng với nhiều hệ thống thiết kế khác (Vd: Figma)</li>
-                <li>Nâng cao chất lượng công việc của team thông qua thiết kế hỗ trợ AI</li>
-            </ul>
-        </div>
-
-        <!-- Comparison Table -->
-        <div class="table-container">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Bảng so sánh tổng quan</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tiêu chí</th>
-                        <th>UX Pilot</th>
-                        <th>Figma</th>
-                        <th>Axure RP</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="font-medium">Mục đích chính</td>
-                        <td class="highlight">Hỗ trợ nhanh trong vẽ mockup, wireframe cơ bản và prototyping đơn giản</td>
-                        <td>Thiết kế giao diện UI/UX chuyên nghiệp, cộng tác nhóm</td>
-                        <td>Thiết kế prototype chi tiết, phức tạp, hỗ trợ nhiều logic và tương tác</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Độ phức tạp</td>
-                        <td class="highlight">Đơn giản, thao tác nhanh, ít tính năng nâng cao</td>
-                        <td>Trung bình → cao, cần thời gian làm quen</td>
-                        <td>Cao, học sử dụng khá khó đối với người mới</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Cộng tác nhóm</td>
-                        <td>Chưa mạnh, chủ yếu cá nhân hoặc nhóm nhỏ</td>
-                        <td class="highlight">Rất mạnh (realtime collaboration, comment, versioning)</td>
-                        <td>Có tính năng share nhưng không realtime mượt như Figma</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Khả năng prototyping</td>
-                        <td>Cơ bản (link giữa các màn hình)</td>
-                        <td>Khá mạnh, mô phỏng flow, animation, interaction trực quan</td>
-                        <td class="highlight">Rất mạnh, giả lập logic, điều kiện, biến, form nhập</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Khả năng hi-fidelity</td>
-                        <td>Thấp → trung bình</td>
-                        <td class="highlight">Cao (gần như sản phẩm cuối cùng)</td>
-                        <td>Cao (tập trung interaction, UI không mượt bằng Figma)</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Thư viện component</td>
-                        <td>Có nhưng hạn chế</td>
-                        <td class="highlight">Rất phong phú (plugin, community assets)</td>
-                        <td>Có, thiên về wireframe/interaction</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Độ phổ biến</td>
-                        <td>Thấp (ít người biết, ít tài liệu)</td>
-                        <td class="highlight">Rất cao, tiêu chuẩn ngành hiện nay</td>
-                        <td>Tương đối, phổ biến với UX chuyên sâu</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Chi phí</td>
-                        <td class="highlight">Thường rẻ hơn hoặc miễn phí</td>
-                        <td class="highlight">Có bản free mạnh, bản Pro trả phí</td>
-                        <td>Trả phí cao, license riêng (tốn kém hơn)</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Đối tượng phù hợp</td>
-                        <td>BA cần vẽ nhanh mockup cơ bản</td>
-                        <td>Designer, Product Owner, BA/UX Researcher</td>
-                        <td>Designer, BA/UX Researcher cần mô phỏng logic phức tạp</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- AI Features Table -->
-        <div class="table-container">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">So sánh tính năng AI của UX Pilot</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tiêu chí</th>
-                        <th>UX Pilot (AI-driven)</th>
-                        <th>Figma</th>
-                        <th>Axure RP</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="font-medium">Mục đích chính</td>
-                        <td class="highlight">Vẽ mockup nhanh bằng AI, tự động sinh giao diện từ mô tả</td>
-                        <td>Thiết kế UI/UX thủ công, cộng tác nhóm</td>
-                        <td>Thiết kế prototype logic chi tiết, hỗ trợ nghiệp vụ</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Ưu điểm nhờ AI</td>
-                        <td class="highlight">
-                            - 🚀 Tăng hiệu suất: sinh mockup trong vài giây.<br>
-                            - 🎨 Đa dạng ý tưởng: nhiều layout, style khác nhau.<br>
-                            - 🤖 Giảm công sức: tự động tạo variant, form, button.<br>
-                            - 🔄 Tự động cải tiến: gợi ý UI theo best-practices.
-                        </td>
-                        <td>Không có AI tích hợp sẵn, dùng plugin AI bên ngoài</td>
-                        <td>Không tích hợp AI, phải tự thiết kế chi tiết</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Khả năng prototyping</td>
-                        <td>Cơ bản, chủ yếu về layout</td>
-                        <td class="highlight">Mạnh (flow, animation, realtime preview)</td>
-                        <td class="highlight">Rất mạnh (logic, biến, điều kiện)</td>
-                    </tr>
-                    <tr>
-                        <td class="font-medium">Đối tượng phù hợp</td>
-                        <td class="highlight">BA, PM, Startup founder cần mockup nhanh</td>
-                        <td>Designer, Product Owner, BA cần teamwork</td>
-                        <td>BA/UX researcher cần prototype phức tạp</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Workflow Comparison -->
-        <div class="flow-diagram">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">So sánh quy trình làm việc</h2>
-            <div>
-                <h3 class="text-xl font-medium text-gray-700">1. Với Figma/Axure (thủ công)</h3>
-                <div class="flow-step">BA/PM nhập Requirement</div> → 
-                <div class="flow-step">Designer/BA vẽ mockup thủ công</div> → 
-                <div class="flow-step">Review & chỉnh sửa nhiều vòng</div> → 
-                <div class="flow-step">Prototype trong Figma/Axure</div> → 
-                <div class="flow-step">Dev implement</div>
-                <p class="mt-2 text-gray-600"><strong>Ưu điểm:</strong> Chủ động chi tiết, logic phức tạp (Axure), teamwork mạnh (Figma).</p>
-                <p class="text-gray-600"><strong>Hạn chế:</strong> Tốn thời gian, lặp lại, cần designer/BA thành thạo.</p>
-            </div>
-            <br>
-            <div class="mb-4">
-                <h3 class="text-xl font-medium text-gray-700">2. Với UX Pilot (AI)</h3>
-                <div class="flow-step">BA/PM nhập Requirement (text, prompt, user story)</div> → 
-                <div class="flow-step">AI (UX Pilot) sinh mockup tự động</div> → 
-                <div class="flow-step">BA/PM chọn & chỉnh sửa nhanh</div> → 
-                <div class="flow-step">Designer refine UI trong Figma (nếu cần)</div> → 
-                <div class="flow-step">Dev implement</div>
-                <p class="mt-2 text-gray-600"><strong>Ưu điểm:</strong> Tốc độ, nhiều ý tưởng, ít công lặp.</p>
-                <p class="text-gray-600"><strong>Hạn chế:</strong> Chưa mạnh ở interaction phức tạp.</p>
-            </div>
-            
-        </div>
-        <!-- Conclusion -->
-        <div class="conclusion-card">
-            <h2 class="text-2xl font-semibold mb-4">Kết luận</h2>
-            <ul class="list-disc pl-5 space-y-2">
-                <li><strong>UX Pilot:</strong> Phù hợp khi cần vẽ nhanh, ít tốn công, lý tưởng cho BA/PM ghi lại luồng nghiệp vụ. AI giúp rút ngắn 70–80% thời gian từ idea → mockup.</li>
-                <li><strong>Figma:</strong>Chuyên nghiệp và là tiêu chuẩn ngành cho thiết kế UI/UX, cộng tác nhóm, mockup → prototype → handoff dev.</li>
-                <li><strong>Axure RP:</strong> Mạnh nhất cho prototype logic phức tạp, nhưng nặng và chi phí cao.</li>
-            </ul>
-            <p class="mt-4 font-medium">👉 <strong>Chọn UX Pilot:</strong> để trình bày ý tưởng nhanh, xác nhận với khách hàng, mô tả cơ bản cho dev dễ hình dung rồi sau đó tinh chỉnh bằng <strong>Figma/Axure</strong> để làm việc nhóm và giao tiếp với dev</p>
-        </div>
- <!-- UX Pilot Prompt Template -->
-        <div class="prompt-section">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">📌 Prompt Template UX Pilot</h2>
-            <h3 class="text-xl font-medium text-gray-700 mb-2">Cấu trúc Prompt (Tiếng Việt)</h3>
-            <pre>
-Tạo màn hình [Tên màn hình / Mục tiêu]
-
-- Header:
-   + [Có/không], hiển thị logo, tên ứng dụng, user avatar, nút logout...
-- Footer:
-   + [Có/không], nội dung: copyright, link contact/support...
-- Menu:
-   + [Dọc/Ngang], vị trí [trái/phải/trên], chứa các mục [Dashboard, Employee, Setting...]
-   + Có icon hay không.
-- Thành phần UI chính:
-   + [Tên field 1] (textbox/dropdown/upload/button..., bắt buộc/không, quy tắc nhập liệu)
-   + [Tên field 2] ...
-- Quy tắc/Logic:
-   + [Điều kiện hiển thị, validation, ràng buộc...]
-- Layout mong muốn:
-   + [1 cột/2 cột/card/dashboard/...]
-   + [Section, tab, panel, căn giữa/trái/phải...]
-- Màu sắc & Theme:
-   + [Light/Dark theme]
-   + Primary color: [#xxxxxx]
-   + Secondary color: [#xxxxxx]
-   + Font: [Roboto/Arial/...]
-- Ngữ cảnh/Đối tượng sử dụng:
-   + [Ứng dụng mobile/web, ai dùng: HR Admin, End-user, Manager...]
-            </pre>
-
-            <h3 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ (Tiếng Việt)</h3>
-            <pre>
-Tạo màn hình "Quản lý Nhân viên"
-
-- Header:
-   + Có, hiển thị logo công ty bên trái, avatar + dropdown user bên phải.
-- Footer:
-   + Có, hiển thị © 2025 Company, link Support.
-- Menu:
-   + Menu dọc bên trái, gồm: Dashboard, Employees, Departments, Settings (có icon).
-- Thành phần UI chính:
-   + Bảng danh sách nhân viên (cột: Name, Department, Position, Status, Actions).
-   + Nút "Add Employee" (primary).
-   + Ô tìm kiếm + filter theo Department.
-- Quy tắc/Logic:
-   + Chỉ HR Admin mới thấy nút "Add Employee".
-- Layout mong muốn:
-   + Bảng chiếm 80% width, thanh menu chiếm 20% bên trái.
-   + Responsive: menu thu gọn thành icon khi màn hình nhỏ.
-- Màu sắc & Theme:
-   + Light theme
-   + Primary color: #2563eb (blue-600)
-   + Secondary color: #10b981 (emerald-500)
-   + Font: Inter
-- Ngữ cảnh/Đối tượng sử dụng:
-   + HR Admin quản lý danh sách nhân viên trên web app.
-            </pre>
-
-            <h3 class="text-xl font-medium text-gray-700 mb-2 mt-4">Ví dụ (Tiếng Anh)</h3>
-            <pre>
-Create an "Employee Management" screen
-
-- Header:
-   + Yes, show company logo on the left, user avatar + dropdown on the right.
-- Footer:
-   + Yes, show © 2025 Company, Support link.
-- Menu:
-   + Vertical menu on the left, items: Dashboard, Employees, Departments, Settings (with icons).
-- Main UI components:
-   + Employee table (columns: Name, Department, Position, Status, Actions).
-   + "Add Employee" button (primary).
-   + Search box + Department filter.
-- Rules/Logic:
-   + Only HR Admin can see the "Add Employee" button.
-- Layout:
-   + Table takes 80% width, sidebar menu 20% on the left.
-   + Responsive: menu collapses to icons on smaller screens.
-- Colors & Theme:
-   + Light theme
-   + Primary color: #2563eb (blue-600)
-   + Secondary color: #10b981 (emerald-500)
-   + Font: Inter
-- Context / Target users:
-   + Web app, HR Admin managing employee list.
-            </pre>
-        </div>
-        
-    </div>
-    <!-- Mockup Generator Section -->
-        <div class="mockup-section">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Trải nghiệm Mockup với UX Pilot</h2>
-            <div class="flex justify-center space-x-4">
-                <button id="generate-mockup" onclick="toggleMockup('mockup-iframe')">Generate Mockup</button>
-                <button id="plugin-html" onclick="toggleMockup('plugin-html-img')">Plugin code.to.design</button>
-                <button id="html-to-figma" onclick="toggleMockup('html-to-figma-img')">Generate Figma</button>
-            </div>
-            <main class="flex-grow overflow-y-auto">
-                <div>
-                    <div class="flex items-center justify-center mx-4 my-8">
-                        <iframe id="mockup-iframe" title="wireframe-f16uj9RIVOAQgVVtUC1D" srcdoc="
-                            <html>
-                            <head>
-                                <meta charset='UTF-8'>
-                                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-                                <script src='https://cdn.tailwindcss.com'></script>
-                                <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
-                                <script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js' crossorigin='anonymous' referrerpolicy='no-referrer'></script>
-                                <style>
-                                    ::-webkit-scrollbar { display: none;}
-                                    body { font-family: 'Inter', sans-serif; }
-                                </style>
-                                <script>tailwind.config = {
-                                    'theme': {
-                                        'extend': {
-                                            'colors': {
-                                                'primary': '#2563eb',
-                                                'secondary': '#10b981'
-                                            },
-                                            'fontFamily': {
-                                                'sans': [
-                                                    'Inter',
-                                                    'sans-serif'
-                                                ]
-                                            }
-                                        }
-                                    }
-                                };</script>
-                                <link rel='preconnect' href='https://fonts.googleapis.com'>
-                                <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
-                                <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap'>
-                                <style>
-                                    .highlighted-section {
-                                        outline: 2px solid #3F20FB;
-                                        background-color: rgba(63, 32, 251, 0.1);
-                                    }
-                                    .edit-button {
-                                        position: absolute;
-                                        z-index: 1000;
-                                    }
-                                    ::-webkit-scrollbar {
-                                        display: none;
-                                    }
-                                    html, body {
-                                        -ms-overflow-style: none;
-                                        scrollbar-width: none;
-                                    }
-                                </style>
-                            </head>
-                            <body class='bg-gray-50'>
-                                <div class='flex h-screen'>
-                                    <!-- Sidebar Menu -->
-                                    <aside id='sidebar' class='w-64 bg-white shadow-lg border-r border-gray-200 flex flex-col'>
-                                        <div class='p-6 border-b border-gray-200'>
-                                            <div class='flex items-center space-x-3'>
-                                                <div class='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
-                                                    <i class='fas fa-building text-white text-sm'></i>
-                                                </div>
-                                                <span class='text-xl font-bold text-gray-800'>Company</span>
-                                            </div>
-                                        </div>
-                                        <nav class='flex-1 p-4'>
-                                            <ul class='space-y-2'>
-                                                <li>
-                                                    <span class='flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer'>
-                                                        <i class='fas fa-chart-line w-5'></i>
-                                                        <span>Dashboard</span>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <span class='flex items-center space-x-3 px-4 py-3 bg-primary text-white rounded-lg cursor-pointer'>
-                                                        <i class='fas fa-users w-5'></i>
-                                                        <span>Employees</span>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <span class='flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer'>
-                                                        <i class='fas fa-sitemap w-5'></i>
-                                                        <span>Departments</span>
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    <span class='flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer'>
-                                                        <i class='fas fa-cog w-5'></i>
-                                                        <span>Settings</span>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </aside>
-                                    <!-- Mobile Sidebar (Hidden by default) -->
-                                    <aside id='mobile-sidebar' class='fixed inset-y-0 left-0 z-50 w-16 bg-white shadow-lg border-r border-gray-200 hidden lg:hidden'>
-                                        <div class='p-4 border-b border-gray-200'>
-                                            <div class='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
-                                                <i class='fas fa-building text-white text-sm'></i>
-                                            </div>
-                                        </div>
-                                        <nav class='p-2'>
-                                            <ul class='space-y-2'>
-                                                <li><span class='flex items-center justify-center w-12 h-12 text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer'><i class='fas fa-chart-line'></i></span></li>
-                                                <li><span class='flex items-center justify-center w-12 h-12 bg-primary text-white rounded-lg cursor-pointer'><i class='fas fa-users'></i></span></li>
-                                                <li><span class='flex items-center justify-center w-12 h-12 text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer'><i class='fas fa-sitemap'></i></span></li>
-                                                <li><span class='flex items-center justify-center w-12 h-12 text-gray-600 hover:bg-gray-100 rounded-lg cursor-pointer'><i class='fas fa-cog'></i></span></li>
-                                            </ul>
-                                        </nav>
-                                    </aside>
-                                    <!-- Main Content Area -->
-                                    <div class='flex-1 flex flex-col'>
-                                        <!-- Header -->
-                                        <header id='header' class='bg-white shadow-sm border-b border-gray-200 px-6 py-4'>
-                                            <div class='flex items-center justify-between'>
-                                                <div class='flex items-center space-x-4'>
-                                                    <button id='mobile-menu-toggle' class='lg:hidden text-gray-600 hover:text-gray-800'>
-                                                        <i class='fas fa-bars text-xl'></i>
-                                                    </button>
-                                                    <h1 class='text-2xl font-semibold text-gray-800'>Employee Management</h1>
-                                                </div>
-                                                <div class='flex items-center space-x-4'>
-                                                    <div class='relative'>
-                                                        <button class='flex items-center space-x-3 text-gray-600 hover:text-gray-800'>
-                                                            <img src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-1.jpg' alt='User Avatar' class='w-8 h-8 rounded-full'>
-                                                            <span class='hidden sm:block font-medium'>Sarah Johnson</span>
-                                                            <i class='fas fa-chevron-down text-sm'></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </header>
-                                        <!-- Main Content -->
-                                        <main id='main-content' class='flex-1 p-6 overflow-auto'>
-                                            <!-- Search and Actions Bar -->
-                                            <div id='actions-bar' class='bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6'>
-                                                <div class='flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0'>
-                                                    <div class='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4'>
-                                                        <div class='relative'>
-                                                            <i class='fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400'></i>
-                                                            <input type='text' placeholder='Search employees...' class='pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent w-full sm:w-64'>
-                                                        </div>
-                                                        <select class='px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent'>
-                                                            <option>All Departments</option>
-                                                            <option>Engineering</option>
-                                                            <option>Marketing</option>
-                                                            <option>Sales</option>
-                                                            <option>HR</option>
-                                                        </select>
-                                                    </div>
-                                                    <button class='bg-primary hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors'>
-                                                        <i class='fas fa-plus'></i>
-                                                        <span>Add Employee</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <!-- Employee Table -->
-                                            <div id='employee-table' class='bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden'>
-                                                <div class='overflow-x-auto'>
-                                                    <table class='w-full'>
-                                                        <thead class='bg-gray-50 border-b border-gray-200'>
-                                                            <tr>
-                                                                <th class='text-left px-6 py-4 text-sm font-semibold text-gray-700'>Name</th>
-                                                                <th class='text-left px-6 py-4 text-sm font-semibold text-gray-700'>Department</th>
-                                                                <th class='text-left px-6 py-4 text-sm font-semibold text-gray-700'>Position</th>
-                                                                <th class='text-left px-6 py-4 text-sm font-semibold text-gray-700'>Status</th>
-                                                                <th class='text-left px-6 py-4 text-sm font-semibold text-gray-700'>Actions</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody class='divide-y divide-gray-200'>
-                                                            <tr class='hover:bg-gray-50'>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-3'>
-                                                                        <img src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg' alt='Employee' class='w-10 h-10 rounded-full'>
-                                                                        <div>
-                                                                            <div class='font-medium text-gray-900'>John Smith</div>
-                                                                            <div class='text-sm text-gray-500'>john.smith@company.com</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class='px-6 py-4 text-gray-900'>Engineering</td>
-                                                                <td class='px-6 py-4 text-gray-900'>Senior Developer</td>
-                                                                <td class='px-6 py-4'>
-                                                                    <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'>Active</span>
-                                                                </td>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-2'>
-                                                                        <button class='text-primary hover:text-blue-700 p-1'><i class='fas fa-edit'></i></button>
-                                                                        <button class='text-gray-400 hover:text-gray-600 p-1'><i class='fas fa-eye'></i></button>
-                                                                        <button class='text-red-400 hover:text-red-600 p-1'><i class='fas fa-trash'></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class='hover:bg-gray-50'>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-3'>
-                                                                        <img src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg' alt='Employee' class='w-10 h-10 rounded-full'>
-                                                                        <div>
-                                                                            <div class='font-medium text-gray-900'>Emily Davis</div>
-                                                                            <div class='text-sm text-gray-500'>emily.davis@company.com</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class='px-6 py-4 text-gray-900'>Marketing</td>
-                                                                <td class='px-6 py-4 text-gray-900'>Marketing Manager</td>
-                                                                <td class='px-6 py-4'>
-                                                                    <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'>Active</span>
-                                                                </td>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-2'>
-                                                                        <button class='text-primary hover:text-blue-700 p-1'><i class='fas fa-edit'></i></button>
-                                                                        <button class='text-gray-400 hover:text-gray-600 p-1'><i class='fas fa-eye'></i></button>
-                                                                        <button class='text-red-400 hover:text-red-600 p-1'><i class='fas fa-trash'></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class='hover:bg-gray-50'>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-3'>
-                                                                        <img src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg' alt='Employee' class='w-10 h-10 rounded-full'>
-                                                                        <div>
-                                                                            <div class='font-medium text-gray-900'>Michael Brown</div>
-                                                                            <div class='text-sm text-gray-500'>michael.brown@company.com</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class='px-6 py-4 text-gray-900'>Sales</td>
-                                                                <td class='px-6 py-4 text-gray-900'>Sales Representative</td>
-                                                                <td class='px-6 py-4'>
-                                                                    <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800'>On Leave</span>
-                                                                </td>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-2'>
-                                                                        <button class='text-primary hover:text-blue-700 p-1'><i class='fas fa-edit'></i></button>
-                                                                        <button class='text-gray-400 hover:text-gray-600 p-1'><i class='fas fa-eye'></i></button>
-                                                                        <button class='text-red-400 hover:text-red-600 p-1'><i class='fas fa-trash'></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                            <tr class='hover:bg-gray-50'>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-3'>
-                                                                        <img src='https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-6.jpg' alt='Employee' class='w-10 h-10 rounded-full'>
-                                                                        <div>
-                                                                            <div class='font-medium text-gray-900'>Lisa Wilson</div>
-                                                                            <div class='text-sm text-gray-500'>lisa.wilson@company.com</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td class='px-6 py-4 text-gray-900'>HR</td>
-                                                                <td class='px-6 py-4 text-gray-900'>HR Specialist</td>
-                                                                <td class='px-6 py-4'>
-                                                                    <span class='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800'>Active</span>
-                                                                </td>
-                                                                <td class='px-6 py-4'>
-                                                                    <div class='flex items-center space-x-2'>
-                                                                        <button class='text-primary hover:text-blue-700 p-1'><i class='fas fa-edit'></i></button>
-                                                                        <button class='text-gray-400 hover:text-gray-600 p-1'><i class='fas fa-eye'></i></button>
-                                                                        <button class='text-red-400 hover:text-red-600 p-1'><i class='fas fa-trash'></i></button>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </main>
-                                        <!-- Footer -->
-                                        <footer id='footer' class='bg-white border-t border-gray-200 px-6 py-4'>
-                                            <div class='flex items-center justify-between text-sm text-gray-600'>
-                                                <span>© 2025 Company</span>
-                                                <span class='text-primary hover:text-blue-700 cursor-pointer'>Support</span>
-                                            </div>
-                                        </footer>
-                                    </div>
-                                </div>
-                                <script>
-                                    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
-                                        const sidebar = document.getElementById('sidebar');
-                                        const mobileSidebar = document.getElementById('mobile-sidebar');
-                                        if (window.innerWidth < 1024) {
-                                            sidebar.classList.toggle('hidden');
-                                            mobileSidebar.classList.toggle('hidden');
-                                        }
-                                    });
-                                    window.addEventListener('resize', function() {
-                                        const sidebar = document.getElementById('sidebar');
-                                        const mobileSidebar = document.getElementById('mobile-sidebar');
-                                        if (window.innerWidth >= 1024) {
-                                            sidebar.classList.remove('hidden');
-                                            mobileSidebar.classList.add('hidden');
-                                        } else {
-                                            sidebar.classList.add('hidden');
-                                            mobileSidebar.classList.remove('hidden');
-                                        }
-                                    });
-                                </script>
-                            </body>
-                            </html>
-                        " frameborder="0" class="w-full h-max overflow-visible border-2 border-carbon-300 border-solid rounded-lg" style="width: 1440px; height: 1025px; min-height: 1024px;"></iframe>
-                        <img id="plugin-html-img" src="figma1.png" alt="Plugin HTML" class="mockup-image">
-                        <img id="html-to-figma-img" src="figma2.png" alt="HTML to Figma" class="mockup-image">
-                      </div>
-                </div>
-            </main>
-        </div>
-            <script>
-        function toggleMockup(elementId) {
-            const mockupIframe = document.getElementById('mockup-iframe');
-            const pluginHtmlImg = document.getElementById('plugin-html-img');
-            const htmlToFigmaImg = document.getElementById('html-to-figma-img');
-
-            // Hide all elements
-            mockupIframe.classList.remove('visible');
-            pluginHtmlImg.classList.remove('visible');
-            htmlToFigmaImg.classList.remove('visible');
-
-            // Show the selected element
-            document.getElementById(elementId).classList.add('visible');
-        }
-    </script>
-</body>
-</html>
+<div>
+ <table>
+  <tr>
+   <td align="center">
+    <table>
+     <tr>
+      <td>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <em style=" color: rgb(41, 42, 46)">(Vietnamese below)</em
+        ><span style=" color: rgb(41, 42, 46)">&nbsp;</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Dear [CDD Full Name],&nbsp;</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Thank you for applying for the</span
+        ><strong style=" color: rgb(41, 42, 46)"> {Job Title}</strong
+        ><span style=" color: rgb(41, 42, 46)"> position at </span
+        ><strong style=" color: rgb(41, 42, 46)">VNG</strong
+        ><span style=" color: rgb(41, 42, 46)">.&nbsp;</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >As part of our selection process, we’ve attached a short assignment for you to complete, along with detailed
+         instructions to guide you through the process. Please read the instructions carefully to ensure you complete
+         the assignment successfully.&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Requirement: {requirement}</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Link: {hiện Link nếu có}</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >The due date to return the assignment is </span
+        ><strong style=" color: rgb(41, 42, 46)">[DD/MM/YYYY]</strong
+        ><span style=" color: rgb(41, 42, 46)"> by </span
+        ><strong style=" color: rgb(41, 42, 46)">[Time] (UTC+...)</strong
+        ><span style=" color: rgb(41, 42, 46)"
+         >. If you have any other questions about the assignment, please don't hesitate to ask!&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >Good luck with the assignment, and I am looking forward to reading your answers.&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Best regards,&nbsp;</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >VNG Talent Acquisition Team&nbsp;</span
+        >
+       </p>
+       <hr
+        style="
+         border: none;
+         border-top: 1px solid #cccccc;
+         margin: 12pt 0;
+         height: 0;
+         border: none;
+         border-top: 1px solid #cccccc;
+         margin: 12pt 0;
+         height: 0;
+        "
+       />
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >Chào bạn [CDD Full Name],&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Cảm ơn bạn đã ứng tuyển vị trí </span
+        ><strong style=" color: rgb(41, 42, 46)">[Job Title]</strong
+        ><span style=" color: rgb(41, 42, 46)"> tại </span
+        ><strong style=" color: rgb(41, 42, 46)">VNG</strong
+        ><span style=" color: rgb(41, 42, 46)">.&nbsp;</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >Để tiếp tục bước tiếp theo, chúng tôi gửi kèm bài test ngắn cùng hướng dẫn chi tiết. Trong quy trình tuyển
+         dụng của chúng tôi, bài test này chỉ được gửi cho các ứng viên được chọn lọc, và bạn là một trong số
+         đó!&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >Vui lòng đọc kỹ hướng dẫn để hoàn thành bài test thành công.&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Yêu cầu: {requirement}</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Link: {hiện Link nếu có}</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Hạn nộp bài: [</span
+        ><strong style=" color: rgb(41, 42, 46)">DD/MM/YYYY]</strong
+        ><span style=" color: rgb(41, 42, 46)"> lúc </span
+        ><strong style=" color: rgb(41, 42, 46)">[Giờ] (UTC+...)</strong
+        ><span style=" color: rgb(41, 42, 46)"
+         >. Nếu có bất kỳ thắc mắc nào về bài test, đừng ngại liên hệ với chúng tôi nhé!&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)"
+         >Chúc bạn làm bài tốt và mong sớm nhận được câu trả lời của bạn.&nbsp;</span
+        >
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15"><br /></p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Trân trọng,&nbsp;</span>
+       </p>
+       <p style="font-size: 16px; margin-top: 0; margin-bottom: 0; line-height: 1.15">
+        <span style=" color: rgb(41, 42, 46)">Bộ Phận Tuyển Dụng VNG</span>
+       </p>
+      </td>
+     </tr>
+    </table>
+   </td>
+  </tr>
+ </table>
+</div>

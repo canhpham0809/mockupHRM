@@ -1355,7 +1355,9 @@
                 const originalKey = key.trim();
                 const nKey = originalKey.toLowerCase();
                 const mappedKey = variableMapping[nKey] || originalKey;
-                return `\${${mappedKey}}`;
+                
+                // Convert to FreeMarker safe format
+                return convertToFreemarkerSafe(mappedKey);
             });
             // Keep [] format as-is, only convert if explicitly mapped
             res = res.replace(regexSelect, (match, content) => {
@@ -1366,13 +1368,25 @@
                 // Only convert if there's a mapping
                 if (variableMapping[nKey]) {
                     const mappedKey = variableMapping[nKey];
-                    return `\${${mappedKey}}`;
+                    return convertToFreemarkerSafe(mappedKey);
                 }
                 
                 // Keep original [] format
                 return match;
             });
             return res;
+        }
+
+        function convertToFreemarkerSafe(variable) {
+            // Convert ${variable} to ${object?has_content?then(object.variable!'','')}
+            if (variable.includes('.')) {
+                const parts = variable.split('.');
+                const object = parts[0];
+                // Keep the full variable path
+                return `\${${object}?has_content?then(${variable}!'','')}`;
+            }
+            // No dot, return as-is
+            return `\${${variable}}`;
         }
 
         // --- 5. EVENTS & UTILS ---
