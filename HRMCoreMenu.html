@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HRM Core Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg1:#fff4ec;
+      --bg2:#f7f8ff;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --accent:#ff6a3d;
+      --accent2:#0f766e;
+      --shadow:0 18px 40px rgba(15,23,42,.12);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Space Grotesk", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 500px at -10% -10%, #ffe0d2 0%, transparent 60%),
+        radial-gradient(900px 420px at 110% 10%, #dbe7ff 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wrap{
+      width:min(980px, 100%);
+    }
+    .hero{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:20px;
+      margin-bottom:22px;
+    }
+    .hero h1{
+      font-size:32px;
+      letter-spacing:.2px;
+      margin:0 0 6px;
+    }
+    .hero p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      font-weight:600;
+    }
+    .badge{
+      padding:10px 14px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid #f2c9b3;
+      color:#9a3412;
+      font-weight:700;
+      box-shadow:0 6px 16px rgba(255,106,61,.12);
+      white-space:nowrap;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+    }
+    .card{
+      background:var(--panel);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,106,61,.15);
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:140px;
+      position:relative;
+      overflow:hidden;
+      text-decoration:none;
+      color:inherit;
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .card:focus,
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 22px 44px rgba(15,23,42,.16);
+    }
+    .card::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-20px;
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background:linear-gradient(135deg, rgba(255,106,61,.22), rgba(15,118,110,.18));
+      filter:blur(2px);
+    }
+    .title{
+      font-size:18px;
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .desc{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .cta{
+      margin-top:auto;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--accent2);
+    }
+    .cta span{
+      display:inline-block;
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      background:rgba(15,118,110,.12);
+      color:var(--accent2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr;}
+      .hero{flex-direction:column; align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="hero">
+      <div>
+        <h1>HRM Core Menu</h1>
+        <p>Chon nhanh module can thao tac cho nhom HRBP.</p>
+      </div>
+      <div class="badge">Mockup v2</div>
+    </div>
+
+    <div class="grid">
+      <a class="card" href="StaffMovement.html">
+        <div class="title">Staff Movement</div>
+        <div class="desc">Tao yeu cau thay doi thong tin nhan su, dieu chuyen, bao cao.</div>
+        <div class="cta"><span>→</span> Mo module</div>
+      </a>
+
+      <a class="card" href="JobChange.html">
+        <div class="title">Job Change</div>
+        <div class="desc">Thay doi chuc danh, bac, cap do, va he thong chuc nang.</div>
+        <div class="cta"><span>→</span> Mo module</div>
+      </a>
+
+      <a class="card" href="#" onclick="alert('Coming soon'); return false;">
+        <div class="title">Compensation Change</div>
+        <div class="desc">Yeu cau dieu chinh thu lao, phu cap, va phuc loi.</div>
+        <div class="cta"><span>→</span> Sap co</div>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

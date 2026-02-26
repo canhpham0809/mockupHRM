@@ -507,7 +507,6 @@
                 <label class="tag"><input type="checkbox" value="move" /> Internal Move</label>
                 <label class="tag"><input type="checkbox" value="report" /> Change Reporting Line</label>
                 <label class="tag"><input type="checkbox" value="relocate" /> Relocation</label>
-                <label class="tag"><input type="checkbox" value="position" /> Position Change</label>
               </div>
               <div class="err">Please select at least 1 change type.</div>
               <div class="hint">Rules will be validated per employee based on selected change type(s).</div>
@@ -527,6 +526,17 @@
         </div>
 
         <div class="card-bd">
+          <div class="row">
+            <div class="lbl req">Changed Assignment</div>
+            <div class="control" id="assignmentControl">
+              <select class="select" id="assignmentSelect" disabled>
+                <option value="">Select assignment</option>
+              </select>
+              <div class="err">Please select an active assignment.</div>
+              <div class="hint">Only active assignments are shown. If one, it is auto-selected.</div>
+            </div>
+          </div>
+
           <!-- Comparison table -->
           <div class="cmp">
             <table>
@@ -538,16 +548,6 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="fieldname">Assignment <small>Select current assignment; new value is locked.</small></td>
-                  <td>
-                    <select class="select" id="curAssignmentSelect"></select>
-                  </td>
-                  <td>
-                    <select class="select" id="newAssignmentSelect" disabled></select>
-                  </td>
-                </tr>
-
                 <tr>
                   <td class="fieldname">Assignment Effective Date <small>Current vs new effective date.</small></td>
                   <td><div class="cur" id="curAsgEffDate">—</div></td>
@@ -973,8 +973,10 @@
       renderActiveEmployeeHeader();
 
       const entry = findSelected(state.activeEmpId);
+      const assignmentSelect = $("assignmentSelect");
       if(!entry){
-        setAssignmentSelects([], "");
+        assignmentSelect.innerHTML = `<option value="">Select assignment</option>`;
+        assignmentSelect.disabled = true;
         setCurrentBlocks(null);
         setNewBlocks(null);
         disableNewInputs(true);
@@ -987,6 +989,17 @@
         entry.assignmentId = activeAssignments[0].id;
       }
 
+      assignmentSelect.disabled = false;
+      assignmentSelect.innerHTML = `<option value="">Select assignment</option>` +
+        activeAssignments.map(a => `<option value="${a.id}">${a.name}</option>`).join("");
+
+      if(activeAssignments.length === 1 && !entry.assignmentId){
+        entry.assignmentId = activeAssignments[0].id;
+        entry.errors.assignment = "";
+      }
+
+      assignmentSelect.value = entry.assignmentId || "";
+
       // Populate dropdowns
       $("newPosition").innerHTML = `<option value="">Select new position</option>` +
         positionCatalog.map(p => `<option value="${p.id}">${p.label} • ${p.entity} • Slots: ${p.openSlots}</option>`).join("");
@@ -996,7 +1009,6 @@
         locations.map(l => `<option value="${l}">${l}</option>`).join("");
 
       // Set current values based on active assignment
-      setAssignmentSelects(activeAssignments, entry.assignmentId);
       const asg = activeAssignments.find(a => a.id === entry.assignmentId) || null;
       if(!asg){
         setCurrentBlocks(null);
@@ -1027,12 +1039,6 @@
     }
 
     function setCurrentBlocks(cur){
-      const entry = findSelected(state.activeEmpId);
-      if(entry){
-        const emp = visibleEmployees().find(x => x.id === entry.empId);
-        const activeAssignments = getActiveAssignments(emp);
-        setAssignmentSelects(activeAssignments, entry.assignmentId);
-      }
       $("curPosition").textContent = cur?.position || "—";
       $("curBU").textContent = cur?.org?.bu || "—";
       $("curDeptGroup").textContent = cur?.org?.deptGroup || "—";
@@ -1066,19 +1072,6 @@
       });
     }
 
-    function setAssignmentSelects(assignments, selectedId){
-      const curSelect = $("curAssignmentSelect");
-      const newSelect = $("newAssignmentSelect");
-      const opts = assignments
-        .map(a => `<option value="${a.id}">${a.name}</option>`)
-        .join("");
-      curSelect.innerHTML = opts || `<option value="">No active assignment</option>`;
-      newSelect.innerHTML = opts || `<option value="">No active assignment</option>`;
-      curSelect.value = selectedId || "";
-      newSelect.value = selectedId || "";
-      newSelect.disabled = true;
-    }
-
     function resetEntryForAssignment(entry){
       entry.form.assignmentEffectiveDate = "";
       entry.form.positionId = "";
@@ -1102,10 +1095,10 @@
     }
 
     // ===== Events: New fields change =====
-    $("curAssignmentSelect").addEventListener("change", ()=>{
+    $("assignmentSelect").addEventListener("change", ()=>{
       const entry = findSelected(state.activeEmpId);
       if(!entry) return;
-      entry.assignmentId = $("curAssignmentSelect").value;
+      entry.assignmentId = $("assignmentSelect").value;
       resetEntryForAssignment(entry);
       loadActiveEmployee();
       validateActiveEmployee();
