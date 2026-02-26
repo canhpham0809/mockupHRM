@@ -539,6 +539,24 @@
               </thead>
               <tbody>
                 <tr>
+                  <td class="fieldname">Assignment <small>Select current assignment; new value is locked.</small></td>
+                  <td>
+                    <select class="select" id="curAssignmentSelect"></select>
+                  </td>
+                  <td>
+                    <select class="select" id="newAssignmentSelect" disabled></select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">Assignment Effective Date <small>Current vs new effective date.</small></td>
+                  <td><div class="cur" id="curAsgEffDate">—</div></td>
+                  <td class="new" data-field="asgEffDate">
+                    <input class="input" type="date" id="newAsgEffDate" />
+                  </td>
+                </tr>
+
+                <tr>
                   <td class="fieldname">Position <small>New Position must be different, same Entity, and have open slots.</small></td>
                   <td><div class="cur" id="curPosition">—</div></td>
                   <td class="new" data-field="position">
@@ -781,6 +799,10 @@
       return (emp.assignments || []).find(a => a.status === "Active") || null;
     }
 
+    function getActiveAssignments(emp){
+      return (emp.assignments || []).filter(a => a.status === "Active");
+    }
+
     // ===== Employee dropdown =====
     const empSelect = $("empSelect");
 
@@ -815,6 +837,7 @@
         empId,
         assignmentId,
         form:{
+          assignmentEffectiveDate:"",
           positionId:"",
           department:"",
           team:"",
@@ -951,6 +974,7 @@
 
       const entry = findSelected(state.activeEmpId);
       if(!entry){
+        setAssignmentSelects([], "");
         setCurrentBlocks(null);
         setNewBlocks(null);
         disableNewInputs(true);
@@ -958,9 +982,9 @@
       }
 
       const emp = visibleEmployees().find(x => x.id === entry.empId);
-      const activeAssignment = getActiveAssignment(emp);
-      if(activeAssignment && !entry.assignmentId){
-        entry.assignmentId = activeAssignment.id;
+      const activeAssignments = getActiveAssignments(emp);
+      if(activeAssignments.length > 0 && !entry.assignmentId){
+        entry.assignmentId = activeAssignments[0].id;
       }
 
       // Populate dropdowns
@@ -972,7 +996,8 @@
         locations.map(l => `<option value="${l}">${l}</option>`).join("");
 
       // Set current values based on active assignment
-      const asg = activeAssignment && activeAssignment.id === entry.assignmentId ? activeAssignment : null;
+      setAssignmentSelects(activeAssignments, entry.assignmentId);
+      const asg = activeAssignments.find(a => a.id === entry.assignmentId) || null;
       if(!asg){
         setCurrentBlocks(null);
         setNewBlocks(null);
@@ -988,6 +1013,7 @@
       $("newReportTo").value = entry.form.reportTo || "";
       $("newLocation").value = entry.form.location || "";
       $("newNote").value = entry.form.note || "";
+      $("newAsgEffDate").value = entry.form.assignmentEffectiveDate || "";
 
       if(entry.form.positionId){
         applyPositionDefaults(entry.form.positionId, asg.current);
@@ -1001,6 +1027,12 @@
     }
 
     function setCurrentBlocks(cur){
+      const entry = findSelected(state.activeEmpId);
+      if(entry){
+        const emp = visibleEmployees().find(x => x.id === entry.empId);
+        const activeAssignments = getActiveAssignments(emp);
+        setAssignmentSelects(activeAssignments, entry.assignmentId);
+      }
       $("curPosition").textContent = cur?.position || "—";
       $("curBU").textContent = cur?.org?.bu || "—";
       $("curDeptGroup").textContent = cur?.org?.deptGroup || "—";
@@ -1011,6 +1043,7 @@
       $("curReportTo").textContent = cur?.reportTo || "—";
       $("curLocation").textContent = cur?.location || "—";
       $("curNote").textContent = "—";
+      $("curAsgEffDate").textContent = cur?.effectiveDate || "—";
     }
 
     function setNewBlocks(curOrNew){
@@ -1028,9 +1061,32 @@
     }
 
     function disableNewInputs(disabled){
-      ["newPosition","newDepartment","newTeam","newReportTo","newLocation","newNote"].forEach(id=>{
+      ["newAsgEffDate","newPosition","newDepartment","newTeam","newReportTo","newLocation","newNote"].forEach(id=>{
         $(id).disabled = disabled;
       });
+    }
+
+    function setAssignmentSelects(assignments, selectedId){
+      const curSelect = $("curAssignmentSelect");
+      const newSelect = $("newAssignmentSelect");
+      const opts = assignments
+        .map(a => `<option value="${a.id}">${a.name}</option>`)
+        .join("");
+      curSelect.innerHTML = opts || `<option value="">No active assignment</option>`;
+      newSelect.innerHTML = opts || `<option value="">No active assignment</option>`;
+      curSelect.value = selectedId || "";
+      newSelect.value = selectedId || "";
+      newSelect.disabled = true;
+    }
+
+    function resetEntryForAssignment(entry){
+      entry.form.assignmentEffectiveDate = "";
+      entry.form.positionId = "";
+      entry.form.department = "";
+      entry.form.team = "";
+      entry.form.reportTo = "";
+      entry.form.location = "";
+      entry.form.note = "";
     }
 
     function setSelectOptions(el, options, placeholder){
@@ -1046,6 +1102,16 @@
     }
 
     // ===== Events: New fields change =====
+    $("curAssignmentSelect").addEventListener("change", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      if(!entry) return;
+      entry.assignmentId = $("curAssignmentSelect").value;
+      resetEntryForAssignment(entry);
+      loadActiveEmployee();
+      validateActiveEmployee();
+      updateAllValidity();
+    });
+
     $("newPosition").addEventListener("change", ()=>{
       const entry = findSelected(state.activeEmpId);
       if(!entry) return;
@@ -1094,6 +1160,12 @@
       entry.form.location = $("newLocation").value;
       validateActiveEmployee();
       updateAllValidity();
+    });
+
+    $("newAsgEffDate").addEventListener("input", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      if(!entry) return;
+      entry.form.assignmentEffectiveDate = $("newAsgEffDate").value;
     });
 
     $("newNote").addEventListener("input", ()=>{
