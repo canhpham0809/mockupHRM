@@ -483,6 +483,17 @@
         </div>
         <div class="card-bd">
           <div class="row">
+            <div class="lbl req">Change Basis</div>
+            <div class="control" id="changeBasisControl">
+              <div class="tags" id="basisTags">
+                <label class="tag active"><input type="radio" name="changeBasis" value="position" checked /> Position - Base</label>
+                <label class="tag"><input type="radio" name="changeBasis" value="job" /> Job - Base</label>
+              </div>
+              <div class="hint">Switch layout between Position - Base and Job - Base.</div>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="lbl req">Change Type</div>
             <div class="control" id="changeTypeControl">
               <div class="tags" id="changeTags">
@@ -539,7 +550,7 @@
                   </td>
                 </tr>
 
-                <tr>
+                <tr id="rowPosition">
                   <td class="fieldname">Position <small>New Position must be different, same Entity and Unit, and have open slots.</small></td>
                   <td><div class="cur" id="curPosition">—</div></td>
                   <td class="new" data-field="position">
@@ -584,7 +595,10 @@
                   <td class="fieldname">Job Title <small>New Job Title must be different from Current.</small></td>
                   <td><div class="cur" id="curJobTitle">—</div></td>
                   <td class="new" data-field="jobTitle">
-                    <div class="cur" id="newJobTitle">—</div>
+                    <div class="cur" id="newJobTitleDisplay">—</div>
+                    <select class="select" id="newJobTitleSelect" style="display:none">
+                      <option value="">Select job title</option>
+                    </select>
                     <div class="inline-err" id="errJobTitle">New Job Title must be different from Current.</div>
                   </td>
                 </tr>
@@ -717,14 +731,6 @@
                     <td><div class="cur" id="newVariableBonus">—</div></td>
                   </tr>
 
-                  <tr>
-                    <td class="fieldname">KPI</td>
-                    <td><div class="cur" id="curKpi">—</div></td>
-                    <td class="new" data-field="kpi">
-                      <input class="input" id="newKpi" type="number" min="0" step="100" />
-                      <div class="inline-err" id="errKpi">KPI is required.</div>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -843,6 +849,15 @@
       J400:{ careerTrack:"Specialist", jobFamily:"Finance", jobGroup:"FP&A", subGroup:"Analysis", jobLevel:"L2" }
     };
 
+    const jobTitleOptions = Object.entries(jobCatalog).map(([id, meta])=>{
+      const p = positionCatalog.find(x => x.jobId === id);
+      return {
+        id,
+        title: p?.jobTitle || id,
+        samplePositionId: p?.id || ""
+      };
+    });
+
     const managers = ["Tran Xuan Thao","Le Quoc Anh","Ngo Hai","Phan Thuy Linh"];
     const currencies = ["VND","USD","SGD"];
     const locationsByEntity = {
@@ -854,7 +869,8 @@
     const state = {
       selectedEmployees: [],   // [{empId, assignmentId, form:{...}, errors:{...}, valid:boolean}]
       activeEmpId: null,
-      changeType: ""
+      changeType: "",
+      changeBasis: "position"
     };
 
     // ===== Helpers =====
@@ -941,6 +957,7 @@
         form:{
           effectiveDate:"",
           positionId:"",
+          jobTitleId:"",
           fte:"",
           reportTo:"",
           location:"",
@@ -948,7 +965,6 @@
           gross:"",
           currency:"",
           basicPct:60,
-          kpi:"",
           note:""
         },
         errors:{
@@ -962,8 +978,7 @@
           location:"",
           gross:"",
           currency:"",
-          basicPct:"",
-          kpi:""
+          basicPct:""
         },
         valid:false
       };
@@ -1046,7 +1061,29 @@
       }
     }
 
-    // ===== Change Types (single) =====
+    // ===== Change Basis + Change Types =====
+    const basisTags = $("basisTags");
+    function syncChangeBasisUI(){
+      basisTags.querySelectorAll("label.tag").forEach(tag=>{
+        const rb = tag.querySelector("input[type=radio]");
+        tag.classList.toggle("active", !!rb?.checked);
+      });
+      const isJobBase = state.changeBasis === "job";
+      $("rowPosition").style.display = isJobBase ? "none" : "";
+      $("newJobTitleDisplay").style.display = isJobBase ? "none" : "block";
+      $("newJobTitleSelect").style.display = isJobBase ? "block" : "none";
+    }
+
+    basisTags.querySelectorAll("input[type=radio]").forEach(rb=>{
+      rb.addEventListener("change", ()=>{
+        if(rb.checked) state.changeBasis = rb.value;
+        syncChangeBasisUI();
+        loadActiveEmployee();
+        validateActiveEmployee();
+        updateAllValidity();
+      });
+    });
+
     const changeTags = $("changeTags");
     changeTags.querySelectorAll("label.tag").forEach(tag=>{
       const rb = tag.querySelector("input[type=radio]");
@@ -1082,6 +1119,7 @@
 
     function loadActiveEmployee(){
       renderActiveEmployeeHeader();
+      syncChangeBasisUI();
 
       const entry = findSelected(state.activeEmpId);
       const assignmentSelect = $("assignmentSelect");
@@ -1113,6 +1151,8 @@
       // Populate dropdowns
       $("newPosition").innerHTML = `<option value="">Select new position</option>` +
         positionCatalog.map(p => `<option value="${p.id}">${p.label} • ${p.entity} • ${p.unit} • Slots: ${p.openSlots}</option>`).join("");
+      $("newJobTitleSelect").innerHTML = `<option value="">Select job title</option>` +
+        jobTitleOptions.map(j => `<option value="${j.id}">${j.title}</option>`).join("");
       $("newReportTo").innerHTML = `<option value="">Select manager</option>` +
         managers.map(m => `<option value="${m}">${m}</option>`).join("");
 
@@ -1130,6 +1170,7 @@
       // load form values per employee
       $("newEffectiveDate").value = entry.form.effectiveDate || "";
       $("newPosition").value = entry.form.positionId || "";
+      $("newJobTitleSelect").value = entry.form.jobTitleId || "";
       $("newFTE").value = entry.form.fte !== "" ? entry.form.fte : "";
       $("newReportTo").value = entry.form.reportTo || "";
       setLocationOptions(asg.current.org.entity, entry.form.location || "");
@@ -1143,17 +1184,20 @@
       if(entry.form.basicPct === "" || entry.form.basicPct === null || entry.form.basicPct === undefined){
         entry.form.basicPct = asg.current.salary.basicPct;
       }
-      if(entry.form.kpi === "" || entry.form.kpi === null || entry.form.kpi === undefined){
-        entry.form.kpi = asg.current.salary.kpi;
-      }
       $("newCurrency").value = entry.form.currency || asg.current.salary.currency;
       $("newBasicPct").value = entry.form.basicPct ?? 60;
-      $("newKpi").value = entry.form.kpi ?? "";
 
-      if(entry.form.positionId){
-        applyPositionDefaults(entry.form.positionId, asg.current);
+      if(state.changeBasis === "position"){
+        if(entry.form.positionId){
+          applyPositionDefaults(entry.form.positionId, asg.current);
+        }else{
+          setNewBlocks(asg.current);
+        }
       }else{
-        setNewBlocks(asg.current);
+        entry.form.positionId = "";
+        $("newPosition").value = "";
+        if(!entry.form.jobTitleId) entry.form.jobTitleId = asg.current.job.id;
+        applyJobTitleDefaults(entry.form.jobTitleId, asg.current);
       }
 
       updateSalaryDerived();
@@ -1189,7 +1233,6 @@
       $("curBasicPct").textContent = cur?.salary ? `${curPct}%` : "—";
       $("curBasicSalary").textContent = cur?.salary ? Math.round(curBasic).toString() : "—";
       $("curVariableBonus").textContent = cur?.salary ? Math.round(curVariable).toString() : "—";
-      $("curKpi").textContent = cur?.salary?.kpi ?? "—";
     }
 
     function setNewBlocks(curOrNew){
@@ -1199,7 +1242,7 @@
         $("newDept").textContent = "—";
         $("newDeptMgr").textContent = "—";
         $("newTeam").textContent = "—";
-        $("newJobTitle").textContent = "—";
+        $("newJobTitleDisplay").textContent = "—";
         $("newCareerTrack").textContent = "—";
         $("newJobFamily").textContent = "—";
         $("newJobGroup").textContent = "—";
@@ -1212,7 +1255,7 @@
       $("newDept").textContent = curOrNew.org?.dept || "—";
       $("newDeptMgr").textContent = curOrNew.org?.mgr || "—";
       $("newTeam").textContent = curOrNew.org?.team || "—";
-      $("newJobTitle").textContent = curOrNew.job?.title || "—";
+      $("newJobTitleDisplay").textContent = curOrNew.job?.title || "—";
       const meta = curOrNew.job ? jobCatalog[curOrNew.job.id] : null;
       $("newCareerTrack").textContent = meta?.careerTrack || "—";
       $("newJobFamily").textContent = meta?.jobFamily || "—";
@@ -1222,9 +1265,25 @@
     }
 
     function disableNewInputs(disabled){
-      ["newEffectiveDate","newPosition","newFTE","newReportTo","newLocation","newNote","newGross","newCurrency","newBasicPct","newKpi"].forEach(id=>{
+      ["newEffectiveDate","newPosition","newJobTitleSelect","newFTE","newReportTo","newLocation","newNote","newGross","newCurrency","newBasicPct"].forEach(id=>{
         $(id).disabled = disabled;
       });
+    }
+
+    function applyJobTitleDefaults(jobId, cur){
+      if(!cur) return;
+      const titleFromPos = positionCatalog.find(p => p.jobId === jobId)?.jobTitle || cur.job.title;
+      const newData = {
+        ...cur,
+        job:{ id: jobId || cur.job.id, title: titleFromPos }
+      };
+      setNewBlocks(newData);
+
+      const entry = findSelected(state.activeEmpId);
+      if(entry && entry.form.fte === ""){
+        entry.form.fte = cur.fte;
+        $("newFTE").value = cur.fte;
+      }
     }
 
     function applyPositionDefaults(positionId, cur){
@@ -1253,6 +1312,8 @@
       // default reportTo/location/FTE only when empty
       const entry = findSelected(state.activeEmpId);
       if(entry){
+        entry.form.jobTitleId = p.jobId;
+        $("newJobTitleSelect").value = p.jobId;
         if(!entry.form.reportTo){
           entry.form.reportTo = p.defaults.reportTo;
           $("newReportTo").value = entry.form.reportTo;
@@ -1311,7 +1372,6 @@
         setInlineInvalid("gross", false);
         setInlineInvalid("currency", false);
         setInlineInvalid("basicPct", false);
-        setInlineInvalid("kpi", false);
         computeRowValidity(entry);
         renderActiveEmployeeHeader();
         renderSummary();
@@ -1332,17 +1392,19 @@
       $("errEffectiveDate").textContent = effErr ? "New date must be greater than current." : "";
 
       // Position*
-      const newPos = entry.form.positionId;
       let posErr = "";
-      if(!newPos){
-        posErr = "Required";
-      }else{
-        if(newPos === cur.positionId) posErr = "Must differ";
-        const p = positionCatalog.find(x => x.id === newPos);
-        if(p){
-          if(!posErr && p.entity !== cur.org.entity) posErr = "Entity mismatch";
-          else if(!posErr && p.unit !== cur.org.unit) posErr = "Unit mismatch";
-          else if(!posErr && p.openSlots <= 0) posErr = "No slots";
+      if(state.changeBasis === "position"){
+        const newPos = entry.form.positionId;
+        if(!newPos){
+          posErr = "Required";
+        }else{
+          if(newPos === cur.positionId) posErr = "Must differ";
+          const p = positionCatalog.find(x => x.id === newPos);
+          if(p){
+            if(!posErr && p.entity !== cur.org.entity) posErr = "Entity mismatch";
+            else if(!posErr && p.unit !== cur.org.unit) posErr = "Unit mismatch";
+            else if(!posErr && p.openSlots <= 0) posErr = "No slots";
+          }
         }
       }
       entry.errors.position = posErr;
@@ -1359,12 +1421,18 @@
 
       // Job Title must differ
       let jtErr = "";
-      if(entry.form.positionId){
+      if(state.changeBasis === "job"){
+        if(!entry.form.jobTitleId) jtErr = "Required";
+        else if(entry.form.jobTitleId === cur.job.id) jtErr = "Must differ";
+      }else if(entry.form.positionId){
         const p = positionCatalog.find(x => x.id === entry.form.positionId);
-        if(p && p.jobTitle === cur.job.title) jtErr = "Must differ";
+        if(p && p.jobId === cur.job.id) jtErr = "Must differ";
       }
       entry.errors.jobTitle = jtErr;
       setInlineInvalid("jobTitle", !!jtErr);
+      $("errJobTitle").textContent = jtErr === "Required"
+        ? "Select a new Job Title."
+        : "New Job Title must be different from Current.";
 
       // FTE rule
       let fteErr = "";
@@ -1401,11 +1469,13 @@
       let grossErr = "";
       let curErr = "";
       let pctErr = "";
-      let kpiErr = "";
       if(entry.form.salaryChange){
         const gross = parseFloat(entry.form.gross);
         if(isNaN(gross) || gross <= 0) grossErr = "Required";
-        const p = positionCatalog.find(x => x.id === entry.form.positionId);
+        const targetPosition = state.changeBasis === "position"
+          ? positionCatalog.find(x => x.id === entry.form.positionId)
+          : positionCatalog.find(x => x.jobId === entry.form.jobTitleId && x.entity === cur.org.entity && x.unit === cur.org.unit) || positionCatalog.find(x => x.id === cur.positionId);
+        const p = targetPosition;
         if(!grossErr && p && (gross < p.gradeRange.min || gross > p.gradeRange.max)) grossErr = "Range";
         if(!grossErr && state.changeType === "promotion" && gross < cur.salary.gross) grossErr = "Promotion min";
         if(!grossErr && state.changeType === "demotion" && gross > cur.salary.gross) grossErr = "Demotion max";
@@ -1413,17 +1483,13 @@
         const pctVal = parseFloat(entry.form.basicPct);
         if(isNaN(pctVal)) pctErr = "Required";
         else if(pctVal < 0 || pctVal > 100) pctErr = "Invalid";
-        const kpiVal = parseFloat(entry.form.kpi);
-        if(isNaN(kpiVal) || kpiVal < 0) kpiErr = "Required";
       }
       entry.errors.gross = grossErr;
       entry.errors.currency = curErr;
       entry.errors.basicPct = pctErr;
-      entry.errors.kpi = kpiErr;
       setInlineInvalid("gross", !!grossErr);
       setInlineInvalid("currency", !!curErr);
       setInlineInvalid("basicPct", !!pctErr);
-      setInlineInvalid("kpi", !!kpiErr);
       $("errGross").textContent = grossErr === "Required"
         ? "Gross Salary is required."
         : grossErr === "Range"
@@ -1439,7 +1505,6 @@
         : pctErr === "Invalid"
         ? "Basic Salary Percentage must be 0-100."
         : "";
-      $("errKpi").textContent = kpiErr ? "KPI is required." : "";
 
       computeRowValidity(entry);
       renderActiveEmployeeHeader();
@@ -1462,7 +1527,10 @@
       $("newBasicSalary").textContent = gross ? Math.round(basic).toString() : "—";
       $("newVariableBonus").textContent = gross ? Math.round(variable).toString() : "—";
 
-      const p = positionCatalog.find(x => x.id === entry.form.positionId);
+      const cur = getCurrentForActive();
+      const p = state.changeBasis === "position"
+        ? positionCatalog.find(x => x.id === entry.form.positionId)
+        : positionCatalog.find(x => x.jobId === entry.form.jobTitleId && x.entity === cur?.org?.entity && x.unit === cur?.org?.unit) || positionCatalog.find(x => x.id === cur?.positionId);
       $("salaryRange").textContent = p
         ? `Range: ${p.gradeRange.min} - ${p.gradeRange.max}`
         : "Range: —";
@@ -1477,6 +1545,7 @@
       entry.form = {
         effectiveDate:"",
         positionId:"",
+        jobTitleId:"",
         fte:"",
         reportTo:"",
         location:"",
@@ -1484,7 +1553,6 @@
         gross:"",
         currency:"",
         basicPct:60,
-        kpi:"",
         note:""
       };
 
@@ -1504,6 +1572,7 @@
     $("newPosition").addEventListener("change", ()=>{
       const entry = findSelected(state.activeEmpId);
       if(!entry) return;
+      if(state.changeBasis !== "position") return;
       entry.form.positionId = $("newPosition").value;
 
       const cur = getCurrentForActive();
@@ -1512,6 +1581,18 @@
       }else if(cur){
         setNewBlocks(cur);
       }
+      updateSalaryDerived();
+      validateActiveEmployee();
+      updateAllValidity();
+    });
+
+    $("newJobTitleSelect").addEventListener("change", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      if(!entry) return;
+      if(state.changeBasis !== "job") return;
+      entry.form.jobTitleId = $("newJobTitleSelect").value;
+      const cur = getCurrentForActive();
+      if(cur) applyJobTitleDefaults(entry.form.jobTitleId, cur);
       updateSalaryDerived();
       validateActiveEmployee();
       updateAllValidity();
@@ -1582,14 +1663,6 @@
       if(!entry) return;
       entry.form.basicPct = $("newBasicPct").value;
       updateSalaryDerived();
-      validateActiveEmployee();
-      updateAllValidity();
-    });
-
-    $("newKpi").addEventListener("input", ()=>{
-      const entry = findSelected(state.activeEmpId);
-      if(!entry) return;
-      entry.form.kpi = $("newKpi").value;
       validateActiveEmployee();
       updateAllValidity();
     });

@@ -500,6 +500,17 @@
         </div>
         <div class="card-bd">
           <div class="row">
+            <div class="lbl req">Change Basis</div>
+            <div class="control" id="changeBasisControl">
+              <div class="tags" id="basisTags">
+                <label class="tag active"><input type="radio" name="changeBasis" value="position" checked /> Position - Base</label>
+                <label class="tag"><input type="radio" name="changeBasis" value="job" /> Job - Base</label>
+              </div>
+              <div class="hint">Default is current Position - Base flow. Switch to Job - Base for organization hierarchy-based change.</div>
+            </div>
+          </div>
+
+          <div class="row">
             <div class="lbl req">Change Type</div>
             <div class="control" id="changeTypeControl">
               <div class="tags" id="changeTags">
@@ -549,14 +560,15 @@
               </thead>
               <tbody>
                 <tr>
-                  <td class="fieldname">Assignment Effective Date <small>Current vs new effective date.</small></td>
+                  <td class="fieldname">Effective Date <small>New date must be greater than current date.</small></td>
                   <td><div class="cur" id="curAsgEffDate">—</div></td>
                   <td class="new" data-field="asgEffDate">
                     <input class="input" type="date" id="newAsgEffDate" />
+                    <div class="inline-err" id="errAsgEffDate">New effective date must be greater than current.</div>
                   </td>
                 </tr>
 
-                <tr>
+                <tr id="rowPosition">
                   <td class="fieldname">Position <small>New Position must be different, same Entity, and have open slots.</small></td>
                   <td><div class="cur" id="curPosition">—</div></td>
                   <td class="new" data-field="position">
@@ -568,15 +580,23 @@
                 </tr>
 
                 <tr>
-                  <td class="fieldname">Business Unit <small>Auto load by Position</small></td>
+                  <td class="fieldname">Business Unit <small>Job-Base: choose BU in current Legal Entity.</small></td>
                   <td><div class="cur" id="curBU">—</div></td>
-                  <td><div class="cur" id="newBU">—</div></td>
+                  <td class="new" data-field="bu">
+                    <div class="cur" id="newBU">—</div>
+                    <select class="select" id="newBUSelect" style="display:none"></select>
+                    <div class="inline-err" id="errBU">Business Unit is required.</div>
+                  </td>
                 </tr>
 
                 <tr>
-                  <td class="fieldname">Department Group <small>Auto load by Position</small></td>
+                  <td class="fieldname">Department Group <small>Job-Base: filter by Business Unit.</small></td>
                   <td><div class="cur" id="curDeptGroup">—</div></td>
-                  <td><div class="cur" id="newDeptGroup">—</div></td>
+                  <td class="new" data-field="deptGroup">
+                    <div class="cur" id="newDeptGroup">—</div>
+                    <select class="select" id="newDeptGroupSelect" style="display:none"></select>
+                    <div class="inline-err" id="errDeptGroup">Department Group is required.</div>
+                  </td>
                 </tr>
 
                 <tr>
@@ -602,15 +622,55 @@
                 </tr>
 
                 <tr>
-                  <td class="fieldname">Job Title <small>Auto load by Position</small></td>
+                  <td class="fieldname">Department Manager <small>Auto load from selected Department.</small></td>
+                  <td><div class="cur" id="curDeptMgr">—</div></td>
+                  <td><div class="cur" id="newDeptMgr">—</div></td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">Job Title <small>Auto load by selected Assignment.</small></td>
                   <td><div class="cur" id="curJobTitle">—</div></td>
                   <td><div class="cur" id="newJobTitle">—</div></td>
                 </tr>
 
                 <tr>
-                  <td class="fieldname">FTE <small>Auto load by Position</small></td>
+                  <td class="fieldname">Career Track <small>Auto load by Job Title</small></td>
+                  <td><div class="cur" id="curCareerTrack">—</div></td>
+                  <td><div class="cur" id="newCareerTrack">—</div></td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">Job Family <small>Auto load by Job Title</small></td>
+                  <td><div class="cur" id="curJobFamily">—</div></td>
+                  <td><div class="cur" id="newJobFamily">—</div></td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">Job Group <small>Auto load by Job Title</small></td>
+                  <td><div class="cur" id="curJobGroup">—</div></td>
+                  <td><div class="cur" id="newJobGroup">—</div></td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">Sub Group <small>Auto load by Job Title</small></td>
+                  <td><div class="cur" id="curSubGroup">—</div></td>
+                  <td><div class="cur" id="newSubGroup">—</div></td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">Job Level <small>Auto load by Job Title</small></td>
+                  <td><div class="cur" id="curJobLevel">—</div></td>
+                  <td><div class="cur" id="newJobLevel">—</div></td>
+                </tr>
+
+                <tr>
+                  <td class="fieldname">FTE <small>Total active assignment FTE of employee must be ≤ 1.</small></td>
                   <td><div class="cur" id="curFTE">—</div></td>
-                  <td><div class="cur" id="newFTE">—</div></td>
+                  <td class="new" data-field="fte">
+                    <div class="cur" id="newFTE">—</div>
+                    <input class="input" type="number" min="0" max="1" step="0.1" id="newFTEInput" style="display:none" />
+                    <div class="inline-err" id="errFTE">Total active assignment FTE exceeds 1.</div>
+                  </td>
                 </tr>
 
                 <tr>
@@ -677,6 +737,7 @@
           { id:"A1", name:"Assignment - Corporate Branding", status:"Active",
             current:{
               effectiveDate:"2026-02-26",
+              changeHistory:{ dept:"2026-01-15", move:"2026-01-10", report:"2026-01-20", relocate:"2026-01-05" },
               positionId:"P1",
               position:"Brand Community Collaborator",
               org:{ entity:"Zion JSC", bu:"Business Operations", deptGroup:"Business Operation 1", dept:"Corporate Branding & Community", mgr:"Trần Xuân Ngọc Thảo", team:"Brand Core" },
@@ -694,6 +755,7 @@
           { id:"A2", name:"Assignment - Biz Ops", status:"Active",
             current:{
               effectiveDate:"2025-12-01",
+              changeHistory:{ dept:"2025-11-20", move:"2025-11-10", report:"2025-11-25", relocate:"2025-10-30" },
               positionId:"P2",
               position:"Operations Specialist",
               org:{ entity:"Zion JSC", bu:"Business Operations", deptGroup:"Business Operation 2", dept:"Operations", mgr:"Lê Quốc Anh", team:"Ops Team A" },
@@ -706,6 +768,7 @@
           { id:"A3", name:"Assignment - Part-time Project", status:"Inactive",
             current:{
               effectiveDate:"2025-09-01",
+              changeHistory:{ dept:"2025-08-15", move:"2025-08-10", report:"2025-08-18", relocate:"2025-08-05" },
               positionId:"P3",
               position:"Project Contributor",
               org:{ entity:"Zion JSC", bu:"Technology", deptGroup:"Engineering", dept:"Platform", mgr:"Ngô Hải", team:"Platform" },
@@ -752,14 +815,61 @@
       }
     ];
 
+    const jobCatalog = {
+      J100:{ careerTrack:"Specialist", jobFamily:"Brand", jobGroup:"Marketing", subGroup:"Community", jobLevel:"L2" },
+      J200:{ careerTrack:"Specialist", jobFamily:"Operations", jobGroup:"Ops", subGroup:"Execution", jobLevel:"L2" },
+      J300:{ careerTrack:"Specialist", jobFamily:"Engineering", jobGroup:"Platform", subGroup:"Delivery", jobLevel:"L1" },
+      J400:{ careerTrack:"Specialist", jobFamily:"Finance", jobGroup:"FP&A", subGroup:"Analysis", jobLevel:"L2" }
+    };
+
+    const orgHierarchy = {
+      "Zion JSC": [
+        {
+          bu:"Business Operations",
+          deptGroups:[
+            { name:"Business Operation 1", departments:[
+              { name:"Corporate Branding & Community", teams:["Brand Core","Community","Events"], manager:"Trần Xuân Ngọc Thảo" },
+              { name:"Brand Strategy", teams:["Brand Core"], manager:"Trần Xuân Ngọc Thảo" }
+            ]},
+            { name:"Business Operation 2", departments:[
+              { name:"Operations", teams:["Ops Team A","Ops Team B","Ops Team C"], manager:"Lê Quốc Anh" },
+              { name:"Operations Support", teams:["Ops Team A","Ops Team B"], manager:"Lê Quốc Anh" }
+            ]}
+          ]
+        },
+        {
+          bu:"Technology",
+          deptGroups:[
+            { name:"Engineering", departments:[
+              { name:"Platform", teams:["Platform","Platform Core"], manager:"Ngô Hải" }
+            ]}
+          ]
+        }
+      ],
+      "Zion Holdings": [
+        {
+          bu:"Finance",
+          deptGroups:[
+            { name:"Finance Ops", departments:[
+              { name:"Finance", teams:["FP&A"], manager:"Phan Thuỳ Linh" }
+            ]}
+          ]
+        }
+      ]
+    };
+
     const managers = ["Trần Xuân Ngọc Thảo","Lê Quốc Anh","Ngô Hải","Phan Thuỳ Linh"];
-    const locations = ["Zion HQ - HCM","Zion Office - HN","Remote - VN"];
+    const locationsByEntity = {
+      "Zion JSC":["Zion HQ - HCM","Zion Office - HN","Remote - VN"],
+      "Zion Holdings":["Zion HQ - HCM","Remote - VN"]
+    };
 
     // ===== State =====
     const state = {
       selectedEmployees: [],   // [{empId, assignmentId, form:{...}, errors:{...}, valid:boolean}]
       activeEmpId: null,
-      changeTypes: new Set()
+      changeTypes: new Set(),
+      changeBasis: "position"
     };
 
     // ===== Helpers =====
@@ -839,17 +949,24 @@
         form:{
           assignmentEffectiveDate:"",
           positionId:"",
+          bu:"",
+          deptGroup:"",
           department:"",
           team:"",
+          fte:"",
           reportTo:"",
           location:"",
           note:""
         },
         errors:{
           changeTypes: state.changeTypes.size === 0 ? "Select change type" : "",
+          asgEffDate: "",
           position: "",
+          bu: "",
+          deptGroup: "",
           department: "",
           team: "",
+          fte: "",
           reportTo: "",
           location: ""
         },
@@ -934,7 +1051,111 @@
       }
     }
 
-    // ===== Change Types (global) =====
+    function parseDate(s){
+      const d = new Date(s + "T00:00:00");
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function setSelectOptions(el, options, placeholder){
+      el.innerHTML = `<option value="">${placeholder}</option>` +
+        options.map(opt => `<option value="${opt}">${opt}</option>`).join("");
+    }
+
+    function getCurrentForEntry(entry){
+      if(!entry) return null;
+      const emp = visibleEmployees().find(x => x.id === entry.empId);
+      const asg = (emp.assignments || []).find(a => a.id === entry.assignmentId && a.status === "Active") || getActiveAssignment(emp);
+      return asg?.current || null;
+    }
+
+    function getCurrentForActive(){
+      const entry = findSelected(state.activeEmpId);
+      return getCurrentForEntry(entry);
+    }
+
+    function getOtherActiveFteTotal(empId, excludeAssignmentId){
+      const emp = visibleEmployees().find(x => x.id === empId);
+      if(!emp) return 0;
+      return (emp.assignments || [])
+        .filter(a => a.status === "Active" && a.id !== excludeAssignmentId)
+        .reduce((sum, a) => sum + (parseFloat(a.current?.fte || 0) || 0), 0);
+    }
+
+    function getBaseEffectiveDate(cur){
+      if(!cur) return "";
+      const history = cur.changeHistory || {};
+      const candidates = [];
+      if(state.changeTypes.has("dept") && history.dept) candidates.push(history.dept);
+      if(state.changeTypes.has("move") && history.move) candidates.push(history.move);
+      if(state.changeTypes.has("report") && history.report) candidates.push(history.report);
+      if(state.changeTypes.has("relocate") && history.relocate) candidates.push(history.relocate);
+      if(candidates.length === 0) return cur.effectiveDate;
+      return candidates
+        .map(x => ({ raw:x, date:parseDate(x) }))
+        .filter(x => x.date)
+        .sort((a,b)=> b.date - a.date)[0]?.raw || cur.effectiveDate;
+    }
+
+    function getBuOptions(entity){
+      return (orgHierarchy[entity] || []).map(x => x.bu);
+    }
+
+    function getDeptGroupOptions(entity, bu){
+      const buNode = (orgHierarchy[entity] || []).find(x => x.bu === bu);
+      return (buNode?.deptGroups || []).map(x => x.name);
+    }
+
+    function getDepartmentOptions(entity, bu, deptGroup){
+      const buNode = (orgHierarchy[entity] || []).find(x => x.bu === bu);
+      const grp = (buNode?.deptGroups || []).find(x => x.name === deptGroup);
+      return (grp?.departments || []).map(x => x.name);
+    }
+
+    function getTeamOptions(entity, bu, deptGroup, dept){
+      const buNode = (orgHierarchy[entity] || []).find(x => x.bu === bu);
+      const grp = (buNode?.deptGroups || []).find(x => x.name === deptGroup);
+      const dep = (grp?.departments || []).find(x => x.name === dept);
+      return dep?.teams || [];
+    }
+
+    function getDeptManager(entity, bu, deptGroup, dept){
+      const buNode = (orgHierarchy[entity] || []).find(x => x.bu === bu);
+      const grp = (buNode?.deptGroups || []).find(x => x.name === deptGroup);
+      const dep = (grp?.departments || []).find(x => x.name === dept);
+      return dep?.manager || "—";
+    }
+
+    function syncBasisTagUI(){
+      $("basisTags").querySelectorAll("label.tag").forEach(tag=>{
+        const rb = tag.querySelector("input[type=radio]");
+        tag.classList.toggle("active", !!rb?.checked);
+      });
+    }
+
+    function applyChangeBasisUI(){
+      const isJob = state.changeBasis === "job";
+      $("rowPosition").style.display = isJob ? "none" : "";
+      $("newBU").style.display = isJob ? "none" : "block";
+      $("newDeptGroup").style.display = isJob ? "none" : "block";
+      $("newBUSelect").style.display = isJob ? "block" : "none";
+      $("newDeptGroupSelect").style.display = isJob ? "block" : "none";
+      $("newFTE").style.display = isJob ? "none" : "block";
+      $("newFTEInput").style.display = isJob ? "block" : "none";
+    }
+
+    // ===== Change Basis + Change Types =====
+    const basisTags = $("basisTags");
+    basisTags.querySelectorAll("input[type=radio]").forEach(rb=>{
+      rb.addEventListener("change", ()=>{
+        if(rb.checked) state.changeBasis = rb.value;
+        syncBasisTagUI();
+        applyChangeBasisUI();
+        loadActiveEmployee();
+        validateActiveEmployee();
+        updateAllValidity();
+      });
+    });
+
     const changeTags = $("changeTags");
     changeTags.querySelectorAll("label.tag").forEach(tag=>{
       const cb = tag.querySelector("input[type=checkbox]");
@@ -942,12 +1163,10 @@
         if(cb.checked) state.changeTypes.add(cb.value);
         else state.changeTypes.delete(cb.value);
         tag.classList.toggle("active", cb.checked);
-
-        // global required validation
-        const ctrl = $("changeTypeControl");
-        ctrl.classList.toggle("invalid", state.changeTypes.size === 0);
+        $("changeTypeControl").classList.toggle("invalid", state.changeTypes.size === 0);
+        loadActiveEmployee();
+        validateActiveEmployee();
         updateAllValidity();
-        validateActiveEmployee(); // rules depend on change types
       });
     });
 
@@ -969,8 +1188,115 @@
       status.style.fontWeight = "900";
     }
 
+    function setCurrentBlocks(cur){
+      const baseDate = getBaseEffectiveDate(cur);
+      $("curAsgEffDate").textContent = baseDate || "—";
+      $("curPosition").textContent = cur?.position || "—";
+      $("curBU").textContent = cur?.org?.bu || "—";
+      $("curDeptGroup").textContent = cur?.org?.deptGroup || "—";
+      $("curDept").textContent = cur?.org?.dept || "—";
+      $("curTeam").textContent = cur?.org?.team || "—";
+      $("curDeptMgr").textContent = cur?.org?.mgr || "—";
+      $("curJobTitle").textContent = cur ? `${cur.job.title} (Job ID: ${cur.job.id})` : "—";
+      const meta = cur ? jobCatalog[cur.job.id] : null;
+      $("curCareerTrack").textContent = meta?.careerTrack || "—";
+      $("curJobFamily").textContent = meta?.jobFamily || "—";
+      $("curJobGroup").textContent = meta?.jobGroup || "—";
+      $("curSubGroup").textContent = meta?.subGroup || "—";
+      $("curJobLevel").textContent = meta?.jobLevel || "—";
+      $("curFTE").textContent = cur?.fte || "—";
+      $("curReportTo").textContent = cur?.reportTo || "—";
+      $("curLocation").textContent = cur?.location || "—";
+      $("curNote").textContent = "—";
+    }
+
+    function setNewBlocks(data){
+      if(!data){
+        ["newBU","newDeptGroup","newDeptMgr","newJobTitle","newCareerTrack","newJobFamily","newJobGroup","newSubGroup","newJobLevel","newFTE"].forEach(id=>{
+          $(id).textContent = "—";
+        });
+        return;
+      }
+      $("newBU").textContent = data.org?.bu || "—";
+      $("newDeptGroup").textContent = data.org?.deptGroup || "—";
+      $("newDeptMgr").textContent = data.org?.mgr || "—";
+      $("newJobTitle").textContent = `${data.job.title} (Job ID: ${data.job.id})`;
+      const meta = jobCatalog[data.job.id] || {};
+      $("newCareerTrack").textContent = meta.careerTrack || "—";
+      $("newJobFamily").textContent = meta.jobFamily || "—";
+      $("newJobGroup").textContent = meta.jobGroup || "—";
+      $("newSubGroup").textContent = meta.subGroup || "—";
+      $("newJobLevel").textContent = meta.jobLevel || "—";
+      $("newFTE").textContent = data.fte || "—";
+    }
+
+    function disableNewInputs(disabled){
+      ["newAsgEffDate","newPosition","newBUSelect","newDeptGroupSelect","newDepartment","newTeam","newFTEInput","newReportTo","newLocation","newNote"].forEach(id=>{
+        $(id).disabled = disabled;
+      });
+    }
+
+    function resetEntryForAssignment(entry){
+      entry.form.assignmentEffectiveDate = "";
+      entry.form.positionId = "";
+      entry.form.bu = "";
+      entry.form.deptGroup = "";
+      entry.form.department = "";
+      entry.form.team = "";
+      entry.form.fte = "";
+      entry.form.reportTo = "";
+      entry.form.location = "";
+      entry.form.note = "";
+    }
+
+    function resetPositionDrivenSelects(){
+      setSelectOptions($("newDepartment"), [], "Select department");
+      setSelectOptions($("newTeam"), [], "Select team");
+      $("newDepartment").disabled = true;
+      $("newTeam").disabled = true;
+    }
+
+    function refreshJobBaseSelectors(entry, cur){
+      const entity = cur?.org?.entity || "";
+      const buOptions = getBuOptions(entity);
+      setSelectOptions($("newBUSelect"), buOptions, "Select BU");
+
+      if(state.changeTypes.has("dept")){
+        if(!entry.form.bu) entry.form.bu = "";
+      }else if(!entry.form.bu){
+        entry.form.bu = cur.org.bu;
+      }
+      $("newBUSelect").value = entry.form.bu || "";
+
+      const dgOptions = getDeptGroupOptions(entity, entry.form.bu);
+      setSelectOptions($("newDeptGroupSelect"), dgOptions, "Select department group");
+      if(!dgOptions.includes(entry.form.deptGroup)) entry.form.deptGroup = "";
+      if(!entry.form.deptGroup && !state.changeTypes.has("dept") && entry.form.bu === cur.org.bu) entry.form.deptGroup = cur.org.deptGroup;
+      $("newDeptGroupSelect").value = entry.form.deptGroup || "";
+
+      const deptOptions = getDepartmentOptions(entity, entry.form.bu, entry.form.deptGroup);
+      setSelectOptions($("newDepartment"), deptOptions, "Select department");
+      $("newDepartment").disabled = false;
+      if(!deptOptions.includes(entry.form.department)) entry.form.department = "";
+      if(!entry.form.department && !state.changeTypes.has("dept") && entry.form.deptGroup === cur.org.deptGroup) entry.form.department = cur.org.dept;
+      $("newDepartment").value = entry.form.department || "";
+
+      const teamOptions = getTeamOptions(entity, entry.form.bu, entry.form.deptGroup, entry.form.department);
+      setSelectOptions($("newTeam"), teamOptions, "Select team");
+      $("newTeam").disabled = false;
+      if(!teamOptions.includes(entry.form.team)) entry.form.team = "";
+      if(!entry.form.team && !state.changeTypes.has("move") && entry.form.department === cur.org.dept) entry.form.team = cur.org.team;
+      $("newTeam").value = entry.form.team || "";
+
+      $("newBU").textContent = entry.form.bu || "—";
+      $("newDeptGroup").textContent = entry.form.deptGroup || "—";
+      $("newDeptMgr").textContent = getDeptManager(entity, entry.form.bu, entry.form.deptGroup, entry.form.department);
+      setNewBlocks(cur);
+    }
+
     function loadActiveEmployee(){
       renderActiveEmployeeHeader();
+      applyChangeBasisUI();
 
       const entry = findSelected(state.activeEmpId);
       const assignmentSelect = $("assignmentSelect");
@@ -992,23 +1318,8 @@
       assignmentSelect.disabled = false;
       assignmentSelect.innerHTML = `<option value="">Select assignment</option>` +
         activeAssignments.map(a => `<option value="${a.id}">${a.name}</option>`).join("");
-
-      if(activeAssignments.length === 1 && !entry.assignmentId){
-        entry.assignmentId = activeAssignments[0].id;
-        entry.errors.assignment = "";
-      }
-
       assignmentSelect.value = entry.assignmentId || "";
 
-      // Populate dropdowns
-      $("newPosition").innerHTML = `<option value="">Select new position</option>` +
-        positionCatalog.map(p => `<option value="${p.id}">${p.label} • ${p.entity} • Slots: ${p.openSlots}</option>`).join("");
-      $("newReportTo").innerHTML = `<option value="">Select manager</option>` +
-        managers.map(m => `<option value="${m}">${m}</option>`).join("");
-      $("newLocation").innerHTML = `<option value="">Select location</option>` +
-        locations.map(l => `<option value="${l}">${l}</option>`).join("");
-
-      // Set current values based on active assignment
       const asg = activeAssignments.find(a => a.id === entry.assignmentId) || null;
       if(!asg){
         setCurrentBlocks(null);
@@ -1017,81 +1328,50 @@
         validateActiveEmployee();
         return;
       }
-      disableNewInputs(false);
-      setCurrentBlocks(asg.current);
 
-      // load form values per employee
-      $("newPosition").value = entry.form.positionId || "";
+      const cur = asg.current;
+      disableNewInputs(false);
+      setCurrentBlocks(cur);
+
+      $("newPosition").innerHTML = `<option value="">Select new position</option>` +
+        positionCatalog.map(p => `<option value="${p.id}">${p.label} • ${p.entity} • Slots: ${p.openSlots}</option>`).join("");
+      $("newReportTo").innerHTML = `<option value="">Select manager</option>` +
+        managers.map(m => `<option value="${m}">${m}</option>`).join("");
+      setSelectOptions($("newLocation"), locationsByEntity[cur.org.entity] || [], "Select location");
+
+      if(!entry.form.reportTo) entry.form.reportTo = cur.reportTo;
+      if(!entry.form.location) entry.form.location = cur.location;
+      if(!entry.form.fte) entry.form.fte = cur.fte;
+
+      $("newAsgEffDate").value = entry.form.assignmentEffectiveDate || "";
       $("newReportTo").value = entry.form.reportTo || "";
       $("newLocation").value = entry.form.location || "";
+      $("newFTEInput").value = entry.form.fte || "";
       $("newNote").value = entry.form.note || "";
-      $("newAsgEffDate").value = entry.form.assignmentEffectiveDate || "";
 
-      if(entry.form.positionId){
-        applyPositionDefaults(entry.form.positionId, asg.current);
+      if(state.changeBasis === "position"){
+        $("newBUSelect").disabled = true;
+        $("newDeptGroupSelect").disabled = true;
+        $("newFTEInput").disabled = true;
+        if(entry.form.positionId){
+          applyPositionDefaults(entry.form.positionId, cur);
+        }else{
+          setNewBlocks(cur);
+          resetPositionDrivenSelects();
+          entry.form.department = "";
+          entry.form.team = "";
+          $("newDeptMgr").textContent = cur.org.mgr || "—";
+        }
+        $("newPosition").value = entry.form.positionId || "";
       }else{
-        setNewBlocks(asg.current);
-        resetPositionDrivenSelects();
+        $("newPosition").value = "";
+        entry.form.positionId = "";
+        refreshJobBaseSelectors(entry, cur);
+        $("newFTE").textContent = entry.form.fte || cur.fte || "—";
       }
 
       validateActiveEmployee();
       renderSummary();
-    }
-
-    function setCurrentBlocks(cur){
-      $("curPosition").textContent = cur?.position || "—";
-      $("curBU").textContent = cur?.org?.bu || "—";
-      $("curDeptGroup").textContent = cur?.org?.deptGroup || "—";
-      $("curDept").textContent = cur?.org?.dept || "—";
-      $("curTeam").textContent = cur?.org?.team || "—";
-      $("curJobTitle").textContent = cur ? `${cur.job.title} (Job ID: ${cur.job.id})` : "—";
-      $("curFTE").textContent = cur?.fte || "—";
-      $("curReportTo").textContent = cur?.reportTo || "—";
-      $("curLocation").textContent = cur?.location || "—";
-      $("curNote").textContent = "—";
-      $("curAsgEffDate").textContent = cur?.effectiveDate || "—";
-    }
-
-    function setNewBlocks(curOrNew){
-      if(!curOrNew){
-        $("newBU").textContent = "—";
-        $("newDeptGroup").textContent = "—";
-        $("newJobTitle").textContent = "—";
-        $("newFTE").textContent = "—";
-        return;
-      }
-      $("newBU").textContent = curOrNew.org?.bu || "—";
-      $("newDeptGroup").textContent = curOrNew.org?.deptGroup || "—";
-      $("newJobTitle").textContent = `${curOrNew.job.title} (Job ID: ${curOrNew.job.id})`;
-      $("newFTE").textContent = curOrNew.fte || "—";
-    }
-
-    function disableNewInputs(disabled){
-      ["newAsgEffDate","newPosition","newDepartment","newTeam","newReportTo","newLocation","newNote"].forEach(id=>{
-        $(id).disabled = disabled;
-      });
-    }
-
-    function resetEntryForAssignment(entry){
-      entry.form.assignmentEffectiveDate = "";
-      entry.form.positionId = "";
-      entry.form.department = "";
-      entry.form.team = "";
-      entry.form.reportTo = "";
-      entry.form.location = "";
-      entry.form.note = "";
-    }
-
-    function setSelectOptions(el, options, placeholder){
-      el.innerHTML = `<option value="">${placeholder}</option>` +
-        options.map(opt => `<option value="${opt}">${opt}</option>`).join("");
-    }
-
-    function resetPositionDrivenSelects(){
-      setSelectOptions($("newDepartment"), [], "Select department");
-      setSelectOptions($("newTeam"), [], "Select team");
-      $("newDepartment").disabled = true;
-      $("newTeam").disabled = true;
     }
 
     // ===== Events: New fields change =====
@@ -1118,15 +1398,46 @@
         resetPositionDrivenSelects();
         entry.form.department = "";
         entry.form.team = "";
+        $("newDeptMgr").textContent = cur.org.mgr || "—";
       }
+      validateActiveEmployee();
+      updateAllValidity();
+    });
+
+    $("newBUSelect").addEventListener("change", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      const cur = getCurrentForActive();
+      if(!entry || !cur) return;
+      entry.form.bu = $("newBUSelect").value;
+      entry.form.deptGroup = "";
+      entry.form.department = "";
+      entry.form.team = "";
+      refreshJobBaseSelectors(entry, cur);
+      validateActiveEmployee();
+      updateAllValidity();
+    });
+
+    $("newDeptGroupSelect").addEventListener("change", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      const cur = getCurrentForActive();
+      if(!entry || !cur) return;
+      entry.form.deptGroup = $("newDeptGroupSelect").value;
+      entry.form.department = "";
+      entry.form.team = "";
+      refreshJobBaseSelectors(entry, cur);
       validateActiveEmployee();
       updateAllValidity();
     });
 
     $("newDepartment").addEventListener("change", ()=>{
       const entry = findSelected(state.activeEmpId);
-      if(!entry) return;
+      const cur = getCurrentForActive();
+      if(!entry || !cur) return;
       entry.form.department = $("newDepartment").value;
+      entry.form.team = "";
+      if(state.changeBasis === "job"){
+        refreshJobBaseSelectors(entry, cur);
+      }
       validateActiveEmployee();
       updateAllValidity();
     });
@@ -1135,6 +1446,15 @@
       const entry = findSelected(state.activeEmpId);
       if(!entry) return;
       entry.form.team = $("newTeam").value;
+      validateActiveEmployee();
+      updateAllValidity();
+    });
+
+    $("newFTEInput").addEventListener("input", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      if(!entry) return;
+      entry.form.fte = $("newFTEInput").value;
+      $("newFTE").textContent = entry.form.fte || "—";
       validateActiveEmployee();
       updateAllValidity();
     });
@@ -1159,6 +1479,8 @@
       const entry = findSelected(state.activeEmpId);
       if(!entry) return;
       entry.form.assignmentEffectiveDate = $("newAsgEffDate").value;
+      validateActiveEmployee();
+      updateAllValidity();
     });
 
     $("newNote").addEventListener("input", ()=>{
@@ -1180,6 +1502,7 @@
           bu:p.defaults.bu,
           deptGroup:p.defaults.deptGroup,
           dept:p.defaults.dept,
+          mgr:p.defaults.reportTo,
           team:p.defaults.team
         },
         job:{ id:p.jobId, title:p.jobTitle },
@@ -1202,8 +1525,10 @@
           : (p.teamOptions?.[0] || "");
         entry.form.department = deptPick;
         entry.form.team = teamPick;
+        entry.form.fte = p.fte;
         $("newDepartment").value = deptPick;
         $("newTeam").value = teamPick;
+        $("newFTE").textContent = p.fte || "—";
 
         if(!entry.form.reportTo){
           entry.form.reportTo = p.defaults.reportTo;
@@ -1213,15 +1538,8 @@
           entry.form.location = p.defaults.location;
           $("newLocation").value = entry.form.location;
         }
+        $("newDeptMgr").textContent = p.defaults.reportTo || "—";
       }
-    }
-
-    function getCurrentForActive(){
-      const entry = findSelected(state.activeEmpId);
-      if(!entry) return null;
-      const emp = visibleEmployees().find(x => x.id === entry.empId);
-      const asg = (emp.assignments || []).find(a => a.id === entry.assignmentId && a.status === "Active") || getActiveAssignment(emp);
-      return asg?.current || null;
     }
 
     // ===== Validation (per employee) =====
@@ -1232,41 +1550,45 @@
         return;
       }
 
-      // Global change types required
       const changeTypeInvalid = state.changeTypes.size === 0;
       $("changeTypeControl").classList.toggle("invalid", changeTypeInvalid);
       entry.errors.changeTypes = changeTypeInvalid ? "Select change type" : "";
 
       const cur = getCurrentForActive();
-      // If no assignment, mark other errors loosely (but don't spam)
       if(!cur){
-        setInlineInvalid("position", false);
-        setInlineInvalid("department", false);
-        setInlineInvalid("team", false);
-        setInlineInvalid("reportTo", false);
-        setInlineInvalid("location", false);
+        ["asgEffDate","position","bu","deptGroup","department","team","fte","reportTo","location"].forEach(k=>setInlineInvalid(k, false));
         computeRowValidity(entry);
         renderActiveEmployeeHeader();
         renderSummary();
         return;
       }
 
-      // Position*
-      const newPos = entry.form.positionId;
+      let effErr = "";
+      const baseDate = parseDate(getBaseEffectiveDate(cur));
+      const newDate = parseDate(entry.form.assignmentEffectiveDate);
+      if(!entry.form.assignmentEffectiveDate) effErr = "Required";
+      else if(!newDate || !baseDate || newDate <= baseDate) effErr = "Invalid";
+      entry.errors.asgEffDate = effErr;
+      setInlineInvalid("asgEffDate", !!effErr);
+      $("errAsgEffDate").textContent = effErr === "Required"
+        ? "Effective Date is required."
+        : "New effective date must be greater than current.";
+
       let posErr = "";
-      if(!newPos){
-        posErr = "Required";
-      }else{
-        if(newPos === cur.positionId) posErr = "Must differ";
-        const p = positionCatalog.find(x => x.id === newPos);
-        if(p){
-          if(!posErr && p.entity !== cur.org.entity) posErr = "Entity mismatch";
-          else if(!posErr && p.openSlots <= 0) posErr = "No slots";
+      if(state.changeBasis === "position"){
+        const newPos = entry.form.positionId;
+        if(!newPos) posErr = "Required";
+        else{
+          if(newPos === cur.positionId) posErr = "Must differ";
+          const p = positionCatalog.find(x => x.id === newPos);
+          if(p){
+            if(!posErr && p.entity !== cur.org.entity) posErr = "Entity mismatch";
+            else if(!posErr && p.openSlots <= 0) posErr = "No slots";
+          }
         }
       }
       entry.errors.position = posErr;
       setInlineInvalid("position", !!posErr);
-      // adjust error text
       $("errPosition").textContent = posErr === "Required"
         ? "Select a new position."
         : posErr === "Entity mismatch"
@@ -1275,48 +1597,60 @@
         ? "New Position must have available slots."
         : "New Position must be different from Current.";
 
-      // Department (only enforced when Dept Change selected)
-      let deptErr = "";
-      if(state.changeTypes.has("dept")){
-        if(!entry.form.department) deptErr = "Required";
-        else if(entry.form.department === cur.org.dept) deptErr = "Must differ";
+      let buErr = "";
+      let dgErr = "";
+      if(state.changeBasis === "job"){
+        if(!entry.form.bu) buErr = "Required";
+        if(!entry.form.deptGroup) dgErr = "Required";
       }
+      entry.errors.bu = buErr;
+      entry.errors.deptGroup = dgErr;
+      setInlineInvalid("bu", !!buErr);
+      setInlineInvalid("deptGroup", !!dgErr);
+
+      let deptErr = "";
+      if(!entry.form.department) deptErr = "Required";
+      else if(state.changeTypes.has("dept") && entry.form.department === cur.org.dept) deptErr = "Must differ";
       entry.errors.department = deptErr;
       setInlineInvalid("department", !!deptErr);
       $("errDepartment").textContent = deptErr === "Required"
         ? "Select a department."
         : "New Department must be different from Current.";
 
-      // Team (only enforced when Internal Move selected)
       let teamErr = "";
-      if(state.changeTypes.has("move")){
-        if(!entry.form.team) teamErr = "Required";
-        else if(entry.form.team === cur.org.team) teamErr = "Must differ";
-      }
+      if(!entry.form.team) teamErr = "Required";
+      else if(state.changeTypes.has("move") && entry.form.team === cur.org.team) teamErr = "Must differ";
       entry.errors.team = teamErr;
       setInlineInvalid("team", !!teamErr);
       $("errTeam").textContent = teamErr === "Required"
         ? "Select a team."
         : "New Team must be different from Current.";
 
-      // Report To* (only enforced when changeTypes includes report)
+      let fteErr = "";
+      const newFte = parseFloat(entry.form.fte);
+      if(isNaN(newFte)) fteErr = "Required";
+      else if(newFte < 0 || newFte > 1) fteErr = "Invalid";
+      else if(newFte + getOtherActiveFteTotal(entry.empId, entry.assignmentId) > 1) fteErr = "Total exceeds";
+      entry.errors.fte = fteErr;
+      setInlineInvalid("fte", !!fteErr);
+      $("errFTE").textContent = fteErr === "Required"
+        ? "FTE is required."
+        : fteErr === "Invalid"
+        ? "FTE must be between 0 and 1."
+        : "Total active assignment FTE exceeds 1.";
+
       let repErr = "";
-      if(state.changeTypes.has("report")){
-        if(!entry.form.reportTo) repErr = "Required";
-        else if(entry.form.reportTo === cur.reportTo) repErr = "Must differ";
-      }
+      if(!entry.form.reportTo) repErr = "Required";
+      else if(state.changeTypes.has("report") && entry.form.reportTo === cur.reportTo) repErr = "Must differ";
       entry.errors.reportTo = repErr;
       setInlineInvalid("reportTo", !!repErr);
       $("errReportTo").textContent = repErr === "Required"
         ? "Select a manager."
         : "New Report To must be different from Current.";
 
-      // Work Location* (only enforced when relocate selected)
       let locErr = "";
-      if(state.changeTypes.has("relocate")){
-        if(!entry.form.location) locErr = "Required";
-        else if(entry.form.location === cur.location) locErr = "Must differ";
-      }
+      if(!entry.form.location) locErr = "Required";
+      else if(state.changeTypes.has("relocate") && entry.form.location === cur.location) locErr = "Must differ";
       entry.errors.location = locErr;
       setInlineInvalid("location", !!locErr);
       $("errLocation").textContent = locErr === "Required"
