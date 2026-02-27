@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Renewal Request Detail</title>
+  <style>
+    :root{
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --line:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+      --primary:#2563eb;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --warn:#d97706;
+      --radius:12px;
+      --shadow:0 6px 20px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header, main, aside > section, main > section > section{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    header{
+      margin:16px;
+      padding:16px;
+    }
+    header h1{ margin:6px 0 8px; font-size:20px; }
+    header a{ color:var(--primary); text-decoration:none; font-weight:600; }
+    header a:hover{ text-decoration:underline; }
+    header > div > div{ display:flex; gap:12px; flex-wrap:wrap; color:var(--muted); font-size:13px; }
+    #eventBanner{
+      margin-top:12px;
+      padding:12px;
+      border:1px solid #fed7aa;
+      background:#fff7ed;
+      color:#9a3412;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    #eventBanner button{
+      margin-left:auto;
+      border:1px solid #fdba74;
+      background:#fff;
+      border-radius:8px;
+      padding:6px 10px;
+      cursor:pointer;
+    }
+    .app-layout{
+      display:flex;
+      gap:16px;
+      padding:0 16px 96px;
+      align-items:flex-start;
+    }
+    .main-col{ flex:1; display:flex; flex-direction:column; gap:14px; }
+    section[aria-label]{ padding:14px; }
+    h2{ margin:0 0 10px; font-size:16px; }
+    h3{ margin:10px 0 8px; font-size:14px; }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+    }
+    label{ font-size:12px; color:var(--muted); display:block; margin-bottom:4px; }
+    input, select, button, textarea{
+      font:inherit;
+    }
+    input, select, textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:8px;
+      padding:8px 10px;
+      background:#fff;
+      color:var(--text);
+      transition:border-color .15s ease, box-shadow .15s ease;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color:#93c5fd;
+      outline:none;
+      box-shadow:0 0 0 3px rgba(37,99,235,.14);
+    }
+    input[readonly], select[disabled], input:disabled{ background:#f9fafb; color:#6b7280; }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      border:1px solid var(--line);
+      border-radius:10px;
+      overflow:hidden;
+      font-size:13px;
+      background:#fff;
+    }
+    th, td{ border-bottom:1px solid var(--line); padding:8px; vertical-align:top; }
+    th{ background:#f8fafc; text-align:left; color:#374151; font-size:12px; }
+    tr:last-child td{ border-bottom:none; }
+    tbody tr{ transition:background-color .15s ease; }
+    tbody tr:hover{ background:#f9fafb; }
+    tr.is-reject{ background:#fef2f2; }
+    .search-row{ display:flex; gap:8px; align-items:flex-end; margin-bottom:8px; }
+    .search-row > div{ flex:1; }
+    .btn{
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:#fff;
+      padding:8px 12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn.primary{ background:var(--primary); border-color:var(--primary); color:#fff; }
+    .btn:hover{ filter:brightness(.98); }
+    .hidden{ display:none !important; }
+    .muted{ color:var(--muted); font-size:12px; }
+    .cta-bar{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#fff;
+      border-top:1px solid var(--line);
+      box-shadow:0 -6px 20px rgba(15,23,42,.08);
+      z-index:20;
+    }
+    .cta-inner{
+      width:100%;
+      margin:0;
+      padding:12px 24px;
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:10px;
+    }
+    .cta-inner .btn{
+      min-width:132px;
+      height:40px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1;
+      margin:0;
+    }
+    @media (max-width: 1200px){
+      .app-layout{ flex-direction:column; }
+      .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 760px){
+      .grid{ grid-template-columns:1fr; }
+      th, td{ padding:6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header>
+  <div>
+    <a href="/renewal-requests">← Back</a>
+    <h1>Renewal Request: RR-2026-08-DeptA-Fixed</h1>
+    <div>
+      <span>Status: <strong>Waiting CnB</strong></span>
+      <span>Created (Date Request): <strong>2026-08-01</strong></span>
+      <span>Scope: <strong>2026-08-01 → 2026-09-15</strong></span>
+    </div>
+  </div>
+
+</header>
+
+
+<main class="app-layout">
+
+  <!-- Left: Header + lines -->
+  <section class="main-col">
+
+    <!-- Request Header -->
+    <section aria-label="Request Header">
+      <h2>Header</h2>
+      <div class="grid">
+        <div>
+          <label>Department</label>
+          <input value="Dept A" readonly />
+        </div>
+        <div>
+          <label>Department Group</label>
+          <input value="DG-01" readonly />
+        </div>
+        <div>
+          <label>Parent Dept Group</label>
+          <input value="PDG-Company" readonly />
+        </div>
+        <div>
+          <label>Contract Type</label>
+          <input value="Hợp đồng lao động 1 năm" readonly />
+        </div>
+        <div>
+          <label>Date Request</label>
+          <input value="2026-08-01" readonly />
+        </div>
+        <div>
+          <label>Date From</label>
+          <input value="2026-08-01" readonly />
+        </div>
+        <div>
+          <label>Date To</label>
+          <input value="2026-09-15" readonly />
+        </div>
+      </div>
+    </section>
+
+    <!-- Search + table -->
+    <section aria-label="Contract Lines">
+      <h2>Contract Lines</h2>
+
+      <!-- FE search only -->
+      <div class="search-row">
+        <div>
+          <label for="lineSearch">Search (FE only)</label>
+          <input id="lineSearch" placeholder="Search by Employee Code/Name/Current Term/Renew Status/Comments" />
+        </div>
+        <button type="button" id="btnClearSearch" class="btn">Clear</button>
+      </div>
+
+      <!-- Reminder: sort by Expired Date by default -->
+      <div>
+        <small>Default sort: Expired Date (ascending)</small>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Employee Code</th>
+            <th>Employee Name</th>
+            <th>Current Term</th>
+            <th>Effective Date</th>
+            <th>Expired Date</th>
+            <th>Renew Status</th>
+            <th>New Term</th>
+            <th>New Effective Date</th>
+            <th>New Expired Date</th>
+            <th>Send Mail</th>
+            <th>Comments</th>
+            <th>System Flags</th>
+          </tr>
+        </thead>
+
+        <tbody id="lineTbody">
+          <!-- Row example: Renew selected -->
+          <tr data-row-id="line-001">
+            <td>1</td>
+            <td><input value="E0001" readonly /></td>
+            <td>
+              <select disabled>
+                <option selected>Nguyen Van A</option>
+              </select>
+            </td>
+            <td><input value="12 months" readonly /></td>
+            <td><input value="2025-09-01" readonly /></td>
+            <td><input value="2026-08-31" /></td>
+
+            <!-- Renew Status depends on step/role -->
+            <td>
+              <select>
+                <option value="RENEW" selected>Renew</option>
+                <option value="REJECT">Reject</option>
+                <!-- Pending only appears at DeptHead step -->
+              </select>
+            </td>
+
+            <td>
+              <select>
+                <option value="6M">6 months</option>
+                <option value="12M" selected>12 months</option>
+                <option value="PERM">Permanent</option>
+              </select>
+            </td>
+
+            <td><input value="2026-09-01" readonly /></td>
+            <td><input value="2027-08-31" /></td>
+
+            <td>
+              <input type="checkbox" checked />
+            </td>
+
+            <td>
+              <input value="" placeholder="Comment..." />
+              <!-- Tooltip behavior: show full text on hover if truncated -->
+              <span title=""></span>
+            </td>
+
+            <td>
+              <small>OK</small>
+            </td>
+          </tr>
+
+          <!-- Row example: Reject => reset/disable New* and uncheck SendMail -->
+          <tr data-row-id="line-002" class="is-reject">
+            <td>2</td>
+            <td><input value="E0002" readonly /></td>
+            <td>
+              <select disabled>
+                <option selected>Tran Thi B</option>
+              </select>
+            </td>
+            <td><input value="Probation" readonly /></td>
+            <td><input value="2026-06-01" readonly /></td>
+            <td><input value="2026-08-10" /></td>
+
+            <td>
+              <select>
+                <option value="RENEW">Renew</option>
+                <option value="REJECT" selected>Reject</option>
+              </select>
+            </td>
+
+            <td>
+              <select disabled>
+                <option selected>(reset)</option>
+              </select>
+            </td>
+            <td><input value="" readonly disabled /></td>
+            <td><input value="" disabled /></td>
+
+            <td>
+              <input type="checkbox" disabled />
+            </td>
+
+            <td>
+              <input value="Termination incoming" placeholder="Reason..." />
+              <span title="Termination incoming"></span>
+            </td>
+
+            <td>
+              <small>Auto Reject (event)</small>
+            </td>
+          </tr>
+
+          <tr data-row-id="line-003">
+            <td>3</td>
+            <td><input value="E0003" readonly /></td>
+            <td><select disabled><option selected>Le Minh C</option></select></td>
+            <td><input value="6 months" readonly /></td>
+            <td><input value="2026-02-15" readonly /></td>
+            <td><input value="2026-08-15" /></td>
+            <td><select><option value="RENEW" selected>Renew</option><option value="REJECT">Reject</option></select></td>
+            <td><select><option value="6M" selected>6 months</option><option value="12M">12 months</option><option value="PERM">Permanent</option></select></td>
+            <td><input value="2026-08-16" readonly /></td>
+            <td><input value="2027-02-15" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input value="" placeholder="Comment..." /><span title=""></span></td>
+            <td><small>OK</small></td>
+          </tr>
+
+          <tr data-row-id="line-004">
+            <td>4</td>
+            <td><input value="E0004" readonly /></td>
+            <td><select disabled><option selected>Pham Thi D</option></select></td>
+            <td><input value="12 months" readonly /></td>
+            <td><input value="2025-10-01" readonly /></td>
+            <td><input value="2026-09-30" /></td>
+            <td><select><option value="RENEW" selected>Renew</option><option value="REJECT">Reject</option></select></td>
+            <td><select><option value="6M">6 months</option><option value="12M" selected>12 months</option><option value="PERM">Permanent</option></select></td>
+            <td><input value="2026-10-01" readonly /></td>
+            <td><input value="2027-09-30" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input value="Need manager feedback" placeholder="Comment..." /><span title="Need manager feedback"></span></td>
+            <td><small>OK</small></td>
+          </tr>
+
+          <tr data-row-id="line-005" class="is-reject">
+            <td>5</td>
+            <td><input value="E0005" readonly /></td>
+            <td><select disabled><option selected>Hoang Van E</option></select></td>
+            <td><input value="Probation" readonly /></td>
+            <td><input value="2026-05-01" readonly /></td>
+            <td><input value="2026-08-05" /></td>
+            <td><select><option value="RENEW">Renew</option><option value="REJECT" selected>Reject</option></select></td>
+            <td><select disabled><option selected>(reset)</option></select></td>
+            <td><input value="" readonly disabled /></td>
+            <td><input value="" disabled /></td>
+            <td><input type="checkbox" disabled /></td>
+            <td><input value="Contract ended" placeholder="Reason..." /><span title="Contract ended"></span></td>
+            <td><small>Manual Reject</small></td>
+          </tr>
+
+          <tr data-row-id="line-006">
+            <td>6</td>
+            <td><input value="E0006" readonly /></td>
+            <td><select disabled><option selected>Do Thi F</option></select></td>
+            <td><input value="24 months" readonly /></td>
+            <td><input value="2024-09-01" readonly /></td>
+            <td><input value="2026-09-01" /></td>
+            <td><select><option value="RENEW" selected>Renew</option><option value="REJECT">Reject</option></select></td>
+            <td><select><option value="6M">6 months</option><option value="12M" selected>12 months</option><option value="PERM">Permanent</option></select></td>
+            <td><input value="2026-09-02" readonly /></td>
+            <td><input value="2027-09-01" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input value="" placeholder="Comment..." /><span title=""></span></td>
+            <td><small>OK</small></td>
+          </tr>
+
+          <tr data-row-id="line-007">
+            <td>7</td>
+            <td><input value="E0007" readonly /></td>
+            <td><select disabled><option selected>Vu Quoc G</option></select></td>
+            <td><input value="12 months" readonly /></td>
+            <td><input value="2025-08-20" readonly /></td>
+            <td><input value="2026-08-20" /></td>
+            <td><select><option value="RENEW" selected>Renew</option><option value="REJECT">Reject</option></select></td>
+            <td><select><option value="6M" selected>6 months</option><option value="12M">12 months</option><option value="PERM">Permanent</option></select></td>
+            <td><input value="2026-08-21" readonly /></td>
+            <td><input value="2027-02-20" /></td>
+            <td><input type="checkbox" /></td>
+            <td><input value="Waiting employee confirmation" placeholder="Comment..." /><span title="Waiting employee confirmation"></span></td>
+            <td><small>Need follow-up</small></td>
+          </tr>
+
+          <tr data-row-id="line-008">
+            <td>8</td>
+            <td><input value="E0008" readonly /></td>
+            <td><select disabled><option selected>Nguyen Thi H</option></select></td>
+            <td><input value="6 months" readonly /></td>
+            <td><input value="2026-03-10" readonly /></td>
+            <td><input value="2026-09-10" /></td>
+            <td><select><option value="RENEW" selected>Renew</option><option value="REJECT">Reject</option></select></td>
+            <td><select><option value="6M">6 months</option><option value="12M">12 months</option><option value="PERM" selected>Permanent</option></select></td>
+            <td><input value="2026-09-11" readonly /></td>
+            <td><input value="" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input value="Convert to permanent" placeholder="Comment..." /><span title="Convert to permanent"></span></td>
+            <td><small>OK</small></td>
+          </tr>
+
+          <tr data-row-id="line-009" class="is-reject">
+            <td>9</td>
+            <td><input value="E0009" readonly /></td>
+            <td><select disabled><option selected>Tran Quang I</option></select></td>
+            <td><input value="12 months" readonly /></td>
+            <td><input value="2025-09-15" readonly /></td>
+            <td><input value="2026-09-14" /></td>
+            <td><select><option value="RENEW">Renew</option><option value="REJECT" selected>Reject</option></select></td>
+            <td><select disabled><option selected>(reset)</option></select></td>
+            <td><input value="" readonly disabled /></td>
+            <td><input value="" disabled /></td>
+            <td><input type="checkbox" disabled /></td>
+            <td><input value="Performance issue" placeholder="Reason..." /><span title="Performance issue"></span></td>
+            <td><small>Auto Reject (event)</small></td>
+          </tr>
+
+          <tr data-row-id="line-010">
+            <td>10</td>
+            <td><input value="E0010" readonly /></td>
+            <td><select disabled><option selected>Mai Lan K</option></select></td>
+            <td><input value="Probation" readonly /></td>
+            <td><input value="2026-07-01" readonly /></td>
+            <td><input value="2026-08-30" /></td>
+            <td><select><option value="RENEW" selected>Renew</option><option value="REJECT">Reject</option></select></td>
+            <td><select><option value="6M" selected>6 months</option><option value="12M">12 months</option><option value="PERM">Permanent</option></select></td>
+            <td><input value="2026-09-01" readonly /></td>
+            <td><input value="2027-02-28" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input value="" placeholder="Comment..." /><span title=""></span></td>
+            <td><small>OK</small></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </section>
+
+  </section>
+
+</main>
+
+<footer class="cta-bar" aria-label="Page Actions">
+  <div class="cta-inner">
+    <button type="button" id="btnSaveDraft" class="btn">Save draft</button>
+    <button type="button" id="btnSubmitDeptHead" class="btn primary">Submit / Complete Step</button>
+  </div>
+</footer>
+
+<script>
+  const lineSearch = document.getElementById("lineSearch");
+  const btnClearSearch = document.getElementById("btnClearSearch");
+  const btnSaveDraft = document.getElementById("btnSaveDraft");
+  const btnSubmitDeptHead = document.getElementById("btnSubmitDeptHead");
+  const lineTbody = document.getElementById("lineTbody");
+  const rows = Array.from(lineTbody.querySelectorAll("tr[data-row-id]"));
+  let showOnlyRenewAfterSubmit = false;
+
+  function parseDateValue(value){
+    const d = new Date((value || "") + "T00:00:00");
+    return Number.isNaN(d.getTime()) ? null : d;
+  }
+
+  function getStatusSelect(row){
+    return row.children[6]?.querySelector("select");
+  }
+
+  function updateRejectState(row){
+    const status = getStatusSelect(row)?.value;
+    const isReject = status === "REJECT";
+    row.classList.toggle("is-reject", isReject);
+
+    const newTerm = row.children[7]?.querySelector("select");
+    const newEff = row.children[8]?.querySelector("input");
+    const newExp = row.children[9]?.querySelector("input");
+    const sendMail = row.children[10]?.querySelector("input[type='checkbox']");
+
+    [newTerm, newEff, newExp, sendMail].forEach(el => {
+      if(!el) return;
+      el.disabled = isReject;
+      if(isReject && el.type === "checkbox") el.checked = false;
+      if(isReject && (el.tagName === "INPUT" || el.tagName === "SELECT") && el.type !== "checkbox") el.value = "";
+    });
+  }
+
+  function updateCommentTooltip(row){
+    const commentInput = row.children[11]?.querySelector("input");
+    const tip = row.children[11]?.querySelector("span");
+    if(!commentInput || !tip) return;
+    tip.title = commentInput.value || "";
+  }
+
+  function applySearch(){
+    const q = lineSearch.value.trim().toLowerCase();
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      const status = getStatusSelect(row)?.value;
+      const hiddenBySubmit = showOnlyRenewAfterSubmit && status !== "RENEW";
+      const hiddenBySearch = q && !text.includes(q);
+      row.classList.toggle("hidden", !!(hiddenBySubmit || hiddenBySearch));
+    });
+  }
+
+  function sortByExpiredDate(){
+    const sorted = [...rows].sort((a,b)=>{
+      const aVal = a.children[5]?.querySelector("input")?.value;
+      const bVal = b.children[5]?.querySelector("input")?.value;
+      const ad = parseDateValue(aVal);
+      const bd = parseDateValue(bVal);
+      if(!ad && !bd) return 0;
+      if(!ad) return 1;
+      if(!bd) return -1;
+      return ad - bd;
+    });
+    sorted.forEach(row => lineTbody.appendChild(row));
+    sorted.forEach((row, idx)=>{
+      const noCell = row.children[0];
+      if(noCell) noCell.textContent = String(idx + 1);
+    });
+  }
+
+  function collectLineData(row){
+    const status = row.children[6]?.querySelector("select")?.value || "";
+    return {
+      rowId: row.dataset.rowId,
+      employeeCode: row.children[1]?.querySelector("input")?.value || "",
+      employeeName: row.children[2]?.querySelector("select")?.selectedOptions?.[0]?.textContent || "",
+      currentTerm: row.children[3]?.querySelector("input")?.value || "",
+      effectiveDate: row.children[4]?.querySelector("input")?.value || "",
+      expiredDate: row.children[5]?.querySelector("input")?.value || "",
+      renewStatus: status,
+      newTerm: row.children[7]?.querySelector("select")?.value || "",
+      newEffectiveDate: row.children[8]?.querySelector("input")?.value || "",
+      newExpiredDate: row.children[9]?.querySelector("input")?.value || "",
+      sendMail: !!row.children[10]?.querySelector("input[type='checkbox']")?.checked,
+      comments: row.children[11]?.querySelector("input")?.value || "",
+      systemFlags: row.children[12]?.innerText?.trim() || ""
+    };
+  }
+
+  function ensurePendingOptions(){
+    rows.forEach(row => {
+      const statusSelect = getStatusSelect(row);
+      if(!statusSelect) return;
+      const hasPending = Array.from(statusSelect.options).some(opt => opt.value === "PENDING");
+      if(!hasPending){
+        const opt = document.createElement("option");
+        opt.value = "PENDING";
+        opt.textContent = "Pending";
+        statusSelect.appendChild(opt);
+      }
+    });
+  }
+
+  function submitToDeptHead(){
+    const allLines = rows.map(collectLineData);
+    const renewLines = allLines.filter(x => x.renewStatus === "RENEW");
+    const rejectLines = allLines.filter(x => x.renewStatus === "REJECT");
+    const pendingLines = allLines.filter(x => x.renewStatus === "PENDING");
+
+    if(renewLines.length === 0){
+      alert("Không có dòng Renew để hiển thị sau khi Submit.");
+      return;
+    }
+
+    showOnlyRenewAfterSubmit = true;
+    applySearch();
+
+    const visibleRows = rows.filter(r => !r.classList.contains("hidden"));
+    visibleRows.forEach((row, idx) => {
+      const noCell = row.children[0];
+      if(noCell) noCell.textContent = String(idx + 1);
+    });
+
+    alert(`Submit thành công (demo).\nRenew: ${renewLines.length}\nReject tách riêng: ${rejectLines.length}\nPending tách riêng: ${pendingLines.length}`);
+  }
+
+  rows.forEach(row => {
+    getStatusSelect(row)?.addEventListener("change", ()=>{
+      updateRejectState(row);
+    });
+    row.children[11]?.querySelector("input")?.addEventListener("input", ()=>updateCommentTooltip(row));
+    updateRejectState(row);
+    updateCommentTooltip(row);
+  });
+
+  lineSearch.addEventListener("input", applySearch);
+  btnClearSearch.addEventListener("click", ()=>{
+    lineSearch.value = "";
+    applySearch();
+    lineSearch.focus();
+  });
+
+  btnSaveDraft.addEventListener("click", ()=>{
+    alert("Saved draft (demo)");
+  });
+
+  btnSubmitDeptHead.addEventListener("click", submitToDeptHead);
+
+  ensurePendingOptions();
+  sortByExpiredDate();
+</script>
+
+</body>
+</html>
