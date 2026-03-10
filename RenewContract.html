@@ -105,6 +105,7 @@
     }
     th, td{ border-bottom:1px solid var(--line); padding:8px; vertical-align:top; }
     th{ background:#f8fafc; text-align:left; color:#374151; font-size:12px; }
+    tbody td:nth-child(13){ display:none; }
     tr:last-child td{ border-bottom:none; }
     tbody tr{ transition:background-color .15s ease; }
     tbody tr:hover{ background:#f9fafb; }
@@ -251,7 +252,6 @@
             <th>New Expired Date</th>
             <th>Send Mail</th>
             <th>Comments</th>
-            <th>System Flags</th>
           </tr>
         </thead>
 
@@ -576,8 +576,7 @@
       newEffectiveDate: row.children[8]?.querySelector("input")?.value || "",
       newExpiredDate: row.children[9]?.querySelector("input")?.value || "",
       sendMail: !!row.children[10]?.querySelector("input[type='checkbox']")?.checked,
-      comments: row.children[11]?.querySelector("input")?.value || "",
-      systemFlags: row.children[12]?.innerText?.trim() || ""
+      comments: row.children[11]?.querySelector("input")?.value || ""
     };
   }
 

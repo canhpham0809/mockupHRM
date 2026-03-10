@@ -500,17 +500,6 @@
         </div>
         <div class="card-bd">
           <div class="row">
-            <div class="lbl req">Change Basis</div>
-            <div class="control" id="changeBasisControl">
-              <div class="tags" id="basisTags">
-                <label class="tag active"><input type="radio" name="changeBasis" value="position" checked /> Position - Base</label>
-                <label class="tag"><input type="radio" name="changeBasis" value="job" /> Job - Base</label>
-              </div>
-              <div class="hint">Default is current Position - Base flow. Switch to Job - Base for organization hierarchy-based change.</div>
-            </div>
-          </div>
-
-          <div class="row">
             <div class="lbl req">Change Type</div>
             <div class="control" id="changeTypeControl">
               <div class="tags" id="changeTags">
@@ -631,6 +620,17 @@
                   <td class="fieldname">Job Title <small>Auto load by selected Assignment.</small></td>
                   <td><div class="cur" id="curJobTitle">—</div></td>
                   <td><div class="cur" id="newJobTitle">—</div></td>
+                </tr>
+
+                <tr id="rowNewPosition">
+                  <td class="fieldname">Position <small>Select if Department or Team is chosen</small></td>
+                  <td><div class="cur" id="curNewPosition">—</div></td>
+                  <td class="new" data-field="newPosition">
+                    <select class="select" id="newPositionSelect">
+                      <option value="">Select position</option>
+                    </select>
+                    <div class="inline-err" id="errNewPosition"></div>
+                  </td>
                 </tr>
 
                 <tr>
@@ -869,7 +869,7 @@
       selectedEmployees: [],   // [{empId, assignmentId, form:{...}, errors:{...}, valid:boolean}]
       activeEmpId: null,
       changeTypes: new Set(),
-      changeBasis: "position"
+      changeBasis: "job"
     };
 
     // ===== Helpers =====
@@ -953,6 +953,7 @@
           deptGroup:"",
           department:"",
           team:"",
+          newPosition:"",
           fte:"",
           reportTo:"",
           location:"",
@@ -1125,13 +1126,6 @@
       return dep?.manager || "—";
     }
 
-    function syncBasisTagUI(){
-      $("basisTags").querySelectorAll("label.tag").forEach(tag=>{
-        const rb = tag.querySelector("input[type=radio]");
-        tag.classList.toggle("active", !!rb?.checked);
-      });
-    }
-
     function applyChangeBasisUI(){
       const isJob = state.changeBasis === "job";
       $("rowPosition").style.display = isJob ? "none" : "";
@@ -1143,19 +1137,7 @@
       $("newFTEInput").style.display = isJob ? "block" : "none";
     }
 
-    // ===== Change Basis + Change Types =====
-    const basisTags = $("basisTags");
-    basisTags.querySelectorAll("input[type=radio]").forEach(rb=>{
-      rb.addEventListener("change", ()=>{
-        if(rb.checked) state.changeBasis = rb.value;
-        syncBasisTagUI();
-        applyChangeBasisUI();
-        loadActiveEmployee();
-        validateActiveEmployee();
-        updateAllValidity();
-      });
-    });
-
+    // ===== Change Types =====
     const changeTags = $("changeTags");
     changeTags.querySelectorAll("label.tag").forEach(tag=>{
       const cb = tag.querySelector("input[type=checkbox]");
@@ -1208,6 +1190,7 @@
       $("curReportTo").textContent = cur?.reportTo || "—";
       $("curLocation").textContent = cur?.location || "—";
       $("curNote").textContent = "—";
+      $("curNewPosition").textContent = "—";
     }
 
     function setNewBlocks(data){
@@ -1231,7 +1214,7 @@
     }
 
     function disableNewInputs(disabled){
-      ["newAsgEffDate","newPosition","newBUSelect","newDeptGroupSelect","newDepartment","newTeam","newFTEInput","newReportTo","newLocation","newNote"].forEach(id=>{
+      ["newAsgEffDate","newPosition","newBUSelect","newDeptGroupSelect","newDepartment","newTeam","newPositionSelect","newFTEInput","newReportTo","newLocation","newNote"].forEach(id=>{
         $(id).disabled = disabled;
       });
     }
@@ -1243,6 +1226,7 @@
       entry.form.deptGroup = "";
       entry.form.department = "";
       entry.form.team = "";
+      entry.form.newPosition = "";
       entry.form.fte = "";
       entry.form.reportTo = "";
       entry.form.location = "";
@@ -1254,6 +1238,25 @@
       setSelectOptions($("newTeam"), [], "Select team");
       $("newDepartment").disabled = true;
       $("newTeam").disabled = true;
+    }
+
+    function refreshPositionSelect(entry, cur){
+      const dept = entry.form.department;
+      const team = entry.form.team;
+      let positions = positionCatalog;
+      if(dept){
+        positions = positions.filter(p => p.deptOptions && p.deptOptions.includes(dept));
+      }
+      if(team){
+        positions = positions.filter(p => p.teamOptions && p.teamOptions.includes(team));
+      }
+      const options = positions.map(p => `<option value="${p.id}">${p.label} • ${p.entity} • Slots: ${p.openSlots}</option>`).join("");
+      $("newPositionSelect").innerHTML = `<option value="">Select position</option>` + options;
+      // If current selection is not in options, reset
+      if(entry.form.newPosition && !positions.find(p => p.id === entry.form.newPosition)){
+        entry.form.newPosition = "";
+        $("newPositionSelect").value = "";
+      }
     }
 
     function refreshJobBaseSelectors(entry, cur){
@@ -1292,6 +1295,7 @@
       $("newDeptGroup").textContent = entry.form.deptGroup || "—";
       $("newDeptMgr").textContent = getDeptManager(entity, entry.form.bu, entry.form.deptGroup, entry.form.department);
       setNewBlocks(cur);
+      refreshPositionSelect(entry, cur);
     }
 
     function loadActiveEmployee(){
@@ -1348,6 +1352,7 @@
       $("newLocation").value = entry.form.location || "";
       $("newFTEInput").value = entry.form.fte || "";
       $("newNote").value = entry.form.note || "";
+      $("newPositionSelect").value = entry.form.newPosition || "";
 
       if(state.changeBasis === "position"){
         $("newBUSelect").disabled = true;
@@ -1367,6 +1372,7 @@
         $("newPosition").value = "";
         entry.form.positionId = "";
         refreshJobBaseSelectors(entry, cur);
+        refreshPositionSelect(entry, cur);
         $("newFTE").textContent = entry.form.fte || cur.fte || "—";
       }
 
@@ -1438,6 +1444,7 @@
       if(state.changeBasis === "job"){
         refreshJobBaseSelectors(entry, cur);
       }
+      refreshPositionSelect(entry, cur);
       validateActiveEmployee();
       updateAllValidity();
     });
@@ -1446,6 +1453,15 @@
       const entry = findSelected(state.activeEmpId);
       if(!entry) return;
       entry.form.team = $("newTeam").value;
+      refreshPositionSelect(entry, getCurrentForActive());
+      validateActiveEmployee();
+      updateAllValidity();
+    });
+
+    $("newPositionSelect").addEventListener("change", ()=>{
+      const entry = findSelected(state.activeEmpId);
+      if(!entry) return;
+      entry.form.newPosition = $("newPositionSelect").value;
       validateActiveEmployee();
       updateAllValidity();
     });

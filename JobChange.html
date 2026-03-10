@@ -483,17 +483,6 @@
         </div>
         <div class="card-bd">
           <div class="row">
-            <div class="lbl req">Change Basis</div>
-            <div class="control" id="changeBasisControl">
-              <div class="tags" id="basisTags">
-                <label class="tag active"><input type="radio" name="changeBasis" value="position" checked /> Position - Base</label>
-                <label class="tag"><input type="radio" name="changeBasis" value="job" /> Job - Base</label>
-              </div>
-              <div class="hint">Switch layout between Position - Base and Job - Base.</div>
-            </div>
-          </div>
-
-          <div class="row">
             <div class="lbl req">Change Type</div>
             <div class="control" id="changeTypeControl">
               <div class="tags" id="changeTags">
@@ -550,17 +539,6 @@
                   </td>
                 </tr>
 
-                <tr id="rowPosition">
-                  <td class="fieldname">Position <small>New Position must be different, same Entity and Unit, and have open slots.</small></td>
-                  <td><div class="cur" id="curPosition">—</div></td>
-                  <td class="new" data-field="position">
-                    <select class="select" id="newPosition">
-                      <option value="">Select new position</option>
-                    </select>
-                    <div class="inline-err" id="errPosition">New Position must be different from Current.</div>
-                  </td>
-                </tr>
-
                 <tr>
                   <td class="fieldname">Business Unit <small>Auto load by Position</small></td>
                   <td><div class="cur" id="curBU">—</div></td>
@@ -600,6 +578,15 @@
                       <option value="">Select job title</option>
                     </select>
                     <div class="inline-err" id="errJobTitle">New Job Title must be different from Current.</div>
+                  </td>
+                </tr>
+
+                <tr id="rowNewPosition">
+                  <td class="fieldname">Position <small>Select if Department or Team is chosen</small></td>
+                  <td><div class="cur" id="curNewPosition">—</div></td>
+                  <td class="new" data-field="newPosition">
+                    <div class="new" id="newPosition">—</div>
+                    <div class="inline-err" id="errNewPosition"></div>
                   </td>
                 </tr>
 
@@ -870,7 +857,7 @@
       selectedEmployees: [],   // [{empId, assignmentId, form:{...}, errors:{...}, valid:boolean}]
       activeEmpId: null,
       changeType: "",
-      changeBasis: "position"
+      changeBasis: "job"
     };
 
     // ===== Helpers =====
@@ -958,6 +945,7 @@
           effectiveDate:"",
           positionId:"",
           jobTitleId:"",
+          newPosition:"",
           fte:"",
           reportTo:"",
           location:"",
@@ -1061,29 +1049,7 @@
       }
     }
 
-    // ===== Change Basis + Change Types =====
-    const basisTags = $("basisTags");
-    function syncChangeBasisUI(){
-      basisTags.querySelectorAll("label.tag").forEach(tag=>{
-        const rb = tag.querySelector("input[type=radio]");
-        tag.classList.toggle("active", !!rb?.checked);
-      });
-      const isJobBase = state.changeBasis === "job";
-      $("rowPosition").style.display = isJobBase ? "none" : "";
-      $("newJobTitleDisplay").style.display = isJobBase ? "none" : "block";
-      $("newJobTitleSelect").style.display = isJobBase ? "block" : "none";
-    }
-
-    basisTags.querySelectorAll("input[type=radio]").forEach(rb=>{
-      rb.addEventListener("change", ()=>{
-        if(rb.checked) state.changeBasis = rb.value;
-        syncChangeBasisUI();
-        loadActiveEmployee();
-        validateActiveEmployee();
-        updateAllValidity();
-      });
-    });
-
+    // ===== Change Types =====
     const changeTags = $("changeTags");
     changeTags.querySelectorAll("label.tag").forEach(tag=>{
       const rb = tag.querySelector("input[type=radio]");
@@ -1119,7 +1085,6 @@
 
     function loadActiveEmployee(){
       renderActiveEmployeeHeader();
-      syncChangeBasisUI();
 
       const entry = findSelected(state.activeEmpId);
       const assignmentSelect = $("assignmentSelect");
@@ -1136,6 +1101,16 @@
       }
 
       const emp = visibleEmployees().find(x => x.id === entry.empId);
+      if(!emp){
+        assignmentSelect.innerHTML = `<option value="">Select assignment</option>`;
+        assignmentSelect.disabled = true;
+        setCurrentBlocks(null);
+        setNewBlocks(null);
+        disableNewInputs(true);
+        validateActiveEmployee();
+        return;
+      }
+
       const activeAssignments = getActiveAssignments(emp);
       assignmentSelect.disabled = false;
       assignmentSelect.innerHTML = `<option value="">Select assignment</option>` +
@@ -1149,8 +1124,6 @@
       assignmentSelect.value = entry.assignmentId || "";
 
       // Populate dropdowns
-      $("newPosition").innerHTML = `<option value="">Select new position</option>` +
-        positionCatalog.map(p => `<option value="${p.id}">${p.label} • ${p.entity} • ${p.unit} • Slots: ${p.openSlots}</option>`).join("");
       $("newJobTitleSelect").innerHTML = `<option value="">Select job title</option>` +
         jobTitleOptions.map(j => `<option value="${j.id}">${j.title}</option>`).join("");
       $("newReportTo").innerHTML = `<option value="">Select manager</option>` +
@@ -1169,8 +1142,9 @@
 
       // load form values per employee
       $("newEffectiveDate").value = entry.form.effectiveDate || "";
-      $("newPosition").value = entry.form.positionId || "";
       $("newJobTitleSelect").value = entry.form.jobTitleId || "";
+      $("newFTE").value = entry.form.fte !== "" ? entry.form.fte : "";
+      $("newReportTo").value = entry.form.reportTo || "";
       $("newFTE").value = entry.form.fte !== "" ? entry.form.fte : "";
       $("newReportTo").value = entry.form.reportTo || "";
       setLocationOptions(asg.current.org.entity, entry.form.location || "");
@@ -1198,6 +1172,7 @@
         $("newPosition").value = "";
         if(!entry.form.jobTitleId) entry.form.jobTitleId = asg.current.job.id;
         applyJobTitleDefaults(entry.form.jobTitleId, asg.current);
+        refreshPositionSelect(entry, asg.current);
       }
 
       updateSalaryDerived();
@@ -1207,7 +1182,6 @@
 
     function setCurrentBlocks(cur){
       $("curEffectiveDate").textContent = cur?.effectiveDate || "—";
-      $("curPosition").textContent = cur?.position || "—";
       $("curBU").textContent = cur?.org?.bu || "—";
       $("curDeptGroup").textContent = cur?.org?.deptGroup || "—";
       $("curDept").textContent = cur?.org?.dept || "—";
@@ -1265,7 +1239,7 @@
     }
 
     function disableNewInputs(disabled){
-      ["newEffectiveDate","newPosition","newJobTitleSelect","newFTE","newReportTo","newLocation","newNote","newGross","newCurrency","newBasicPct"].forEach(id=>{
+      ["newEffectiveDate","newJobTitleSelect","newFTE","newReportTo","newLocation","newNote","newGross","newCurrency","newBasicPct"].forEach(id=>{
         $(id).disabled = disabled;
       });
     }

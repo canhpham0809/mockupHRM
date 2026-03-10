@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Assignment Popup</title>
+  <style>
+    :root{
+      --bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --field: #ffffff;
+      --field-line: #e5e7eb;
+      --shadow: 0 20px 60px rgba(0,0,0,.25);
+      --primary: #ea5b2a; /* nút Save */
+      --primary-hover: #d94f22;
+      --btn: #ffffff;
+      --btn-line: #d1d5db;
+      --radius: 14px;
+      --radius-field: 12px;
+      --gap: 22px;
+      --icon: #94a3b8;
+      --req: #ef4444;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      background:#f3f4f6;
+      height:100vh;
+    }
+
+    /* overlay */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.35);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 24px;
+    }
+
+    /* modal */
+    .modal{
+      width: min(980px, 100%);
+      background: var(--bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .modal__header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background:#fafafa;
+    }
+
+    .modal__title{
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .icon-btn{
+      width: 40px;
+      height: 40px;
+      display:grid;
+      place-items:center;
+      border:0;
+      background:transparent;
+      border-radius: 10px;
+      cursor:pointer;
+      color:#111;
+    }
+    .icon-btn:hover{ background:#f3f4f6; }
+
+    .modal__body{
+      padding: 22px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap);
+    }
+
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .field{ display:flex; flex-direction:column; gap: 8px; }
+    .label{
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .label .req{ color: var(--req); margin-left: 2px; }
+
+    .control{
+      position:relative;
+    }
+
+    .input{
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--field-line);
+      border-radius: var(--radius-field);
+      padding: 10px 42px 10px 12px;
+      outline:none;
+      background: var(--field);
+      color: var(--text);
+      font-size: 14px;
+    }
+    .input:focus{
+      border-color:#93c5fd;
+      box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+    }
+
+    .search-btn{
+      position:absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      display:grid;
+      place-items:center;
+      color: var(--icon);
+      border-radius: 8px;
+    }
+    .search-btn:hover{ background:#f3f4f6; color:#64748b; }
+
+    /* footer */
+    .modal__footer{
+      display:flex;
+      justify-content:flex-end;
+      gap: 12px;
+      padding: 16px 22px;
+      border-top: 1px solid var(--line);
+      background:#ffffff;
+    }
+
+    .btn{
+      height: 42px;
+      padding: 0 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor:pointer;
+      border: 1px solid var(--btn-line);
+      background: var(--btn);
+      color: #111827;
+    }
+    .btn:hover{ background:#f9fafb; }
+
+    .btn--primary{
+      border-color: transparent;
+      background: var(--primary);
+      color: white;
+    }
+    .btn--primary:hover{ background: var(--primary-hover); }
+
+    /* icon svg sizing */
+    svg{ display:block; }
+  </style>
+</head>
+<body>
+  <div class="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal__header">
+        <div class="modal__title" id="modalTitle">Job Application</div>
+
+        <button class="icon-btn" type="button" aria-label="Close">
+          <!-- X icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <div class="grid">
+          <!-- Row 1 -->
+          <div class="field">
+            <div class="label">Company Group<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Company Group">
+                <!-- magnifier -->
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Company<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Company">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Business Unit</div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Business Unit">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Department Group</div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Department Group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Department<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Department">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="field">
+            <div class="label">Team</div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Team">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Job Track<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Job Track">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Job Family<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Job Family">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Job Group<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Job Group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="field">
+            <div class="label">Sub Group<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Sub Group">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Job<span class="req">*</span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Job">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Job Profile<span></span></div>
+            <div class="control">
+              <input class="input" type="text" placeholder="" />
+              <button class="search-btn" type="button" aria-label="Search Job Profile">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label">Job Position</div>
+            <div class="control">
+              <input class="input" type="text" value="No Use Position" />
+              <button class="search-btn" type="button" aria-label="Search Job Position">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 21l-4.3-4.3M10.8 18.1a7.3 7.3 0 1 1 0-14.6 7.3 7.3 0 0 1 0 14.6Z"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- empty cell to match layout -->
+          <div class="field" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn" type="button">Cancel</button>
+        <button class="btn btn--primary" type="button">Save</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
