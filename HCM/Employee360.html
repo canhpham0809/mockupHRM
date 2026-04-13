@@ -1,0 +1,1734 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.2">
+<title>Employee 360 – Detail Information</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #D85A30;
+  --orange-light: #fff3ef;
+  --orange-mid: #f0997b;
+  --bg: #f4f2ee;
+  --surface: #ffffff;
+  --border: #e8e4dc;
+  --border-soft: #f0ede6;
+  --text-primary: #1e1d1b;
+  --text-secondary: #6b6860;
+  --text-muted: #b0aca4;
+  --teal: #1D9E75;
+  --teal-bg: #e1f5ee;
+  --amber: #BA7517;
+  --amber-bg: #faeeda;
+  --blue: #185FA5;
+  --blue-bg: #e6f1fb;
+  --red: #A32D2D;
+  --red-bg: #fcebeb;
+  --green: #3B6D11;
+  --green-bg: #eaf3de;
+  --sidebar-w: 64px;
+  --topbar-h: 52px;
+  --font: 'Exo 2', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:auto;font-family:var(--font);font-size:14px;color:var(--text-primary);background:var(--bg);}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:calc(100vh/1.20);width:calc(100%/1.20);transform:scale(1.20);transform-origin:top left;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 0;gap:2px;flex-shrink:0;z-index:10;
+}
+.s-logo{width:36px;height:36px;background:var(--orange);border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.s-logo svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8}
+.s-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:7px 4px;border-radius:8px;cursor:pointer;width:50px;
+  color:var(--text-muted);font-size:10px;font-weight:500;
+  transition:all 0.15s;letter-spacing:0.01em;
+}
+.s-item:hover{background:#f7f5f1;color:var(--text-primary)}
+.s-item.active{background:var(--orange-light);color:var(--orange)}
+.s-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6}
+.s-divider{width:28px;height:1px;background:var(--border);margin:6px 0}
+.s-spacer{flex:1}
+
+/* ── MAIN COLUMN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── TOPBAR ── */
+.topbar{
+  height:var(--topbar-h);background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0;
+}
+.hamburger{color:var(--text-muted);cursor:pointer;display:flex}
+.hamburger svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px}
+.bc-parent{color:var(--text-muted);font-weight:400}
+.bc-sep{color:var(--text-muted);font-size:11px}
+.bc-current{color:var(--text-primary);font-weight:500}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:7px;padding:6px 12px;width:210px;
+}
+.search-wrap svg{width:13px;height:13px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0}
+.search-wrap input{border:none;background:transparent;font-family:var(--font);font-size:13px;color:var(--text-primary);outline:none;width:100%}
+.search-wrap input::placeholder{color:var(--text-muted)}
+.ask-ai-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--orange-light);color:var(--orange);
+  border:1px solid #f5c4b3;border-radius:7px;
+  padding:6px 11px;font-family:var(--font);font-size:12px;font-weight:600;
+  cursor:pointer;white-space:nowrap;
+}
+.ask-ai-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+/* ── DEPARTMENT FILTER ── */
+.filter-select{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:7px;padding:6px 12px;cursor:pointer;
+  font-family:var(--font);font-size:12px;color:var(--text-primary);
+  transition:all 0.15s;
+}
+.filter-select:hover{border-color:var(--orange);background:var(--orange-light)}
+.filter-select svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.filter-select select{display:none}
+.filter-select span{flex:1;text-align:left}
+
+/* ── WIDGET FILTERS ── */
+.widget-filters{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.filter-btn{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:4px 10px;
+  font-size:11px;color:var(--text-secondary);cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+  font-weight:500;
+}
+.filter-btn:hover{background:var(--border-soft);color:var(--text-primary)}
+.filter-btn.active{background:var(--orange-light);border-color:var(--orange);color:var(--orange);font-weight:600}
+
+.radar-year-select{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:6px 12px;cursor:pointer;
+  font-family:var(--font);font-size:12px;color:var(--text-primary);
+  transition:all 0.15s;font-weight:500;
+}
+.radar-year-select:hover{border-color:var(--orange);background:var(--orange-light)}
+.radar-year-select:focus{outline:none;border-color:var(--orange);background:var(--orange-light)}
+
+.perf-year-select{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:6px 12px;cursor:pointer;
+  font-family:var(--font);font-size:12px;color:var(--text-primary);
+  transition:all 0.15s;font-weight:500;
+}
+.perf-year-select:hover{border-color:var(--orange);background:var(--orange-light)}
+.perf-year-select:focus{outline:none;border-color:var(--orange);background:var(--orange-light)}
+
+.icon-btn{
+  width:32px;height:32px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-muted);
+}
+.icon-btn:hover{background:var(--bg);color:var(--text-primary)}
+.icon-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+.avatar-topbar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--orange);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;cursor:pointer;
+}
+.flag{font-size:16px;cursor:pointer}
+
+/* ── SCROLL AREA ── */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:auto;padding:16px 20px 32px}
+.scroll-area::-webkit-scrollbar{width:5px}
+.scroll-area::-webkit-scrollbar-track{background:transparent}
+.scroll-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.gap-12{gap:12px}
+.mb-12{margin-bottom:12px}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);border-radius:11px;
+  border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;
+}
+.card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px 10px;border-bottom:1px solid var(--border-soft);
+}
+.card-title{font-size:13px;font-weight:600;color:var(--text-primary);letter-spacing:-0.01em}
+.card-actions{display:flex;gap:3px}
+.c-btn{
+  width:24px;height:24px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-muted);
+}
+.c-btn:hover{background:var(--bg);color:var(--text-primary)}
+.c-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+.card-body{padding:14px 16px;flex:1;overflow-x:auto;overflow-y:hidden;min-width:0}
+
+body.no-scroll{overflow:hidden}
+.card-popup-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.35);
+  display:none;align-items:center;justify-content:center;
+  padding:12px;z-index:9999;
+}
+.card-popup-overlay.show{display:flex}
+.card-popup-shell{
+  width:min(1420px, calc(100vw - 24px));
+  max-height:calc(100vh - 24px);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,0.24);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.card-popup-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--border-soft);
+}
+.card-popup-title{font-size:13px;font-weight:700;color:var(--text-primary)}
+.card-popup-body{padding:18px 20px 30px;overflow:auto}
+.card-popup-placeholder{display:none}
+.card.in-popup{width:100%;zoom:1.6}
+.card.in-popup .card-body{overflow:auto}
+
+/* ── PROFILE CARD ── */
+.profile-flex{display:flex;gap:22px;align-items:center}
+.avatar-upload{
+  width:96px;height:96px;border-radius:50%;
+  border:1.5px dashed var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;font-size:11px;color:var(--text-muted);cursor:pointer;flex-shrink:0;
+  background:#fafaf8;transition:all 0.15s;
+}
+.avatar-upload:hover{background:var(--bg);border-color:var(--text-muted)}
+.avatar-upload span{display:block;text-align:center;line-height:1.2}
+.profile-right{flex:1;min-width:0}
+.profile-name{font-size:20px;font-weight:700;color:var(--text-primary);letter-spacing:-0.01em;margin-bottom:4px}
+.worker-id{font-size:13px;color:var(--text-muted);font-family:var(--mono);margin-bottom:14px}
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-bottom:16px}
+.meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary)}
+.meta-item svg{width:15px;height:15px;stroke:var(--text-muted);fill:none;stroke-width:1.6;flex-shrink:0}
+.skills-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.skills-label{font-size:12px;color:var(--text-muted);margin-right:4px}
+.skill-tag{background:var(--orange-light);color:var(--orange);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600}
+.skill-more{background:var(--bg);color:var(--text-muted);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;cursor:pointer}
+.skill-more:hover{background:var(--border);color:var(--text-secondary)}
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--green-bg);color:var(--green);
+  border-radius:5px;padding:3px 10px;font-size:11px;font-weight:600;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+/* ── FIELD GRID ── */
+.field-grid{display:grid;gap:12px 20px}
+.field-grid-3{grid-template-columns:1fr 1fr 1fr}
+.field-grid-2{grid-template-columns:1fr 1fr}
+.field-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px}
+.field-val{font-size:13px;font-weight:500;color:var(--text-primary)}
+.field-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--bg);border-radius:8px;border:1px solid var(--border-soft);padding:10px 13px;min-width:140px}
+.stat-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.stat-val{font-size:20px;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;line-height:1}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:4px}
+.stat-sub.pos{color:var(--green)}
+.stat-sub.neg{color:var(--red)}
+.stat-sub.info{color:var(--blue)}
+
+/* ── COMPENSATION TREND ── */
+.comp-line-wrap{margin-top:6px;padding-top:12px;border-top:1px solid var(--border-soft);position:relative}
+.comp-line-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.line-caption{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
+.comp-chart{width:100%;height:168px;display:block}
+.comp-grid-line{stroke:var(--border-soft);stroke-width:1}
+.comp-line-path{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.comp-point{fill:var(--surface);stroke:var(--orange);stroke-width:2;cursor:pointer}
+.comp-axis,
+.comp-values{display:flex;justify-content:space-between;gap:8px}
+.comp-axis{margin-top:4px}
+.comp-axis span{font-size:10px;color:var(--text-muted);font-family:var(--mono);text-align:center;flex:1}
+.comp-values{margin-top:6px}
+.comp-values span{font-size:11px;color:var(--text-primary);font-weight:600;text-align:center;flex:1}
+.comp-tooltip{
+  position:absolute;
+  min-width:126px;
+  background:var(--text-primary);
+  color:#fff;
+  border-radius:8px;
+  padding:7px 9px;
+  font-size:11px;
+  line-height:1.35;
+  box-shadow:0 8px 20px rgba(0,0,0,0.18);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%, calc(-100% - 8px));
+  transition:opacity 0.12s ease;
+  z-index:3;
+  white-space:nowrap;
+}
+.comp-tooltip.show{opacity:1}
+.comp-tooltip .t-date{opacity:0.78;font-size:10px;margin-bottom:2px}
+.comp-tooltip .t-val{font-weight:700;font-family:var(--mono)}
+.comp-tooltip .t-delta{opacity:0.88;font-size:10px;margin-top:1px}
+
+/* ── MANAGER ── */
+.mgr-card{display:flex;align-items:center;gap:12px;padding:10px 0}
+.mgr-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.mgr-name{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.mgr-role{font-size:11px;color:var(--text-muted)}
+.report-list{display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin-top:8px}
+
+.report-more{font-size:11px;color:var(--text-muted);font-weight:600;padding:0}
+
+/* ── ORG ── */
+.org-tree{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.org-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.org-indent{width:20px;height:1px;background:var(--border);flex-shrink:0}
+.org-chip{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-weight:500;color:var(--text-primary)}
+.org-chip.highlight{background:var(--orange-light);border-color:#f5c4b3;color:var(--orange)}
+
+/* ── PERFORMANCE ── */
+.perf-list{display:flex;flex-direction:column;gap:10px}
+.perf-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.perf-year{font-weight:600;color:var(--text-primary);width:36px}
+.perf-year-row{padding:6px 8px;border-radius:8px;cursor:pointer;transition:background 0.15s ease}
+.perf-year-row:hover{background:#f7f5f1}
+.perf-year-row.is-active{background:var(--orange-light)}
+.perf-year-row:not(.is-active) .perf-year{color:var(--text-muted)}
+.perf-kpi-rate{font-size:12px;color:var(--text-muted);font-family:var(--mono);min-width:62px;text-align:right}
+.perf-grade{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:28px;border-radius:7px;font-size:12px;font-weight:700;font-family:var(--mono);margin-left:8px}
+.perf-grade.a-plus{background:var(--green-bg);color:var(--green)}
+.perf-grade.a{background:#e0f4dd;color:#2d7a2d}
+.perf-grade.a-minus{background:#f0e8d8;color:#8b6d2e}
+.perf-grade.b-plus{background:var(--amber-bg);color:var(--amber)}
+.perf-grade.b{background:#fce4cc;color:#c87a22}
+.perf-grade.b-minus{background:var(--red-bg);color:var(--red)}
+
+.perf-list.all-view{
+  max-height:240px;overflow-y:auto;border:1px solid var(--border-soft);
+  border-radius:8px;padding:0;margin-bottom:12px;
+}
+.perf-list.all-view .perf-year-row{
+  border-bottom:1px solid var(--border-soft);margin-bottom:0;padding:8px 10px;
+}
+.perf-list.all-view .perf-year-row:last-child{
+  border-bottom:none;
+}
+.bar-section.hidden{display:none}
+.bar-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--border-soft)}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12px}
+.bar-label{width:110px;text-align:right;color:var(--text-secondary);font-size:11px;flex-shrink:0}
+.bar-track{flex:1;height:5px;background:var(--border-soft);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+.bar-fill.orange{background:var(--orange)}
+.bar-fill.teal{background:var(--teal)}
+.bar-fill.amber{background:var(--amber)}
+.bar-pct{width:28px;font-size:11px;color:var(--text-muted);font-family:var(--mono);text-align:right}
+
+/* ── RADAR CHART ── */
+.radar-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.radar-chart{width:100%;max-width:340px;height:auto;display:block}
+.radar-compare-wrap{display:none}
+.radar-compare-wrap.show{display:block}
+.radar-compare-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px}
+.radar-compare-item{
+  min-width:220px;background:var(--bg);border:1px solid var(--border-soft);
+  border-radius:8px;padding:8px 10px;
+}
+.radar-compare-year{font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.radar-compare-chart{width:100%;height:auto;display:block}
+.radar-compare-label{font-size:9px;font-weight:600;fill:var(--text-secondary)}
+.radar-grid{stroke:var(--border-soft);stroke-width:1}
+.radar-axis{stroke:#d7d3cb;stroke-width:1}
+.radar-self{fill:rgba(216,90,48,0.20);stroke:var(--orange);stroke-width:2.2}
+.radar-manager{fill:rgba(61,143,70,0.14);stroke:#7bb547;stroke-width:2.2}
+.radar-point-self{fill:var(--orange)}
+.radar-point-manager{fill:#7bb547}
+.radar-label{font-size:11px;font-weight:600;fill:var(--text-secondary)}
+.radar-legend{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text-secondary)}
+.radar-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.radar-legend .self i{background:var(--orange)}
+.radar-legend .mgr i{background:#7bb547}
+.radar-wrap{position:relative}
+.radar-point-self,.radar-point-manager{cursor:pointer}
+.radar-tooltip{
+  position:absolute;
+  min-width:120px;
+  background:var(--text-primary);
+  color:#fff;
+  border-radius:8px;
+  padding:7px 9px;
+  font-size:11px;
+  line-height:1.35;
+  box-shadow:0 8px 20px rgba(0,0,0,0.18);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%, calc(-100% - 8px));
+  transition:opacity 0.12s ease;
+  z-index:4;
+  white-space:nowrap;
+}
+.radar-tooltip.show{opacity:1}
+.radar-tooltip .t-meta{opacity:0.78;font-size:10px;margin-bottom:2px}
+.radar-tooltip .t-val{font-weight:700;font-family:var(--mono)}
+
+/* ── TIMELINE ── */
+.tl-wrap{position:relative;padding-left:22px}
+.tl-track{position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--border)}
+.tl-item{position:relative;padding-bottom:16px}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{
+  position:absolute;left:-17px;top:3px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--orange);border:2px solid var(--surface);
+  box-shadow:0 0 0 1.5px var(--orange);z-index:1;
+}
+.tl-dot.gray{background:var(--text-muted);box-shadow:0 0 0 1.5px var(--text-muted)}
+.tl-header{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.tl-title{font-size:12px;font-weight:600;color:var(--text-primary)}
+.tl-badge{font-size:10px;background:var(--orange-light);color:var(--orange);border-radius:4px;padding:1px 7px;font-weight:600}
+.tl-sub{font-size:11px;color:var(--text-secondary);margin-bottom:2px}
+.tl-date{font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+
+/* ── WR TIMELINE ── */
+.wr-tl-wrap{margin-bottom:6px}
+.wr-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.wr-label{width:96px;text-align:right;font-size:12px;color:var(--text-secondary);flex-shrink:0}
+.wr-bar-area{flex:1;position:relative;height:24px}
+.wr-bar{
+  position:absolute;top:0;left:0;right:0;height:100%;
+  background:var(--orange);border-radius:6px;
+  display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+}
+.wr-bar span{font-size:11px;color:#fff;font-weight:600;font-family:var(--mono)}
+.wr-years{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);padding-left:108px;margin-top:6px;font-family:var(--mono)}
+
+/* ── TIME STATS ── */
+.time-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+
+/* ── SKILLS SECTION ── */
+.skills-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.skill-pill{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:4px 11px;font-size:12px;
+  color:var(--text-secondary);font-weight:500;cursor:pointer;
+  transition:all 0.15s;
+}
+.skill-pill:hover{background:var(--border-soft)}
+.skill-pill.active{background:var(--orange-light);border-color:#f5c4b3;color:var(--orange)}
+
+/* ── LEARNING LIST ── */
+.learn-block{margin-bottom:12px}
+.learn-title{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:7px}
+.learn-list{display:flex;flex-direction:column;gap:7px}
+.learn-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:7px 9px;background:var(--bg);border:1px solid var(--border-soft);border-radius:7px}
+.learn-name{font-size:12px;font-weight:600;color:var(--text-primary)}
+.learn-note{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.learn-time{font-size:11px;color:var(--text-muted);font-family:var(--mono);white-space:nowrap}
+
+/* ── DIVIDER ── */
+.sect-divider{height:1px;background:var(--border-soft);margin:14px 0 0}
+
+/* ── STATUS CHIPS ── */
+.chip{display:inline-flex;align-items:center;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600}
+.chip.orange{background:var(--orange-light);color:var(--orange)}
+.chip.green{background:var(--green-bg);color:var(--green)}
+.chip.blue{background:var(--blue-bg);color:var(--blue)}
+.chip.amber{background:var(--amber-bg);color:var(--amber)}
+
+/* ── SECTION HEADER (between groups) ── */
+.page-section{margin-bottom:12px}
+.section-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;padding-left:2px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="s-logo">
+      <svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Home
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M3 9h14"/><path d="M7 2v4M13 2v4"/></svg>
+      Task
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M4 14l4-4 3 3 5-6"/><rect x="3" y="3" width="14" height="14" rx="2"/></svg>
+      Dashboard
+    </div>
+    <div class="s-divider"></div>
+    <div class="s-item active">
+      <svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3.5"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>
+      Workforce
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+      HR
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="12" rx="2"/><path d="M7 5V4a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+      Batch
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><circle cx="10" cy="5" r="2.5"/><circle cx="3.5" cy="15" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/><path d="M10 7.5v3M10 10.5l-4.5 3M10 10.5l4.5 3"/></svg>
+      Org
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+      Job &
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M6 3h8l3 5-7 10L3 8z"/></svg>
+      Contracts
+    </div>
+    <div class="s-divider"></div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/><path d="M10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17M4.9 4.9l1 1M14.1 14.1l1 1M14.1 4.9l-1 1M5.9 14.1l-1 1"/></svg>
+      System
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M7 10h6M10 7v6"/></svg>
+      Master
+    </div>
+    <div class="s-spacer"></div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M3 6h14M3 10h10M3 14h7"/></svg>
+      Tools &
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="hamburger"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg></div>
+      <div class="breadcrumb">
+        <span class="bc-parent">Employee 360</span>
+        <span class="bc-sep">›</span>
+        <span class="bc-current">Detail Information</span>
+      </div>
+      <div class="topbar-right">
+        <button class="ask-ai-btn">
+          <svg viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z"/><path d="M10 7v4M10 13v.5"/></svg>
+          Ask AI
+        </button>
+        <div class="icon-btn" title="Search"><svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg></div>
+        <span class="flag">🇺🇸</span>
+        <div class="icon-btn" title="View Layout.md" onclick="window.open('layout-view.html', '_blank')"><svg viewBox="0 0 20 20"><path d="M4 3h9l4 4v10a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M13 3v4h4"/><path d="M6 8h8M6 12h8M6 16h4"/></svg></div>
+        <div class="icon-btn" title="Notifications"><svg viewBox="0 0 20 20"><path d="M10 3a5 5 0 00-5 5v3l-1.5 2.5h13L15 11V8a5 5 0 00-5-5z"/><path d="M8.5 16.5a1.5 1.5 0 003 0"/></svg></div>
+        <div class="avatar-topbar">NB</div>
+      </div>
+    </header>
+
+    <!-- SCROLL AREA -->
+    <div class="scroll-area">
+
+      <!-- SEARCH AND FILTERS -->
+      <div class="page-section">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="search-wrap">
+            <svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
+            <input type="text" value="Nguyễn Bùi Thành" placeholder="Search employee...">
+          </div>
+          <div class="filter-select">
+            <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+            <select id="deptFilter">
+              <option value="">All Departments</option>
+              <option value="engineering">Engineering</option>
+              <option value="sales">Sales</option>
+              <option value="hr">HR</option>
+              <option value="finance">Finance</option>
+            </select>
+            <span id="deptLabel">All Departments</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 1: Employee Profile (full width) -->
+      <div class="page-section">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Profile</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="status-badge"><div class="status-dot"></div>Active</div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/><path d="M6 17h8"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="profile-flex">
+              <div class="avatar-upload">
+                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+              </div>
+              <div class="profile-right">
+                <div class="profile-name">Nguyễn Bùi Thành</div>
+                <div class="worker-id">Employee Code: VG-17230</div>
+                <div class="meta-row">
+                  <div class="meta-item"><svg viewBox="0 0 20 20" ><path d="M4 6h12v5H4z"/><path d="M4 12h16v6H4z"/></svg>Viet Nam</div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M3 6h14v3H3z"/><path d="M3 10h14v7H3z"/></svg>01/01/2000</div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M4 4h12v10H4z"/><path d="M4 10l6 3 6-3"/></svg>48985local@my.local</div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M5 3h3l1.5 4-2 1.5c1 2 2.5 3.5 4.5 4.5L13.5 11 18 12.5V16c0 1.1-.9 2-2 2C7 18 2 13 2 5c0-1.1.9-2 2-2z"/></svg>+84 123456789</div>
+                </div>
+                <div class="skills-row">
+                  <span class="skills-label">Skills:</span>
+                  <span class="skill-tag">Angular</span>
+                  <span class="skill-tag">TypeScript</span>
+                  <span class="skill-tag">Node.js</span>
+                  <span class="skill-tag">JavaScript</span>
+                  <span class="skill-tag">HTML5</span>
+                  <span class="skill-more">+1 more</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: WR Switcher + Organization -->
+      <div class="grid-2 mb-12">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Contract Information</span>
+            <div class="card-actions">
+              <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+              <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="field-grid field-grid-3">
+              <div><div class="field-label">Legal Entity</div><div class="field-val">VNG Group JSC</div></div>
+              <div><div class="field-label">Type</div><div class="chip orange">EMPLOYEE</div></div>
+              <div><div class="field-label">Job Title</div><div class="field-val">Software Engineer</div></div>
+              <div><div class="field-label">Position</div><div class="field-val">Software Engineer L1</div></div>
+              <div><div class="field-label">Join Date</div><div class="field-val">03/09/2013</div></div>
+              <div><div class="field-label">End Date</div><div class="field-val"></div></div>
+              <div><div class="field-label">Status</div><div class="chip green">Active</div></div>
+              <div><div class="field-label">Seniority</div><div class="field-val">3 years 4 months 12 days</div></div>
+              <div><div class="field-label">Employee Class</div><div class="chip blue">Permanent</div></div>
+              <div><div class="field-label">Contract Type</div><div class="chip blue">Labour Contract Unlimited</div></div>
+              <div><div class="field-label">Working Location</div><div class="field-val">VNG Campus</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Organization</span>
+            <div class="card-actions">
+              <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+              <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="field-grid field-grid-2" style="margin-bottom:12px">
+              <div><div class="field-label">Business Unit</div><div class="field-val">INCT</div></div>
+              <div><div class="field-label">Department</div><div class="field-val">A4B</div></div>
+              <div><div class="field-label">Team</div><div class="field-val">DataBase</div></div>
+              <div><div class="field-label">Cost Center</div><div class="field-val">CC-TEC-001</div></div>
+            </div>
+            <div class="sect-divider"></div>
+            <div style="margin-top:12px"><div class="field-label">Line Manager</div></div>
+            <div class="mgr-card">
+              <div class="mgr-avatar">TN</div>
+              <div>
+                <div class="mgr-name">Trần Văn Nam</div>
+                <div class="mgr-role">Engineering Manager</div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px"><div class="field-label">Direct Reports</div></div>
+            <div class="report-list">
+              <div class="mgr-card">
+                <div class="mgr-avatar">HL</div>
+                <div>
+                  <div class="mgr-name">Hoàng Linh</div>
+                  <div class="mgr-role">Backend Engineer</div>
+                </div>
+              </div>
+              <div class="mgr-card">
+                <div class="mgr-avatar">TM</div>
+                <div>
+                  <div class="mgr-name">Trần Minh</div>
+                  <div class="mgr-role">Data Engineer</div>
+                </div>
+              </div>
+              <div class="mgr-card">
+                <div class="mgr-avatar">QT</div>
+                <div>
+                  <div class="mgr-name">Quốc Thịnh</div>
+                  <div class="mgr-role">QA Engineer</div>
+                </div>
+              </div>
+              <div class="report-more">+2 more</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: Compensation + Performance -->
+      <div class="grid-2 mb-12">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Compensation</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <select class="perf-year-select" id="compYearSelect" onchange="filterCompBySelect(this)">
+                <option value="2025" selected>2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="grid-4" style="margin-bottom:14px">
+              <div class="stat-card">
+                <div class="stat-label">Base Salary</div>
+                <div class="stat-val" id="compBaseSalary">27M</div>
+                <div class="stat-sub" id="compBaseSub">VND / tháng</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Allowance</div>
+                <div class="stat-val" id="compAllowance">1.6M</div>
+                <div class="stat-sub pos" id="compAllowanceYoY">+8% YoY</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Bonus YTD</div>
+                <div class="stat-val" id="compBonus">8.4M</div>
+                <div class="stat-sub pos" id="compBonusYoY">+10% YoY</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Grade</div>
+                <div class="stat-val" id="compGrade">SE4</div>
+                <div class="stat-sub info" id="compGradeBand">Band L2.3</div>
+              </div>
+            </div>
+            <div class="comp-line-wrap" id="compLineWrap">
+              <div class="comp-line-head">
+                <span class="line-caption" id="compRangeLabel">Salary Trend (Yearly)</span>
+                <span class="chip orange" id="compDelta">+0.0%</span>
+              </div>
+              <svg class="comp-chart" viewBox="0 0 520 170" preserveAspectRatio="none" aria-label="Compensation trend line chart">
+                <line class="comp-grid-line" x1="16" y1="22" x2="504" y2="22"></line>
+                <line class="comp-grid-line" x1="16" y1="66" x2="504" y2="66"></line>
+                <line class="comp-grid-line" x1="16" y1="110" x2="504" y2="110"></line>
+                <line class="comp-grid-line" x1="16" y1="150" x2="504" y2="150"></line>
+                <polyline class="comp-line-path" id="compLinePath" points=""></polyline>
+                <g id="compPointGroup"></g>
+              </svg>
+              <div class="comp-axis" id="compAxisLabels"></div>
+              <div class="comp-values" id="compValueLabels"></div>
+              <div class="comp-tooltip" id="compTooltip">
+                <div class="t-date" id="compTooltipDate"></div>
+                <div class="t-val" id="compTooltipValue"></div>
+                <div class="t-delta" id="compTooltipDelta"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Performance</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <select class="perf-year-select" id="perfYearSelect" onchange="filterPerfBySelect(this)">
+                <option value="all" selected>All</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="perf-list" id="perfList">
+              <div class="perf-row perf-year-row is-active" data-year="2025" onclick="selectPerfYear('2025')">
+                <span class="perf-year">2025</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2025">--%</span>
+                  <span class="perf-grade" data-perf-grade="2025">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2024" onclick="selectPerfYear('2024')">
+                <span class="perf-year">2024</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2024">--%</span>
+                  <span class="perf-grade" data-perf-grade="2024">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2023" onclick="selectPerfYear('2023')">
+                <span class="perf-year">2023</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2023">--%</span>
+                  <span class="perf-grade" data-perf-grade="2023">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2022" onclick="selectPerfYear('2022')">
+                <span class="perf-year">2022</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2022">--%</span>
+                  <span class="perf-grade" data-perf-grade="2022">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2021" onclick="selectPerfYear('2021')">
+                <span class="perf-year">2021</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2021">--%</span>
+                  <span class="perf-grade" data-perf-grade="2021">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2020" onclick="selectPerfYear('2020')">
+                <span class="perf-year">2020</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2020">--%</span>
+                  <span class="perf-grade" data-perf-grade="2020">--</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-section" id="barSection">
+              <div id="perfKpiTitle" style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">KPI Performance 2023</div>
+              <div id="perfKpiRows"></div>
+            </div>
+          </div>
+        </div>
+      </div>    
+          <!-- ROW 4: Snapshot + Learning -->
+          <div class="grid-2 mb-12">
+            <div class="card">
+              <div class="card-head">
+                <span class="card-title">Capability Radar</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <select class="radar-year-select" id="radarYearSelect" onchange="filterRadarBySelect(this)">
+                    <option value="all" selected>All</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                  </select>
+                  <div class="card-actions">
+                    <div class="c-btn" title="View quick actions"><svg viewBox="0 0 20 20"><path d="M4 10h12M4 6h12M4 14h12"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="radar-wrap" id="radarWrap">
+                  <svg class="radar-chart" id="radarChart" viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" aria-label="Capability radar chart">
+                    <circle class="radar-grid" cx="180" cy="180" r="120" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="96" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="72" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="48" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="24" fill="none"></circle>
+
+                    <line class="radar-axis" x1="180" y1="180" x2="180" y2="60"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="95.15"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="300" y2="180"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="264.85"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="180" y2="300"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="264.85"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="60" y2="180"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="95.15"></line>
+
+                    <polygon class="radar-self" id="radarSelfPolygon" points=""></polygon>
+                    <polygon class="radar-manager" id="radarManagerPolygon" points=""></polygon>
+                    <g id="radarSelfPoints"></g>
+                    <g id="radarManagerPoints"></g>
+
+                    <text class="radar-label" x="180" y="46" text-anchor="middle">Leadership</text>
+                    <text class="radar-label" x="274" y="92" text-anchor="start">Adaptability</text>
+                    <text class="radar-label" x="312" y="184" text-anchor="start">Relationships</text>
+                    <text class="radar-label" x="270" y="280" text-anchor="start">Analytical</text>
+                    <text class="radar-label" x="180" y="322" text-anchor="middle">Integrity</text>
+                    <text class="radar-label" x="90" y="280" text-anchor="end">Teamwork</text>
+                    <text class="radar-label" x="48" y="184" text-anchor="end">Decision</text>
+                    <text class="radar-label" x="90" y="92" text-anchor="end">Communication</text>
+                  </svg>
+                  <div class="radar-tooltip" id="radarTooltip">
+                    <div class="t-meta" id="radarTooltipMeta"></div>
+                    <div class="t-val" id="radarTooltipVal"></div>
+                  </div>
+                  <div class="radar-legend">
+                    <span class="self"><i></i> Self</span>
+                    <span class="mgr"><i></i> Manager</span>
+                  </div>
+                </div>
+                <div class="radar-compare-wrap" id="radarCompareWrap"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <span class="card-title">Learning & Certification</span>
+                <div class="card-actions">
+                  <div class="c-btn" title="Training details"><svg viewBox="0 0 20 20"><path d="M4 4h12v12H4z"/></svg></div>
+                </div>
+              </div>
+              <div class="card-body">
+
+                <div class="learn-block">
+                  <div class="learn-title">Education</div>
+                  <div class="learn-list">
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">Dai hoc FPT</div>
+                        <div class="learn-note">Bachelor of Software Engineering</div>
+                      </div>
+                      <div class="learn-time">2017 - 2021</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="learn-block">
+                  <div class="learn-title">Additional Certifications</div>
+                  <div class="learn-list">
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">AWS Cloud Practitioner</div>
+                        <div class="learn-note">Amazon Web Services</div>
+                      </div>
+                      <div class="learn-time">2020</div>
+                    </div>
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">Coursera Project Management</div>
+                        <div class="learn-note">Google Professional Certificate</div>
+                      </div>
+                      <div class="learn-time">2021</div>
+                    </div>
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">Scrum Fundamentals Certified</div>
+                        <div class="learn-note">SCRUMstudy</div>
+                      </div>
+                      <div class="learn-time">2022</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      <!-- ROW 4: History + WR Timeline -->
+      <div class="grid-2 mb-12">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee History</span>
+            <div style="display:flex;align-items:center;gap:8px">
+
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="tl-wrap">
+                <div class="tl-track"></div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-header">
+                    <span class="tl-title">Senior Product Engineer</span>
+                    
+                  </div>
+                  <div class="tl-sub">Zalo Product Team · Zalo</div>
+                  <div class="tl-date">01/01/2021 – Present</div>
+                </div>
+              </div>
+              <div class="tl-wrap">
+                <div class="tl-track"></div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-header">
+                    <span class="tl-title">Consultant Manager</span>
+                  
+                  </div>
+                  <div class="tl-sub">ZNS Team · Zalo</div>
+                  <div class="tl-date">01/01/2021 – Present</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-wrap" style="margin-top:10px">
+              <div class="tl-track"></div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header">
+                  <span class="tl-title">Senior Software Engineer</span>
+                  <span class="tl-badge">Promotion</span>
+                </div>
+                <div class="tl-sub">Core Game Services · VNG Game</div>
+                <div class="tl-date">01/01/2017 – 31/12/2018</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header">
+                  <span class="tl-title">Junior Software Engineer</span>
+                  <span class="tl-badge">Staff Movement</span>
+                </div>
+                <div class="tl-sub">Game Platform Team · VNG Game</div>
+                <div class="tl-date">01/01/2016 – 31/12/2016</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header">
+                  <span class="tl-title">Junior Software Engineer</span>
+                  <span class="tl-badge">Promotion</span>
+                </div>
+                <div class="tl-sub">Core Engineering · VNG Corp</div>
+                <div class="tl-date">01/01/2015 – 31/12/2015</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header"><span class="tl-title">Fresher Software Engineer</span></div>
+                <div class="tl-sub">Engineering Trainee Program · VNG Corp</div>
+                <div class="tl-date">01/01/2013 – 31/12/2014</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee TimeLine</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="widget-filters">
+                <span class="filter-btn active" onclick="filterWR(this, 'all')">All</span>
+              </div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="wr-tl-wrap">
+              <div class="wr-row">
+                <span class="wr-label">VNG Corp</span>
+                <div class="wr-bar-area">
+                  <div class="wr-bar" style="left:0;right:auto;width:22%"><span>2013 → 2015</span></div>
+                </div>
+              </div>
+              <div class="wr-row">
+                <span class="wr-label">VNG Game</span>
+                <div class="wr-bar-area">
+                  <div class="wr-bar" style="left:22%;right:auto;width:20%"><span>2015 → 2018</span></div>
+                </div>
+              </div>
+              <div class="wr-row">
+                <span class="wr-label">ZaloPay</span>
+                <div class="wr-bar-area">
+                  <div class="wr-bar" style="left:64%;right:auto;width:32%;background:var(--teal)"><span>2021 → Now</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="wr-years">
+              <span>2013</span><span>2015</span><span>2017</span><span>2019</span><span>2021</span><span>2023</span><span>2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 5: Time + Attendance (full width) -->
+      <div class="page-section">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Time & Attendance</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="widget-filters">
+                <span class="filter-btn active" onclick="filterTime(this, 'month')">Current Month</span>
+                <span class="filter-btn" onclick="filterTime(this, 'annual')">Current Year</span>
+              </div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="time-grid">
+              <div class="stat-card">
+                <div class="stat-label">Working Days</div>
+                <div class="stat-val">22</div>
+                <div class="stat-sub">April 2025</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Present</div>
+                <div class="stat-val">21</div>
+                <div class="stat-sub pos">95.5% attendance</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Leave Used</div>
+                <div class="stat-val">3</div>
+                <div class="stat-sub">/ 12 days remaining</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">OT Hours</div>
+                <div class="stat-val">14h</div>
+                <div class="stat-sub neg">–2h vs monthly avg</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// Filter handlers with proper button styling
+function filterCompBySelect(selectEl) {
+  renderCompSummary(selectEl.value);
+}
+
+const compSummaryByYear = {
+  '2025': {
+    baseSalary: '27M',
+    baseSub: 'VND / thang',
+    allowance: '1.6M',
+    allowanceYoY: '+8% YoY',
+    bonus: '8.4M',
+    bonusYoY: '+10% YoY',
+    grade: 'SE4',
+    gradeBand: 'Band L2.3'
+  },
+  '2024': {
+    baseSalary: '26M',
+    baseSub: 'VND / thang',
+    allowance: '1.4M',
+    allowanceYoY: '+7% YoY',
+    bonus: '7.6M',
+    bonusYoY: '+9% YoY',
+    grade: 'SE4',
+    gradeBand: 'Band L2.2'
+  },
+  '2023': {
+    baseSalary: '24.2M',
+    baseSub: 'VND / thang',
+    allowance: '1.2M',
+    allowanceYoY: '+6% YoY',
+    bonus: '6.8M',
+    bonusYoY: '+8% YoY',
+    grade: 'SE3',
+    gradeBand: 'Band L2.1'
+  },
+  '2022': {
+    baseSalary: '22M',
+    baseSub: 'VND / thang',
+    allowance: '1.1M',
+    allowanceYoY: '+5% YoY',
+    bonus: '6.2M',
+    bonusYoY: '+7% YoY',
+    grade: 'SE3',
+    gradeBand: 'Band L2.0'
+  },
+  '2021': {
+    baseSalary: '20M',
+    baseSub: 'VND / thang',
+    allowance: '1.0M',
+    allowanceYoY: '+4% YoY',
+    bonus: '5.5M',
+    bonusYoY: '+6% YoY',
+    grade: 'SE2',
+    gradeBand: 'Band L1.3'
+  }
+};
+
+function renderCompSummary(year) {
+  const summary = compSummaryByYear[year] || compSummaryByYear['2025'];
+  const baseSalary = document.getElementById('compBaseSalary');
+  const baseSub = document.getElementById('compBaseSub');
+  const allowance = document.getElementById('compAllowance');
+  const allowanceYoY = document.getElementById('compAllowanceYoY');
+  const bonus = document.getElementById('compBonus');
+  const bonusYoY = document.getElementById('compBonusYoY');
+  const grade = document.getElementById('compGrade');
+  const gradeBand = document.getElementById('compGradeBand');
+
+  if (!baseSalary || !baseSub || !allowance || !allowanceYoY || !bonus || !bonusYoY || !grade || !gradeBand) return;
+
+  baseSalary.textContent = summary.baseSalary;
+  baseSub.textContent = summary.baseSub;
+  allowance.textContent = summary.allowance;
+  allowanceYoY.textContent = summary.allowanceYoY;
+  bonus.textContent = summary.bonus;
+  bonusYoY.textContent = summary.bonusYoY;
+  grade.textContent = summary.grade;
+  gradeBand.textContent = summary.gradeBand;
+}
+
+const compSeries = {
+  year: {
+    title: 'Salary Trend (Yearly)',
+    labels: ['2021', '2022', '2023', '2024', '2025'],
+    dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'],
+    values: [20, 22, 24.2, 26, 27],
+    unit: 'M'
+  }
+};
+
+function renderCompLine(type) {
+  const series = compSeries[type] || compSeries.year;
+  const linePath = document.getElementById('compLinePath');
+  const pointGroup = document.getElementById('compPointGroup');
+  const wrap = document.getElementById('compLineWrap');
+  const tooltip = document.getElementById('compTooltip');
+  const tooltipDate = document.getElementById('compTooltipDate');
+  const tooltipValue = document.getElementById('compTooltipValue');
+  const tooltipDelta = document.getElementById('compTooltipDelta');
+  const axis = document.getElementById('compAxisLabels');
+  const values = document.getElementById('compValueLabels');
+  const rangeLabel = document.getElementById('compRangeLabel');
+  const delta = document.getElementById('compDelta');
+  if (!linePath || !pointGroup || !wrap || !tooltip || !tooltipDate || !tooltipValue || !tooltipDelta || !axis || !values || !rangeLabel || !delta) return;
+
+  const min = Math.min(...series.values);
+  const max = Math.max(...series.values);
+  const spread = Math.max(max - min, 1);
+  const left = 24;
+  const right = 496;
+  const top = 24;
+  const bottom = 146;
+  const step = (right - left) / Math.max(series.values.length - 1, 1);
+
+  const points = series.values.map((val, idx) => {
+    const x = left + (step * idx);
+    const normalized = (val - min) / spread;
+    const y = bottom - (normalized * (bottom - top));
+    return { x, y, val };
+  });
+
+  linePath.setAttribute('points', points.map(p => `${p.x},${p.y}`).join(' '));
+  pointGroup.innerHTML = points.map((p, idx) => `<circle class="comp-point" data-idx="${idx}" cx="${p.x}" cy="${p.y}" r="4"></circle>`).join('');
+  axis.innerHTML = series.labels.map(label => `<span>${label}</span>`).join('');
+  values.innerHTML = series.values.map(val => `<span>${val}${series.unit}</span>`).join('');
+  rangeLabel.textContent = series.title;
+
+  const first = series.values[0];
+  const last = series.values[series.values.length - 1];
+  const percent = ((last - first) / first) * 100;
+  const sign = percent >= 0 ? '+' : '';
+  delta.textContent = `${sign}${percent.toFixed(1)}%`;
+
+  tooltip.classList.remove('show');
+
+  const chart = linePath.ownerSVGElement;
+  const chartRect = chart.getBoundingClientRect();
+  const chartWidth = chartRect.width;
+  const chartHeight = chartRect.height;
+
+  const pointEls = pointGroup.querySelectorAll('.comp-point');
+  pointEls.forEach((el, idx) => {
+    const showTooltip = () => {
+      const current = series.values[idx];
+      const prev = idx > 0 ? series.values[idx - 1] : null;
+      const pointPct = prev ? (((current - prev) / prev) * 100) : 0;
+      const pointSign = pointPct >= 0 ? '+' : '';
+
+      tooltipDate.textContent = series.dates[idx];
+      tooltipValue.textContent = `${series.labels[idx]}: ${current}${series.unit}`;
+      tooltipDelta.textContent = idx === 0
+        ? 'Change vs previous: N/A'
+        : `Change vs previous: ${pointSign}${pointPct.toFixed(1)}%`;
+
+      const cx = Number(el.getAttribute('cx'));
+      const cy = Number(el.getAttribute('cy'));
+      const x = (cx / 520) * chartWidth;
+      const y = (cy / 170) * chartHeight;
+
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+      tooltip.classList.add('show');
+    };
+
+    el.addEventListener('mouseenter', showTooltip);
+    el.addEventListener('mousemove', showTooltip);
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function filterPerfBySelect(selectEl) {
+  const type = selectEl.value;
+  
+  const perfList = document.getElementById('perfList');
+  const barSection = document.getElementById('barSection');
+  const yearRows = perfList.querySelectorAll('.perf-year-row');
+  
+  if (type === 'all') {
+    perfList.classList.add('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => row.style.display = 'flex');
+  } else {
+    perfList.classList.remove('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => {
+      row.style.display = row.getAttribute('data-year') === type ? 'flex' : 'none';
+      if (row.getAttribute('data-year') === type) row.classList.add('is-active');
+      else row.classList.remove('is-active');
+    });
+    selectPerfYear(type);
+  }
+}
+
+function filterPerf(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  
+  const perfList = document.getElementById('perfList');
+  const barSection = document.getElementById('barSection');
+  const yearRows = perfList.querySelectorAll('.perf-year-row');
+  
+  if (type === 'all') {
+    perfList.classList.add('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => row.style.display = 'flex');
+  } else if (type === 'current') {
+    perfList.classList.remove('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => {
+      row.style.display = row.getAttribute('data-year') === '2023' ? 'flex' : 'none';
+      if (row.getAttribute('data-year') === '2023') row.classList.add('is-active');
+      else row.classList.remove('is-active');
+    });
+    selectPerfYear('2023');
+  }
+  console.log('Performance filter:', type);
+}
+
+const perfKpiByYear = {
+  '2025': [
+    { label: 'Revenue', value: 94, color: 'orange' },
+    { label: 'Jira On-time', value: 91, color: 'teal' },
+    { label: 'Task Throughput', value: 88, color: 'amber' },
+    { label: 'Bug Quality', value: 92, color: 'teal' }
+  ],
+  '2024': [
+    { label: 'Revenue', value: 92, color: 'orange' },
+    { label: 'Jira On-time', value: 89, color: 'teal' },
+    { label: 'Task Throughput', value: 86, color: 'amber' },
+    { label: 'Bug Quality', value: 90, color: 'teal' }
+  ],
+  '2023': [
+    { label: 'Revenue', value: 91, color: 'orange' },
+    { label: 'Jira On-time', value: 87, color: 'teal' },
+    { label: 'Task Throughput', value: 84, color: 'amber' },
+    { label: 'Bug Quality', value: 89, color: 'teal' }
+  ],
+  '2022': [
+    { label: 'Revenue', value: 86, color: 'orange' },
+    { label: 'Jira On-time', value: 82, color: 'teal' },
+    { label: 'UAT Pass Rate', value: 80, color: 'amber' },
+    { label: 'Customer Feedback', value: 85, color: 'teal' }
+  ],
+  '2021': [
+    { label: 'Feature Delivery', value: 79, color: 'orange' },
+    { label: 'Jira On-time', value: 77, color: 'teal' },
+    { label: 'Bug Reopen Rate', value: 72, color: 'amber' },
+    { label: 'Code Review SLA', value: 81, color: 'teal' }
+  ],
+  '2020': [
+    { label: 'Revenue', value: 74, color: 'orange' },
+    { label: 'Task Completion', value: 71, color: 'teal' },
+    { label: 'Bug Quality', value: 68, color: 'amber' },
+    { label: 'Escalation Rate', value: 76, color: 'teal' }
+  ]
+};
+
+function getPerfGradeByRate(rate) {
+  if (rate >= 90) return { label: 'A+', cls: 'a-plus' };
+  if (rate >= 85) return { label: 'A', cls: 'a' };
+  if (rate >= 80) return { label: 'A-', cls: 'a-minus' };
+  if (rate >= 75) return { label: 'B+', cls: 'b-plus' };
+  if (rate >= 70) return { label: 'B', cls: 'b' };
+  return { label: 'B-', cls: 'b-minus' };
+}
+
+function renderPerfYearRatings() {
+  Object.keys(perfKpiByYear).forEach((year) => {
+    const list = perfKpiByYear[year] || [];
+    if (!list.length) return;
+    const avg = list.reduce((sum, item) => sum + Number(item.value || 0), 0) / list.length;
+    const grade = getPerfGradeByRate(avg);
+
+    const rateEl = document.querySelector(`[data-perf-rate="${year}"]`);
+    const gradeEl = document.querySelector(`[data-perf-grade="${year}"]`);
+    if (rateEl) rateEl.textContent = `${Math.round(avg)}%`;
+    if (gradeEl) {
+      gradeEl.textContent = grade.label;
+      gradeEl.className = `perf-grade ${grade.cls}`;
+    }
+  });
+}
+
+function renderPerfKpi(year) {
+  const title = document.getElementById('perfKpiTitle');
+  const rows = document.getElementById('perfKpiRows');
+  const kpis = perfKpiByYear[year] || perfKpiByYear['2023'];
+  if (!title || !rows) return;
+
+  title.textContent = `KPI Performance ${year}`;
+  rows.innerHTML = kpis.map(kpi => `
+    <div class="bar-row">
+      <span class="bar-label">${kpi.label}</span>
+      <div class="bar-track"><div class="bar-fill ${kpi.color}" style="width:${kpi.value}%"></div></div>
+      <span class="bar-pct">${kpi.value}%</span>
+    </div>
+  `).join('');
+}
+
+function selectPerfYear(year) {
+  document.querySelectorAll('.perf-year-row').forEach(row => {
+    row.classList.toggle('is-active', row.getAttribute('data-year') === year);
+  });
+  renderPerfKpi(year);
+}
+
+const radarAxes = [
+  'Leadership',
+  'Adaptability',
+  'Relationships',
+  'Analytical',
+  'Integrity',
+  'Teamwork',
+  'Decision',
+  'Communication'
+];
+
+const radarSeries = {
+  '2023': {
+    self: [4, 4, 2, 2, 4, 2, 4, 4],
+    manager: [3, 3, 4, 4, 3, 5, 4, 3]
+  },
+  '2022': {
+    self: [3.5, 3.8, 2.5, 2.2, 3.8, 2.8, 3.7, 3.6],
+    manager: [3.2, 3.1, 3.8, 3.6, 3.1, 4.5, 3.8, 3.0]
+  },
+  '2021': {
+    self: [3.2, 3.3, 2.3, 2.0, 3.4, 2.6, 3.2, 3.1],
+    manager: [3.0, 2.9, 3.5, 3.3, 2.9, 4.2, 3.4, 2.8]
+  },
+  '2020': {
+    self: [2.8, 3.0, 2.0, 1.8, 3.0, 2.2, 2.8, 2.9],
+    manager: [2.7, 2.6, 3.2, 3.0, 2.7, 3.9, 3.0, 2.6]
+  }
+};
+
+function getRadarPoint(index, value) {
+  const center = 180;
+  const maxRadius = 120;
+  const angle = (-Math.PI / 2) + (index * ((Math.PI * 2) / radarAxes.length));
+  const radius = (Math.max(0, Math.min(5, value)) / 5) * maxRadius;
+  return {
+    x: center + (Math.cos(angle) * radius),
+    y: center + (Math.sin(angle) * radius)
+  };
+}
+
+function renderRadar(year) {
+  const series = radarSeries[year] || radarSeries['2023'];
+  const selfPolygon = document.getElementById('radarSelfPolygon');
+  const managerPolygon = document.getElementById('radarManagerPolygon');
+  const selfPointsGroup = document.getElementById('radarSelfPoints');
+  const managerPointsGroup = document.getElementById('radarManagerPoints');
+  const chart = document.getElementById('radarChart');
+  const wrap = document.getElementById('radarWrap');
+  const tooltip = document.getElementById('radarTooltip');
+  const tooltipMeta = document.getElementById('radarTooltipMeta');
+  const tooltipVal = document.getElementById('radarTooltipVal');
+  if (!selfPolygon || !managerPolygon || !selfPointsGroup || !managerPointsGroup || !chart || !wrap || !tooltip || !tooltipMeta || !tooltipVal) return;
+
+  const selfPoints = series.self.map((value, idx) => ({ ...getRadarPoint(idx, value), value, axis: radarAxes[idx] }));
+  const managerPoints = series.manager.map((value, idx) => ({ ...getRadarPoint(idx, value), value, axis: radarAxes[idx] }));
+
+  selfPolygon.setAttribute('points', selfPoints.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' '));
+  managerPolygon.setAttribute('points', managerPoints.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' '));
+
+  selfPointsGroup.innerHTML = selfPoints
+    .map((p, idx) => `<circle class="radar-point-self" data-series="Self" data-axis="${p.axis}" data-value="${p.value}" data-idx="${idx}" cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3"></circle>`)
+    .join('');
+  managerPointsGroup.innerHTML = managerPoints
+    .map((p, idx) => `<circle class="radar-point-manager" data-series="Manager" data-axis="${p.axis}" data-value="${p.value}" data-idx="${idx}" cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3"></circle>`)
+    .join('');
+
+  tooltip.classList.remove('show');
+  const chartRect = chart.getBoundingClientRect();
+  const pointEls = wrap.querySelectorAll('.radar-point-self, .radar-point-manager');
+  pointEls.forEach((el) => {
+    const showTooltip = () => {
+      const value = Number(el.getAttribute('data-value'));
+      const axis = el.getAttribute('data-axis') || '';
+      const seriesName = el.getAttribute('data-series') || '';
+      const cx = Number(el.getAttribute('cx'));
+      const cy = Number(el.getAttribute('cy'));
+      const x = (cx / 360) * chartRect.width;
+      const y = (cy / 360) * chartRect.height;
+
+      tooltipMeta.textContent = `${year} • ${seriesName}`;
+      tooltipVal.textContent = `${axis}: ${value.toFixed(1)} / 5`;
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+      tooltip.classList.add('show');
+    };
+    el.addEventListener('mouseenter', showTooltip);
+    el.addEventListener('mousemove', showTooltip);
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function getRadarPolygonPoints(values) {
+  return values
+    .map((value, idx) => {
+      const p = getRadarPoint(idx, value);
+      return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    })
+    .join(' ');
+}
+
+function renderRadarAll() {
+  const radarWrap = document.getElementById('radarWrap');
+  const compareWrap = document.getElementById('radarCompareWrap');
+  if (!radarWrap || !compareWrap) return;
+
+  radarWrap.style.display = 'none';
+  compareWrap.classList.add('show');
+
+  const years = Object.keys(radarSeries).sort((a, b) => Number(b) - Number(a));
+  compareWrap.innerHTML = `
+    <div class="radar-compare-row">
+      ${years.map((year) => {
+        const series = radarSeries[year];
+        const selfPoints = getRadarPolygonPoints(series.self);
+        const managerPoints = getRadarPolygonPoints(series.manager);
+        return `
+          <div class="radar-compare-item">
+            <div class="radar-compare-year">${year}</div>
+            <svg class="radar-compare-chart" viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" aria-label="Capability radar ${year}">
+              <circle class="radar-grid" cx="180" cy="180" r="120" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="96" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="72" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="48" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="24" fill="none"></circle>
+              <line class="radar-axis" x1="180" y1="180" x2="180" y2="60"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="95.15"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="300" y2="180"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="264.85"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="180" y2="300"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="264.85"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="60" y2="180"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="95.15"></line>
+              <polygon class="radar-self" points="${selfPoints}"></polygon>
+              <polygon class="radar-manager" points="${managerPoints}"></polygon>
+              <text class="radar-compare-label" x="180" y="50" text-anchor="middle">Leadership</text>
+              <text class="radar-compare-label" x="276" y="92" text-anchor="start">Adaptability</text>
+              <text class="radar-compare-label" x="312" y="184" text-anchor="start">Relationships</text>
+              <text class="radar-compare-label" x="272" y="280" text-anchor="start">Analytical</text>
+              <text class="radar-compare-label" x="180" y="326" text-anchor="middle">Integrity</text>
+              <text class="radar-compare-label" x="88" y="280" text-anchor="end">Teamwork</text>
+              <text class="radar-compare-label" x="48" y="184" text-anchor="end">Decision</text>
+              <text class="radar-compare-label" x="88" y="92" text-anchor="end">Communication</text>
+            </svg>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="radar-legend" style="margin-top:8px">
+      <span class="self"><i></i> Self</span>
+      <span class="mgr"><i></i> Manager</span>
+    </div>
+  `;
+}
+
+function filterRadarBySelect(selectEl) {
+  const year = selectEl.value;
+  const radarWrap = document.getElementById('radarWrap');
+  const compareWrap = document.getElementById('radarCompareWrap');
+  if (!radarWrap || !compareWrap) return;
+
+  if (year === 'all') {
+    renderRadarAll();
+    return;
+  }
+
+  compareWrap.classList.remove('show');
+  compareWrap.innerHTML = '';
+  radarWrap.style.display = 'flex';
+  renderRadar(year);
+}
+
+function filterRadar(btn, year) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  renderRadar(year);
+}
+
+function filterHist(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  console.log('History filter:', type);
+}
+
+function filterWR(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  console.log('WR Timeline filter:', type);
+}
+
+function filterTime(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  console.log('Time & Attendance filter:', type);
+}
+
+let activeCardPopup = null;
+
+function ensureCardPopupLayer() {
+  if (document.getElementById('cardPopupOverlay')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'cardPopupOverlay';
+  overlay.className = 'card-popup-overlay';
+  overlay.innerHTML = `
+    <div class="card-popup-shell">
+      <div class="card-popup-head">
+        <span class="card-popup-title" id="cardPopupTitle">Card Detail</span>
+        <div class="c-btn" id="cardPopupClose" title="Close popup">
+          <svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15"/></svg>
+        </div>
+      </div>
+      <div class="card-popup-body" id="cardPopupBody"></div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) closeCardPopup();
+  });
+
+  document.getElementById('cardPopupClose')?.addEventListener('click', closeCardPopup);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeCardPopup();
+  });
+}
+
+function openCardPopup(card) {
+  ensureCardPopupLayer();
+
+  if (activeCardPopup && activeCardPopup.card === card) return;
+  if (activeCardPopup) closeCardPopup();
+
+  const overlay = document.getElementById('cardPopupOverlay');
+  const popupBody = document.getElementById('cardPopupBody');
+  const popupTitle = document.getElementById('cardPopupTitle');
+  if (!overlay || !popupBody || !popupTitle || !card.parentElement) return;
+
+  const title = card.querySelector('.card-title')?.textContent?.trim() || 'Card Detail';
+  popupTitle.textContent = title;
+
+  const placeholder = document.createElement('div');
+  placeholder.className = 'card-popup-placeholder';
+  card.parentElement.insertBefore(placeholder, card.nextSibling);
+
+  card.classList.add('in-popup');
+  popupBody.appendChild(card);
+  overlay.classList.add('show');
+  document.body.classList.add('no-scroll');
+
+  activeCardPopup = { card, placeholder };
+}
+
+function closeCardPopup() {
+  if (!activeCardPopup) return;
+
+  const overlay = document.getElementById('cardPopupOverlay');
+  const { card, placeholder } = activeCardPopup;
+
+  if (placeholder?.parentElement) {
+    placeholder.parentElement.insertBefore(card, placeholder);
+    placeholder.remove();
+  }
+
+  card.classList.remove('in-popup');
+  overlay?.classList.remove('show');
+  document.body.classList.remove('no-scroll');
+  activeCardPopup = null;
+}
+
+function initCardPopupActions() {
+  document.querySelectorAll('.card').forEach((card) => {
+    const head = card.querySelector('.card-head');
+    if (!head) return;
+
+    let actions = head.querySelector('.card-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'card-actions';
+      head.appendChild(actions);
+    }
+
+    // Remove existing SVG icon actions in card headers.
+    actions.querySelectorAll('.c-btn:not([data-card-popup-btn="1"])').forEach((btn) => btn.remove());
+
+    if (actions.querySelector('[data-card-popup-btn="1"]')) return;
+
+    const btn = document.createElement('div');
+    btn.className = 'c-btn';
+    btn.setAttribute('title', 'View in center');
+    btn.setAttribute('data-card-popup-btn', '1');
+    btn.innerHTML = '<svg viewBox="0 0 20 20"><path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4"/></svg>';
+    btn.addEventListener('click', () => openCardPopup(card));
+    actions.appendChild(btn);
+  });
+}
+
+// Department filter
+document.getElementById('deptFilter')?.addEventListener('change', function() {
+  const label = this.options[this.selectedIndex].text;
+  document.getElementById('deptLabel').textContent = label;
+  console.log('Department filter:', this.value);
+});
+
+renderCompLine('year');
+renderCompSummary(document.getElementById('compYearSelect')?.value || '2025');
+renderPerfYearRatings();
+renderPerfKpi('2023');
+filterRadarBySelect(document.getElementById('radarYearSelect'));
+filterPerfBySelect(document.getElementById('perfYearSelect'));
+initCardPopupActions();
+</script>

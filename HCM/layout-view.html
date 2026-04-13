@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layout.md Viewer</title>
+<style>
+:root { --bg: #f4f4f7; --surface: #ffffff; --border: #e8e4dc; --text: #1f1d1b; --muted: #6b6860; --accent: #d85a30; }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 18px 24px; display: flex; align-items: center; gap: 12px; }
+header h1 { margin: 0; font-size: 18px; }
+header .btn { margin-left: auto; display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: #fff; color: var(--text); text-decoration: none; font-weight: 600; }
+main { padding: 24px; max-width: 960px; margin: 0 auto; }
+main h1, main h2, main h3 { margin-top: 2rem; margin-bottom: 1rem; }
+main p { line-height: 1.75; margin: 0 0 1rem; }
+main ul, main ol { margin: 0 0 1rem 1.4rem; }
+main li { margin-bottom: 0.5rem; }
+main hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace; background: #f8f8f8; padding: 0.2rem 0.4rem; border-radius: 6px; }
+pre { padding: 14px; overflow: auto; }
+strong { color: var(--text); }
+em { font-style: italic; }
+blockquote { margin: 1rem 0; padding: 1rem 1.2rem; border-left: 4px solid var(--accent); background: #fff6f0; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <strong>Layout.md Viewer</strong>
+    <div style="font-size:13px;color:#6b6860;margin-top:4px">Rendered from HCM/LAYOUT.md</div>
+  </div>
+  <a class="btn" href="Employee360.html">Back to Employee360</a>
+</header>
+<main id="content">Đang tải...</main>
+<script>
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function parseMarkdown(markdown) {
+  const lines = markdown.split('\n');
+  const html = [];
+  let openList = null;
+  lines.forEach(line => {
+    if (/^---+$/.test(line)) {
+      if (openList) { html.push(openList === 'ul' ? '</ul>' : '</ol>'); openList = null; }
+      html.push('<hr>');
+      return;
+    }
+    if (/^#{3}\s+(.*)/.test(line)) { html.push('<h3>' + RegExp.$1 + '</h3>'); return; }
+    if (/^#{2}\s+(.*)/.test(line)) { html.push('<h2>' + RegExp.$1 + '</h2>'); return; }
+    if (/^#\s+(.*)/.test(line)) { html.push('<h1>' + RegExp.$1 + '</h1>'); return; }
+    if (/^\*\s+(.*)/.test(line)) {
+      if (openList !== 'ul') { if (openList) html.push('</' + openList + '>'); openList = 'ul'; html.push('<ul>'); }
+      html.push('<li>' + RegExp.$1.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code>$1</code>') + '</li>');
+      return;
+    }
+    if (/^\d+\.\s+(.*)/.test(line)) {
+      if (openList !== 'ol') { if (openList) html.push('</' + openList + '>'); openList = 'ol'; html.push('<ol>'); }
+      html.push('<li>' + RegExp.$1.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code>$1</code>') + '</li>');
+      return;
+    }
+    if (line.trim() === '') {
+      if (openList) { html.push(openList === 'ul' ? '</ul>' : '</ol>'); openList = null; }
+      return;
+    }
+    let text = escapeHtml(line).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/`([^`]+)`/g, '<code>$1</code>');
+    html.push('<p>' + text + '</p>');
+  });
+  if (openList) html.push(openList === 'ul' ? '</ul>' : '</ol>');
+  return html.join('\n');
+}
+const markdown = `# Employee 360 – Detail Information
+## Widget Organization & UX Strategy
+
+### Overview
+The Employee 360 dashboard is strategically organized to provide **Managers** with the most critical employee information in order of priority, enabling quick decision-making and comprehensive employee oversight.
+
+**Tóm tắt:** Bảng điều khiển Employee 360 được sắp xếp hợp lý để cung cấp cho quản lý các thông tin nhân sự quan trọng theo thứ tự ưu tiên, giúp ra quyết định nhanh và nắm bắt tổng thể hiệu suất nhân viên.
+
+---
+
+## Widget Organization (by priority)
+
+### 1. **Employee Profile** (Full Width)
+**Position:** Top priority context
+**Why:** Managers need immediate employee identification and key metadata before deep-diving into details.
+
+**Mô tả:** Phần Employee Profile là ngữ cảnh ưu tiên cao nhất, giúp quản lý nắm ngay thông tin cơ bản của nhân viên trước khi đi sâu vào các phần khác.
+
+**Includes:**
+- Employee photo/avatar upload area
+- Full name & Worker ID
+- Job title, location, email, phone
+- Key skills overview (Angular, TypeScript, etc.)
+- Active status badge
+
+**UX Purpose:** Uses visual hierarchy and avatar as focal point to quickly identify the employee being reviewed.
+
+---
+
+### 2. **Employee Compensation** (Full Width)
+**Position:** Primary widget - immediately after profile
+**Why:** Managers in HRM/HR context typically prioritize compensation data for salary reviews, raise recommendations, budget planning.
+
+**Mô tả:** Phần Employee Compensation hiển thị dữ liệu lương và phúc lợi, là thông tin quan trọng để đánh giá lương thưởng, đề xuất tăng lương và lập kế hoạch ngân sách.
+
+**Key Metrics:**
+- Base Salary (35M VND)
+- Allowance (+14% YoY growth)
+- Bonus YTD (+8% growth trend)
+- Grade & Band classification
+
+**Filters Available:**
+- \'Year\' (default) - Annual view
+- \'Quarter\' - Quarterly breakdown
+
+**UX Strategy:**
+- 4-column stat cards for quick scanning
+- Color coding for positive (+14% green) vs neutral trends
+- Compact table for compliance details (tax code, insurance base, effective date)
+
+---
+
+### 3. **Organization & WR Switcher** (2-Column Layout)
+**Position:** Secondary context (rows 2-3)
+**Why:** Completes the organizational picture - where does this employee sit?
+
+**Mô tả:** Phần Organization & WR Switcher hoàn thiện bức tranh tổ chức, giúp biết nhân viên đang ở vị trí nào trong bộ phận và quan hệ công việc cụ thể.
+
+**Left Column - Employee Organization:**
+- Division, Department, Team, Cost Center
+- Direct Manager info with mini card showing:
+  - Manager avatar (initials)
+  - Manager name
+  - Manager role & company
+
+**Right Column - Employee WR Switcher (Work Relationship):**
+- Legal Entity (company name)
+- Employment Type (EMPLOYEE, CONTRACTOR, etc.)
+- Employment Status (Active, On Leave, etc.)
+- Contract Type (Full-time, Part-time, etc.)
+- Period of employment
+
+**UX Pattern:** Separates \'where\' (left) from \'what type of relationship\' (right)
+
+---
+
+### 4. **Performance & Career History** (2-Column Layout)
+**Position:** Rows 3+
+**Why:** Managers need to understand employee trajectory and current performance level.
+
+**Left Column - Employee Performance:**
+Historical rating by year with 5-star system:
+- 2023: 4.2/5 ⭐⭐⭐⭐◯
+- 2022: 3.8/5
+- 2021: 3.5/5
+- 2020: 2.9/5
+
+Competency breakdown (2023):
+- Technical: 88%
+- Teamwork: 82%
+- Leadership: 70%
+- Communication: 76%
+
+**Filters:**
+- \'Last 4Y\' (default) - Shows all history
+- \'Current Year\' - Shows only 2024 metrics
+
+**Right Column - Career History:**
+Timeline of career progression:
+- Role changes (promotions, transfers)
+- Department movements
+- Title progression
+- Employment dates
+
+**Filters:**
+- \'All\' (default) - Shows complete history
+- \'Promotions\' - Only promotion events
+- \'Transfers\' - Only lateral moves
+
+**UX Purpose:** Manager can quickly assess:
+- \"Is performance trending up or down?\"
+- \"How long in current role?\"
+- \"Career growth trajectory?\"
+
+---
+
+### 5. **Time & Attendance** (Full Width)
+**Position:** Bottom (operational metrics)
+**Why:** Essential for attendance compliance and workload assessment.
+
+**Layout:** 2-column grid for stable display at system-scaled 125% view, so metric cards remain even and readable without forcing unnecessary horizontal scroll.
+
+**Key Metrics:**
+- Working Days (22 in April)
+- Present (21 days = 95.5% attendance)
+- Leave Used (3 days, 12 remaining)
+- OT Hours (14h = –2h vs average)
+
+**Filters:**
+- \'Monthly\' (default) - Current month detail
+- \'Quarterly\' - Q1, Q2, Q3, Q4 view
+- \'Annual\' - Year-to-date totals
+
+**Time Selector:** April 2025 chip (clickable for date range selection)
+
+**UX Strategy:**
+- Color coding: green for positive (high attendance), red/orange for concerns
+- Benchmarking against monthly average for OT
+
+---
+
+## Top Navigation Enhancements
+
+### Search Bar + Department Filter
+**Located:** Topbar right section
+
+**Mô tả:** Phần điều hướng trên cùng cho phép tìm kiếm nhanh và lọc theo phòng ban, giúp người dùng chuyển đổi giữa nhân viên trong cùng bộ phận dễ dàng.
+
+**Features:**
+1. **Employee Name Search** (primary)
+   - Placeholder: "Search employee name..."
+   - Current value: "Nguyễn Bùi Thành"
+
+2. **Department Filter** (new dropdown)
+   - All Departments (default)
+   - Engineering
+   - Sales
+   - Human Resources
+   - Finance
+   - Marketing
+   - Behavior: Dropdown with visual indicator showing selected department
+
+**UX Purpose:** Allows fast employee switching within same department for comparative review.
+
+---
+
+## Widget Filter Patterns
+
+### Standard Filter Button Group
+Each widget has context-specific filters using pill-style buttons:
+
+- [Filter A (active)] [Filter B] [Filter C]
+
+**States:**
+- .active - Orange highlight (#D85A30), bold text
+- .hover - Soft border highlight
+- .default - Gray background
+
+**Filter Types by Widget:**
+- **Compensation:** Year vs. Quarter
+- **Performance:** Last 4 Years vs. Current Year
+- **History:** All vs. Promotions vs. Transfers
+- **Time & Attendance:** Monthly vs. Quarterly vs. Annual
+
+---
+
+## Color & Typography Conventions
+
+### Primary Colors
+- **Orange** (#D85A30): Active states, highlights, primary CTAs
+- **Green** (#3B6D11): Positive metrics, Active status
+- **Blue** (#185FA5): Reference info, manager cards
+- **Amber** (#BA7517): Warnings, historical year markers
+
+### Typography
+- **Font Family:** Be Vietnam Pro (sans-serif)
+- **Mono Family:** DM Mono (for dates, IDs, numerical data)
+- **Hierarchy:**
+  - Card Titles: 13px, bold
+  - Stat Values: 20px, bold
+  - Labels: 10px, uppercase, muted
+  - Metadata: 11-12px, secondary text
+
+---
+
+## Display Scaling
+The page is designed to render at a 125% visual scale using CSS transform scaling rather than native zoom, so the layout remains intact and content does not get clipped when the browser is enlarged.
+
+**Why:** Ensures the UI feels slightly larger and easier to read while preserving responsive card spacing and grid behavior.
+
+---
+
+## Manager Use Cases
+
+### Use Case 1: Salary Review Meeting
+1. Run dashboard for employee
+2. Check **Compensation** widget for current salary vs. peers (grade)
+`;
+document.getElementById('content').innerHTML = parseMarkdown(markdown);
+</script>
+</body>
+</html>

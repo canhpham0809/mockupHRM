@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee 360</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+<div class="flex h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="w-[230px] bg-white border-r border-gray-200 p-4">
+    <div class="font-semibold mb-6">HRM</div>
+
+    <nav class="space-y-1 text-sm">
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Home</div>
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Task</div>
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Dashboard</div>
+
+      <div class="px-3 py-2 rounded-md bg-orange-100 text-orange-600 font-medium">
+        Workforce
+      </div>
+
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">HR</div>
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Batch</div>
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Organization</div>
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Contracts</div>
+      <div class="px-3 py-2 rounded-md hover:bg-gray-100">System</div>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-6 overflow-auto">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-sm text-gray-500">
+        Employee 360 > Detail Information
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="border rounded-full px-4 py-1 text-sm">
+          Finish update
+        </button>
+      </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="mb-4">
+      <div class="relative w-[420px]">
+        <input
+          class="w-full bg-gray-50 border border-gray-200 rounded-full py-2 pl-4 pr-10 text-sm"
+          value="Nguyễn Lâm Thục Nhi"
+        />
+        <span class="absolute right-3 top-2.5 text-gray-400">🔍</span>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 flex justify-between items-center shadow-sm">
+
+      <!-- LEFT -->
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-full border border-dashed flex items-center justify-center text-xs text-gray-400">
+          Upload<br/>Avatar
+        </div>
+
+        <div>
+          <div class="text-lg font-semibold">
+            Nhi Nguyễn Lâm Thục
+          </div>
+          <div class="text-sm text-gray-500">
+            Worker ID: 24567
+          </div>
+
+          <div class="mt-2 flex items-center gap-2 text-xs">
+            <span class="text-gray-500">Skills:</span>
+
+            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
+              Angular
+            </span>
+            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
+              TypeScript
+            </span>
+            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
+              Node.js
+            </span>
+            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
+              HTML5
+            </span>
+
+            <span class="bg-orange-500 text-white px-2 py-1 rounded">
+              +1 more
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT INFO -->
+      <div class="flex gap-10 text-sm">
+
+        <div class="space-y-1">
+          <div>👤 Account Collaborator</div>
+          <div>🏢 OUTSOURCEASIA COMPANY LIMITED</div>
+        </div>
+
+        <div class="space-y-1">
+          <div>✉️ 48985local@my.local</div>
+          <div>📞 +84 123456789</div>
+        </div>
+
+        <div class="flex items-start">
+          <span class="flex items-center gap-1 bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
+            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+            Active
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WR SWITCHER -->
+    <div class="bg-white border border-gray-200 rounded-xl p-5 mt-4 shadow-sm">
+      <div class="flex justify-between items-center mb-4">
+        <div class="font-medium text-sm">Employee WR Switcher</div>
+        <div class="text-gray-400">⟳ ⛶</div>
+      </div>
+
+      <div class="grid grid-cols-3 text-sm gap-10">
+
+        <div>
+          <div class="text-gray-400 text-xs">Legal Entity</div>
+          <div>Aditima Joint Stock Company</div>
+
+          <div class="text-gray-400 text-xs mt-3">Period</div>
+          <div>10/17/2025 - 04/02/2026</div>
+        </div>
+
+        <div>
+          <div class="text-gray-400 text-xs">Type</div>
+          <div>EMPLOYEE</div>
+
+          <div class="text-gray-400 text-xs mt-3">Status</div>
+          <div>Active</div>
+        </div>
+
+        <div>
+          <div class="text-gray-400 text-xs">Role</div>
+          <div>Account Collaborator</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-2 gap-4 mt-4">
+
+      <!-- CARD -->
+      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
+        <div class="font-medium text-sm mb-2">Employee Organization</div>
+        <div class="h-full flex items-center justify-center text-gray-300">
+          No Data
+        </div>
+      </div>
+
+      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
+        <div class="font-medium text-sm mb-2">Employee Time</div>
+        <div class="h-full flex items-center justify-center text-gray-300">
+          No Data
+        </div>
+      </div>
+
+      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
+        <div class="font-medium text-sm mb-2">Employee Compensation</div>
+        <div class="h-full flex items-center justify-center text-gray-300">
+          No Data
+        </div>
+      </div>
+
+      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
+        <div class="font-medium text-sm mb-2">Employee Performance</div>
+        <div class="h-full flex items-center justify-center text-gray-300">
+          No Data
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
+        <div class="font-medium text-sm mb-3">Employee History</div>
+
+        <div class="flex">
+          <div class="w-[2px] bg-gray-200 mr-3 relative">
+            <div class="w-2 h-2 bg-orange-500 rounded-full absolute -left-[3px] top-1"></div>
+          </div>
+
+          <div class="text-sm">
+            <div>
+              <span class="font-medium">07/07/2025</span>
+              <span class="ml-2 text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded">
+                Assignment
+              </span>
+            </div>
+            <div>Account Collaborator</div>
+            <div class="text-gray-400 text-xs">Zalo Sales</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
+        <div class="font-medium text-sm mb-2">Employee WR Timeline</div>
+        <div class="text-xs text-gray-500 mb-2">
+          Aditima Joint Stock Company
+        </div>
+
+        <div class="h-2 bg-orange-500 rounded-full mt-6"></div>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>
