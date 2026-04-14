@@ -1,228 +1,2899 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>Employee 360</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.2">
+<title>Employee 360 v1 - Spec Aligned</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #D85A30;
+  --orange-light: #fff3ef;
+  --orange-mid: #f0997b;
+  --bg: #f4f2ee;
+  --surface: #ffffff;
+  --border: #e8e4dc;
+  --border-soft: #f0ede6;
+  --text-primary: #1e1d1b;
+  --text-secondary: #6b6860;
+  --text-muted: #b0aca4;
+  --teal: #1D9E75;
+  --teal-bg: #e1f5ee;
+  --amber: #BA7517;
+  --amber-bg: #faeeda;
+  --blue: #185FA5;
+  --blue-bg: #e6f1fb;
+  --red: #A32D2D;
+  --red-bg: #fcebeb;
+  --green: #3B6D11;
+  --green-bg: #eaf3de;
+  --sidebar-w: 64px;
+  --topbar-h: 52px;
+  --font: 'Exo 2', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:auto;font-family:var(--font);font-size:14px;color:var(--text-primary);background:var(--bg);}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:calc(100vh/1.20);width:calc(100%/1.20);transform:scale(1.20);transform-origin:top left;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--surface);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;
+  padding:14px 0;gap:2px;flex-shrink:0;z-index:10;
+}
+.s-logo{width:36px;height:36px;background:var(--orange);border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.s-logo svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.8}
+.s-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:7px 4px;border-radius:8px;cursor:pointer;width:50px;
+  color:var(--text-muted);font-size:10px;font-weight:500;
+  transition:all 0.15s;letter-spacing:0.01em;
+}
+.s-item:hover{background:#f7f5f1;color:var(--text-primary)}
+.s-item.active{background:var(--orange-light);color:var(--orange)}
+.s-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6}
+.s-divider{width:28px;height:1px;background:var(--border);margin:6px 0}
+.s-spacer{flex:1}
+
+/* ── MAIN COLUMN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+/* ── TOPBAR ── */
+.topbar{
+  height:var(--topbar-h);background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0;
+}
+.hamburger{color:var(--text-muted);cursor:pointer;display:flex}
+.hamburger svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px}
+.bc-parent{color:var(--text-muted);font-weight:400}
+.bc-sep{color:var(--text-muted);font-size:11px}
+.bc-current{color:var(--text-primary);font-weight:500}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:8px 12px;width:280px;
+  position:relative;transition:all 0.15s;
+}
+.search-wrap:focus-within{border-color:var(--orange);background:#fff}
+.search-wrap svg{width:13px;height:13px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0}
+.search-wrap input{border:none;background:transparent;font-family:var(--font);font-size:13px;color:var(--text-primary);outline:none;width:100%}
+.search-wrap input::placeholder{color:var(--text-muted)}
+.employee-search-results{
+  position:absolute;left:0;right:0;top:calc(100% + 6px);
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);max-height:220px;overflow:auto;
+  display:none;z-index:30;padding:4px;
+}
+.employee-search-results.show{display:block}
+.employee-option{
+  padding:8px 10px;border-radius:7px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.employee-option:hover{background:var(--orange-light)}
+.employee-option .name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.employee-option .dept{font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+.ask-ai-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--orange-light);color:var(--orange);
+  border:1px solid #f5c4b3;border-radius:7px;
+  padding:6px 11px;font-family:var(--font);font-size:12px;font-weight:600;
+  cursor:pointer;white-space:nowrap;
+}
+.ask-ai-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+
+/* ── DEPARTMENT FILTER ── */
+.filter-select{
+  display:flex;align-items:center;gap:6px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:10px;padding:8px 12px;cursor:pointer;
+  font-family:var(--font);font-size:12px;color:var(--text-primary);
+  transition:all 0.15s;min-width:160px;
+}
+.filter-select:hover,.filter-select:focus-within{border-color:var(--orange);background:#fff}
+.filter-select svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
+.filter-select select{
+  border:none;background:transparent;font-family:var(--font);
+  font-size:12px;color:var(--text-primary);outline:none;cursor:pointer;
+  min-width:110px;appearance:none;-webkit-appearance:none;
+}
+.dept-native-select{display:none}
+.dept-select{position:relative;min-width:180px}
+.dept-display{font-size:12px;color:var(--text-primary);font-weight:500;white-space:nowrap}
+.dept-options{
+  position:absolute;left:0;right:0;top:calc(100% + 6px);
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);max-height:220px;overflow:auto;
+  display:none;z-index:30;padding:4px;
+}
+.dept-options.show{display:block}
+.dept-option{padding:8px 10px;border-radius:7px;cursor:pointer;font-size:12px;color:var(--text-primary)}
+.dept-option:hover{background:var(--orange-light)}
+.dept-option.active{background:var(--orange-light);color:var(--orange);font-weight:600}
+.select-caret{font-size:10px;color:var(--text-muted);margin-left:auto;pointer-events:none}
+.toolbar-filters{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+@media (max-width: 840px){
+  .search-wrap{width:100%}
+  .filter-select{min-width:140px}
+}
+
+/* ── WIDGET FILTERS ── */
+.widget-filters{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.filter-btn{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:4px 10px;
+  font-size:11px;color:var(--text-secondary);cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+  font-weight:500;
+}
+.filter-btn:hover{background:var(--border-soft);color:var(--text-primary)}
+.filter-btn.active{background:var(--orange-light);border-color:var(--orange);color:var(--orange);font-weight:600}
+
+.radar-year-select{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:6px 12px;cursor:pointer;
+  font-family:var(--font);font-size:12px;color:var(--text-primary);
+  transition:all 0.15s;font-weight:500;
+}
+.radar-year-select:hover{border-color:var(--orange);background:var(--orange-light)}
+.radar-year-select:focus{outline:none;border-color:var(--orange);background:var(--orange-light)}
+
+.perf-year-select{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:6px 12px;cursor:pointer;
+  font-family:var(--font);font-size:12px;color:var(--text-primary);
+  transition:all 0.15s;font-weight:500;
+}
+.perf-year-select:hover{border-color:var(--orange);background:var(--orange-light)}
+.perf-year-select:focus{outline:none;border-color:var(--orange);background:var(--orange-light)}
+
+.icon-btn{
+  width:32px;height:32px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-muted);
+}
+.icon-btn:hover{background:var(--bg);color:var(--text-primary)}
+.icon-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}
+.avatar-topbar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--orange);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;cursor:pointer;
+}
+.flag{font-size:16px;cursor:pointer}
+
+/* ── SCROLL AREA ── */
+.scroll-area{flex:1;overflow-y:auto;overflow-x:auto;padding:16px 20px 32px}
+.scroll-area::-webkit-scrollbar{width:5px}
+.scroll-area::-webkit-scrollbar-track{background:transparent}
+.scroll-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ── GRID ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.gap-12{gap:12px}
+.mb-12{margin-bottom:12px}
+
+/* ── CARDS ── */
+.card{
+  background:var(--surface);border-radius:11px;
+  border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;
+}
+.card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px 10px;border-bottom:1px solid var(--border-soft);
+}
+.card-title{font-size:13px;font-weight:600;color:var(--text-primary);letter-spacing:-0.01em}
+.card-actions{display:flex;gap:3px}
+.c-btn{
+  width:24px;height:24px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--text-muted);
+}
+.c-btn:hover{background:var(--bg);color:var(--text-primary)}
+.c-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+.card-body{padding:14px 16px;flex:1;overflow-x:auto;overflow-y:hidden;min-width:0}
+
+body.no-scroll{overflow:hidden}
+.card-popup-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.35);
+  display:none;align-items:center;justify-content:center;
+  padding:12px;z-index:9999;
+}
+.card-popup-overlay.show{display:flex}
+.card-popup-shell{
+  width:min(1420px, calc(100vw - 24px));
+  max-height:calc(100vh - 24px);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,0.24);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.card-popup-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border-bottom:1px solid var(--border-soft);
+}
+.card-popup-title{font-size:13px;font-weight:700;color:var(--text-primary)}
+.card-popup-body{padding:18px 20px 30px;overflow:auto}
+.card-popup-placeholder{display:none}
+.card.in-popup{width:100%;zoom:1.6}
+.card.in-popup .card-body{overflow:auto}
+
+.profile-main{display:flex;flex-direction:column;gap:16px}
+.profile-top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap}
+.profile-meta-stack{display:flex;flex-direction:column;gap:10px;min-width:320px;flex:1}
+.quick-actions-wrap{position:relative}
+.action-pill{
+  display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;
+  border:1px solid var(--border);background:var(--surface);font-size:12px;font-weight:600;
+  color:var(--text-primary);cursor:pointer;text-decoration:none;
+}
+.action-pill:hover{border-color:var(--orange);background:var(--orange-light)}
+.action-pill.primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.action-pill svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start;align-self:flex-start}
+.quick-menu{
+  position:absolute;right:0;top:calc(100% + 8px);min-width:210px;max-width:230px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 26px rgba(24,20,14,0.16);
+  padding:6px;display:none;z-index:60;
+}
+.quick-menu.show{display:block}
+.quick-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .14s ease}
+.quick-item + .quick-item{margin-top:2px}
+.quick-item::after{content:'›';font-size:14px;color:var(--text-muted);font-weight:700}
+.quick-item:hover{background:var(--orange-light);transform:translateX(1px)}
+.quick-item-title{font-size:13px;font-weight:650;color:var(--text-primary);line-height:1.25}
+.quick-item-desc{font-size:11px;color:var(--text-secondary)}
+.profile-card{overflow:visible}
+.profile-card .card-body{overflow:visible}
+.wr-summary{
+  border:1px solid var(--border);border-radius:14px;padding:14px 16px;
+  background:linear-gradient(135deg,#fffaf7 0%, #ffffff 55%, #f8f6f2 100%);
+}
+.wr-summary-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.wr-summary-title{font-size:12px;font-weight:800;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase}
+.wr-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.wr-summary-grid .field-val{font-size:14px}
+.permission-strip{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:14px;padding:10px 12px;border-radius:10px;background:#f8f6f2;border:1px solid var(--border-soft);
+}
+.permission-copy{font-size:12px;color:var(--text-secondary)}
+.permission-copy strong{color:var(--text-primary)}
+.wr-switcher-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.wr-card{
+  border:1px solid var(--border);border-radius:12px;padding:14px;background:var(--surface);
+  display:flex;flex-direction:column;gap:10px;cursor:pointer;transition:all 0.18s ease;
+}
+.wr-card:hover{border-color:#d9c8bb;transform:translateY(-1px)}
+.wr-card.is-active{border-color:var(--orange);background:var(--orange-light);box-shadow:0 8px 18px rgba(216,90,48,0.12)}
+.wr-card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.wr-card-entity{font-size:15px;font-weight:700;color:var(--text-primary)}
+.wr-card-role{font-size:12px;color:var(--text-secondary)}
+.wr-card-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;color:var(--text-secondary)}
+.wr-card-action{font-size:12px;font-weight:700;color:var(--orange)}
+.info-grid-2{display:grid;grid-template-columns:1.2fr 0.8fr;gap:12px}
+.stack-list{display:flex;flex-direction:column;gap:10px}
+.info-block{border:1px solid var(--border-soft);border-radius:10px;padding:12px;background:#fcfbf9}
+.info-block-title{font-size:11px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px}
+.info-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--border-soft)}
+.info-row:last-child{border-bottom:none;padding-bottom:0}
+.info-key{font-size:12px;color:var(--text-secondary)}
+.info-value{font-size:12px;color:var(--text-primary);font-weight:600;text-align:right}
+.doc-list,.benefit-list,.leave-list{display:flex;flex-direction:column;gap:8px}
+.doc-item,.benefit-item,.leave-item{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;background:#fcfbf9;border:1px solid var(--border-soft)}
+.doc-name,.benefit-name,.leave-name{font-size:12px;font-weight:700;color:var(--text-primary)}
+.doc-meta,.benefit-meta,.leave-meta{font-size:11px;color:var(--text-secondary)}
+.summary-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.summary-chip{padding:10px 12px;border-radius:10px;background:#fcfbf9;border:1px solid var(--border-soft)}
+.summary-chip-label{font-size:11px;font-weight:800;letter-spacing:0.05em;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px}
+.summary-chip-value{font-size:14px;font-weight:700;color:var(--text-primary)}
+.summary-chip-note{font-size:11px;color:var(--text-secondary);margin-top:4px}
+.timeline-event{cursor:pointer}
+.wr-event-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.wr-event-pill{padding:6px 10px;border-radius:999px;background:#fcfbf9;border:1px solid var(--border-soft);font-size:11px;font-weight:700;color:var(--text-secondary);cursor:pointer}
+.wr-event-pill:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-light)}
+
+@media (max-width: 1180px){
+  .wr-summary-grid,.summary-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .wr-switcher-grid,.info-grid-2{grid-template-columns:1fr}
+}
+
+@media (max-width: 760px){
+  .profile-top{flex-direction:column}
+  .wr-summary-grid,.summary-strip{grid-template-columns:1fr}
+}
+
+/* ── PROFILE CARD ── */
+.profile-flex{display:flex;gap:22px;align-items:center}
+.avatar-upload{
+  width:96px;height:96px;border-radius:50%;
+  border:1.5px dashed var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;font-size:11px;color:var(--text-muted);cursor:pointer;flex-shrink:0;
+  background:#fafaf8;transition:all 0.15s;
+}
+.avatar-upload:hover{background:var(--bg);border-color:var(--text-muted)}
+.avatar-upload span{display:block;text-align:center;line-height:1.2}
+.profile-right{flex:1;min-width:0}
+.profile-name{font-size:20px;font-weight:700;color:var(--text-primary);letter-spacing:-0.01em;margin-bottom:4px}
+.worker-id{font-size:13px;color:var(--text-muted);font-family:var(--mono);margin-bottom:14px}
+.meta-row{display:grid;grid-template-columns:1fr 1fr;gap:10px 18px;margin-bottom:16px}
+.meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary)}
+.meta-item svg{width:15px;height:15px;stroke:var(--text-muted);fill:none;stroke-width:1.6;flex-shrink:0}
+.skills-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.skills-label{font-size:12px;color:var(--text-muted);margin-right:4px}
+.skill-tag{background:var(--orange-light);color:var(--orange);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:600}
+.skill-more{background:var(--bg);color:var(--text-muted);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;cursor:pointer}
+.skill-more:hover{background:var(--border);color:var(--text-secondary)}
+.status-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--green-bg);color:var(--green);
+  border-radius:5px;padding:3px 10px;font-size:11px;font-weight:600;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.assignment-select{min-width:240px}
+.assignment-select .dept-display{font-size:11px;font-weight:600}
+
+/* ── FIELD GRID ── */
+.field-grid{display:grid;gap:12px 20px}
+.field-grid-3{grid-template-columns:1fr 1fr 1fr}
+.field-grid-2{grid-template-columns:1fr 1fr}
+.field-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px}
+.field-val{font-size:13px;font-weight:500;color:var(--text-primary)}
+.field-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--bg);border-radius:8px;border:1px solid var(--border-soft);padding:10px 13px;min-width:140px}
+.stat-label{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.stat-val{font-size:20px;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;line-height:1}
+.stat-sub{font-size:11px;color:var(--text-muted);margin-top:4px}
+.stat-sub.pos{color:var(--green)}
+.stat-sub.neg{color:var(--red)}
+.stat-sub.info{color:var(--blue)}
+
+/* ── COMPENSATION TREND ── */
+.comp-line-wrap{margin-top:6px;padding-top:12px;border-top:1px solid var(--border-soft);position:relative}
+.comp-line-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.line-caption{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em}
+.comp-chart{width:100%;height:168px;display:block}
+.comp-grid-line{stroke:var(--border-soft);stroke-width:1}
+.comp-line-path{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.comp-point{fill:var(--surface);stroke:var(--orange);stroke-width:2;cursor:pointer}
+.comp-axis,
+.comp-values{display:flex;justify-content:space-between;gap:8px}
+.comp-axis{margin-top:4px}
+.comp-axis span{font-size:10px;color:var(--text-muted);font-family:var(--mono);text-align:center;flex:1}
+.comp-values{margin-top:6px}
+.comp-values span{font-size:11px;color:var(--text-primary);font-weight:600;text-align:center;flex:1}
+.comp-tooltip{
+  position:absolute;
+  min-width:126px;
+  background:var(--text-primary);
+  color:#fff;
+  border-radius:8px;
+  padding:7px 9px;
+  font-size:11px;
+  line-height:1.35;
+  box-shadow:0 8px 20px rgba(0,0,0,0.18);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%, calc(-100% - 8px));
+  transition:opacity 0.12s ease;
+  z-index:3;
+  white-space:nowrap;
+}
+.comp-tooltip.show{opacity:1}
+.comp-tooltip .t-date{opacity:0.78;font-size:10px;margin-bottom:2px}
+.comp-tooltip .t-val{font-weight:700;font-family:var(--mono)}
+.comp-tooltip .t-delta{opacity:0.88;font-size:10px;margin-top:1px}
+
+/* ── MANAGER ── */
+.mgr-card{display:flex;align-items:center;gap:12px;padding:10px 0}
+.mgr-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.mgr-name{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.mgr-role{font-size:11px;color:var(--text-muted)}
+.report-list{display:flex;align-items:center;gap:30px;flex-wrap:wrap;margin-top:8px}
+
+.report-more{font-size:11px;color:var(--text-muted);font-weight:600;padding:0}
+
+/* ── ORG ── */
+.org-tree{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.org-row{display:flex;align-items:center;gap:10px;font-size:12px}
+.org-indent{width:20px;height:1px;background:var(--border);flex-shrink:0}
+.org-chip{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-weight:500;color:var(--text-primary)}
+.org-chip.highlight{background:var(--orange-light);border-color:#f5c4b3;color:var(--orange)}
+
+/* ── PERFORMANCE ── */
+.perf-list{display:flex;flex-direction:column;gap:10px}
+.perf-row{display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.perf-year{font-weight:600;color:var(--text-primary);width:36px}
+.perf-year-row{padding:6px 8px;border-radius:8px;cursor:pointer;transition:background 0.15s ease}
+.perf-year-row:hover{background:#f7f5f1}
+.perf-year-row.is-active{background:var(--orange-light)}
+.perf-year-row:not(.is-active) .perf-year{color:var(--text-muted)}
+.perf-kpi-rate{font-size:12px;color:var(--text-muted);font-family:var(--mono);min-width:62px;text-align:right}
+.perf-grade{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:28px;border-radius:7px;font-size:12px;font-weight:700;font-family:var(--mono);margin-left:8px}
+.perf-grade.a-plus{background:var(--green-bg);color:var(--green)}
+.perf-grade.a{background:#e0f4dd;color:#2d7a2d}
+.perf-grade.a-minus{background:#f0e8d8;color:#8b6d2e}
+.perf-grade.b-plus{background:var(--amber-bg);color:var(--amber)}
+.perf-grade.b{background:#fce4cc;color:#c87a22}
+.perf-grade.b-minus{background:var(--red-bg);color:var(--red)}
+
+.perf-list.all-view{
+  max-height:240px;overflow-y:auto;border:1px solid var(--border-soft);
+  border-radius:8px;padding:0;margin-bottom:12px;
+}
+.perf-list.all-view .perf-year-row{
+  border-bottom:1px solid var(--border-soft);margin-bottom:0;padding:8px 10px;
+}
+.perf-list.all-view .perf-year-row:last-child{
+  border-bottom:none;
+}
+.bar-section.hidden{display:none}
+.bar-section{margin-top:14px;padding-top:12px;border-top:1px solid var(--border-soft)}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;font-size:12px}
+.bar-label{width:110px;text-align:right;color:var(--text-secondary);font-size:11px;flex-shrink:0}
+.bar-track{flex:1;height:5px;background:var(--border-soft);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+.bar-fill.orange{background:var(--orange)}
+.bar-fill.teal{background:var(--teal)}
+.bar-fill.amber{background:var(--amber)}
+.bar-pct{width:28px;font-size:11px;color:var(--text-muted);font-family:var(--mono);text-align:right}
+
+/* ── RADAR CHART ── */
+.radar-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.radar-chart{width:100%;max-width:340px;height:auto;display:block}
+.radar-compare-wrap{display:none}
+.radar-compare-wrap.show{display:block}
+.radar-compare-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:4px}
+.radar-compare-item{
+  min-width:220px;background:var(--bg);border:1px solid var(--border-soft);
+  border-radius:8px;padding:8px 10px;
+}
+.radar-compare-year{font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.radar-compare-chart{width:100%;height:auto;display:block}
+.radar-compare-label{font-size:9px;font-weight:600;fill:var(--text-secondary)}
+.radar-grid{stroke:var(--border-soft);stroke-width:1}
+.radar-axis{stroke:#d7d3cb;stroke-width:1}
+.radar-self{fill:rgba(216,90,48,0.20);stroke:var(--orange);stroke-width:2.2}
+.radar-manager{fill:rgba(61,143,70,0.14);stroke:#7bb547;stroke-width:2.2}
+.radar-point-self{fill:var(--orange)}
+.radar-point-manager{fill:#7bb547}
+.radar-label{font-size:11px;font-weight:600;fill:var(--text-secondary)}
+.radar-legend{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--text-secondary)}
+.radar-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
+.radar-legend .self i{background:var(--orange)}
+.radar-legend .mgr i{background:#7bb547}
+.radar-wrap{position:relative}
+.radar-point-self,.radar-point-manager{cursor:pointer}
+.radar-tooltip{
+  position:absolute;
+  min-width:120px;
+  background:var(--text-primary);
+  color:#fff;
+  border-radius:8px;
+  padding:7px 9px;
+  font-size:11px;
+  line-height:1.35;
+  box-shadow:0 8px 20px rgba(0,0,0,0.18);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%, calc(-100% - 8px));
+  transition:opacity 0.12s ease;
+  z-index:4;
+  white-space:nowrap;
+}
+.radar-tooltip.show{opacity:1}
+.radar-tooltip .t-meta{opacity:0.78;font-size:10px;margin-bottom:2px}
+.radar-tooltip .t-val{font-weight:700;font-family:var(--mono)}
+
+/* ── TIMELINE ── */
+.tl-wrap{position:relative;padding-left:22px}
+.tl-track{position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--border)}
+.tl-item{position:relative;padding-bottom:16px}
+.tl-item:last-child{padding-bottom:0}
+.tl-dot{
+  position:absolute;left:-17px;top:3px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--orange);border:2px solid var(--surface);
+  box-shadow:0 0 0 1.5px var(--orange);z-index:1;
+}
+.tl-dot.gray{background:var(--text-muted);box-shadow:0 0 0 1.5px var(--text-muted)}
+.tl-header{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.tl-title{font-size:12px;font-weight:600;color:var(--text-primary)}
+.tl-badge{font-size:10px;background:var(--orange-light);color:var(--orange);border-radius:4px;padding:1px 7px;font-weight:600}
+.tl-sub{font-size:11px;color:var(--text-secondary);margin-bottom:2px}
+.tl-date{font-size:11px;color:var(--text-muted);font-family:var(--mono)}
+
+/* ── WR TIMELINE ── */
+.wr-tl-wrap{margin-bottom:6px}
+.wr-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.wr-label{width:96px;text-align:right;font-size:12px;color:var(--text-secondary);flex-shrink:0}
+.wr-bar-area{flex:1;position:relative;height:24px}
+.wr-bar{
+  position:absolute;top:0;left:0;right:0;height:100%;
+  background:var(--orange);border-radius:6px;
+  display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+}
+.wr-bar span{font-size:11px;color:#fff;font-weight:600;font-family:var(--mono)}
+.wr-years{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);padding-left:108px;margin-top:6px;font-family:var(--mono)}
+
+/* ── TIME STATS ── */
+.time-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+
+/* ── SKILLS SECTION ── */
+.skills-cloud{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.skill-pill{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:5px;padding:4px 11px;font-size:12px;
+  color:var(--text-secondary);font-weight:500;cursor:pointer;
+  transition:all 0.15s;
+}
+.skill-pill:hover{background:var(--border-soft)}
+.skill-pill.active{background:var(--orange-light);border-color:#f5c4b3;color:var(--orange)}
+
+/* ── LEARNING LIST ── */
+.learn-block{margin-bottom:12px}
+.learn-title{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:7px}
+.learn-list{display:flex;flex-direction:column;gap:7px}
+.learn-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:7px 9px;background:var(--bg);border:1px solid var(--border-soft);border-radius:7px}
+.learn-name{font-size:12px;font-weight:600;color:var(--text-primary)}
+.learn-note{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.learn-time{font-size:11px;color:var(--text-muted);font-family:var(--mono);white-space:nowrap}
+
+/* ── DIVIDER ── */
+.sect-divider{height:1px;background:var(--border-soft);margin:14px 0 0}
+
+/* ── STATUS CHIPS ── */
+.chip{display:inline-flex;align-items:center;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600}
+.chip.orange{background:var(--orange-light);color:var(--orange)}
+.chip.green{background:var(--green-bg);color:var(--green)}
+.chip.blue{background:var(--blue-bg);color:var(--blue)}
+.chip.amber{background:var(--amber-bg);color:var(--amber)}
+
+/* ── SECTION HEADER (between groups) ── */
+.page-section{margin-bottom:12px}
+.section-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;padding-left:2px}
+</style>
 </head>
-
-<body class="bg-gray-100 text-gray-800">
-
-<div class="flex h-screen">
+<body>
+<div class="app">
 
   <!-- SIDEBAR -->
-  <aside class="w-[230px] bg-white border-r border-gray-200 p-4">
-    <div class="font-semibold mb-6">HRM</div>
-
-    <nav class="space-y-1 text-sm">
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Home</div>
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Task</div>
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Dashboard</div>
-
-      <div class="px-3 py-2 rounded-md bg-orange-100 text-orange-600 font-medium">
-        Workforce
-      </div>
-
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">HR</div>
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Batch</div>
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Organization</div>
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">Contracts</div>
-      <div class="px-3 py-2 rounded-md hover:bg-gray-100">System</div>
-    </nav>
-  </aside>
+  <nav class="sidebar">
+    <div class="s-logo">
+      <svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+      Home
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="3" y="4" width="14" height="13" rx="2"/><path d="M3 9h14"/><path d="M7 2v4M13 2v4"/></svg>
+      Task
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M4 14l4-4 3 3 5-6"/><rect x="3" y="3" width="14" height="14" rx="2"/></svg>
+      Dashboard
+    </div>
+    <div class="s-divider"></div>
+    <div class="s-item active">
+      <svg viewBox="0 0 20 20"><circle cx="10" cy="7" r="3.5"/><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6"/></svg>
+      Workforce
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+      HR
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="12" rx="2"/><path d="M7 5V4a1 1 0 011-1h4a1 1 0 011 1v1"/></svg>
+      Batch
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><circle cx="10" cy="5" r="2.5"/><circle cx="3.5" cy="15" r="2.5"/><circle cx="16.5" cy="15" r="2.5"/><path d="M10 7.5v3M10 10.5l-4.5 3M10 10.5l4.5 3"/></svg>
+      Org
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+      Job &
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M6 3h8l3 5-7 10L3 8z"/></svg>
+      Contracts
+    </div>
+    <div class="s-divider"></div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/><path d="M10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17M4.9 4.9l1 1M14.1 14.1l1 1M14.1 4.9l-1 1M5.9 14.1l-1 1"/></svg>
+      System
+    </div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M7 10h6M10 7v6"/></svg>
+      Master
+    </div>
+    <div class="s-spacer"></div>
+    <div class="s-item">
+      <svg viewBox="0 0 20 20"><path d="M3 6h14M3 10h10M3 14h7"/></svg>
+      Tools &
+    </div>
+  </nav>
 
   <!-- MAIN -->
-  <main class="flex-1 p-6 overflow-auto">
-
-    <!-- HEADER -->
-    <div class="flex justify-between items-center mb-4">
-      <div class="text-sm text-gray-500">
-        Employee 360 > Detail Information
+  <div class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="hamburger"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg></div>
+      <div class="breadcrumb">
+        <span class="bc-parent">Employee 360</span>
+        <span class="bc-sep">›</span>
+        <span class="bc-current">Detail Information</span>
       </div>
-
-      <div class="flex items-center gap-3">
-        <button class="border rounded-full px-4 py-1 text-sm">
-          Finish update
+      <div class="topbar-right">
+        <button class="ask-ai-btn">
+          <svg viewBox="0 0 20 20"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2z"/><path d="M10 7v4M10 13v.5"/></svg>
+          Ask AI
         </button>
+        <div class="icon-btn" title="Search"><svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg></div>
+        <span class="flag">🇺🇸</span>
+        <div class="icon-btn" title="View Layout.md" onclick="window.open('layout-view.html', '_blank')"><svg viewBox="0 0 20 20"><path d="M4 3h9l4 4v10a1 1 0 01-1 1H4a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M13 3v4h4"/><path d="M6 8h8M6 12h8M6 16h4"/></svg></div>
+        <div class="icon-btn" title="Notifications"><svg viewBox="0 0 20 20"><path d="M10 3a5 5 0 00-5 5v3l-1.5 2.5h13L15 11V8a5 5 0 00-5-5z"/><path d="M8.5 16.5a1.5 1.5 0 003 0"/></svg></div>
+        <div class="avatar-topbar">NB</div>
       </div>
-    </div>
+    </header>
 
-    <!-- SEARCH -->
-    <div class="mb-4">
-      <div class="relative w-[420px]">
-        <input
-          class="w-full bg-gray-50 border border-gray-200 rounded-full py-2 pl-4 pr-10 text-sm"
-          value="Nguyễn Lâm Thục Nhi"
-        />
-        <span class="absolute right-3 top-2.5 text-gray-400">🔍</span>
-      </div>
-    </div>
+    <!-- SCROLL AREA -->
+    <div class="scroll-area">
 
-    <!-- PROFILE -->
-    <div class="bg-white border border-gray-200 rounded-xl p-5 flex justify-between items-center shadow-sm">
-
-      <!-- LEFT -->
-      <div class="flex items-center gap-4">
-        <div class="w-16 h-16 rounded-full border border-dashed flex items-center justify-center text-xs text-gray-400">
-          Upload<br/>Avatar
-        </div>
-
-        <div>
-          <div class="text-lg font-semibold">
-            Nhi Nguyễn Lâm Thục
+      <!-- SEARCH AND FILTERS -->
+      <div class="page-section">
+        <div class="toolbar-filters">
+          <div class="search-wrap">
+            <svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
+            <input id="employeeSearch" type="text" placeholder="Search employee...">
+            <div id="employeeSearchResults" class="employee-search-results"></div>
           </div>
-          <div class="text-sm text-gray-500">
-            Worker ID: 24567
+          <div class="filter-select dept-select legal-entity-select" id="legalEntitySelect">
+            <svg viewBox="0 0 20 20"><path d="M4 4h12v4H4zM4 10h8v6H4zM13 10h3v6h-3z"/></svg>
+            <select id="legalEntityFilter" class="dept-native-select">
+              <option value="all">All Legal Entity</option>
+              <option value="VNG">VNG</option>
+              <option value="VNGG">VNGG</option>
+              <option value="A4B">A4B</option>
+              <option value="TrueID">TrueID</option>
+              <option value="Zion">Zion</option>
+            </select>
+            <span id="legalEntityDisplay" class="dept-display">All Legal Entity</span>
+            <span class="select-caret">▼</span>
+            <div class="dept-options" id="legalEntityOptions"></div>
           </div>
-
-          <div class="mt-2 flex items-center gap-2 text-xs">
-            <span class="text-gray-500">Skills:</span>
-
-            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
-              Angular
-            </span>
-            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
-              TypeScript
-            </span>
-            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
-              Node.js
-            </span>
-            <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded">
-              HTML5
-            </span>
-
-            <span class="bg-orange-500 text-white px-2 py-1 rounded">
-              +1 more
-            </span>
+          <div class="filter-select dept-select" id="deptSelect">
+            <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+            <select id="deptFilter" class="dept-native-select">
+              <option value="all">All Department</option>
+              <option value="HR">HR</option>
+              <option value="A4B">A4B</option>
+              <option value="FA">FA</option>
+              <option value="AF">AF</option>
+              <option value="DC">DC</option>
+              <option value="ZA">ZA</option>
+              <option value="PY">PY</option>
+            </select>
+            <span id="deptDisplay" class="dept-display">All Department</span>
+            <span class="select-caret">▼</span>
+            <div class="dept-options" id="deptOptions"></div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT INFO -->
-      <div class="flex gap-10 text-sm">
-
-        <div class="space-y-1">
-          <div>👤 Account Collaborator</div>
-          <div>🏢 OUTSOURCEASIA COMPANY LIMITED</div>
-        </div>
-
-        <div class="space-y-1">
-          <div>✉️ 48985local@my.local</div>
-          <div>📞 +84 123456789</div>
-        </div>
-
-        <div class="flex items-start">
-          <span class="flex items-center gap-1 bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
-            <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-            Active
-          </span>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- WR SWITCHER -->
-    <div class="bg-white border border-gray-200 rounded-xl p-5 mt-4 shadow-sm">
-      <div class="flex justify-between items-center mb-4">
-        <div class="font-medium text-sm">Employee WR Switcher</div>
-        <div class="text-gray-400">⟳ ⛶</div>
-      </div>
-
-      <div class="grid grid-cols-3 text-sm gap-10">
-
-        <div>
-          <div class="text-gray-400 text-xs">Legal Entity</div>
-          <div>Aditima Joint Stock Company</div>
-
-          <div class="text-gray-400 text-xs mt-3">Period</div>
-          <div>10/17/2025 - 04/02/2026</div>
-        </div>
-
-        <div>
-          <div class="text-gray-400 text-xs">Type</div>
-          <div>EMPLOYEE</div>
-
-          <div class="text-gray-400 text-xs mt-3">Status</div>
-          <div>Active</div>
-        </div>
-
-        <div>
-          <div class="text-gray-400 text-xs">Role</div>
-          <div>Account Collaborator</div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- GRID -->
-    <div class="grid grid-cols-2 gap-4 mt-4">
-
-      <!-- CARD -->
-      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
-        <div class="font-medium text-sm mb-2">Employee Organization</div>
-        <div class="h-full flex items-center justify-center text-gray-300">
-          No Data
-        </div>
-      </div>
-
-      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
-        <div class="font-medium text-sm mb-2">Employee Time</div>
-        <div class="h-full flex items-center justify-center text-gray-300">
-          No Data
-        </div>
-      </div>
-
-      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
-        <div class="font-medium text-sm mb-2">Employee Compensation</div>
-        <div class="h-full flex items-center justify-center text-gray-300">
-          No Data
-        </div>
-      </div>
-
-      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
-        <div class="font-medium text-sm mb-2">Employee Performance</div>
-        <div class="h-full flex items-center justify-center text-gray-300">
-          No Data
-        </div>
-      </div>
-
-      <!-- HISTORY -->
-      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
-        <div class="font-medium text-sm mb-3">Employee History</div>
-
-        <div class="flex">
-          <div class="w-[2px] bg-gray-200 mr-3 relative">
-            <div class="w-2 h-2 bg-orange-500 rounded-full absolute -left-[3px] top-1"></div>
-          </div>
-
-          <div class="text-sm">
-            <div>
-              <span class="font-medium">07/07/2025</span>
-              <span class="ml-2 text-xs bg-orange-100 text-orange-600 px-2 py-0.5 rounded">
-                Assignment
-              </span>
+      <!-- ROW 1: Employee Profile (full width) -->
+      <div class="page-section">
+        <div class="card profile-card">
+          <div class="card-head">
+            <span class="card-title">Employee Profile</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="status-badge"><div class="status-dot"></div>Active</div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/><path d="M6 17h8"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
             </div>
-            <div>Account Collaborator</div>
-            <div class="text-gray-400 text-xs">Zalo Sales</div>
+          </div>
+          <div class="card-body">
+            <div class="profile-main">
+              <div class="profile-top">
+                <div class="profile-flex">
+                  <div class="avatar-upload">
+                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                  </div>
+                  <div class="profile-meta-stack">
+                    <div>
+                      <div class="profile-name">Nguyễn Văn A</div>
+                      <div class="worker-id" id="profileWorkerId">Worker ID: W-001</div>
+                    </div>
+                    <div class="meta-row">
+                      <div class="meta-item"><svg viewBox="0 0 20 20" ><path d="M4 6h12v5H4z"/><path d="M4 12h16v6H4z"/></svg><span id="profileCountry">Vietnam</span></div>
+                      <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M3 6h14v3H3z"/><path d="M3 10h14v7H3z"/></svg><span id="profileDob">15/03/1990</span></div>
+                      <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M4 4h12v10H4z"/><path d="M4 10l6 3 6-3"/></svg><span id="profileEmail">nguyen.a@gmail.com</span></div>
+                      <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M5 3h3l1.5 4-2 1.5c1 2 2.5 3.5 4.5 4.5L13.5 11 18 12.5V16c0 1.1-.9 2-2 2C7 18 2 13 2 5c0-1.1.9-2 2-2z"/></svg><span id="profilePhone">+84 912 345 678</span></div>
+                    </div>
+                    <div class="skills-row" id="profileSkillsRow">
+                      <span class="skills-label">Skills:</span>
+                      <span class="skill-tag">Python</span>
+                      <span class="skill-tag">AWS</span>
+                      <span class="skill-tag">React</span>
+                      <span class="skill-tag">System Design</span>
+                      <span class="skill-tag">People Mentoring</span>
+                      <span class="skill-more">+2 more</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="header-actions">
+                  <div class="quick-actions-wrap">
+                    <button class="action-pill primary" id="quickActionsBtn"><svg viewBox="0 0 20 20"><path d="M10 2l2.2 4.5L17 7l-3.5 3.4.8 4.8L10 13l-4.3 2.2.8-4.8L3 7l4.8-.5z"/></svg>Actions</button>
+                    <div class="quick-menu" id="quickActionsMenu">
+                      <div class="quick-item" data-action="transfer"><div class="quick-item-title">Transfer</div></div>
+                      <div class="quick-item" data-action="promote"><div class="quick-item-title">Promote</div></div>
+                      <div class="quick-item" data-action="compensation"><div class="quick-item-title">Compensation</div></div>
+                      <div class="quick-item" data-action="update"><div class="quick-item-title">Update</div></div>
+                      <div class="quick-item" data-action="terminate"><div class="quick-item-title">Terminate</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- TIMELINE -->
-      <div class="bg-white border rounded-xl p-4 h-[180px] shadow-sm">
-        <div class="font-medium text-sm mb-2">Employee WR Timeline</div>
-        <div class="text-xs text-gray-500 mb-2">
-          Aditima Joint Stock Company
+      <div class="page-section">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Working Relationship</span>
+            <div class="card-actions"></div>
+          </div>
+          <div class="card-body">
+            
+            <div class="wr-switcher-grid" id="wrSwitcherGrid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: WR Switcher + Organization -->
+      <div class="grid-2 mb-12">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Contract Information</span>
+            <div class="card-actions">
+              <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+              <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="field-grid field-grid-3">
+              <div><div class="field-label">Legal Entity</div><div class="field-val" id="contractLegalEntity">VNG Group JSC</div></div>
+              <div><div class="field-label">Type</div><div class="chip orange" id="contractType">EMPLOYEE</div></div>
+              <div><div class="field-label">Employee Code</div><div class="field-val" id="contractEmployeeCode">VG-19283</div></div>
+              <div><div class="field-label">Employee Type</div><div class="field-val" id="contractEmployeeType">Full Time</div></div>
+              <div><div class="field-label">Onboarding Date</div><div class="field-val" id="contractOnboardingDate">15/01/2020</div></div>
+              <div><div class="field-label">Onboarding End Date</div><div class="field-val" id="contractOnboardingEndDate">15/07/2020</div></div>
+              <div><div class="field-label">Gross Salary</div><div class="field-val" id="contractGrossSalary">37M</div></div>
+              <div><div class="field-label">Basic Salary</div><div class="field-val" id="contractBasicSalary">27M</div></div>
+              <div><div class="field-label">VBonus</div><div class="field-val" id="contractVBonus">10M</div></div>
+              <div><div class="field-label">Job Title</div><div class="field-val" id="contractJobTitle">Software Engineer</div></div>
+              <div><div class="field-label">Position</div><div class="field-val" id="contractPosition">Software Engineer L1</div></div>
+              <div><div class="field-label">Work Email</div><div class="field-val" id="contractWorkEmail">nguyen.a@abccorp.vn</div></div>
+              <div><div class="field-label">Join Date</div><div class="field-val" id="contractJoinDate">03/09/2013</div></div>
+              <div><div class="field-label">End Date</div><div class="field-val" id="contractEndDate"></div></div>
+              <div><div class="field-label">Status</div><div class="chip green" id="contractStatus">Active</div></div>
+              <div><div class="field-label">Seniority</div><div class="field-val" id="contractSeniority">3 years 4 months 12 days</div></div>
+              <div><div class="field-label">Employee Class</div><div class="chip blue" id="contractEmployeeClass">Permanent</div></div>
+              <div><div class="field-label">Contract Type</div><div class="chip blue" id="contractContractType">Labour Contract Unlimited</div></div>
+              <div><div class="field-label">Working Location</div><div class="field-val" id="contractLocation">VNG Campus</div></div>
+              <div><div class="field-label">Work Schedule</div><div class="field-val" id="contractWorkSchedule">Mon-Fri, 8:30 - 17:30</div></div>
+              <div><div class="field-label">Country</div><div class="field-val" id="contractCountry">Vietnam</div></div>
+            </div>
+          </div>
         </div>
 
-        <div class="h-2 bg-orange-500 rounded-full mt-6"></div>
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Assignment</span>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="filter-select dept-select assignment-select" id="assignmentSelect">
+                <svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h9M3 15h6"/></svg>
+                <select id="assignmentFilter" class="dept-native-select">
+                  <option value="software_engineer" selected>Software Engineer - FTE 0.6</option>
+                  <option value="senior_product_engineer">Senior Product Engineer - FTE 0.2</option>
+                  <option value="consultant_manager">Consultant Manager - FTE 0.2</option>
+                </select>
+                <span id="assignmentDisplay" class="dept-display">Software Engineer L1</span>
+                <span class="select-caret">▼</span>
+                <div class="dept-options" id="assignmentOptions"></div>
+              </div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="field-grid field-grid-2" style="margin-bottom:12px">
+              <div><div class="field-label">Job Title</div><div class="field-val" id="assignmentJobTitle">Senior Software Engineer</div></div>
+              <div><div class="field-label">Position</div><div class="field-val" id="assignmentPosition">Senior Software Engineer</div></div>
+              <div><div class="field-label">Start Date</div><div class="field-val" id="assignmentStartDate">15/01/2020</div></div>
+              <div><div class="field-label">End Date</div><div class="field-val" id="assignmentEndDate"></div></div>
+            </div>
+      
+            <div class="field-grid field-grid-2" style="margin-bottom:12px">
+              <div><div class="field-label">Business Unit</div><div class="field-val" id="orgBusinessUnit">INCT</div></div>
+              <div><div class="field-label">Department</div><div class="field-val" id="orgDepartment">A4B</div></div>
+              <div><div class="field-label">Team</div><div class="field-val" id="orgTeam">DataBase</div></div>
+              <div><div class="field-label">Working Location</div><div class="field-val" id="orgWorkingLocation">VNG Campus</div></div>
+            </div>
+            <div class="sect-divider"></div>
+            <div style="margin-top:12px"><div class="field-label">Line Manager</div></div>
+            <div class="mgr-card" id="orgManagerCard">
+              <div class="mgr-avatar" id="orgManagerAvatar">TN</div>
+              <div>
+                <div class="mgr-name" id="orgManagerName">Trần Văn Nam</div>
+                <div class="mgr-role" id="orgManagerRole">Engineering Manager</div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px"><div class="field-label">Direct Reports</div></div>
+            <div class="report-list" id="orgReportList">
+              <div class="mgr-card">
+                <div class="mgr-avatar">HL</div>
+                <div>
+                  <div class="mgr-name">Hoàng Linh</div>
+                  <div class="mgr-role">Backend Engineer</div>
+                </div>
+              </div>
+              <div class="mgr-card">
+                <div class="mgr-avatar">TM</div>
+                <div>
+                  <div class="mgr-name">Trần Minh</div>
+                  <div class="mgr-role">Data Engineer</div>
+                </div>
+              </div>
+              <div class="mgr-card">
+                <div class="mgr-avatar">QT</div>
+                <div>
+                  <div class="mgr-name">Quốc Thịnh</div>
+                  <div class="mgr-role">QA Engineer</div>
+                </div>
+              </div>
+              <div class="report-more">+2 more</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: Compensation + Performance -->
+      <div class="grid-2 mb-12">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Compensation</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <select class="perf-year-select" id="compYearSelect" onchange="filterCompBySelect(this)">
+                <option value="2025" selected>2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="summary-strip">
+              <div class="summary-chip">
+                <div class="summary-chip-label">Annual Package</div>
+                <div class="summary-chip-value" id="compAnnualPackage">120M VND</div>
+                <div class="summary-chip-note">Base + Variable + Benefits</div>
+              </div>
+              <div class="summary-chip">
+                <div class="summary-chip-label">Next Review</div>
+                <div class="summary-chip-value" id="compNextReview">01/07/2026</div>
+                <div class="summary-chip-note">Annual compensation cycle</div>
+              </div>
+              <div class="summary-chip">
+                <div class="summary-chip-label">Healthy Package</div>
+                <div class="summary-chip-value" id="compViewMode">60M</div>
+                <div class="summary-chip-note">Annual health benefits</div>
+              </div>
+            </div>
+            <div class="grid-4" style="margin-bottom:14px">
+              <div class="stat-card">
+                <div class="stat-label">Base Salary</div>
+                <div class="stat-val" id="compBaseSalary">27M</div>
+                <div class="stat-sub" id="compBaseSub">VND / tháng</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Allowance</div>
+                <div class="stat-val" id="compAllowance">1.6M</div>
+                <div class="stat-sub pos" id="compAllowanceYoY">+8% YoY</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Bonus YTD</div>
+                <div class="stat-val" id="compBonus">8.4M</div>
+                <div class="stat-sub pos" id="compBonusYoY">+10% YoY</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Salary</div>
+                <div class="stat-val" id="compTotalSalary">37M</div>
+                <div class="stat-sub" id="compTotalSalaryNote">Base + Allowance + Bonus</div>
+              </div>
+            </div>
+            <div class="comp-line-wrap" id="compLineWrap">
+              <div class="comp-line-head">
+                <span class="line-caption" id="compRangeLabel">Total Salary Trend (Yearly)</span>
+                <span class="chip orange" id="compDelta">+0.0%</span>
+              </div>
+              <svg class="comp-chart" viewBox="0 0 520 170" preserveAspectRatio="none" aria-label="Compensation trend line chart">
+                <line class="comp-grid-line" x1="16" y1="22" x2="504" y2="22"></line>
+                <line class="comp-grid-line" x1="16" y1="66" x2="504" y2="66"></line>
+                <line class="comp-grid-line" x1="16" y1="110" x2="504" y2="110"></line>
+                <line class="comp-grid-line" x1="16" y1="150" x2="504" y2="150"></line>
+                <polyline class="comp-line-path" id="compLinePath" points=""></polyline>
+                <g id="compPointGroup"></g>
+              </svg>
+              <div class="comp-axis" id="compAxisLabels"></div>
+              <div class="comp-values" id="compValueLabels"></div>
+              <div class="comp-tooltip" id="compTooltip">
+                <div class="t-date" id="compTooltipDate"></div>
+                <div class="t-val" id="compTooltipValue"></div>
+                <div class="t-delta" id="compTooltipDelta"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Performance</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <select class="perf-year-select" id="perfYearSelect" onchange="filterPerfBySelect(this)">
+                <option value="all" selected>All</option>
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+              </select>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="summary-strip">
+              <div class="summary-chip">
+                <div class="summary-chip-label">Current Rating</div>
+                <div class="summary-chip-value" id="perfCurrentRating">Exceeds Expectations</div>
+                <div class="summary-chip-note">2025 review cycle</div>
+              </div>
+              <div class="summary-chip">
+                <div class="summary-chip-label">Goals Progress</div>
+                <div class="summary-chip-value" id="perfGoalsProgress">3/4 On Track</div>
+                <div class="summary-chip-note" id="perfGoalsSub">75% goals progressing as planned</div>
+              </div>
+              <div class="summary-chip">
+                <div class="summary-chip-label">Performance Access</div>
+                <div class="summary-chip-value" id="perfAccessMode">Manager + HR</div>
+                <div class="summary-chip-note">Role-based visibility enabled</div>
+              </div>
+            </div>
+            <div class="perf-list" id="perfList">
+              <div class="perf-row perf-year-row is-active" data-year="2025" onclick="selectPerfYear('2025')">
+                <span class="perf-year">2025</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2025">--%</span>
+                  <span class="perf-grade" data-perf-grade="2025">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2024" onclick="selectPerfYear('2024')">
+                <span class="perf-year">2024</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2024">--%</span>
+                  <span class="perf-grade" data-perf-grade="2024">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2023" onclick="selectPerfYear('2023')">
+                <span class="perf-year">2023</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2023">--%</span>
+                  <span class="perf-grade" data-perf-grade="2023">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2022" onclick="selectPerfYear('2022')">
+                <span class="perf-year">2022</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2022">--%</span>
+                  <span class="perf-grade" data-perf-grade="2022">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2021" onclick="selectPerfYear('2021')">
+                <span class="perf-year">2021</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2021">--%</span>
+                  <span class="perf-grade" data-perf-grade="2021">--</span>
+                </div>
+              </div>
+              <div class="perf-row perf-year-row" data-year="2020" onclick="selectPerfYear('2020')">
+                <span class="perf-year">2020</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="perf-kpi-rate" data-perf-rate="2020">--%</span>
+                  <span class="perf-grade" data-perf-grade="2020">--</span>
+                </div>
+              </div>
+            </div>
+            <div class="bar-section" id="barSection">
+              <div id="perfKpiTitle" style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">KPI Performance 2023</div>
+              <div id="perfKpiRows"></div>
+            </div>
+          </div>
+        </div>
+      </div>    
+          <!-- ROW 4: Snapshot + Learning -->
+          <div class="grid-2 mb-12">
+            <div class="card">
+              <div class="card-head">
+                <span class="card-title">Capability Radar</span>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <select class="radar-year-select" id="radarYearSelect" onchange="filterRadarBySelect(this)">
+                    <option value="all" selected>All</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                  </select>
+                  <div class="card-actions">
+                    <div class="c-btn" title="View quick actions"><svg viewBox="0 0 20 20"><path d="M4 10h12M4 6h12M4 14h12"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="radar-wrap" id="radarWrap">
+                  <svg class="radar-chart" id="radarChart" viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" aria-label="Capability radar chart">
+                    <circle class="radar-grid" cx="180" cy="180" r="120" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="96" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="72" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="48" fill="none"></circle>
+                    <circle class="radar-grid" cx="180" cy="180" r="24" fill="none"></circle>
+
+                    <line class="radar-axis" x1="180" y1="180" x2="180" y2="60"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="95.15"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="300" y2="180"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="264.85"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="180" y2="300"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="264.85"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="60" y2="180"></line>
+                    <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="95.15"></line>
+
+                    <polygon class="radar-self" id="radarSelfPolygon" points=""></polygon>
+                    <polygon class="radar-manager" id="radarManagerPolygon" points=""></polygon>
+                    <g id="radarSelfPoints"></g>
+                    <g id="radarManagerPoints"></g>
+
+                    <text class="radar-label" x="180" y="46" text-anchor="middle">Leadership</text>
+                    <text class="radar-label" x="274" y="92" text-anchor="start">Adaptability</text>
+                    <text class="radar-label" x="312" y="184" text-anchor="start">Relationships</text>
+                    <text class="radar-label" x="270" y="280" text-anchor="start">Analytical</text>
+                    <text class="radar-label" x="180" y="322" text-anchor="middle">Integrity</text>
+                    <text class="radar-label" x="90" y="280" text-anchor="end">Teamwork</text>
+                    <text class="radar-label" x="48" y="184" text-anchor="end">Decision</text>
+                    <text class="radar-label" x="90" y="92" text-anchor="end">Communication</text>
+                  </svg>
+                  <div class="radar-tooltip" id="radarTooltip">
+                    <div class="t-meta" id="radarTooltipMeta"></div>
+                    <div class="t-val" id="radarTooltipVal"></div>
+                  </div>
+                  <div class="radar-legend">
+                    <span class="self"><i></i> Self</span>
+                    <span class="mgr"><i></i> Manager</span>
+                  </div>
+                </div>
+                <div class="radar-compare-wrap" id="radarCompareWrap"></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <span class="card-title">Learning & Certification</span>
+                <div class="card-actions">
+                  <div class="c-btn" title="Training details"><svg viewBox="0 0 20 20"><path d="M4 4h12v12H4z"/></svg></div>
+                </div>
+              </div>
+              <div class="card-body">
+
+                <div class="learn-block">
+                  <div class="learn-title">Education</div>
+                  <div class="learn-list" id="learningEducationList">
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">Dai hoc FPT</div>
+                        <div class="learn-note">Bachelor of Software Engineering</div>
+                      </div>
+                      <div class="learn-time">2017 - 2021</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="learn-block">
+                  <div class="learn-title">Additional Certifications</div>
+                  <div class="learn-list" id="learningCertList">
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">AWS Cloud Practitioner</div>
+                        <div class="learn-note">Amazon Web Services</div>
+                      </div>
+                      <div class="learn-time">2020</div>
+                    </div>
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">Coursera Project Management</div>
+                        <div class="learn-note">Google Professional Certificate</div>
+                      </div>
+                      <div class="learn-time">2021</div>
+                    </div>
+                    <div class="learn-item">
+                      <div>
+                        <div class="learn-name">Scrum Fundamentals Certified</div>
+                        <div class="learn-note">SCRUMstudy</div>
+                      </div>
+                      <div class="learn-time">2022</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      <!-- ROW 4: History + WR Timeline -->
+      <div class="grid-2 mb-12">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee History</span>
+            <div style="display:flex;align-items:center;gap:8px">
+
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="tl-wrap">
+                <div class="tl-track"></div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-header">
+                    <span class="tl-title">Senior Product Engineer</span>
+                    
+                  </div>
+                  <div class="tl-sub">Zalo Product Team · Zalo</div>
+                  <div class="tl-date">01/01/2021 – Present</div>
+                </div>
+              </div>
+              <div class="tl-wrap">
+                <div class="tl-track"></div>
+                <div class="tl-item">
+                  <div class="tl-dot"></div>
+                  <div class="tl-header">
+                    <span class="tl-title">Consultant Manager</span>
+                  
+                  </div>
+                  <div class="tl-sub">ZNS Team · Zalo</div>
+                  <div class="tl-date">01/01/2021 – Present</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tl-wrap" style="margin-top:10px">
+              <div class="tl-track"></div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header">
+                  <span class="tl-title">Senior Software Engineer</span>
+                  <span class="tl-badge">Promotion</span>
+                </div>
+                <div class="tl-sub">Core Game Services · VNG Game</div>
+                <div class="tl-date">01/01/2017 – 31/12/2018</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header">
+                  <span class="tl-title">Junior Software Engineer</span>
+                  <span class="tl-badge">Staff Movement</span>
+                </div>
+                <div class="tl-sub">Game Platform Team · VNG Game</div>
+                <div class="tl-date">01/01/2016 – 31/12/2016</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header">
+                  <span class="tl-title">Junior Software Engineer</span>
+                  <span class="tl-badge">Promotion</span>
+                </div>
+                <div class="tl-sub">Core Engineering · VNG Corp</div>
+                <div class="tl-date">01/01/2015 – 31/12/2015</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot gray"></div>
+                <div class="tl-header"><span class="tl-title">Fresher Software Engineer</span></div>
+                <div class="tl-sub">Engineering Trainee Program · VNG Corp</div>
+                <div class="tl-date">01/01/2013 – 31/12/2014</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee TimeLine</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="widget-filters">
+                <span class="filter-btn active" onclick="filterWR(this, 'all')">All</span>
+              </div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="wr-tl-wrap">
+              <div class="wr-row">
+                <span class="wr-label">VNG Corp</span>
+                <div class="wr-bar-area">
+                  <div class="wr-bar" style="left:0;right:auto;width:22%"><span>2013 → 2015</span></div>
+                </div>
+              </div>
+              <div class="wr-row">
+                <span class="wr-label">VNG Game</span>
+                <div class="wr-bar-area">
+                  <div class="wr-bar" style="left:22%;right:auto;width:20%"><span>2015 → 2018</span></div>
+                </div>
+              </div>
+              <div class="wr-row">
+                <span class="wr-label">ZaloPay</span>
+                <div class="wr-bar-area">
+                  <div class="wr-bar" style="left:64%;right:auto;width:32%;background:var(--teal)"><span>2021 → Now</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="wr-years">
+              <span>2013</span><span>2015</span><span>2017</span><span>2019</span><span>2021</span><span>2023</span><span>2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 5: Time + Attendance (full width) -->
+      <div class="page-section">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Employee Time & Attendance</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="widget-filters">
+                <span class="filter-btn active" onclick="filterTime(this, 'month')">Current Month</span>
+                <span class="filter-btn" onclick="filterTime(this, 'annual')">Current Year</span>
+              </div>
+              <div class="card-actions">
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/></svg></div>
+                <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="time-grid">
+              <div class="stat-card">
+                <div class="stat-label">Working Days</div>
+                <div class="stat-val" id="timeWorkingDays">22</div>
+                <div class="stat-sub" id="timeWorkingDaysSub">April 2025</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Present</div>
+                <div class="stat-val" id="timePresent">21</div>
+                <div class="stat-sub pos" id="timePresentSub">95.5% attendance</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Leave Used</div>
+                <div class="stat-val" id="timeLeaveUsed">3</div>
+                <div class="stat-sub" id="timeLeaveSub">/ 12 days remaining</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">OT Hours</div>
+                <div class="stat-val" id="timeOtHours">14h</div>
+                <div class="stat-sub neg" id="timeOtSub">–2h vs monthly avg</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
 
     </div>
-
-  </main>
-
+  </div>
 </div>
 
-</body>
-</html>
+<script>
+// Filter handlers with proper button styling
+function filterCompBySelect(selectEl) {
+  renderCompSummary(selectEl.value);
+}
+
+let compSummaryByYear = {
+  '2025': {
+    baseSalary: '27M',
+    baseSub: 'VND / thang',
+    allowance: '1.6M',
+    allowanceYoY: '+8% YoY',
+    bonus: '8.4M',
+    bonusYoY: '+10% YoY',
+    totalSalary: '37M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
+  },
+  '2024': {
+    baseSalary: '26M',
+    baseSub: 'VND / thang',
+    allowance: '1.4M',
+    allowanceYoY: '+7% YoY',
+    bonus: '7.6M',
+    bonusYoY: '+9% YoY',
+    totalSalary: '35M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
+  },
+  '2023': {
+    baseSalary: '24.2M',
+    baseSub: 'VND / thang',
+    allowance: '1.2M',
+    allowanceYoY: '+6% YoY',
+    bonus: '6.8M',
+    bonusYoY: '+8% YoY',
+    totalSalary: '32.2M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
+  },
+  '2022': {
+    baseSalary: '22M',
+    baseSub: 'VND / thang',
+    allowance: '1.1M',
+    allowanceYoY: '+5% YoY',
+    bonus: '6.2M',
+    bonusYoY: '+7% YoY',
+    totalSalary: '29.3M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
+  },
+  '2021': {
+    baseSalary: '20M',
+    baseSub: 'VND / thang',
+    allowance: '1.0M',
+    allowanceYoY: '+4% YoY',
+    bonus: '5.5M',
+    bonusYoY: '+6% YoY',
+    totalSalary: '26.5M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
+  }
+};
+
+function renderCompSummary(year) {
+  const summary = compSummaryByYear[year] || compSummaryByYear['2025'];
+  const baseSalary = document.getElementById('compBaseSalary');
+  const baseSub = document.getElementById('compBaseSub');
+  const allowance = document.getElementById('compAllowance');
+  const allowanceYoY = document.getElementById('compAllowanceYoY');
+  const bonus = document.getElementById('compBonus');
+  const bonusYoY = document.getElementById('compBonusYoY');
+  const totalSalary = document.getElementById('compTotalSalary');
+  const totalSalaryNote = document.getElementById('compTotalSalaryNote');
+
+  if (!baseSalary || !baseSub || !allowance || !allowanceYoY || !bonus || !bonusYoY || !totalSalary || !totalSalaryNote) return;
+
+  baseSalary.textContent = summary.baseSalary;
+  baseSub.textContent = summary.baseSub;
+  allowance.textContent = summary.allowance;
+  allowanceYoY.textContent = summary.allowanceYoY;
+  bonus.textContent = summary.bonus;
+  bonusYoY.textContent = summary.bonusYoY;
+  totalSalary.textContent = summary.totalSalary;
+  totalSalaryNote.textContent = summary.totalSalaryNote;
+}
+
+let compSeries = {
+  year: {
+    title: 'Total Salary Trend (Yearly)',
+    labels: ['2021', '2022', '2023', '2024', '2025'],
+    dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'],
+    values: [26.5, 29.3, 32.2, 35, 37],
+    unit: 'M'
+  }
+};
+
+function renderCompLine(type) {
+  const series = compSeries[type] || compSeries.year;
+  const linePath = document.getElementById('compLinePath');
+  const pointGroup = document.getElementById('compPointGroup');
+  const wrap = document.getElementById('compLineWrap');
+  const tooltip = document.getElementById('compTooltip');
+  const tooltipDate = document.getElementById('compTooltipDate');
+  const tooltipValue = document.getElementById('compTooltipValue');
+  const tooltipDelta = document.getElementById('compTooltipDelta');
+  const axis = document.getElementById('compAxisLabels');
+  const values = document.getElementById('compValueLabels');
+  const rangeLabel = document.getElementById('compRangeLabel');
+  const delta = document.getElementById('compDelta');
+  if (!linePath || !pointGroup || !wrap || !tooltip || !tooltipDate || !tooltipValue || !tooltipDelta || !axis || !values || !rangeLabel || !delta) return;
+
+  const min = Math.min(...series.values);
+  const max = Math.max(...series.values);
+  const spread = Math.max(max - min, 1);
+  const left = 24;
+  const right = 496;
+  const top = 24;
+  const bottom = 146;
+  const step = (right - left) / Math.max(series.values.length - 1, 1);
+
+  const points = series.values.map((val, idx) => {
+    const x = left + (step * idx);
+    const normalized = (val - min) / spread;
+    const y = bottom - (normalized * (bottom - top));
+    return { x, y, val };
+  });
+
+  linePath.setAttribute('points', points.map(p => `${p.x},${p.y}`).join(' '));
+  pointGroup.innerHTML = points.map((p, idx) => `<circle class="comp-point" data-idx="${idx}" cx="${p.x}" cy="${p.y}" r="4"></circle>`).join('');
+  axis.innerHTML = series.labels.map(label => `<span>${label}</span>`).join('');
+  values.innerHTML = series.values.map(val => `<span>${val}${series.unit}</span>`).join('');
+  rangeLabel.textContent = series.title;
+
+  const first = series.values[0];
+  const last = series.values[series.values.length - 1];
+  const percent = ((last - first) / first) * 100;
+  const sign = percent >= 0 ? '+' : '';
+  delta.textContent = `${sign}${percent.toFixed(1)}%`;
+
+  tooltip.classList.remove('show');
+
+  const chart = linePath.ownerSVGElement;
+  const chartRect = chart.getBoundingClientRect();
+  const chartWidth = chartRect.width;
+  const chartHeight = chartRect.height;
+
+  const pointEls = pointGroup.querySelectorAll('.comp-point');
+  pointEls.forEach((el, idx) => {
+    const showTooltip = () => {
+      const current = series.values[idx];
+      const prev = idx > 0 ? series.values[idx - 1] : null;
+      const pointPct = prev ? (((current - prev) / prev) * 100) : 0;
+      const pointSign = pointPct >= 0 ? '+' : '';
+
+      tooltipDate.textContent = series.dates[idx];
+      tooltipValue.textContent = `${series.labels[idx]}: ${current}${series.unit}`;
+      tooltipDelta.textContent = idx === 0
+        ? 'Change vs previous: N/A'
+        : `Change vs previous: ${pointSign}${pointPct.toFixed(1)}%`;
+
+      const cx = Number(el.getAttribute('cx'));
+      const cy = Number(el.getAttribute('cy'));
+      const x = (cx / 520) * chartWidth;
+      const y = (cy / 170) * chartHeight;
+
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+      tooltip.classList.add('show');
+    };
+
+    el.addEventListener('mouseenter', showTooltip);
+    el.addEventListener('mousemove', showTooltip);
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function filterPerfBySelect(selectEl) {
+  const type = selectEl.value;
+  
+  const perfList = document.getElementById('perfList');
+  const barSection = document.getElementById('barSection');
+  const yearRows = perfList.querySelectorAll('.perf-year-row');
+  
+  if (type === 'all') {
+    perfList.classList.add('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => row.style.display = 'flex');
+  } else {
+    perfList.classList.remove('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => {
+      row.style.display = row.getAttribute('data-year') === type ? 'flex' : 'none';
+      if (row.getAttribute('data-year') === type) row.classList.add('is-active');
+      else row.classList.remove('is-active');
+    });
+    selectPerfYear(type);
+  }
+}
+
+function filterPerf(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  
+  const perfList = document.getElementById('perfList');
+  const barSection = document.getElementById('barSection');
+  const yearRows = perfList.querySelectorAll('.perf-year-row');
+  
+  if (type === 'all') {
+    perfList.classList.add('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => row.style.display = 'flex');
+  } else if (type === 'current') {
+    perfList.classList.remove('all-view');
+    barSection.classList.remove('hidden');
+    yearRows.forEach(row => {
+      row.style.display = row.getAttribute('data-year') === '2023' ? 'flex' : 'none';
+      if (row.getAttribute('data-year') === '2023') row.classList.add('is-active');
+      else row.classList.remove('is-active');
+    });
+    selectPerfYear('2023');
+  }
+  console.log('Performance filter:', type);
+}
+
+let perfKpiByYear = {
+  '2025': [
+    { label: 'Revenue', value: 94, color: 'orange' },
+    { label: 'Jira On-time', value: 91, color: 'teal' },
+    { label: 'Task Throughput', value: 88, color: 'amber' },
+    { label: 'Bug Quality', value: 92, color: 'teal' }
+  ],
+  '2024': [
+    { label: 'Revenue', value: 92, color: 'orange' },
+    { label: 'Jira On-time', value: 89, color: 'teal' },
+    { label: 'Task Throughput', value: 86, color: 'amber' },
+    { label: 'Bug Quality', value: 90, color: 'teal' }
+  ],
+  '2023': [
+    { label: 'Revenue', value: 91, color: 'orange' },
+    { label: 'Jira On-time', value: 87, color: 'teal' },
+    { label: 'Task Throughput', value: 84, color: 'amber' },
+    { label: 'Bug Quality', value: 89, color: 'teal' }
+  ],
+  '2022': [
+    { label: 'Revenue', value: 86, color: 'orange' },
+    { label: 'Jira On-time', value: 82, color: 'teal' },
+    { label: 'UAT Pass Rate', value: 80, color: 'amber' },
+    { label: 'Customer Feedback', value: 85, color: 'teal' }
+  ],
+  '2021': [
+    { label: 'Feature Delivery', value: 79, color: 'orange' },
+    { label: 'Jira On-time', value: 77, color: 'teal' },
+    { label: 'Bug Reopen Rate', value: 72, color: 'amber' },
+    { label: 'Code Review SLA', value: 81, color: 'teal' }
+  ],
+  '2020': [
+    { label: 'Revenue', value: 74, color: 'orange' },
+    { label: 'Task Completion', value: 71, color: 'teal' },
+    { label: 'Bug Quality', value: 68, color: 'amber' },
+    { label: 'Escalation Rate', value: 76, color: 'teal' }
+  ]
+};
+
+function getPerfGradeByRate(rate) {
+  if (rate >= 90) return { label: 'A+', cls: 'a-plus' };
+  if (rate >= 85) return { label: 'A', cls: 'a' };
+  if (rate >= 80) return { label: 'A-', cls: 'a-minus' };
+  if (rate >= 75) return { label: 'B+', cls: 'b-plus' };
+  if (rate >= 70) return { label: 'B', cls: 'b' };
+  return { label: 'B-', cls: 'b-minus' };
+}
+
+function renderPerfYearRatings() {
+  Object.keys(perfKpiByYear).forEach((year) => {
+    const list = perfKpiByYear[year] || [];
+    if (!list.length) return;
+    const avg = list.reduce((sum, item) => sum + Number(item.value || 0), 0) / list.length;
+    const grade = getPerfGradeByRate(avg);
+
+    const rateEl = document.querySelector(`[data-perf-rate="${year}"]`);
+    const gradeEl = document.querySelector(`[data-perf-grade="${year}"]`);
+    if (rateEl) rateEl.textContent = `${Math.round(avg)}%`;
+    if (gradeEl) {
+      gradeEl.textContent = grade.label;
+      gradeEl.className = `perf-grade ${grade.cls}`;
+    }
+  });
+}
+
+function renderPerfKpi(year) {
+  const title = document.getElementById('perfKpiTitle');
+  const rows = document.getElementById('perfKpiRows');
+  const kpis = perfKpiByYear[year] || perfKpiByYear['2023'];
+  if (!title || !rows) return;
+
+  title.textContent = `KPI Performance ${year}`;
+  rows.innerHTML = kpis.map(kpi => `
+    <div class="bar-row">
+      <span class="bar-label">${kpi.label}</span>
+      <div class="bar-track"><div class="bar-fill ${kpi.color}" style="width:${kpi.value}%"></div></div>
+      <span class="bar-pct">${kpi.value}%</span>
+    </div>
+  `).join('');
+}
+
+function selectPerfYear(year) {
+  document.querySelectorAll('.perf-year-row').forEach(row => {
+    row.classList.toggle('is-active', row.getAttribute('data-year') === year);
+  });
+  renderPerfKpi(year);
+}
+
+const radarAxes = [
+  'Leadership',
+  'Adaptability',
+  'Relationships',
+  'Analytical',
+  'Integrity',
+  'Teamwork',
+  'Decision',
+  'Communication'
+];
+
+let radarSeries = {
+  '2023': {
+    self: [4, 4, 2, 2, 4, 2, 4, 4],
+    manager: [3, 3, 4, 4, 3, 5, 4, 3]
+  },
+  '2022': {
+    self: [3.5, 3.8, 2.5, 2.2, 3.8, 2.8, 3.7, 3.6],
+    manager: [3.2, 3.1, 3.8, 3.6, 3.1, 4.5, 3.8, 3.0]
+  },
+  '2021': {
+    self: [3.2, 3.3, 2.3, 2.0, 3.4, 2.6, 3.2, 3.1],
+    manager: [3.0, 2.9, 3.5, 3.3, 2.9, 4.2, 3.4, 2.8]
+  },
+  '2020': {
+    self: [2.8, 3.0, 2.0, 1.8, 3.0, 2.2, 2.8, 2.9],
+    manager: [2.7, 2.6, 3.2, 3.0, 2.7, 3.9, 3.0, 2.6]
+  }
+};
+
+function getRadarPoint(index, value) {
+  const center = 180;
+  const maxRadius = 120;
+  const angle = (-Math.PI / 2) + (index * ((Math.PI * 2) / radarAxes.length));
+  const radius = (Math.max(0, Math.min(5, value)) / 5) * maxRadius;
+  return {
+    x: center + (Math.cos(angle) * radius),
+    y: center + (Math.sin(angle) * radius)
+  };
+}
+
+const workerProfileBase = {
+  workerId: 'W-001',
+  fullNameVi: 'Nguyen Van A',
+  fullNameEn: 'Nguyen Van A',
+  preferredName: 'Alex Nguyen',
+  country: 'Vietnam',
+  dob: '15/03/1990',
+  email: 'nguyen.a@gmail.com',
+  phone: '+84 912 345 678',
+  gender: 'Male',
+  maritalStatus: 'Married',
+  currentAddress: '123 Nguyen Hue, D1, HCMC',
+  permanentAddress: '456 Le Loi, D3, HCMC',
+  emergency: { name: 'Nguyen Thi B', relationship: 'Spouse', phone: '+84 909 111 222' },
+  documents: [
+    { name: 'Citizen ID', meta: '079190xxxx · No expiry', badge: 'Verified', badgeClass: 'blue' },
+    { name: 'Passport', meta: 'Cxxxxxx · Expires 2030-12-31', badge: 'Exp 2030', badgeClass: 'orange' }
+  ],
+  visibleSections: 'All',
+  canEdit: 'Yes',
+  editScope: 'Contact, Skills'
+};
+
+const workingRelationships = {
+  employment_vn: {
+    name: 'ABC Corporation Vietnam',
+    code: 'ABC-VN',
+    country: 'Vietnam',
+    type: 'Employment (Full-time)',
+    status: 'ACTIVE',
+    badge: 'PRIMARY WR',
+    since: 'Jan 2020 (5yr 0mo)',
+    role: 'Senior Software Engineer',
+    department: 'Engineering',
+    manager: 'Tran Van B',
+    employeeNumber: 'EMP-VN-001',
+    period: '2020-01-15 to Present',
+    cardMeta1: 'Primary employment',
+    cardMeta2: 'HCM Office',
+    contract: {
+      legalEntity: 'ABC Corporation Vietnam',
+      type: 'EMPLOYMENT',
+      jobTitle: 'Senior Software Engineer',
+      position: 'Senior Software Engineer',
+      joinDate: '15/01/2020',
+      endDate: '',
+      status: 'Active',
+      seniority: '5 years 0 months',
+      employeeClass: 'Permanent',
+      contractType: 'Indefinite Term',
+      location: 'HCM Office',
+      workEmail: 'nguyen.a@abccorp.vn',
+      workSchedule: 'Mon-Fri, 8:30 - 17:30',
+      country: 'Vietnam'
+    },
+    benefits: [
+      { name: 'Premium Health Care', meta: 'Health · Enrolled', badge: 'Active', badgeClass: 'green' },
+      { name: 'Wellness Allowance', meta: 'Allowance · Annual budget', badge: '12M/year', badgeClass: 'blue' }
+    ],
+    performance: { currentRating: 'Exceeds Expectations', goalsProgress: '3/4 On Track', goalsSub: '75% goals progressing as planned' },
+    compensation: { annualPackage: '120M VND', nextReview: '01/07/2026', viewMode: '60M' },
+    time: { leaves: [{ name: 'Annual Leave', meta: 'Current balance', badge: '12 days', badgeClass: 'green' }, { name: 'Sick Leave', meta: 'Current balance', badge: '5 days', badgeClass: 'blue' }] },
+    assignments: [
+      { value: 'software_engineer', label: 'Software Engineer - FTE 0.6' },
+      { value: 'senior_product_engineer', label: 'Senior Product Engineer - FTE 0.4' }
+    ],
+    defaultAssignment: 'software_engineer'
+  },
+  secondment_sg: {
+    name: 'ABC Corporation Singapore',
+    code: 'ABC-SG',
+    country: 'Singapore',
+    type: 'Secondment',
+    status: 'ACTIVE',
+    badge: 'SECONDMENT',
+    since: 'Jul 2024 (0yr 9mo)',
+    role: 'Tech Lead Regional',
+    department: 'Regional Technology',
+    manager: 'John D',
+    employeeNumber: 'EMP-SG-042',
+    period: '2024-07-01 to Present',
+    cardMeta1: 'Cross-border assignment',
+    cardMeta2: 'Singapore Hub',
+    contract: {
+      legalEntity: 'ABC Corporation Singapore',
+      type: 'SECONDMENT',
+      jobTitle: 'Tech Lead Regional',
+      position: 'Regional Technology Lead',
+      joinDate: '01/07/2024',
+      endDate: '',
+      status: 'Active',
+      seniority: '9 months',
+      employeeClass: 'Secondment',
+      contractType: 'Secondment Addendum',
+      location: 'Singapore Hub',
+      workEmail: 'nguyen.a@abccorp.sg',
+      workSchedule: 'Mon-Fri, 9:00 - 18:00',
+      country: 'Singapore'
+    },
+    benefits: [
+      { name: 'Regional Mobility Package', meta: 'Mobility · Enrolled', badge: 'SG Relocation', badgeClass: 'orange' },
+      { name: 'Executive Medical', meta: 'Health · Enrolled', badge: 'Active', badgeClass: 'green' }
+    ],
+    performance: { currentRating: 'Leadership Track', goalsProgress: '4/5 On Track', goalsSub: '80% regional milestones achieved' },
+    compensation: { annualPackage: '168K SGD', nextReview: '01/07/2026', viewMode: '48K SGD' },
+    time: { leaves: [{ name: 'Annual Leave', meta: 'Current balance', badge: '14 days', badgeClass: 'green' }, { name: 'Regional Travel', meta: 'Business mobility', badge: '6 trips', badgeClass: 'blue' }] },
+    assignments: [
+      { value: 'regional_tech_lead', label: 'Tech Lead Regional - FTE 1.0' }
+    ],
+    defaultAssignment: 'regional_tech_lead'
+  },
+  consulting_history: {
+    name: 'XYZ Consulting',
+    code: 'XYZ-CONS',
+    country: 'Vietnam',
+    type: 'Contract',
+    status: 'UNACTIVE',
+    badge: 'HISTORICAL WR',
+    since: 'Jan 2018 - Dec 2019',
+    role: 'Tech Consultant',
+    department: 'Consulting',
+    manager: 'Le Minh',
+    employeeNumber: 'EMP-CN-118',
+    period: '2018-01-01 to 2019-12-31',
+    cardMeta1: 'Historical relationship',
+    cardMeta2: 'Completed contract',
+    contract: {
+      legalEntity: 'XYZ Consulting',
+      type: 'CONTRACT',
+      jobTitle: 'Tech Consultant',
+      position: 'Consulting Manager',
+      joinDate: '01/01/2018',
+      endDate: '31/12/2019',
+      status: 'Completed',
+      seniority: '2 years',
+      employeeClass: 'Contractor',
+      contractType: 'Fixed Term',
+      location: 'HCM Office',
+      workEmail: 'nguyen.a@xyzconsulting.vn',
+      workSchedule: 'Project Based',
+      country: 'Vietnam'
+    },
+    benefits: [
+      { name: 'Project Bonus', meta: 'Variable · Historical', badge: 'Closed', badgeClass: 'orange' }
+    ],
+    performance: { currentRating: 'Historical Snapshot', goalsProgress: '3/3 Delivered', goalsSub: 'Archived relationship for reference only' },
+    compensation: { annualPackage: '720M VND', nextReview: 'N/A', viewMode: '30M VND' },
+    time: { leaves: [{ name: 'Annual Leave', meta: 'Historical balance', badge: '0 days', badgeClass: 'blue' }] },
+    assignments: [
+      { value: 'consultant_manager', label: 'Consultant Manager - FTE 1.0' }
+    ],
+    defaultAssignment: 'consultant_manager'
+  }
+};
+
+let currentWrKey = 'employment_vn';
+
+const assignmentDataByRole = {
+  software_engineer: {
+    profile: {
+      name: 'Nguyen Van A',
+      code: 'Worker ID: W-001',
+      country: 'Vietnam',
+      dob: '15/03/1990',
+      email: 'nguyen.a@gmail.com',
+      phone: '+84 912 345 678',
+      skills: ['Python', 'AWS', 'React', 'System Design', 'Mentoring', 'Agile Delivery', 'Architecture Review']
+    },
+    contract: {
+      legalEntity: 'ABC Corporation Vietnam',
+      type: 'EMPLOYMENT',
+      jobTitle: 'Senior Software Engineer',
+      position: 'Senior Software Engineer',
+      workEmail: 'nguyen.a@abccorp.vn',
+      workSchedule: 'Mon-Fri, 8:30 - 17:30',
+      country: 'Vietnam',
+      joinDate: '15/01/2020',
+      endDate: '',
+      status: 'Active',
+      seniority: '5 years 0 months',
+      employeeClass: 'Permanent',
+      contractType: 'Indefinite Term',
+      location: 'HCM Office'
+    },
+    org: {
+      businessUnit: 'Technology',
+      department: 'Engineering',
+      team: 'Platform Team',
+      costCenter: 'CC-ENG-001',
+      manager: { avatar: 'TB', name: 'Tran Van B', role: 'Engineering Manager' },
+      reports: [
+        { avatar: 'DV', name: 'Ngo Van D', role: 'Software Engineer' },
+        { avatar: 'LT', name: 'Le Thu C', role: 'Backend Engineer' },
+        { avatar: 'PH', name: 'Pham Hoang E', role: 'QA Engineer' }
+      ],
+      more: 5
+    },
+    compSummaryByYear,
+    compSeries: compSeries.year,
+    perfKpiByYear,
+    radarSeries,
+    learning: {
+      education: [{ name: 'Ho Chi Minh City University of Technology', note: 'Bachelor of Computer Science', time: '2008 - 2012' }],
+      certs: [
+        { name: 'AWS Solutions Architect', note: 'Amazon Web Services', time: '2024' },
+        { name: 'Professional Scrum Master', note: 'Scrum.org', time: '2023' },
+        { name: 'Google Project Leadership', note: 'Coursera', time: '2022' }
+      ]
+    },
+    time: {
+      workingDays: '20', workingSub: 'April 2026',
+      present: '17', presentSub: '85% attendance',
+      leaveUsed: '4', leaveSub: '/ 12 days remaining',
+      otHours: '11h', otSub: '+1h vs monthly avg'
+    }
+  },
+  senior_product_engineer: {
+    profile: {
+      name: 'Nguyen Van A',
+      code: 'Worker ID: W-001',
+      country: 'Vietnam',
+      dob: '15/03/1990',
+      email: 'nguyen.a@gmail.com',
+      phone: '+84 912 345 678',
+      skills: ['Product Thinking', 'Roadmapping', 'Stakeholder Mgmt', 'SQL', 'Discovery', 'OKR Planning']
+    },
+    contract: {
+      legalEntity: 'ABC Corporation Vietnam', type: 'EMPLOYMENT', jobTitle: 'Senior Product Engineer', position: 'Senior Product Engineer',
+      workEmail: 'nguyen.a@abccorp.vn', workSchedule: 'Mon-Fri, 8:30 - 17:30', country: 'Vietnam',
+      joinDate: '01/01/2021', endDate: '', status: 'Active', seniority: '4 years 3 months 5 days',
+      employeeClass: 'Permanent', contractType: 'Indefinite Term', location: 'HCM Office'
+    },
+    org: {
+      businessUnit: 'Technology', department: 'Product', team: 'Growth Product Team', costCenter: 'CC-PD-220',
+      manager: { avatar: 'PL', name: 'Pham Lam', role: 'Director of Product' },
+      reports: [
+        { avatar: 'VN', name: 'Vũ Nam', role: 'Product Analyst' },
+        { avatar: 'TH', name: 'Tạ Hân', role: 'UX Researcher' }
+      ],
+      more: 1
+    },
+    compSummaryByYear: {
+      '2025': { baseSalary: '31M', baseSub: 'VND / tháng', allowance: '2.1M', allowanceYoY: '+9% YoY', bonus: '11.4M', bonusYoY: '+12% YoY', totalSalary: '44.5M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2024': { baseSalary: '29M', baseSub: 'VND / tháng', allowance: '1.9M', allowanceYoY: '+8% YoY', bonus: '10.3M', bonusYoY: '+11% YoY', totalSalary: '41.2M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2023': { baseSalary: '27M', baseSub: 'VND / tháng', allowance: '1.7M', allowanceYoY: '+7% YoY', bonus: '9.0M', bonusYoY: '+10% YoY', totalSalary: '37.7M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2022': { baseSalary: '24.5M', baseSub: 'VND / tháng', allowance: '1.5M', allowanceYoY: '+6% YoY', bonus: '8.0M', bonusYoY: '+9% YoY', totalSalary: '34.0M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2021': { baseSalary: '22M', baseSub: 'VND / tháng', allowance: '1.2M', allowanceYoY: '+5% YoY', bonus: '7.2M', bonusYoY: '+8% YoY', totalSalary: '30.4M', totalSalaryNote: 'Base + Allowance + Bonus' }
+    },
+    compSeries: { title: 'Total Salary Trend (Yearly)', labels: ['2021', '2022', '2023', '2024', '2025'], dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'], values: [30.4, 34.0, 37.7, 41.2, 44.5], unit: 'M' },
+    perfKpiByYear: {
+      '2025': [{ label: 'Product Impact', value: 95, color: 'orange' }, { label: 'Delivery Quality', value: 92, color: 'teal' }, { label: 'Cross-team Sync', value: 90, color: 'amber' }, { label: 'User Satisfaction', value: 94, color: 'teal' }],
+      '2024': [{ label: 'Product Impact', value: 92, color: 'orange' }, { label: 'Delivery Quality', value: 89, color: 'teal' }, { label: 'Cross-team Sync', value: 87, color: 'amber' }, { label: 'User Satisfaction', value: 90, color: 'teal' }],
+      '2023': [{ label: 'Product Impact', value: 89, color: 'orange' }, { label: 'Delivery Quality', value: 86, color: 'teal' }, { label: 'Cross-team Sync', value: 84, color: 'amber' }, { label: 'User Satisfaction', value: 88, color: 'teal' }],
+      '2022': [{ label: 'Product Impact', value: 85, color: 'orange' }, { label: 'Delivery Quality', value: 82, color: 'teal' }, { label: 'Cross-team Sync', value: 80, color: 'amber' }, { label: 'User Satisfaction', value: 83, color: 'teal' }],
+      '2021': [{ label: 'Product Impact', value: 81, color: 'orange' }, { label: 'Delivery Quality', value: 78, color: 'teal' }, { label: 'Cross-team Sync', value: 76, color: 'amber' }, { label: 'User Satisfaction', value: 79, color: 'teal' }],
+      '2020': [{ label: 'Product Impact', value: 76, color: 'orange' }, { label: 'Delivery Quality', value: 74, color: 'teal' }, { label: 'Cross-team Sync', value: 72, color: 'amber' }, { label: 'User Satisfaction', value: 75, color: 'teal' }]
+    },
+    radarSeries: {
+      '2023': { self: [4.5, 4.2, 4.4, 4.1, 4.3, 4.0, 4.2, 4.4], manager: [4.2, 4.0, 4.1, 4.0, 4.1, 3.9, 4.0, 4.1] },
+      '2022': { self: [4.1, 4.0, 4.2, 3.9, 4.0, 3.8, 4.0, 4.1], manager: [3.9, 3.8, 3.9, 3.7, 3.8, 3.7, 3.8, 3.9] },
+      '2021': { self: [3.8, 3.7, 3.9, 3.6, 3.7, 3.6, 3.7, 3.8], manager: [3.6, 3.5, 3.7, 3.5, 3.6, 3.4, 3.5, 3.6] },
+      '2020': { self: [3.4, 3.3, 3.5, 3.3, 3.4, 3.2, 3.3, 3.4], manager: [3.2, 3.1, 3.3, 3.1, 3.2, 3.0, 3.1, 3.2] }
+    },
+    learning: {
+      education: [{ name: 'RMIT Vietnam', note: 'Bachelor of Business Information Systems', time: '2011 - 2015' }],
+      certs: [
+        { name: 'Product Management Certificate', note: 'Reforge', time: '2022' },
+        { name: 'Design Thinking', note: 'IDEO U', time: '2023' }
+      ]
+    },
+    time: { workingDays: '22', workingSub: 'April 2025', present: '22', presentSub: '100% attendance', leaveUsed: '2', leaveSub: '/ 13 days remaining', otHours: '10h', otSub: '–6h vs monthly avg' }
+  },
+  consultant_manager: {
+    profile: {
+      name: 'Nguyen Van A',
+      code: 'Worker ID: W-001',
+      country: 'Vietnam',
+      dob: '15/03/1990',
+      email: 'nguyen.a@gmail.com',
+      phone: '+84 912 345 678',
+      skills: ['Client Consulting', 'Data Analysis', 'Communication', 'Presentation', 'CRM', 'Project Mgmt']
+    },
+    contract: {
+      legalEntity: 'XYZ Consulting', type: 'CONTRACT', jobTitle: 'Consultant Manager', position: 'Consultant Manager',
+      workEmail: 'nguyen.a@xyzconsulting.vn', workSchedule: 'Project Based', country: 'Vietnam',
+      joinDate: '01/01/2018', endDate: '31/12/2019', status: 'Completed', seniority: '2 years',
+      employeeClass: 'Contractor', contractType: 'Fixed Term', location: 'HCM Office'
+    },
+    org: {
+      businessUnit: 'Consulting', department: 'Consulting', team: 'Enterprise Consulting', costCenter: 'CC-CNS-3198',
+      manager: { avatar: 'LM', name: 'Le Minh', role: 'Head of Consulting' },
+      reports: [
+        { avatar: 'HA', name: 'Hà Anh', role: 'Consultant' },
+        { avatar: 'BT', name: 'Bảo Trâm', role: 'Business Analyst' },
+        { avatar: 'KH', name: 'Khánh Huy', role: 'Consultant' }
+      ],
+      more: 0
+    },
+    compSummaryByYear: {
+      '2025': { baseSalary: '29M', baseSub: 'VND / tháng', allowance: '1.8M', allowanceYoY: '+7% YoY', bonus: '10.0M', bonusYoY: '+9% YoY', totalSalary: '40.8M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2024': { baseSalary: '27.5M', baseSub: 'VND / tháng', allowance: '1.6M', allowanceYoY: '+6% YoY', bonus: '9.1M', bonusYoY: '+8% YoY', totalSalary: '38.2M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2023': { baseSalary: '25.5M', baseSub: 'VND / tháng', allowance: '1.4M', allowanceYoY: '+5% YoY', bonus: '8.2M', bonusYoY: '+8% YoY', totalSalary: '35.1M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2022': { baseSalary: '23.5M', baseSub: 'VND / tháng', allowance: '1.3M', allowanceYoY: '+5% YoY', bonus: '7.4M', bonusYoY: '+7% YoY', totalSalary: '32.2M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2021': { baseSalary: '21.5M', baseSub: 'VND / tháng', allowance: '1.1M', allowanceYoY: '+4% YoY', bonus: '6.5M', bonusYoY: '+6% YoY', totalSalary: '29.1M', totalSalaryNote: 'Base + Allowance + Bonus' }
+    },
+    compSeries: { title: 'Total Salary Trend (Yearly)', labels: ['2021', '2022', '2023', '2024', '2025'], dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'], values: [29.1, 32.2, 35.1, 38.2, 40.8], unit: 'M' },
+    perfKpiByYear: {
+      '2025': [{ label: 'Revenue', value: 90, color: 'orange' }, { label: 'Client Satisfaction', value: 93, color: 'teal' }, { label: 'Delivery SLA', value: 88, color: 'amber' }, { label: 'Renewal Rate', value: 91, color: 'teal' }],
+      '2024': [{ label: 'Revenue', value: 88, color: 'orange' }, { label: 'Client Satisfaction', value: 90, color: 'teal' }, { label: 'Delivery SLA', value: 86, color: 'amber' }, { label: 'Renewal Rate', value: 89, color: 'teal' }],
+      '2023': [{ label: 'Revenue', value: 85, color: 'orange' }, { label: 'Client Satisfaction', value: 88, color: 'teal' }, { label: 'Delivery SLA', value: 83, color: 'amber' }, { label: 'Renewal Rate', value: 86, color: 'teal' }],
+      '2022': [{ label: 'Revenue', value: 82, color: 'orange' }, { label: 'Client Satisfaction', value: 84, color: 'teal' }, { label: 'Delivery SLA', value: 80, color: 'amber' }, { label: 'Renewal Rate', value: 83, color: 'teal' }],
+      '2021': [{ label: 'Revenue', value: 79, color: 'orange' }, { label: 'Client Satisfaction', value: 81, color: 'teal' }, { label: 'Delivery SLA', value: 77, color: 'amber' }, { label: 'Renewal Rate', value: 80, color: 'teal' }],
+      '2020': [{ label: 'Revenue', value: 74, color: 'orange' }, { label: 'Client Satisfaction', value: 76, color: 'teal' }, { label: 'Delivery SLA', value: 72, color: 'amber' }, { label: 'Renewal Rate', value: 75, color: 'teal' }]
+    },
+    radarSeries: {
+      '2023': { self: [4.2, 4.4, 4.3, 3.8, 4.1, 4.5, 4.0, 4.4], manager: [4.0, 4.1, 4.0, 3.7, 3.9, 4.2, 3.8, 4.0] },
+      '2022': { self: [3.9, 4.1, 4.0, 3.6, 3.8, 4.2, 3.7, 4.0], manager: [3.7, 3.9, 3.8, 3.5, 3.6, 3.9, 3.5, 3.8] },
+      '2021': { self: [3.6, 3.8, 3.7, 3.4, 3.5, 3.9, 3.4, 3.7], manager: [3.4, 3.6, 3.5, 3.2, 3.3, 3.6, 3.2, 3.4] },
+      '2020': { self: [3.2, 3.5, 3.3, 3.0, 3.1, 3.6, 3.0, 3.4], manager: [3.0, 3.3, 3.1, 2.8, 2.9, 3.3, 2.8, 3.1] }
+    },
+    learning: {
+      education: [{ name: 'University of Economics HCMC', note: 'Bachelor of International Business', time: '2014 - 2018' }],
+      certs: [
+        { name: 'PMP', note: 'Project Management Institute', time: '2021' },
+        { name: 'Consultative Selling', note: 'LinkedIn Learning', time: '2023' }
+      ]
+    },
+    time: { workingDays: '22', workingSub: 'April 2025', present: '20', presentSub: '90.9% attendance', leaveUsed: '4', leaveSub: '/ 11 days remaining', otHours: '12h', otSub: '–4h vs monthly avg' }
+  },
+  regional_tech_lead: {
+    profile: {
+      name: 'Nguyen Van A',
+      code: 'Worker ID: W-001',
+      country: 'Vietnam',
+      dob: '15/03/1990',
+      email: 'nguyen.a@gmail.com',
+      phone: '+84 912 345 678',
+      skills: ['Regional Leadership', 'Architecture', 'Stakeholder Mgmt', 'Cloud Platform', 'Delivery Governance', 'Coaching']
+    },
+    contract: {
+      legalEntity: 'ABC Corporation Singapore', type: 'SECONDMENT', jobTitle: 'Tech Lead Regional', position: 'Regional Technology Lead',
+      workEmail: 'nguyen.a@abccorp.sg', workSchedule: 'Mon-Fri, 9:00 - 18:00', country: 'Singapore',
+      joinDate: '01/07/2024', endDate: '', status: 'Active', seniority: '9 months',
+      employeeClass: 'Secondment', contractType: 'Secondment Addendum', location: 'Singapore Hub'
+    },
+    org: {
+      businessUnit: 'Regional Technology', department: 'Regional Technology', team: 'Platform Enablement', costCenter: 'SG-TECH-042',
+      manager: { avatar: 'JD', name: 'John D', role: 'Regional VP Technology' },
+      reports: [
+        { avatar: 'SY', name: 'Sarah Y', role: 'Solutions Architect' },
+        { avatar: 'MK', name: 'Michael K', role: 'Platform Engineer' }
+      ],
+      more: 4
+    },
+    compSummaryByYear: {
+      '2025': { baseSalary: '11.2K', baseSub: 'SGD / month', allowance: '1.4K', allowanceYoY: '+11% YoY', bonus: '24K', bonusYoY: '+18% YoY', totalSalary: '159K', totalSalaryNote: 'Base + Mobility + Bonus' },
+      '2024': { baseSalary: '10.5K', baseSub: 'SGD / month', allowance: '1.2K', allowanceYoY: '+8% YoY', bonus: '18K', bonusYoY: '+14% YoY', totalSalary: '144K', totalSalaryNote: 'Base + Mobility + Bonus' },
+      '2023': { baseSalary: '32M', baseSub: 'VND / month', allowance: '2.2M', allowanceYoY: '+9% YoY', bonus: '12M', bonusYoY: '+13% YoY', totalSalary: '46.2M', totalSalaryNote: 'Pre-secondment baseline' },
+      '2022': { baseSalary: '29M', baseSub: 'VND / month', allowance: '1.9M', allowanceYoY: '+8% YoY', bonus: '10.2M', bonusYoY: '+11% YoY', totalSalary: '41.1M', totalSalaryNote: 'Pre-secondment baseline' },
+      '2021': { baseSalary: '26M', baseSub: 'VND / month', allowance: '1.6M', allowanceYoY: '+7% YoY', bonus: '8.4M', bonusYoY: '+9% YoY', totalSalary: '36M', totalSalaryNote: 'Pre-secondment baseline' }
+    },
+    compSeries: { title: 'Regional Package Trend', labels: ['2021', '2022', '2023', '2024', '2025'], dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'], values: [36, 41.1, 46.2, 144, 159], unit: 'K' },
+    perfKpiByYear: {
+      '2025': [{ label: 'Regional SLA', value: 95, color: 'orange' }, { label: 'Platform Stability', value: 93, color: 'teal' }, { label: 'Delivery Governance', value: 90, color: 'amber' }, { label: 'Leadership', value: 96, color: 'teal' }],
+      '2024': [{ label: 'Regional SLA', value: 91, color: 'orange' }, { label: 'Platform Stability', value: 89, color: 'teal' }, { label: 'Delivery Governance', value: 87, color: 'amber' }, { label: 'Leadership', value: 92, color: 'teal' }],
+      '2023': [{ label: 'Architecture', value: 88, color: 'orange' }, { label: 'Enablement', value: 86, color: 'teal' }, { label: 'Planning', value: 82, color: 'amber' }, { label: 'Mentoring', value: 88, color: 'teal' }],
+      '2022': [{ label: 'Architecture', value: 84, color: 'orange' }, { label: 'Enablement', value: 81, color: 'teal' }, { label: 'Planning', value: 79, color: 'amber' }, { label: 'Mentoring', value: 83, color: 'teal' }],
+      '2021': [{ label: 'Architecture', value: 80, color: 'orange' }, { label: 'Enablement', value: 77, color: 'teal' }, { label: 'Planning', value: 75, color: 'amber' }, { label: 'Mentoring', value: 79, color: 'teal' }],
+      '2020': [{ label: 'Architecture', value: 74, color: 'orange' }, { label: 'Enablement', value: 72, color: 'teal' }, { label: 'Planning', value: 70, color: 'amber' }, { label: 'Mentoring', value: 73, color: 'teal' }]
+    },
+    radarSeries: {
+      '2023': { self: [4.4, 4.3, 4.2, 4.5, 4.3, 4.1, 4.2, 4.0], manager: [4.2, 4.1, 4.0, 4.2, 4.1, 4.0, 4.0, 3.9] },
+      '2022': { self: [4.0, 3.9, 3.9, 4.1, 3.8, 3.8, 3.9, 3.7], manager: [3.8, 3.7, 3.7, 3.9, 3.7, 3.6, 3.6, 3.5] },
+      '2021': { self: [3.7, 3.6, 3.5, 3.8, 3.5, 3.4, 3.5, 3.4], manager: [3.5, 3.4, 3.3, 3.6, 3.3, 3.2, 3.2, 3.1] },
+      '2020': { self: [3.3, 3.2, 3.1, 3.4, 3.1, 3.0, 3.1, 3.0], manager: [3.1, 3.0, 2.9, 3.2, 2.9, 2.8, 2.8, 2.7] }
+    },
+    learning: {
+      education: [{ name: 'National University of Singapore', note: 'Executive Program - Regional Leadership', time: '2024 - 2025' }],
+      certs: [
+        { name: 'TOGAF Practitioner', note: 'Architecture Guild', time: '2025' },
+        { name: 'AWS Advanced Networking', note: 'Amazon Web Services', time: '2024' }
+      ]
+    },
+    time: { workingDays: '22', workingSub: 'April 2026', present: '20', presentSub: '91% attendance', leaveUsed: '2', leaveSub: '/ 14 days remaining', otHours: '8h', otSub: 'Within plan' }
+  }
+};
+
+function renderProfileSkills(skills) {
+  const row = document.getElementById('profileSkillsRow');
+  if (!row) return;
+  const topSkills = (skills || []).slice(0, 5);
+  const remain = Math.max((skills || []).length - topSkills.length, 0);
+  row.innerHTML = `
+    <span class="skills-label">Skills:</span>
+    ${topSkills.map((s) => `<span class="skill-tag">${s}</span>`).join('')}
+    ${remain > 0 ? `<span class="skill-more">+${remain} more</span>` : ''}
+  `;
+}
+
+function renderOrgReports(reports, moreCount) {
+  const wrap = document.getElementById('orgReportList');
+  if (!wrap) return;
+  wrap.innerHTML = (reports || [])
+    .map((r) => `
+      <div class="mgr-card">
+        <div class="mgr-avatar">${r.avatar}</div>
+        <div>
+          <div class="mgr-name">${r.name}</div>
+          <div class="mgr-role">${r.role}</div>
+        </div>
+      </div>
+    `)
+    .join('') + (moreCount > 0 ? `<div class="report-more">+${moreCount} more</div>` : '');
+}
+
+function renderLearningList(listId, items) {
+  const el = document.getElementById(listId);
+  if (!el) return;
+  el.innerHTML = (items || [])
+    .map((item) => `
+      <div class="learn-item">
+        <div>
+          <div class="learn-name">${item.name}</div>
+          <div class="learn-note">${item.note}</div>
+        </div>
+        <div class="learn-time">${item.time}</div>
+      </div>
+    `)
+    .join('');
+}
+
+function applyAssignmentData(key) {
+  const data = assignmentDataByRole[key] || assignmentDataByRole.software_engineer;
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value || ''; };
+
+  // Employee Profile
+  // Allow selected WR/assignment to drive DOB and Mobile in profile header.
+  setText('profileDob', data.profile?.dob || workerProfileBase.dob);
+  setText('profilePhone', data.profile?.phone || workerProfileBase.phone);
+  renderProfileSkills(data.profile.skills);
+
+  // Contract Information
+  setText('contractLegalEntity', data.contract.legalEntity);
+  setText('contractType', data.contract.type);
+  setText('contractEndDate', data.contract.endDate);
+  setText('contractStatus', data.contract.status);
+  setText('contractEmployeeClass', data.contract.employeeClass);
+  setText('contractContractType', data.contract.contractType);
+  setText('contractLocation', data.contract.location);
+  setText('contractWorkEmail', data.contract.workEmail);
+  setText('contractWorkSchedule', data.contract.workSchedule);
+  setText('contractCountry', data.contract.country);
+
+  // Assignment details block
+  setText('assignmentJobTitle', data.contract.jobTitle);
+  setText('assignmentPosition', data.contract.position);
+  setText('assignmentStartDate', data.contract.joinDate);
+  setText('assignmentEndDate', data.contract.endDate || '');
+
+  // Organization
+  setText('orgBusinessUnit', data.org.businessUnit);
+  setText('orgDepartment', data.org.department);
+  setText('orgTeam', data.org.team);
+  setText('orgCostCenter', data.org.costCenter);
+  setText('orgManagerAvatar', data.org.manager.avatar);
+  setText('orgManagerName', data.org.manager.name);
+  setText('orgManagerRole', data.org.manager.role);
+  renderOrgReports(data.org.reports, data.org.more);
+
+  // Compensation + chart
+  compSummaryByYear = data.compSummaryByYear;
+  compSeries = { year: data.compSeries };
+  const compYear = document.getElementById('compYearSelect')?.value || '2025';
+  renderCompSummary(compYear);
+  renderCompLine('year');
+
+  // Performance
+  perfKpiByYear = data.perfKpiByYear;
+  renderPerfYearRatings();
+  const perfSelectValue = document.getElementById('perfYearSelect')?.value || 'all';
+  if (perfSelectValue === 'all') {
+    selectPerfYear('2025');
+  } else {
+    selectPerfYear(perfSelectValue);
+  }
+  filterPerfBySelect(document.getElementById('perfYearSelect'));
+
+  // Capability Radar
+  radarSeries = data.radarSeries;
+  filterRadarBySelect(document.getElementById('radarYearSelect'));
+
+  // Learning & Certification
+  renderLearningList('learningEducationList', data.learning.education);
+  renderLearningList('learningCertList', data.learning.certs);
+
+  // Time & Attendance
+  setText('timeWorkingDays', data.time.workingDays);
+  setText('timeWorkingDaysSub', data.time.workingSub);
+  setText('timePresent', data.time.present);
+  setText('timePresentSub', data.time.presentSub);
+  setText('timeLeaveUsed', data.time.leaveUsed);
+  setText('timeLeaveSub', data.time.leaveSub);
+  setText('timeOtHours', data.time.otHours);
+  setText('timeOtSub', data.time.otSub);
+
+  const wrData = workingRelationships[currentWrKey] || workingRelationships.employment_vn;
+  setText('compAnnualPackage', wrData.compensation.annualPackage);
+  setText('compNextReview', wrData.compensation.nextReview);
+  setText('compViewMode', wrData.compensation.viewMode);
+  setText('perfCurrentRating', wrData.performance.currentRating);
+  setText('perfGoalsProgress', wrData.performance.goalsProgress);
+  setText('perfGoalsSub', wrData.performance.goalsSub);
+
+  const benefitList = document.getElementById('benefitList');
+  if (benefitList) {
+    benefitList.innerHTML = (wrData.benefits || []).map((item) => `
+      <div class="benefit-item"><div><div class="benefit-name">${item.name}</div><div class="benefit-meta">${item.meta}</div></div><span class="chip ${item.badgeClass}">${item.badge}</span></div>
+    `).join('');
+  }
+
+  const leaveList = document.getElementById('timeLeaveList');
+  if (leaveList) {
+    leaveList.innerHTML = (wrData.time?.leaves || []).map((item) => `
+      <div class="leave-item"><div><div class="leave-name">${item.name}</div><div class="leave-meta">${item.meta}</div></div><span class="chip ${item.badgeClass}">${item.badge}</span></div>
+    `).join('');
+  }
+}
+
+function renderWorkerBaseProfile() {
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value || ''; };
+  const profileName = document.querySelector('.profile-name');
+  if (profileName) profileName.textContent = workerProfileBase.fullNameVi;
+  setText('profileWorkerId', `Worker ID: ${workerProfileBase.workerId}`);
+  setText('profileCountry', workerProfileBase.country);
+  setText('profileDob', workerProfileBase.dob);
+  setText('profileEmail', workerProfileBase.email);
+  setText('profilePhone', workerProfileBase.phone);
+  setText('workerPreferredName', workerProfileBase.preferredName);
+  setText('workerFullNameEn', workerProfileBase.fullNameEn);
+  setText('workerGender', workerProfileBase.gender);
+  setText('workerMaritalStatus', workerProfileBase.maritalStatus);
+  setText('workerCurrentAddress', workerProfileBase.currentAddress);
+  setText('workerPermanentAddress', workerProfileBase.permanentAddress);
+  setText('workerEmergencyName', workerProfileBase.emergency.name);
+  setText('workerEmergencyRelationship', workerProfileBase.emergency.relationship);
+  setText('workerEmergencyPhone', workerProfileBase.emergency.phone);
+  setText('workerCanEdit', workerProfileBase.canEdit);
+  setText('workerVisibleSections', workerProfileBase.visibleSections);
+  setText('workerEditScope', workerProfileBase.editScope);
+
+  const docList = document.getElementById('workerDocList');
+  if (docList) {
+    docList.innerHTML = workerProfileBase.documents.map((doc) => `
+      <div class="doc-item"><div><div class="doc-name">${doc.name}</div><div class="doc-meta">${doc.meta}</div></div><span class="chip ${doc.badgeClass}">${doc.badge}</span></div>
+    `).join('');
+  }
+}
+
+function renderWrSwitcher() {
+  const wrap = document.getElementById('wrSwitcherGrid');
+  if (!wrap) return;
+  wrap.innerHTML = Object.entries(workingRelationships).map(([key, wr]) => `
+    <div class="wr-card ${key === currentWrKey ? 'is-active' : ''}" data-wr-key="${key}">
+      <div class="wr-card-top">
+        <div>
+          <div class="wr-card-entity">${wr.name}</div>
+          <div class="wr-card-role">${wr.role}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+          <span class="chip ${wr.status === 'ACTIVE' ? 'green' : 'orange'}">${wr.status}</span>
+          <span class="chip blue">${wr.badge}</span>
+        </div>
+      </div>
+      <div class="wr-card-meta">
+        <span>${wr.type}</span>
+        <span>${wr.country}</span>
+        <span>${wr.period}</span>
+        <span>${wr.cardMeta2}</span>
+      </div>
+      <div class="wr-card-action">${key === currentWrKey ? 'Selected' : 'View ->'}</div>
+    </div>
+  `).join('');
+}
+
+function renderWrSummary() {
+  const wr = workingRelationships[currentWrKey] || workingRelationships.employment_vn;
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value || ''; };
+  setText('wrSummaryLegalEntity', wr.name);
+  setText('wrSummaryType', wr.type);
+  setText('wrSummarySince', wr.since);
+  setText('wrSummaryCountry', wr.country);
+  setText('wrSummaryRole', wr.role);
+  setText('wrSummaryDepartment', wr.department);
+  setText('wrSummaryManager', wr.manager);
+  setText('wrSummaryEmployeeNumber', wr.employeeNumber);
+  setText('wrSummaryBadge', wr.badge);
+  setText('wrSummaryStatus', wr.status);
+}
+
+function renderContractFixedByWr() {
+  const wr = workingRelationships[currentWrKey] || workingRelationships.employment_vn;
+  const contract = wr.contract || {};
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value || ''; };
+
+  // Fixed fields in Employee Contract: these follow WR, not Assignment.
+  setText('contractJobTitle', contract.jobTitle);
+  setText('contractPosition', contract.position);
+  setText('contractJoinDate', contract.joinDate);
+  setText('contractSeniority', contract.seniority);
+}
+
+function updateAssignmentOptionsForWr() {
+  const assignmentFilter = document.getElementById('assignmentFilter');
+  const assignmentOptions = document.getElementById('assignmentOptions');
+  if (!assignmentFilter || !assignmentOptions) return;
+
+  const wr = workingRelationships[currentWrKey] || workingRelationships.employment_vn;
+  assignmentFilter.innerHTML = wr.assignments.map((item) => `<option value="${item.value}">${item.label}</option>`).join('');
+  assignmentFilter.value = wr.defaultAssignment;
+  assignmentOptions.innerHTML = wr.assignments.map((item) => `<div class="dept-option" data-value="${item.value}">${item.label}</div>`).join('');
+}
+
+function applyWorkingRelationship(key) {
+  currentWrKey = key;
+  const wr = workingRelationships[currentWrKey] || workingRelationships.employment_vn;
+  renderWrSwitcher();
+  renderWrSummary();
+  renderContractFixedByWr();
+  updateAssignmentOptionsForWr();
+
+  const assignmentDisplay = document.getElementById('assignmentDisplay');
+  if (assignmentDisplay) {
+    const selected = document.getElementById('assignmentFilter')?.selectedOptions?.[0];
+    assignmentDisplay.textContent = selected?.textContent || wr.assignments[0]?.label || '';
+  }
+
+  applyAssignmentData(document.getElementById('assignmentFilter')?.value || wr.defaultAssignment);
+}
+
+function bindWrSwitcher() {
+  document.getElementById('wrSwitcherGrid')?.addEventListener('click', (event) => {
+    const card = event.target.closest('[data-wr-key]');
+    if (!card) return;
+    applyWorkingRelationship(card.getAttribute('data-wr-key') || 'employment_vn');
+  });
+}
+
+function bindQuickActionsMenu() {
+  const btn = document.getElementById('quickActionsBtn');
+  const menu = document.getElementById('quickActionsMenu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    menu.classList.toggle('show');
+  });
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.quick-actions-wrap')) menu.classList.remove('show');
+  });
+
+  menu.addEventListener('click', (event) => {
+    const item = event.target.closest('.quick-item');
+    if (!item) return;
+    const action = item.getAttribute('data-action') || '';
+    console.log('Quick action selected:', action);
+    menu.classList.remove('show');
+  });
+}
+
+function renderRadar(year) {
+  const series = radarSeries[year] || radarSeries['2023'];
+  const selfPolygon = document.getElementById('radarSelfPolygon');
+  const managerPolygon = document.getElementById('radarManagerPolygon');
+  const selfPointsGroup = document.getElementById('radarSelfPoints');
+  const managerPointsGroup = document.getElementById('radarManagerPoints');
+  const chart = document.getElementById('radarChart');
+  const wrap = document.getElementById('radarWrap');
+  const tooltip = document.getElementById('radarTooltip');
+  const tooltipMeta = document.getElementById('radarTooltipMeta');
+  const tooltipVal = document.getElementById('radarTooltipVal');
+  if (!selfPolygon || !managerPolygon || !selfPointsGroup || !managerPointsGroup || !chart || !wrap || !tooltip || !tooltipMeta || !tooltipVal) return;
+
+  const selfPoints = series.self.map((value, idx) => ({ ...getRadarPoint(idx, value), value, axis: radarAxes[idx] }));
+  const managerPoints = series.manager.map((value, idx) => ({ ...getRadarPoint(idx, value), value, axis: radarAxes[idx] }));
+
+  selfPolygon.setAttribute('points', selfPoints.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' '));
+  managerPolygon.setAttribute('points', managerPoints.map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' '));
+
+  selfPointsGroup.innerHTML = selfPoints
+    .map((p, idx) => `<circle class="radar-point-self" data-series="Self" data-axis="${p.axis}" data-value="${p.value}" data-idx="${idx}" cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3"></circle>`)
+    .join('');
+  managerPointsGroup.innerHTML = managerPoints
+    .map((p, idx) => `<circle class="radar-point-manager" data-series="Manager" data-axis="${p.axis}" data-value="${p.value}" data-idx="${idx}" cx="${p.x.toFixed(2)}" cy="${p.y.toFixed(2)}" r="3"></circle>`)
+    .join('');
+
+  tooltip.classList.remove('show');
+  const chartRect = chart.getBoundingClientRect();
+  const pointEls = wrap.querySelectorAll('.radar-point-self, .radar-point-manager');
+  pointEls.forEach((el) => {
+    const showTooltip = () => {
+      const value = Number(el.getAttribute('data-value'));
+      const axis = el.getAttribute('data-axis') || '';
+      const seriesName = el.getAttribute('data-series') || '';
+      const cx = Number(el.getAttribute('cx'));
+      const cy = Number(el.getAttribute('cy'));
+      const x = (cx / 360) * chartRect.width;
+      const y = (cy / 360) * chartRect.height;
+
+      tooltipMeta.textContent = `${year} • ${seriesName}`;
+      tooltipVal.textContent = `${axis}: ${value.toFixed(1)} / 5`;
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+      tooltip.classList.add('show');
+    };
+    el.addEventListener('mouseenter', showTooltip);
+    el.addEventListener('mousemove', showTooltip);
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+  });
+}
+
+function getRadarPolygonPoints(values) {
+  return values
+    .map((value, idx) => {
+      const p = getRadarPoint(idx, value);
+      return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+    })
+    .join(' ');
+}
+
+function renderRadarAll() {
+  const radarWrap = document.getElementById('radarWrap');
+  const compareWrap = document.getElementById('radarCompareWrap');
+  if (!radarWrap || !compareWrap) return;
+
+  radarWrap.style.display = 'none';
+  compareWrap.classList.add('show');
+
+  const years = Object.keys(radarSeries).sort((a, b) => Number(b) - Number(a));
+  compareWrap.innerHTML = `
+    <div class="radar-compare-row">
+      ${years.map((year) => {
+        const series = radarSeries[year];
+        const selfPoints = getRadarPolygonPoints(series.self);
+        const managerPoints = getRadarPolygonPoints(series.manager);
+        return `
+          <div class="radar-compare-item">
+            <div class="radar-compare-year">${year}</div>
+            <svg class="radar-compare-chart" viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" aria-label="Capability radar ${year}">
+              <circle class="radar-grid" cx="180" cy="180" r="120" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="96" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="72" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="48" fill="none"></circle>
+              <circle class="radar-grid" cx="180" cy="180" r="24" fill="none"></circle>
+              <line class="radar-axis" x1="180" y1="180" x2="180" y2="60"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="95.15"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="300" y2="180"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="264.85" y2="264.85"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="180" y2="300"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="264.85"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="60" y2="180"></line>
+              <line class="radar-axis" x1="180" y1="180" x2="95.15" y2="95.15"></line>
+              <polygon class="radar-self" points="${selfPoints}"></polygon>
+              <polygon class="radar-manager" points="${managerPoints}"></polygon>
+              <text class="radar-compare-label" x="180" y="50" text-anchor="middle">Leadership</text>
+              <text class="radar-compare-label" x="276" y="92" text-anchor="start">Adaptability</text>
+              <text class="radar-compare-label" x="312" y="184" text-anchor="start">Relationships</text>
+              <text class="radar-compare-label" x="272" y="280" text-anchor="start">Analytical</text>
+              <text class="radar-compare-label" x="180" y="326" text-anchor="middle">Integrity</text>
+              <text class="radar-compare-label" x="88" y="280" text-anchor="end">Teamwork</text>
+              <text class="radar-compare-label" x="48" y="184" text-anchor="end">Decision</text>
+              <text class="radar-compare-label" x="88" y="92" text-anchor="end">Communication</text>
+            </svg>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="radar-legend" style="margin-top:8px">
+      <span class="self"><i></i> Self</span>
+      <span class="mgr"><i></i> Manager</span>
+    </div>
+  `;
+}
+
+function filterRadarBySelect(selectEl) {
+  const year = selectEl.value;
+  const radarWrap = document.getElementById('radarWrap');
+  const compareWrap = document.getElementById('radarCompareWrap');
+  if (!radarWrap || !compareWrap) return;
+
+  if (year === 'all') {
+    renderRadarAll();
+    return;
+  }
+
+  compareWrap.classList.remove('show');
+  compareWrap.innerHTML = '';
+  radarWrap.style.display = 'flex';
+  renderRadar(year);
+}
+
+function filterRadar(btn, year) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  renderRadar(year);
+}
+
+function filterHist(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  console.log('History filter:', type);
+}
+
+function filterWR(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  console.log('WR Timeline filter:', type);
+}
+
+function filterTime(btn, type) {
+  btn.parentElement.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  console.log('Time & Attendance filter:', type);
+}
+
+let activeCardPopup = null;
+
+function ensureCardPopupLayer() {
+  if (document.getElementById('cardPopupOverlay')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'cardPopupOverlay';
+  overlay.className = 'card-popup-overlay';
+  overlay.innerHTML = `
+    <div class="card-popup-shell">
+      <div class="card-popup-head">
+        <span class="card-popup-title" id="cardPopupTitle">Card Detail</span>
+        <div class="c-btn" id="cardPopupClose" title="Close popup">
+          <svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15"/></svg>
+        </div>
+      </div>
+      <div class="card-popup-body" id="cardPopupBody"></div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) closeCardPopup();
+  });
+
+  document.getElementById('cardPopupClose')?.addEventListener('click', closeCardPopup);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeCardPopup();
+  });
+}
+
+function openCardPopup(card) {
+  ensureCardPopupLayer();
+
+  if (activeCardPopup && activeCardPopup.card === card) return;
+  if (activeCardPopup) closeCardPopup();
+
+  const overlay = document.getElementById('cardPopupOverlay');
+  const popupBody = document.getElementById('cardPopupBody');
+  const popupTitle = document.getElementById('cardPopupTitle');
+  if (!overlay || !popupBody || !popupTitle || !card.parentElement) return;
+
+  const title = card.querySelector('.card-title')?.textContent?.trim() || 'Card Detail';
+  popupTitle.textContent = title;
+
+  const placeholder = document.createElement('div');
+  placeholder.className = 'card-popup-placeholder';
+  card.parentElement.insertBefore(placeholder, card.nextSibling);
+
+  card.classList.add('in-popup');
+  popupBody.appendChild(card);
+  overlay.classList.add('show');
+  document.body.classList.add('no-scroll');
+
+  activeCardPopup = { card, placeholder };
+}
+
+function closeCardPopup() {
+  if (!activeCardPopup) return;
+
+  const overlay = document.getElementById('cardPopupOverlay');
+  const { card, placeholder } = activeCardPopup;
+
+  if (placeholder?.parentElement) {
+    placeholder.parentElement.insertBefore(card, placeholder);
+    placeholder.remove();
+  }
+
+  card.classList.remove('in-popup');
+  overlay?.classList.remove('show');
+  document.body.classList.remove('no-scroll');
+  activeCardPopup = null;
+}
+
+function initCardPopupActions() {
+  document.querySelectorAll('.card').forEach((card) => {
+    const head = card.querySelector('.card-head');
+    if (!head) return;
+
+    let actions = head.querySelector('.card-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'card-actions';
+      head.appendChild(actions);
+    }
+
+    // Remove existing SVG icon actions in card headers.
+    actions.querySelectorAll('.c-btn:not([data-card-popup-btn="1"])').forEach((btn) => btn.remove());
+
+    if (actions.querySelector('[data-card-popup-btn="1"]')) return;
+
+    const btn = document.createElement('div');
+    btn.className = 'c-btn';
+    btn.setAttribute('title', 'View in center');
+    btn.setAttribute('data-card-popup-btn', '1');
+    btn.innerHTML = '<svg viewBox="0 0 20 20"><path d="M4 8V4h4M16 8V4h-4M4 12v4h4M16 12v4h-4"/></svg>';
+    btn.addEventListener('click', () => openCardPopup(card));
+    actions.appendChild(btn);
+  });
+}
+
+const mockEmployees = [
+  { name: 'Nguyen Bui Thanh - thanhbn', dept: 'A4B' },
+  { name: 'Tran Van Nam - namtv3', dept: 'A4B' },
+  { name: 'Hoang Linh - linhhl', dept: 'HR' },
+  { name: 'Tran Minh - minht', dept: 'FA' },
+  { name: 'Quoc Thinh - thinhq', dept: 'AF' },
+  { name: 'Pham Duc Anh - anhpd', dept: 'DC' },
+  { name: 'Le Thu Ha - halet', dept: 'ZA' },
+  { name: 'Vo Gia Phuc - phucvg2', dept: 'PY' },
+  { name: 'Do Khanh Linh - linhdk43', dept: 'HR' },
+  { name: 'Nguyen Tuan Kiet - kietnt11', dept: 'FA' }
+];
+
+const deptLegalEntityMap = {
+  HR: 'VNG',
+  A4B: 'A4B',
+  FA: 'VNGG',
+  AF: 'TrueID',
+  DC: 'Zion',
+  ZA: 'VNGG',
+  PY: 'TrueID'
+};
+
+function getLegalEntityByDept(dept) {
+  return deptLegalEntityMap[dept] || 'VNG';
+}
+
+function getAllowedDeptSetByLegalEntity(legalEntity) {
+  if (legalEntity === 'all') {
+    return new Set(Object.keys(deptLegalEntityMap));
+  }
+  return new Set(
+    Object.entries(deptLegalEntityMap)
+      .filter(([, legal]) => legal === legalEntity)
+      .map(([dept]) => dept)
+  );
+}
+
+function renderEmployeeOptions() {
+  const dept = document.getElementById('deptFilter')?.value || 'all';
+  const legalEntity = document.getElementById('legalEntityFilter')?.value || 'all';
+  const searchInput = document.getElementById('employeeSearch');
+  const results = document.getElementById('employeeSearchResults');
+  if (!searchInput || !results) return;
+
+  const keyword = searchInput.value.trim().toLowerCase();
+  const filtered = mockEmployees.filter((emp) => {
+    const matchDept = dept === 'all' || emp.dept === dept;
+    const matchLegal = legalEntity === 'all' || getLegalEntityByDept(emp.dept) === legalEntity;
+    const matchName = !keyword || emp.name.toLowerCase().includes(keyword);
+    return matchDept && matchLegal && matchName;
+  });
+
+  results.innerHTML = filtered
+    .map((emp) => `
+      <div class="employee-option" data-name="${emp.name}" data-dept="${emp.dept}">
+        <span class="name">${emp.name}</span>
+        <span class="dept">${emp.dept} · ${getLegalEntityByDept(emp.dept)}</span>
+      </div>
+    `)
+    .join('');
+
+  results.classList.toggle('show', filtered.length > 0 && (keyword.length > 0 || document.activeElement === searchInput));
+}
+
+function bindDepartmentEmployeeFilters() {
+  const legalEntityFilter = document.getElementById('legalEntityFilter');
+  const legalEntitySelect = document.getElementById('legalEntitySelect');
+  const legalEntityDisplay = document.getElementById('legalEntityDisplay');
+  const legalEntityOptions = document.getElementById('legalEntityOptions');
+  const deptFilter = document.getElementById('deptFilter');
+  const deptSelect = document.getElementById('deptSelect');
+  const deptDisplay = document.getElementById('deptDisplay');
+  const deptOptions = document.getElementById('deptOptions');
+  const employeeSearch = document.getElementById('employeeSearch');
+  const searchResults = document.getElementById('employeeSearchResults');
+  if (!legalEntityFilter || !deptFilter || !employeeSearch) return;
+
+  const deptBaseOptions = Array.from(deptFilter.options).map((opt) => ({
+    value: opt.value,
+    label: opt.textContent || ''
+  }));
+
+  function renderDeptOptionsByLegalEntity() {
+    const allowedDepts = getAllowedDeptSetByLegalEntity(legalEntityFilter.value);
+    if (!deptOptions) return;
+    deptOptions.innerHTML = deptBaseOptions
+      .filter((opt) => opt.value === 'all' || allowedDepts.has(opt.value))
+      .map((opt) => `<div class="dept-option" data-value="${opt.value}">${opt.label}</div>`)
+      .join('');
+  }
+
+  if (legalEntityOptions) {
+    legalEntityOptions.innerHTML = Array.from(legalEntityFilter.options)
+      .map((opt) => `<div class="dept-option" data-value="${opt.value}">${opt.textContent || ''}</div>`)
+      .join('');
+  }
+
+  function syncLegalEntityUi() {
+    const selected = legalEntityFilter.options[legalEntityFilter.selectedIndex];
+    if (legalEntityDisplay && selected) legalEntityDisplay.textContent = selected.textContent || '';
+    legalEntityOptions?.querySelectorAll('.dept-option').forEach((opt) => {
+      opt.classList.toggle('active', opt.getAttribute('data-value') === legalEntityFilter.value);
+    });
+  }
+
+  function syncDeptUi() {
+    renderDeptOptionsByLegalEntity();
+    const selected = deptFilter.options[deptFilter.selectedIndex];
+    if (deptDisplay && selected) deptDisplay.textContent = selected.textContent || '';
+    deptOptions?.querySelectorAll('.dept-option').forEach((opt) => {
+      opt.classList.toggle('active', opt.getAttribute('data-value') === deptFilter.value);
+    });
+  }
+
+  legalEntitySelect?.addEventListener('click', (event) => {
+    if (event.target.closest('.dept-option')) return;
+    legalEntityOptions?.classList.toggle('show');
+  });
+
+  legalEntityOptions?.addEventListener('click', (event) => {
+    const option = event.target.closest('.dept-option');
+    if (!option) return;
+    legalEntityFilter.value = option.getAttribute('data-value') || 'all';
+    legalEntityFilter.dispatchEvent(new Event('change'));
+    legalEntityOptions.classList.remove('show');
+  });
+
+  legalEntityFilter.addEventListener('change', () => {
+    const allowedDepts = getAllowedDeptSetByLegalEntity(legalEntityFilter.value);
+    if (deptFilter.value !== 'all' && !allowedDepts.has(deptFilter.value)) {
+      deptFilter.value = 'all';
+    }
+    syncLegalEntityUi();
+    deptFilter.dispatchEvent(new Event('change'));
+  });
+
+  deptSelect?.addEventListener('click', (event) => {
+    if (event.target.closest('.dept-option')) return;
+    deptOptions?.classList.toggle('show');
+  });
+
+  deptOptions?.addEventListener('click', (event) => {
+    const option = event.target.closest('.dept-option');
+    if (!option) return;
+    const value = option.getAttribute('data-value') || 'all';
+    deptFilter.value = value;
+    deptFilter.dispatchEvent(new Event('change'));
+    deptOptions.classList.remove('show');
+  });
+
+  deptFilter.addEventListener('change', () => {
+    syncDeptUi();
+    renderEmployeeOptions();
+    console.log('Department filter:', deptFilter.value);
+  });
+
+  employeeSearch.addEventListener('input', () => {
+    renderEmployeeOptions();
+  });
+
+  employeeSearch.addEventListener('focus', () => {
+    renderEmployeeOptions();
+  });
+
+  employeeSearch.addEventListener('change', () => {
+    const profileName = document.querySelector('.profile-name');
+    const matched = mockEmployees.find((emp) => emp.name === employeeSearch.value);
+    if (matched && profileName) {
+      profileName.textContent = matched.name;
+      if (deptFilter.value === 'all') {
+        deptFilter.value = matched.dept;
+        renderEmployeeOptions();
+      }
+    }
+  });
+
+  searchResults?.addEventListener('click', (event) => {
+    const option = event.target.closest('.employee-option');
+    if (!option) return;
+
+    const name = option.getAttribute('data-name') || '';
+    const dept = option.getAttribute('data-dept') || 'all';
+    const profileName = document.querySelector('.profile-name');
+
+    employeeSearch.value = name;
+    if (profileName) profileName.textContent = name;
+    deptFilter.value = dept;
+    deptFilter.dispatchEvent(new Event('change'));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.search-wrap')) {
+      searchResults?.classList.remove('show');
+    }
+    if (!event.target.closest('.dept-select')) {
+      deptOptions?.classList.remove('show');
+    }
+    if (!event.target.closest('.legal-entity-select')) {
+      legalEntityOptions?.classList.remove('show');
+    }
+  });
+
+  syncLegalEntityUi();
+  syncDeptUi();
+  renderEmployeeOptions();
+}
+
+function bindAssignmentFilter() {
+  const assignmentFilter = document.getElementById('assignmentFilter');
+  const assignmentSelect = document.getElementById('assignmentSelect');
+  const assignmentDisplay = document.getElementById('assignmentDisplay');
+  const assignmentOptions = document.getElementById('assignmentOptions');
+  if (!assignmentFilter || !assignmentSelect || !assignmentDisplay || !assignmentOptions) return;
+
+  updateAssignmentOptionsForWr();
+
+  function syncAssignmentUi() {
+    const selected = assignmentFilter.options[assignmentFilter.selectedIndex];
+    if (selected) assignmentDisplay.textContent = selected.textContent || '';
+    assignmentOptions.querySelectorAll('.dept-option').forEach((opt) => {
+      opt.classList.toggle('active', opt.getAttribute('data-value') === assignmentFilter.value);
+    });
+  }
+
+  assignmentSelect.addEventListener('click', (event) => {
+    if (event.target.closest('.dept-option')) return;
+    assignmentOptions.classList.toggle('show');
+  });
+
+  assignmentOptions.addEventListener('click', (event) => {
+    const option = event.target.closest('.dept-option');
+    if (!option) return;
+    assignmentFilter.value = option.getAttribute('data-value') || assignmentFilter.value;
+    assignmentFilter.dispatchEvent(new Event('change'));
+    assignmentOptions.classList.remove('show');
+  });
+
+  assignmentFilter.addEventListener('change', function() {
+    syncAssignmentUi();
+    applyAssignmentData(this.value);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.assignment-select')) {
+      assignmentOptions.classList.remove('show');
+    }
+  });
+
+  syncAssignmentUi();
+  applyAssignmentData(assignmentFilter.value);
+}
+
+renderWorkerBaseProfile();
+renderCompLine('year');
+renderCompSummary(document.getElementById('compYearSelect')?.value || '2025');
+renderPerfYearRatings();
+renderPerfKpi('2023');
+filterRadarBySelect(document.getElementById('radarYearSelect'));
+filterPerfBySelect(document.getElementById('perfYearSelect'));
+initCardPopupActions();
+bindDepartmentEmployeeFilters();
+bindAssignmentFilter();
+renderWrSwitcher();
+renderWrSummary();
+bindWrSwitcher();
+bindQuickActionsMenu();
+applyWorkingRelationship(currentWrKey);
+</script>

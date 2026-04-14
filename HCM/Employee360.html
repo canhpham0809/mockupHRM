@@ -80,11 +80,27 @@ html,body{height:100%;overflow:auto;font-family:var(--font);font-size:14px;color
 .search-wrap{
   display:flex;align-items:center;gap:8px;
   background:var(--bg);border:1px solid var(--border);
-  border-radius:7px;padding:6px 12px;width:210px;
+  border-radius:10px;padding:8px 12px;width:280px;
+  position:relative;transition:all 0.15s;
 }
+.search-wrap:focus-within{border-color:var(--orange);background:#fff}
 .search-wrap svg{width:13px;height:13px;stroke:var(--text-muted);fill:none;stroke-width:2;flex-shrink:0}
 .search-wrap input{border:none;background:transparent;font-family:var(--font);font-size:13px;color:var(--text-primary);outline:none;width:100%}
 .search-wrap input::placeholder{color:var(--text-muted)}
+.employee-search-results{
+  position:absolute;left:0;right:0;top:calc(100% + 6px);
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);max-height:220px;overflow:auto;
+  display:none;z-index:30;padding:4px;
+}
+.employee-search-results.show{display:block}
+.employee-option{
+  padding:8px 10px;border-radius:7px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.employee-option:hover{background:var(--orange-light)}
+.employee-option .name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.employee-option .dept{font-size:11px;color:var(--text-muted);font-family:var(--mono)}
 .ask-ai-btn{
   display:flex;align-items:center;gap:6px;
   background:var(--orange-light);color:var(--orange);
@@ -98,14 +114,37 @@ html,body{height:100%;overflow:auto;font-family:var(--font);font-size:14px;color
 .filter-select{
   display:flex;align-items:center;gap:6px;
   background:var(--bg);border:1px solid var(--border);
-  border-radius:7px;padding:6px 12px;cursor:pointer;
+  border-radius:10px;padding:8px 12px;cursor:pointer;
   font-family:var(--font);font-size:12px;color:var(--text-primary);
-  transition:all 0.15s;
+  transition:all 0.15s;min-width:160px;
 }
-.filter-select:hover{border-color:var(--orange);background:var(--orange-light)}
+.filter-select:hover,.filter-select:focus-within{border-color:var(--orange);background:#fff}
 .filter-select svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2}
-.filter-select select{display:none}
-.filter-select span{flex:1;text-align:left}
+.filter-select select{
+  border:none;background:transparent;font-family:var(--font);
+  font-size:12px;color:var(--text-primary);outline:none;cursor:pointer;
+  min-width:110px;appearance:none;-webkit-appearance:none;
+}
+.dept-native-select{display:none}
+.dept-select{position:relative;min-width:180px}
+.dept-display{font-size:12px;color:var(--text-primary);font-weight:500;white-space:nowrap}
+.dept-options{
+  position:absolute;left:0;right:0;top:calc(100% + 6px);
+  background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 10px 24px rgba(0,0,0,0.12);max-height:220px;overflow:auto;
+  display:none;z-index:30;padding:4px;
+}
+.dept-options.show{display:block}
+.dept-option{padding:8px 10px;border-radius:7px;cursor:pointer;font-size:12px;color:var(--text-primary)}
+.dept-option:hover{background:var(--orange-light)}
+.dept-option.active{background:var(--orange-light);color:var(--orange);font-weight:600}
+.select-caret{font-size:10px;color:var(--text-muted);margin-left:auto;pointer-events:none}
+.toolbar-filters{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+@media (max-width: 840px){
+  .search-wrap{width:100%}
+  .filter-select{min-width:140px}
+}
 
 /* ── WIDGET FILTERS ── */
 .widget-filters{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -237,6 +276,8 @@ body.no-scroll{overflow:hidden}
   border-radius:5px;padding:3px 10px;font-size:11px;font-weight:600;
 }
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.assignment-select{min-width:240px}
+.assignment-select .dept-display{font-size:11px;font-weight:600}
 
 /* ── FIELD GRID ── */
 .field-grid{display:grid;gap:12px 20px}
@@ -550,21 +591,41 @@ body.no-scroll{overflow:hidden}
 
       <!-- SEARCH AND FILTERS -->
       <div class="page-section">
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+        <div class="toolbar-filters">
           <div class="search-wrap">
             <svg viewBox="0 0 20 20"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M15 15l-3.5-3.5"/></svg>
-            <input type="text" value="Nguyễn Bùi Thành" placeholder="Search employee...">
+            <input id="employeeSearch" type="text" placeholder="Search employee...">
+            <div id="employeeSearchResults" class="employee-search-results"></div>
           </div>
-          <div class="filter-select">
-            <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
-            <select id="deptFilter">
-              <option value="">All Departments</option>
-              <option value="engineering">Engineering</option>
-              <option value="sales">Sales</option>
-              <option value="hr">HR</option>
-              <option value="finance">Finance</option>
+          <div class="filter-select dept-select legal-entity-select" id="legalEntitySelect">
+            <svg viewBox="0 0 20 20"><path d="M4 4h12v4H4zM4 10h8v6H4zM13 10h3v6h-3z"/></svg>
+            <select id="legalEntityFilter" class="dept-native-select">
+              <option value="all">All Legal Entity</option>
+              <option value="VNG">VNG</option>
+              <option value="VNGG">VNGG</option>
+              <option value="A4B">A4B</option>
+              <option value="TrueID">TrueID</option>
+              <option value="Zion">Zion</option>
             </select>
-            <span id="deptLabel">All Departments</span>
+            <span id="legalEntityDisplay" class="dept-display">All Legal Entity</span>
+            <span class="select-caret">▼</span>
+            <div class="dept-options" id="legalEntityOptions"></div>
+          </div>
+          <div class="filter-select dept-select" id="deptSelect">
+            <svg viewBox="0 0 20 20"><path d="M4 6h12M4 10h8M4 14h6"/></svg>
+            <select id="deptFilter" class="dept-native-select">
+              <option value="all">All Department</option>
+              <option value="HR">HR</option>
+              <option value="A4B">A4B</option>
+              <option value="FA">FA</option>
+              <option value="AF">AF</option>
+              <option value="DC">DC</option>
+              <option value="ZA">ZA</option>
+              <option value="PY">PY</option>
+            </select>
+            <span id="deptDisplay" class="dept-display">All Department</span>
+            <span class="select-caret">▼</span>
+            <div class="dept-options" id="deptOptions"></div>
           </div>
         </div>
       </div>
@@ -576,6 +637,17 @@ body.no-scroll{overflow:hidden}
             <span class="card-title">Employee Profile</span>
             <div style="display:flex;align-items:center;gap:10px">
               <div class="status-badge"><div class="status-dot"></div>Active</div>
+              <div class="filter-select dept-select assignment-select" id="assignmentSelect">
+                <svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h9M3 15h6"/></svg>
+                <select id="assignmentFilter" class="dept-native-select">
+                  <option value="software_engineer" selected>Software Engineer - FTE 0.6</option>
+                  <option value="senior_product_engineer">Senior Product Engineer - FTE 0.2</option>
+                  <option value="consultant_manager">Consultant Manager - FTE 0.2</option>
+                </select>
+                <span id="assignmentDisplay" class="dept-display">Software Engineer L1</span>
+                <span class="select-caret">▼</span>
+                <div class="dept-options" id="assignmentOptions"></div>
+              </div>
               <div class="card-actions">
                 <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1112 0"/><path d="M10 4V2"/><path d="M6 17h8"/></svg></div>
                 <div class="c-btn"><svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z"/></svg></div>
@@ -588,15 +660,15 @@ body.no-scroll{overflow:hidden}
                 <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
               </div>
               <div class="profile-right">
-                <div class="profile-name">Nguyễn Bùi Thành</div>
-                <div class="worker-id">Employee Code: VG-17230</div>
+                <div class="profile-name">Nguyễn Bùi Thành - thanhnb4</div>
+                <div class="worker-id" id="profileWorkerId">Employee Code: VG-17230</div>
                 <div class="meta-row">
-                  <div class="meta-item"><svg viewBox="0 0 20 20" ><path d="M4 6h12v5H4z"/><path d="M4 12h16v6H4z"/></svg>Viet Nam</div>
-                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M3 6h14v3H3z"/><path d="M3 10h14v7H3z"/></svg>01/01/2000</div>
-                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M4 4h12v10H4z"/><path d="M4 10l6 3 6-3"/></svg>48985local@my.local</div>
-                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M5 3h3l1.5 4-2 1.5c1 2 2.5 3.5 4.5 4.5L13.5 11 18 12.5V16c0 1.1-.9 2-2 2C7 18 2 13 2 5c0-1.1.9-2 2-2z"/></svg>+84 123456789</div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20" ><path d="M4 6h12v5H4z"/><path d="M4 12h16v6H4z"/></svg><span id="profileCountry">Viet Nam</span></div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M3 6h14v3H3z"/><path d="M3 10h14v7H3z"/></svg><span id="profileDob">01/01/2000</span></div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M4 4h12v10H4z"/><path d="M4 10l6 3 6-3"/></svg><span id="profileEmail">thanhnb4@vng.com.vn</span></div>
+                  <div class="meta-item"><svg viewBox="0 0 20 20"><path d="M5 3h3l1.5 4-2 1.5c1 2 2.5 3.5 4.5 4.5L13.5 11 18 12.5V16c0 1.1-.9 2-2 2C7 18 2 13 2 5c0-1.1.9-2 2-2z"/></svg><span id="profilePhone">+84 123456789</span></div>
                 </div>
-                <div class="skills-row">
+                <div class="skills-row" id="profileSkillsRow">
                   <span class="skills-label">Skills:</span>
                   <span class="skill-tag">Angular</span>
                   <span class="skill-tag">TypeScript</span>
@@ -623,17 +695,17 @@ body.no-scroll{overflow:hidden}
           </div>
           <div class="card-body">
             <div class="field-grid field-grid-3">
-              <div><div class="field-label">Legal Entity</div><div class="field-val">VNG Group JSC</div></div>
-              <div><div class="field-label">Type</div><div class="chip orange">EMPLOYEE</div></div>
-              <div><div class="field-label">Job Title</div><div class="field-val">Software Engineer</div></div>
-              <div><div class="field-label">Position</div><div class="field-val">Software Engineer L1</div></div>
-              <div><div class="field-label">Join Date</div><div class="field-val">03/09/2013</div></div>
-              <div><div class="field-label">End Date</div><div class="field-val"></div></div>
-              <div><div class="field-label">Status</div><div class="chip green">Active</div></div>
-              <div><div class="field-label">Seniority</div><div class="field-val">3 years 4 months 12 days</div></div>
-              <div><div class="field-label">Employee Class</div><div class="chip blue">Permanent</div></div>
-              <div><div class="field-label">Contract Type</div><div class="chip blue">Labour Contract Unlimited</div></div>
-              <div><div class="field-label">Working Location</div><div class="field-val">VNG Campus</div></div>
+              <div><div class="field-label">Legal Entity</div><div class="field-val" id="contractLegalEntity">VNG Group JSC</div></div>
+              <div><div class="field-label">Type</div><div class="chip orange" id="contractType">EMPLOYEE</div></div>
+              <div><div class="field-label">Job Title</div><div class="field-val" id="contractJobTitle">Software Engineer</div></div>
+              <div><div class="field-label">Position</div><div class="field-val" id="contractPosition">Software Engineer L1</div></div>
+              <div><div class="field-label">Join Date</div><div class="field-val" id="contractJoinDate">03/09/2013</div></div>
+              <div><div class="field-label">End Date</div><div class="field-val" id="contractEndDate"></div></div>
+              <div><div class="field-label">Status</div><div class="chip green" id="contractStatus">Active</div></div>
+              <div><div class="field-label">Seniority</div><div class="field-val" id="contractSeniority">3 years 4 months 12 days</div></div>
+              <div><div class="field-label">Employee Class</div><div class="chip blue" id="contractEmployeeClass">Permanent</div></div>
+              <div><div class="field-label">Contract Type</div><div class="chip blue" id="contractContractType">Labour Contract Unlimited</div></div>
+              <div><div class="field-label">Working Location</div><div class="field-val" id="contractLocation">VNG Campus</div></div>
             </div>
           </div>
         </div>
@@ -648,23 +720,23 @@ body.no-scroll{overflow:hidden}
           </div>
           <div class="card-body">
             <div class="field-grid field-grid-2" style="margin-bottom:12px">
-              <div><div class="field-label">Business Unit</div><div class="field-val">INCT</div></div>
-              <div><div class="field-label">Department</div><div class="field-val">A4B</div></div>
-              <div><div class="field-label">Team</div><div class="field-val">DataBase</div></div>
-              <div><div class="field-label">Cost Center</div><div class="field-val">CC-TEC-001</div></div>
+              <div><div class="field-label">Business Unit</div><div class="field-val" id="orgBusinessUnit">INCT</div></div>
+              <div><div class="field-label">Department</div><div class="field-val" id="orgDepartment">A4B</div></div>
+              <div><div class="field-label">Team</div><div class="field-val" id="orgTeam">DataBase</div></div>
+              <div><div class="field-label">Cost Center</div><div class="field-val" id="orgCostCenter">1211</div></div>
             </div>
             <div class="sect-divider"></div>
             <div style="margin-top:12px"><div class="field-label">Line Manager</div></div>
-            <div class="mgr-card">
-              <div class="mgr-avatar">TN</div>
+            <div class="mgr-card" id="orgManagerCard">
+              <div class="mgr-avatar" id="orgManagerAvatar">TN</div>
               <div>
-                <div class="mgr-name">Trần Văn Nam</div>
-                <div class="mgr-role">Engineering Manager</div>
+                <div class="mgr-name" id="orgManagerName">Trần Văn Nam</div>
+                <div class="mgr-role" id="orgManagerRole">Engineering Manager</div>
               </div>
             </div>
 
             <div style="margin-top:12px"><div class="field-label">Direct Reports</div></div>
-            <div class="report-list">
+            <div class="report-list" id="orgReportList">
               <div class="mgr-card">
                 <div class="mgr-avatar">HL</div>
                 <div>
@@ -729,14 +801,14 @@ body.no-scroll{overflow:hidden}
                 <div class="stat-sub pos" id="compBonusYoY">+10% YoY</div>
               </div>
               <div class="stat-card">
-                <div class="stat-label">Grade</div>
-                <div class="stat-val" id="compGrade">SE4</div>
-                <div class="stat-sub info" id="compGradeBand">Band L2.3</div>
+                <div class="stat-label">Total Salary</div>
+                <div class="stat-val" id="compTotalSalary">37M</div>
+                <div class="stat-sub" id="compTotalSalaryNote">Base + Allowance + Bonus</div>
               </div>
             </div>
             <div class="comp-line-wrap" id="compLineWrap">
               <div class="comp-line-head">
-                <span class="line-caption" id="compRangeLabel">Salary Trend (Yearly)</span>
+                <span class="line-caption" id="compRangeLabel">Total Salary Trend (Yearly)</span>
                 <span class="chip orange" id="compDelta">+0.0%</span>
               </div>
               <svg class="comp-chart" viewBox="0 0 520 170" preserveAspectRatio="none" aria-label="Compensation trend line chart">
@@ -901,7 +973,7 @@ body.no-scroll{overflow:hidden}
 
                 <div class="learn-block">
                   <div class="learn-title">Education</div>
-                  <div class="learn-list">
+                  <div class="learn-list" id="learningEducationList">
                     <div class="learn-item">
                       <div>
                         <div class="learn-name">Dai hoc FPT</div>
@@ -914,7 +986,7 @@ body.no-scroll{overflow:hidden}
 
                 <div class="learn-block">
                   <div class="learn-title">Additional Certifications</div>
-                  <div class="learn-list">
+                  <div class="learn-list" id="learningCertList">
                     <div class="learn-item">
                       <div>
                         <div class="learn-name">AWS Cloud Practitioner</div>
@@ -1083,23 +1155,23 @@ body.no-scroll{overflow:hidden}
             <div class="time-grid">
               <div class="stat-card">
                 <div class="stat-label">Working Days</div>
-                <div class="stat-val">22</div>
-                <div class="stat-sub">April 2025</div>
+                <div class="stat-val" id="timeWorkingDays">22</div>
+                <div class="stat-sub" id="timeWorkingDaysSub">April 2025</div>
               </div>
               <div class="stat-card">
                 <div class="stat-label">Present</div>
-                <div class="stat-val">21</div>
-                <div class="stat-sub pos">95.5% attendance</div>
+                <div class="stat-val" id="timePresent">21</div>
+                <div class="stat-sub pos" id="timePresentSub">95.5% attendance</div>
               </div>
               <div class="stat-card">
                 <div class="stat-label">Leave Used</div>
-                <div class="stat-val">3</div>
-                <div class="stat-sub">/ 12 days remaining</div>
+                <div class="stat-val" id="timeLeaveUsed">3</div>
+                <div class="stat-sub" id="timeLeaveSub">/ 12 days remaining</div>
               </div>
               <div class="stat-card">
                 <div class="stat-label">OT Hours</div>
-                <div class="stat-val">14h</div>
-                <div class="stat-sub neg">–2h vs monthly avg</div>
+                <div class="stat-val" id="timeOtHours">14h</div>
+                <div class="stat-sub neg" id="timeOtSub">–2h vs monthly avg</div>
               </div>
             </div>
           </div>
@@ -1116,7 +1188,7 @@ function filterCompBySelect(selectEl) {
   renderCompSummary(selectEl.value);
 }
 
-const compSummaryByYear = {
+let compSummaryByYear = {
   '2025': {
     baseSalary: '27M',
     baseSub: 'VND / thang',
@@ -1124,8 +1196,8 @@ const compSummaryByYear = {
     allowanceYoY: '+8% YoY',
     bonus: '8.4M',
     bonusYoY: '+10% YoY',
-    grade: 'SE4',
-    gradeBand: 'Band L2.3'
+    totalSalary: '37M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
   },
   '2024': {
     baseSalary: '26M',
@@ -1134,8 +1206,8 @@ const compSummaryByYear = {
     allowanceYoY: '+7% YoY',
     bonus: '7.6M',
     bonusYoY: '+9% YoY',
-    grade: 'SE4',
-    gradeBand: 'Band L2.2'
+    totalSalary: '35M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
   },
   '2023': {
     baseSalary: '24.2M',
@@ -1144,8 +1216,8 @@ const compSummaryByYear = {
     allowanceYoY: '+6% YoY',
     bonus: '6.8M',
     bonusYoY: '+8% YoY',
-    grade: 'SE3',
-    gradeBand: 'Band L2.1'
+    totalSalary: '32.2M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
   },
   '2022': {
     baseSalary: '22M',
@@ -1154,8 +1226,8 @@ const compSummaryByYear = {
     allowanceYoY: '+5% YoY',
     bonus: '6.2M',
     bonusYoY: '+7% YoY',
-    grade: 'SE3',
-    gradeBand: 'Band L2.0'
+    totalSalary: '29.3M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
   },
   '2021': {
     baseSalary: '20M',
@@ -1164,8 +1236,8 @@ const compSummaryByYear = {
     allowanceYoY: '+4% YoY',
     bonus: '5.5M',
     bonusYoY: '+6% YoY',
-    grade: 'SE2',
-    gradeBand: 'Band L1.3'
+    totalSalary: '26.5M',
+    totalSalaryNote: 'Base + Allowance + Bonus'
   }
 };
 
@@ -1177,10 +1249,10 @@ function renderCompSummary(year) {
   const allowanceYoY = document.getElementById('compAllowanceYoY');
   const bonus = document.getElementById('compBonus');
   const bonusYoY = document.getElementById('compBonusYoY');
-  const grade = document.getElementById('compGrade');
-  const gradeBand = document.getElementById('compGradeBand');
+  const totalSalary = document.getElementById('compTotalSalary');
+  const totalSalaryNote = document.getElementById('compTotalSalaryNote');
 
-  if (!baseSalary || !baseSub || !allowance || !allowanceYoY || !bonus || !bonusYoY || !grade || !gradeBand) return;
+  if (!baseSalary || !baseSub || !allowance || !allowanceYoY || !bonus || !bonusYoY || !totalSalary || !totalSalaryNote) return;
 
   baseSalary.textContent = summary.baseSalary;
   baseSub.textContent = summary.baseSub;
@@ -1188,16 +1260,16 @@ function renderCompSummary(year) {
   allowanceYoY.textContent = summary.allowanceYoY;
   bonus.textContent = summary.bonus;
   bonusYoY.textContent = summary.bonusYoY;
-  grade.textContent = summary.grade;
-  gradeBand.textContent = summary.gradeBand;
+  totalSalary.textContent = summary.totalSalary;
+  totalSalaryNote.textContent = summary.totalSalaryNote;
 }
 
-const compSeries = {
+let compSeries = {
   year: {
-    title: 'Salary Trend (Yearly)',
+    title: 'Total Salary Trend (Yearly)',
     labels: ['2021', '2022', '2023', '2024', '2025'],
     dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'],
-    values: [20, 22, 24.2, 26, 27],
+    values: [26.5, 29.3, 32.2, 35, 37],
     unit: 'M'
   }
 };
@@ -1330,7 +1402,7 @@ function filterPerf(btn, type) {
   console.log('Performance filter:', type);
 }
 
-const perfKpiByYear = {
+let perfKpiByYear = {
   '2025': [
     { label: 'Revenue', value: 94, color: 'orange' },
     { label: 'Jira On-time', value: 91, color: 'teal' },
@@ -1429,7 +1501,7 @@ const radarAxes = [
   'Communication'
 ];
 
-const radarSeries = {
+let radarSeries = {
   '2023': {
     self: [4, 4, 2, 2, 4, 2, 4, 4],
     manager: [3, 3, 4, 4, 3, 5, 4, 3]
@@ -1457,6 +1529,298 @@ function getRadarPoint(index, value) {
     x: center + (Math.cos(angle) * radius),
     y: center + (Math.sin(angle) * radius)
   };
+}
+
+const assignmentDataByRole = {
+  software_engineer: {
+    profile: {
+      name: 'Nguyễn Bùi Thành - thanhnb4',
+      code: 'Employee Code: VG-17230',
+      country: 'Viet Nam',
+      dob: '01/01/2000',
+      email: 'thanhnb4@vng.com.vn',
+      phone: '+84 123456789',
+      skills: ['Angular', 'TypeScript', 'Node.js', 'JavaScript', 'HTML5', 'MySQL']
+    },
+    contract: {
+      legalEntity: 'VNG Group JSC',
+      type: 'EMPLOYEE',
+      jobTitle: 'Software Engineer',
+      position: 'Software Engineer L1',
+      joinDate: '03/09/2013',
+      endDate: '',
+      status: 'Active',
+      seniority: '3 years 4 months 12 days',
+      employeeClass: 'Permanent',
+      contractType: 'Labour Contract Unlimited',
+      location: 'VNG Campus'
+    },
+    org: {
+      businessUnit: 'INCT',
+      department: 'A4B',
+      team: 'DataBase',
+      costCenter: '1211',
+      manager: { avatar: 'TN', name: 'Trần Văn Nam', role: 'Engineering Manager' },
+      reports: [
+        { avatar: 'HL', name: 'Hoàng Linh', role: 'Backend Engineer' },
+        { avatar: 'TM', name: 'Trần Minh', role: 'Data Engineer' },
+        { avatar: 'QT', name: 'Quốc Thịnh', role: 'QA Engineer' }
+      ],
+      more: 2
+    },
+    compSummaryByYear,
+    compSeries: compSeries.year,
+    perfKpiByYear,
+    radarSeries,
+    learning: {
+      education: [{ name: 'Dai hoc FPT', note: 'Bachelor of Software Engineering', time: '2017 - 2021' }],
+      certs: [
+        { name: 'AWS Cloud Practitioner', note: 'Amazon Web Services', time: '2020' },
+        { name: 'Coursera Project Management', note: 'Google Professional Certificate', time: '2021' },
+        { name: 'Scrum Fundamentals Certified', note: 'SCRUMstudy', time: '2022' }
+      ]
+    },
+    time: {
+      workingDays: '22', workingSub: 'April 2025',
+      present: '21', presentSub: '95.5% attendance',
+      leaveUsed: '3', leaveSub: '/ 12 days remaining',
+      otHours: '14h', otSub: '–2h vs monthly avg'
+    }
+  },
+  senior_product_engineer: {
+    profile: {
+      name: 'Nguyễn Bùi Thành - thanhnb4',
+      code: 'Employee Code: VG-17230',
+      country: 'Viet Nam',
+      dob: '01/01/2000',
+      email: 'thanhnb4@vng.com.vn',
+      phone: '+84 123456789',
+      skills: ['Angular', 'TypeScript', 'Node.js', 'JavaScript', 'HTML5', 'MySQL']
+    },
+    contract: {
+      legalEntity: 'VNG Group JSC', type: 'EMPLOYEE', jobTitle: 'Senior Product Engineer', position: 'Senior Product Engineer',
+      joinDate: '01/01/2021', endDate: '', status: 'Active', seniority: '4 years 3 months 5 days',
+      employeeClass: 'Permanent', contractType: 'Labour Contract Unlimited', location: 'VNG Campus'
+    },
+    org: {
+      businessUnit: 'Zalo', department: 'ZA', team: 'Zalo Product Team', costCenter: '2230',
+      manager: { avatar: 'PL', name: 'Phạm Lâm', role: 'Director of Product' },
+      reports: [
+        { avatar: 'VN', name: 'Vũ Nam', role: 'Product Analyst' },
+        { avatar: 'TH', name: 'Tạ Hân', role: 'UX Researcher' }
+      ],
+      more: 1
+    },
+    compSummaryByYear: {
+      '2025': { baseSalary: '31M', baseSub: 'VND / tháng', allowance: '2.1M', allowanceYoY: '+9% YoY', bonus: '11.4M', bonusYoY: '+12% YoY', totalSalary: '44.5M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2024': { baseSalary: '29M', baseSub: 'VND / tháng', allowance: '1.9M', allowanceYoY: '+8% YoY', bonus: '10.3M', bonusYoY: '+11% YoY', totalSalary: '41.2M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2023': { baseSalary: '27M', baseSub: 'VND / tháng', allowance: '1.7M', allowanceYoY: '+7% YoY', bonus: '9.0M', bonusYoY: '+10% YoY', totalSalary: '37.7M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2022': { baseSalary: '24.5M', baseSub: 'VND / tháng', allowance: '1.5M', allowanceYoY: '+6% YoY', bonus: '8.0M', bonusYoY: '+9% YoY', totalSalary: '34.0M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2021': { baseSalary: '22M', baseSub: 'VND / tháng', allowance: '1.2M', allowanceYoY: '+5% YoY', bonus: '7.2M', bonusYoY: '+8% YoY', totalSalary: '30.4M', totalSalaryNote: 'Base + Allowance + Bonus' }
+    },
+    compSeries: { title: 'Total Salary Trend (Yearly)', labels: ['2021', '2022', '2023', '2024', '2025'], dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'], values: [30.4, 34.0, 37.7, 41.2, 44.5], unit: 'M' },
+    perfKpiByYear: {
+      '2025': [{ label: 'Product Impact', value: 95, color: 'orange' }, { label: 'Delivery Quality', value: 92, color: 'teal' }, { label: 'Cross-team Sync', value: 90, color: 'amber' }, { label: 'User Satisfaction', value: 94, color: 'teal' }],
+      '2024': [{ label: 'Product Impact', value: 92, color: 'orange' }, { label: 'Delivery Quality', value: 89, color: 'teal' }, { label: 'Cross-team Sync', value: 87, color: 'amber' }, { label: 'User Satisfaction', value: 90, color: 'teal' }],
+      '2023': [{ label: 'Product Impact', value: 89, color: 'orange' }, { label: 'Delivery Quality', value: 86, color: 'teal' }, { label: 'Cross-team Sync', value: 84, color: 'amber' }, { label: 'User Satisfaction', value: 88, color: 'teal' }],
+      '2022': [{ label: 'Product Impact', value: 85, color: 'orange' }, { label: 'Delivery Quality', value: 82, color: 'teal' }, { label: 'Cross-team Sync', value: 80, color: 'amber' }, { label: 'User Satisfaction', value: 83, color: 'teal' }],
+      '2021': [{ label: 'Product Impact', value: 81, color: 'orange' }, { label: 'Delivery Quality', value: 78, color: 'teal' }, { label: 'Cross-team Sync', value: 76, color: 'amber' }, { label: 'User Satisfaction', value: 79, color: 'teal' }],
+      '2020': [{ label: 'Product Impact', value: 76, color: 'orange' }, { label: 'Delivery Quality', value: 74, color: 'teal' }, { label: 'Cross-team Sync', value: 72, color: 'amber' }, { label: 'User Satisfaction', value: 75, color: 'teal' }]
+    },
+    radarSeries: {
+      '2023': { self: [4.5, 4.2, 4.4, 4.1, 4.3, 4.0, 4.2, 4.4], manager: [4.2, 4.0, 4.1, 4.0, 4.1, 3.9, 4.0, 4.1] },
+      '2022': { self: [4.1, 4.0, 4.2, 3.9, 4.0, 3.8, 4.0, 4.1], manager: [3.9, 3.8, 3.9, 3.7, 3.8, 3.7, 3.8, 3.9] },
+      '2021': { self: [3.8, 3.7, 3.9, 3.6, 3.7, 3.6, 3.7, 3.8], manager: [3.6, 3.5, 3.7, 3.5, 3.6, 3.4, 3.5, 3.6] },
+      '2020': { self: [3.4, 3.3, 3.5, 3.3, 3.4, 3.2, 3.3, 3.4], manager: [3.2, 3.1, 3.3, 3.1, 3.2, 3.0, 3.1, 3.2] }
+    },
+    learning: {
+      education: [{ name: 'RMIT Vietnam', note: 'Bachelor of Business Information Systems', time: '2015 - 2019' }],
+      certs: [
+        { name: 'Product Management Certificate', note: 'Reforge', time: '2022' },
+        { name: 'Design Thinking', note: 'IDEO U', time: '2023' }
+      ]
+    },
+    time: { workingDays: '22', workingSub: 'April 2025', present: '22', presentSub: '100% attendance', leaveUsed: '2', leaveSub: '/ 13 days remaining', otHours: '10h', otSub: '–6h vs monthly avg' }
+  },
+  consultant_manager: {
+    profile: {
+      name: 'Nguyễn Bùi Thành - thanhnb4',
+      code: 'Employee Code: VG-17230',
+      country: 'Viet Nam',
+      dob: '01/01/2000',
+      email: 'thanhnb4@vng.com.vn',
+      phone: '+84 123456789',
+      skills: ['Angular', 'TypeScript', 'Node.js', 'JavaScript', 'HTML5', 'MySQL']
+    },
+    contract: {
+      legalEntity: 'VNG Group JSC', type: 'EMPLOYEE', jobTitle: 'Consultant Manager', position: 'Consultant Manager',
+      joinDate: '01/01/2021', endDate: '', status: 'Active', seniority: '4 years 3 months 5 days',
+      employeeClass: 'Permanent', contractType: 'Labour Contract Unlimited', location: 'VNG Campus'
+    },
+    org: {
+      businessUnit: 'ZNS', department: 'FA', team: 'Enterprise Consulting', costCenter: '3198',
+      manager: { avatar: 'LM', name: 'Lê Minh', role: 'Head of Consulting' },
+      reports: [
+        { avatar: 'HA', name: 'Hà Anh', role: 'Consultant' },
+        { avatar: 'BT', name: 'Bảo Trâm', role: 'Business Analyst' },
+        { avatar: 'KH', name: 'Khánh Huy', role: 'Consultant' }
+      ],
+      more: 0
+    },
+    compSummaryByYear: {
+      '2025': { baseSalary: '29M', baseSub: 'VND / tháng', allowance: '1.8M', allowanceYoY: '+7% YoY', bonus: '10.0M', bonusYoY: '+9% YoY', totalSalary: '40.8M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2024': { baseSalary: '27.5M', baseSub: 'VND / tháng', allowance: '1.6M', allowanceYoY: '+6% YoY', bonus: '9.1M', bonusYoY: '+8% YoY', totalSalary: '38.2M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2023': { baseSalary: '25.5M', baseSub: 'VND / tháng', allowance: '1.4M', allowanceYoY: '+5% YoY', bonus: '8.2M', bonusYoY: '+8% YoY', totalSalary: '35.1M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2022': { baseSalary: '23.5M', baseSub: 'VND / tháng', allowance: '1.3M', allowanceYoY: '+5% YoY', bonus: '7.4M', bonusYoY: '+7% YoY', totalSalary: '32.2M', totalSalaryNote: 'Base + Allowance + Bonus' },
+      '2021': { baseSalary: '21.5M', baseSub: 'VND / tháng', allowance: '1.1M', allowanceYoY: '+4% YoY', bonus: '6.5M', bonusYoY: '+6% YoY', totalSalary: '29.1M', totalSalaryNote: 'Base + Allowance + Bonus' }
+    },
+    compSeries: { title: 'Total Salary Trend (Yearly)', labels: ['2021', '2022', '2023', '2024', '2025'], dates: ['01/07/2021', '01/07/2022', '01/07/2023', '01/07/2024', '01/07/2025'], values: [29.1, 32.2, 35.1, 38.2, 40.8], unit: 'M' },
+    perfKpiByYear: {
+      '2025': [{ label: 'Revenue', value: 90, color: 'orange' }, { label: 'Client Satisfaction', value: 93, color: 'teal' }, { label: 'Delivery SLA', value: 88, color: 'amber' }, { label: 'Renewal Rate', value: 91, color: 'teal' }],
+      '2024': [{ label: 'Revenue', value: 88, color: 'orange' }, { label: 'Client Satisfaction', value: 90, color: 'teal' }, { label: 'Delivery SLA', value: 86, color: 'amber' }, { label: 'Renewal Rate', value: 89, color: 'teal' }],
+      '2023': [{ label: 'Revenue', value: 85, color: 'orange' }, { label: 'Client Satisfaction', value: 88, color: 'teal' }, { label: 'Delivery SLA', value: 83, color: 'amber' }, { label: 'Renewal Rate', value: 86, color: 'teal' }],
+      '2022': [{ label: 'Revenue', value: 82, color: 'orange' }, { label: 'Client Satisfaction', value: 84, color: 'teal' }, { label: 'Delivery SLA', value: 80, color: 'amber' }, { label: 'Renewal Rate', value: 83, color: 'teal' }],
+      '2021': [{ label: 'Revenue', value: 79, color: 'orange' }, { label: 'Client Satisfaction', value: 81, color: 'teal' }, { label: 'Delivery SLA', value: 77, color: 'amber' }, { label: 'Renewal Rate', value: 80, color: 'teal' }],
+      '2020': [{ label: 'Revenue', value: 74, color: 'orange' }, { label: 'Client Satisfaction', value: 76, color: 'teal' }, { label: 'Delivery SLA', value: 72, color: 'amber' }, { label: 'Renewal Rate', value: 75, color: 'teal' }]
+    },
+    radarSeries: {
+      '2023': { self: [4.2, 4.4, 4.3, 3.8, 4.1, 4.5, 4.0, 4.4], manager: [4.0, 4.1, 4.0, 3.7, 3.9, 4.2, 3.8, 4.0] },
+      '2022': { self: [3.9, 4.1, 4.0, 3.6, 3.8, 4.2, 3.7, 4.0], manager: [3.7, 3.9, 3.8, 3.5, 3.6, 3.9, 3.5, 3.8] },
+      '2021': { self: [3.6, 3.8, 3.7, 3.4, 3.5, 3.9, 3.4, 3.7], manager: [3.4, 3.6, 3.5, 3.2, 3.3, 3.6, 3.2, 3.4] },
+      '2020': { self: [3.2, 3.5, 3.3, 3.0, 3.1, 3.6, 3.0, 3.4], manager: [3.0, 3.3, 3.1, 2.8, 2.9, 3.3, 2.8, 3.1] }
+    },
+    learning: {
+      education: [{ name: 'University of Economics HCMC', note: 'Bachelor of International Business', time: '2014 - 2018' }],
+      certs: [
+        { name: 'PMP', note: 'Project Management Institute', time: '2021' },
+        { name: 'Consultative Selling', note: 'LinkedIn Learning', time: '2023' }
+      ]
+    },
+    time: { workingDays: '22', workingSub: 'April 2025', present: '20', presentSub: '90.9% attendance', leaveUsed: '4', leaveSub: '/ 11 days remaining', otHours: '12h', otSub: '–4h vs monthly avg' }
+  }
+};
+
+function renderProfileSkills(skills) {
+  const row = document.getElementById('profileSkillsRow');
+  if (!row) return;
+  const topSkills = (skills || []).slice(0, 5);
+  const remain = Math.max((skills || []).length - topSkills.length, 0);
+  row.innerHTML = `
+    <span class="skills-label">Skills:</span>
+    ${topSkills.map((s) => `<span class="skill-tag">${s}</span>`).join('')}
+    ${remain > 0 ? `<span class="skill-more">+${remain} more</span>` : ''}
+  `;
+}
+
+function renderOrgReports(reports, moreCount) {
+  const wrap = document.getElementById('orgReportList');
+  if (!wrap) return;
+  wrap.innerHTML = (reports || [])
+    .map((r) => `
+      <div class="mgr-card">
+        <div class="mgr-avatar">${r.avatar}</div>
+        <div>
+          <div class="mgr-name">${r.name}</div>
+          <div class="mgr-role">${r.role}</div>
+        </div>
+      </div>
+    `)
+    .join('') + (moreCount > 0 ? `<div class="report-more">+${moreCount} more</div>` : '');
+}
+
+function renderLearningList(listId, items) {
+  const el = document.getElementById(listId);
+  if (!el) return;
+  el.innerHTML = (items || [])
+    .map((item) => `
+      <div class="learn-item">
+        <div>
+          <div class="learn-name">${item.name}</div>
+          <div class="learn-note">${item.note}</div>
+        </div>
+        <div class="learn-time">${item.time}</div>
+      </div>
+    `)
+    .join('');
+}
+
+function applyAssignmentData(key) {
+  const data = assignmentDataByRole[key] || assignmentDataByRole.software_engineer;
+
+  // Employee Profile
+  const profileName = document.querySelector('.profile-name');
+  if (profileName) profileName.textContent = data.profile.name;
+  const workerId = document.getElementById('profileWorkerId');
+  if (workerId) workerId.textContent = data.profile.code;
+  const country = document.getElementById('profileCountry');
+  const dob = document.getElementById('profileDob');
+  const email = document.getElementById('profileEmail');
+  const phone = document.getElementById('profilePhone');
+  if (country) country.textContent = data.profile.country;
+  if (dob) dob.textContent = data.profile.dob;
+  if (email) email.textContent = data.profile.email;
+  if (phone) phone.textContent = data.profile.phone;
+  renderProfileSkills(data.profile.skills);
+
+  // Contract Information
+  const setText = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value || ''; };
+  setText('contractLegalEntity', data.contract.legalEntity);
+  setText('contractType', data.contract.type);
+  setText('contractJobTitle', data.contract.jobTitle);
+  setText('contractPosition', data.contract.position);
+  setText('contractJoinDate', data.contract.joinDate);
+  setText('contractEndDate', data.contract.endDate);
+  setText('contractStatus', data.contract.status);
+  setText('contractSeniority', data.contract.seniority);
+  setText('contractEmployeeClass', data.contract.employeeClass);
+  setText('contractContractType', data.contract.contractType);
+  setText('contractLocation', data.contract.location);
+
+  // Organization
+  setText('orgBusinessUnit', data.org.businessUnit);
+  setText('orgDepartment', data.org.department);
+  setText('orgTeam', data.org.team);
+  setText('orgCostCenter', data.org.costCenter);
+  setText('orgManagerAvatar', data.org.manager.avatar);
+  setText('orgManagerName', data.org.manager.name);
+  setText('orgManagerRole', data.org.manager.role);
+  renderOrgReports(data.org.reports, data.org.more);
+
+  // Compensation + chart
+  compSummaryByYear = data.compSummaryByYear;
+  compSeries = { year: data.compSeries };
+  const compYear = document.getElementById('compYearSelect')?.value || '2025';
+  renderCompSummary(compYear);
+  renderCompLine('year');
+
+  // Performance
+  perfKpiByYear = data.perfKpiByYear;
+  renderPerfYearRatings();
+  const perfSelectValue = document.getElementById('perfYearSelect')?.value || 'all';
+  if (perfSelectValue === 'all') {
+    selectPerfYear('2025');
+  } else {
+    selectPerfYear(perfSelectValue);
+  }
+  filterPerfBySelect(document.getElementById('perfYearSelect'));
+
+  // Capability Radar
+  radarSeries = data.radarSeries;
+  filterRadarBySelect(document.getElementById('radarYearSelect'));
+
+  // Learning & Certification
+  renderLearningList('learningEducationList', data.learning.education);
+  renderLearningList('learningCertList', data.learning.certs);
+
+  // Time & Attendance
+  setText('timeWorkingDays', data.time.workingDays);
+  setText('timeWorkingDaysSub', data.time.workingSub);
+  setText('timePresent', data.time.present);
+  setText('timePresentSub', data.time.presentSub);
+  setText('timeLeaveUsed', data.time.leaveUsed);
+  setText('timeLeaveSub', data.time.leaveSub);
+  setText('timeOtHours', data.time.otHours);
+  setText('timeOtSub', data.time.otSub);
 }
 
 function renderRadar(year) {
@@ -1717,12 +2081,260 @@ function initCardPopupActions() {
   });
 }
 
-// Department filter
-document.getElementById('deptFilter')?.addEventListener('change', function() {
-  const label = this.options[this.selectedIndex].text;
-  document.getElementById('deptLabel').textContent = label;
-  console.log('Department filter:', this.value);
-});
+const mockEmployees = [
+  { name: 'Nguyen Bui Thanh - thanhbn', dept: 'A4B' },
+  { name: 'Tran Van Nam - namtv3', dept: 'A4B' },
+  { name: 'Hoang Linh - linhhl', dept: 'HR' },
+  { name: 'Tran Minh - minht', dept: 'FA' },
+  { name: 'Quoc Thinh - thinhq', dept: 'AF' },
+  { name: 'Pham Duc Anh - anhpd', dept: 'DC' },
+  { name: 'Le Thu Ha - halet', dept: 'ZA' },
+  { name: 'Vo Gia Phuc - phucvg2', dept: 'PY' },
+  { name: 'Do Khanh Linh - linhdk43', dept: 'HR' },
+  { name: 'Nguyen Tuan Kiet - kietnt11', dept: 'FA' }
+];
+
+const deptLegalEntityMap = {
+  HR: 'VNG',
+  A4B: 'A4B',
+  FA: 'VNGG',
+  AF: 'TrueID',
+  DC: 'Zion',
+  ZA: 'VNGG',
+  PY: 'TrueID'
+};
+
+function getLegalEntityByDept(dept) {
+  return deptLegalEntityMap[dept] || 'VNG';
+}
+
+function getAllowedDeptSetByLegalEntity(legalEntity) {
+  if (legalEntity === 'all') {
+    return new Set(Object.keys(deptLegalEntityMap));
+  }
+  return new Set(
+    Object.entries(deptLegalEntityMap)
+      .filter(([, legal]) => legal === legalEntity)
+      .map(([dept]) => dept)
+  );
+}
+
+function renderEmployeeOptions() {
+  const dept = document.getElementById('deptFilter')?.value || 'all';
+  const legalEntity = document.getElementById('legalEntityFilter')?.value || 'all';
+  const searchInput = document.getElementById('employeeSearch');
+  const results = document.getElementById('employeeSearchResults');
+  if (!searchInput || !results) return;
+
+  const keyword = searchInput.value.trim().toLowerCase();
+  const filtered = mockEmployees.filter((emp) => {
+    const matchDept = dept === 'all' || emp.dept === dept;
+    const matchLegal = legalEntity === 'all' || getLegalEntityByDept(emp.dept) === legalEntity;
+    const matchName = !keyword || emp.name.toLowerCase().includes(keyword);
+    return matchDept && matchLegal && matchName;
+  });
+
+  results.innerHTML = filtered
+    .map((emp) => `
+      <div class="employee-option" data-name="${emp.name}" data-dept="${emp.dept}">
+        <span class="name">${emp.name}</span>
+        <span class="dept">${emp.dept} · ${getLegalEntityByDept(emp.dept)}</span>
+      </div>
+    `)
+    .join('');
+
+  results.classList.toggle('show', filtered.length > 0 && (keyword.length > 0 || document.activeElement === searchInput));
+}
+
+function bindDepartmentEmployeeFilters() {
+  const legalEntityFilter = document.getElementById('legalEntityFilter');
+  const legalEntitySelect = document.getElementById('legalEntitySelect');
+  const legalEntityDisplay = document.getElementById('legalEntityDisplay');
+  const legalEntityOptions = document.getElementById('legalEntityOptions');
+  const deptFilter = document.getElementById('deptFilter');
+  const deptSelect = document.getElementById('deptSelect');
+  const deptDisplay = document.getElementById('deptDisplay');
+  const deptOptions = document.getElementById('deptOptions');
+  const employeeSearch = document.getElementById('employeeSearch');
+  const searchResults = document.getElementById('employeeSearchResults');
+  if (!legalEntityFilter || !deptFilter || !employeeSearch) return;
+
+  const deptBaseOptions = Array.from(deptFilter.options).map((opt) => ({
+    value: opt.value,
+    label: opt.textContent || ''
+  }));
+
+  function renderDeptOptionsByLegalEntity() {
+    const allowedDepts = getAllowedDeptSetByLegalEntity(legalEntityFilter.value);
+    if (!deptOptions) return;
+    deptOptions.innerHTML = deptBaseOptions
+      .filter((opt) => opt.value === 'all' || allowedDepts.has(opt.value))
+      .map((opt) => `<div class="dept-option" data-value="${opt.value}">${opt.label}</div>`)
+      .join('');
+  }
+
+  if (legalEntityOptions) {
+    legalEntityOptions.innerHTML = Array.from(legalEntityFilter.options)
+      .map((opt) => `<div class="dept-option" data-value="${opt.value}">${opt.textContent || ''}</div>`)
+      .join('');
+  }
+
+  function syncLegalEntityUi() {
+    const selected = legalEntityFilter.options[legalEntityFilter.selectedIndex];
+    if (legalEntityDisplay && selected) legalEntityDisplay.textContent = selected.textContent || '';
+    legalEntityOptions?.querySelectorAll('.dept-option').forEach((opt) => {
+      opt.classList.toggle('active', opt.getAttribute('data-value') === legalEntityFilter.value);
+    });
+  }
+
+  function syncDeptUi() {
+    renderDeptOptionsByLegalEntity();
+    const selected = deptFilter.options[deptFilter.selectedIndex];
+    if (deptDisplay && selected) deptDisplay.textContent = selected.textContent || '';
+    deptOptions?.querySelectorAll('.dept-option').forEach((opt) => {
+      opt.classList.toggle('active', opt.getAttribute('data-value') === deptFilter.value);
+    });
+  }
+
+  legalEntitySelect?.addEventListener('click', (event) => {
+    if (event.target.closest('.dept-option')) return;
+    legalEntityOptions?.classList.toggle('show');
+  });
+
+  legalEntityOptions?.addEventListener('click', (event) => {
+    const option = event.target.closest('.dept-option');
+    if (!option) return;
+    legalEntityFilter.value = option.getAttribute('data-value') || 'all';
+    legalEntityFilter.dispatchEvent(new Event('change'));
+    legalEntityOptions.classList.remove('show');
+  });
+
+  legalEntityFilter.addEventListener('change', () => {
+    const allowedDepts = getAllowedDeptSetByLegalEntity(legalEntityFilter.value);
+    if (deptFilter.value !== 'all' && !allowedDepts.has(deptFilter.value)) {
+      deptFilter.value = 'all';
+    }
+    syncLegalEntityUi();
+    deptFilter.dispatchEvent(new Event('change'));
+  });
+
+  deptSelect?.addEventListener('click', (event) => {
+    if (event.target.closest('.dept-option')) return;
+    deptOptions?.classList.toggle('show');
+  });
+
+  deptOptions?.addEventListener('click', (event) => {
+    const option = event.target.closest('.dept-option');
+    if (!option) return;
+    const value = option.getAttribute('data-value') || 'all';
+    deptFilter.value = value;
+    deptFilter.dispatchEvent(new Event('change'));
+    deptOptions.classList.remove('show');
+  });
+
+  deptFilter.addEventListener('change', () => {
+    syncDeptUi();
+    renderEmployeeOptions();
+    console.log('Department filter:', deptFilter.value);
+  });
+
+  employeeSearch.addEventListener('input', () => {
+    renderEmployeeOptions();
+  });
+
+  employeeSearch.addEventListener('focus', () => {
+    renderEmployeeOptions();
+  });
+
+  employeeSearch.addEventListener('change', () => {
+    const profileName = document.querySelector('.profile-name');
+    const matched = mockEmployees.find((emp) => emp.name === employeeSearch.value);
+    if (matched && profileName) {
+      profileName.textContent = matched.name;
+      if (deptFilter.value === 'all') {
+        deptFilter.value = matched.dept;
+        renderEmployeeOptions();
+      }
+    }
+  });
+
+  searchResults?.addEventListener('click', (event) => {
+    const option = event.target.closest('.employee-option');
+    if (!option) return;
+
+    const name = option.getAttribute('data-name') || '';
+    const dept = option.getAttribute('data-dept') || 'all';
+    const profileName = document.querySelector('.profile-name');
+
+    employeeSearch.value = name;
+    if (profileName) profileName.textContent = name;
+    deptFilter.value = dept;
+    deptFilter.dispatchEvent(new Event('change'));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.search-wrap')) {
+      searchResults?.classList.remove('show');
+    }
+    if (!event.target.closest('.dept-select')) {
+      deptOptions?.classList.remove('show');
+    }
+    if (!event.target.closest('.legal-entity-select')) {
+      legalEntityOptions?.classList.remove('show');
+    }
+  });
+
+  syncLegalEntityUi();
+  syncDeptUi();
+  renderEmployeeOptions();
+}
+
+function bindAssignmentFilter() {
+  const assignmentFilter = document.getElementById('assignmentFilter');
+  const assignmentSelect = document.getElementById('assignmentSelect');
+  const assignmentDisplay = document.getElementById('assignmentDisplay');
+  const assignmentOptions = document.getElementById('assignmentOptions');
+  if (!assignmentFilter || !assignmentSelect || !assignmentDisplay || !assignmentOptions) return;
+
+  assignmentOptions.innerHTML = Array.from(assignmentFilter.options)
+    .map((opt) => `<div class="dept-option" data-value="${opt.value}">${opt.textContent || ''}</div>`)
+    .join('');
+
+  function syncAssignmentUi() {
+    const selected = assignmentFilter.options[assignmentFilter.selectedIndex];
+    if (selected) assignmentDisplay.textContent = selected.textContent || '';
+    assignmentOptions.querySelectorAll('.dept-option').forEach((opt) => {
+      opt.classList.toggle('active', opt.getAttribute('data-value') === assignmentFilter.value);
+    });
+  }
+
+  assignmentSelect.addEventListener('click', (event) => {
+    if (event.target.closest('.dept-option')) return;
+    assignmentOptions.classList.toggle('show');
+  });
+
+  assignmentOptions.addEventListener('click', (event) => {
+    const option = event.target.closest('.dept-option');
+    if (!option) return;
+    assignmentFilter.value = option.getAttribute('data-value') || assignmentFilter.value;
+    assignmentFilter.dispatchEvent(new Event('change'));
+    assignmentOptions.classList.remove('show');
+  });
+
+  assignmentFilter.addEventListener('change', function() {
+    syncAssignmentUi();
+    applyAssignmentData(this.value);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.assignment-select')) {
+      assignmentOptions.classList.remove('show');
+    }
+  });
+
+  syncAssignmentUi();
+  applyAssignmentData(assignmentFilter.value);
+}
 
 renderCompLine('year');
 renderCompSummary(document.getElementById('compYearSelect')?.value || '2025');
@@ -1731,4 +2343,6 @@ renderPerfKpi('2023');
 filterRadarBySelect(document.getElementById('radarYearSelect'));
 filterPerfBySelect(document.getElementById('perfYearSelect'));
 initCardPopupActions();
+bindDepartmentEmployeeFilters();
+bindAssignmentFilter();
 </script>
