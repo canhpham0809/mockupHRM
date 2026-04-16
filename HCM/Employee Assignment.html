@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Assignment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f4f2ee; --surface:#fff; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-light:#fff3ef; --blue:#185fa5; --blue-bg:#e6f1fb; --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); color:var(--text); background:transparent; }
+  .widget { width:100%; height:100%; padding:16px; overflow:auto; background:transparent; display:grid; gap:8px; }
+  .field-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px 18px; }
+  .field-label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); font-weight:700; margin-bottom:4px; }
+  .field-val { font-size:13px; font-weight:600; }
+  .block { background:transparent; border:none; border-radius:0; padding:0px 12px; }
+  .mgr-card { display:flex; align-items:center; gap:10px; }
+  .avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; background:var(--blue-bg); color:var(--blue); }
+  .mgr-name { font-size:13px; font-weight:700; }
+  .mgr-role { font-size:11px; color:var(--muted); }
+  .report-list { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+  .report-item { display:flex; align-items:center; gap:8px; background:var(--orange-light); color:var(--orange); border-radius:999px; padding:6px 10px; font-size:12px; font-weight:600; }
+  @media (max-width: 720px) { .widget { padding:12px; } .field-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Employee Assignment">
+    <div class="block">
+      <div class="field-grid">
+        <div><div class="field-label">Job Title</div><div class="field-val" id="assignmentJobTitle"></div></div>
+        <div><div class="field-label">Position</div><div class="field-val" id="assignmentPosition"></div></div>
+        <div><div class="field-label">Start Date</div><div class="field-val" id="assignmentStartDate"></div></div>
+        <div><div class="field-label">End Date</div><div class="field-val" id="assignmentEndDate"></div></div>
+
+        <div><div class="field-label">Business Unit</div><div class="field-val" id="orgBusinessUnit"></div></div>
+        <div><div class="field-label">Department</div><div class="field-val" id="orgDepartment"></div></div>
+        <div><div class="field-label">Team</div><div class="field-val" id="orgTeam"></div></div>
+        <div><div class="field-label">Working Location</div><div class="field-val" id="orgWorkingLocation"></div></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="field-label">Line Manager</div>
+      <div class="mgr-card">
+        <div class="avatar" id="orgManagerAvatar"></div>
+        <div>
+          <div class="mgr-name" id="orgManagerName"></div>
+          <div class="mgr-role" id="orgManagerRole"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="field-label">Direct Reports</div>
+      <div class="report-list" id="orgReportList"></div>
+    </div>
+  </section>
+
+  <script>
+    const mockAssignment = {
+      jobTitle: 'Senior Software Engineer',
+      position: 'Senior Software Engineer L1',
+      startDate: '15/01/2020',
+      endDate: '',
+      businessUnit: 'Technology',
+      department: 'Engineering',
+      team: 'Platform Team',
+      workingLocation: 'VNG Campus',
+      manager: { avatar: 'TB', name: 'Tran Van B', role: 'Engineering Manager' },
+      reports: [
+        { avatar: 'DV', name: 'Ngo Van D' },
+        { avatar: 'LT', name: 'Le Thu C' },
+        { avatar: 'PH', name: 'Pham Hoang E' },
+        { avatar: 'QN', name: 'Quang N' }
+      ]
+    };
+
+    function setText(id, value, fallback = '-') {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const content = String(value || '').trim();
+      el.textContent = content || fallback;
+    }
+
+    function renderAssignment(data) {
+      setText('assignmentJobTitle', data.jobTitle);
+      setText('assignmentPosition', data.position);
+      setText('assignmentStartDate', data.startDate);
+      setText('assignmentEndDate', data.endDate);
+      setText('orgBusinessUnit', data.businessUnit);
+      setText('orgDepartment', data.department);
+      setText('orgTeam', data.team);
+      setText('orgWorkingLocation', data.workingLocation);
+      setText('orgManagerAvatar', data.manager?.avatar);
+      setText('orgManagerName', data.manager?.name);
+      setText('orgManagerRole', data.manager?.role);
+
+      const list = document.getElementById('orgReportList');
+      if (list) {
+        list.innerHTML = (data.reports || []).map((r) => `<div class="report-item">${r.avatar} - ${r.name}</div>`).join('');
+      }
+    }
+    renderAssignment(mockAssignment);
+  </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning and Certification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f4f2ee; --surface:#fff; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-light:#fff3ef; --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); background:transparent; color:var(--text); }
+  .widget { width:100%; height:100%; background:transparent; padding:16px; overflow:auto; display:grid; gap:12px; }
+  .section-label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); font-weight:700; }
+  .list { display:grid; gap:8px; }
+  .item { background:var(--bg); border-radius:10px; padding:10px 12px; display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .name { font-size:13px; font-weight:700; }
+  .note { margin-top:2px; font-size:11px; color:var(--muted); }
+  .time { font-family:var(--mono); font-size:11px; color:var(--muted); white-space:nowrap; }
+  .badge { margin-top:4px; display:inline-flex; padding:3px 8px; border-radius:999px; background:var(--orange-light); color:var(--orange); font-size:10px; font-weight:700; }
+  @media (max-width: 640px) { .widget { padding:12px; } .item { flex-direction:column; } }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Learning and Certification">
+    <div>
+      <div class="section-label">Education</div>
+      <div class="list" id="educationList"></div>
+    </div>
+
+    <div>
+      <div class="section-label">Certification</div>
+      <div class="list" id="certList"></div>
+    </div>
+  </section>
+
+  <script>
+    const mockLearning = {
+      education: [
+        { name: 'Ho Chi Minh City University of Technology', note: 'Bachelor of Computer Science', time: '2008 - 2012', badge: 'Completed' }
+      ],
+      certs: [
+        { name: 'AWS Solutions Architect', note: 'Amazon Web Services', time: '2024', badge: 'Active' },
+        { name: 'Professional Scrum Master', note: 'Scrum.org', time: '2023', badge: 'Active' },
+        { name: 'Google Project Leadership', note: 'Coursera', time: '2022', badge: 'Completed' }
+      ]
+    };
+
+    function renderList(id, items) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = (items || []).map((item) => `
+        <article class="item">
+          <div>
+            <div class="name">${item.name}</div>
+            <div class="note">${item.note}</div>
+            <span class="badge">${item.badge}</span>
+          </div>
+          <div class="time">${item.time}</div>
+        </article>
+      `).join('');
+    }
+
+    renderList('educationList', mockLearning.education);
+    renderList('certList', mockLearning.certs);
+  </script>
+</body>
+</html>

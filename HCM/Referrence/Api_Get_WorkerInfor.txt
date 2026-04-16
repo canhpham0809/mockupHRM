@@ -1,0 +1,80 @@
+curl 'https://hcm-api-dev.a4b.vn/api/v1/core/worker/pivotPagingEffective' \
+  -H 'Accept: */*' \
+  -H 'Accept-Language: en-US,en;q=0.9' \
+  -H 'AppCode: HCM' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoY21fYWRtaW5AYTRiLmNvbS52biIsInVzZXJJbmZvIjoie1wibW9yZUluZm9cIjp7XCJtYWtlckRhdGVcIjpcIjIwMjUtMDUtMDZUMDY6NDU6MDMuNjc0KzAwOjAwXCIsXCJjbGllbnRJZFwiOlwiaGNtX2FkbWluQGE0Yi5jb20udm5cIixcImNvbnRhY3RFbWFpbFwiOlwiaGNtX2FkbWluQGE0Yi5jb20udm5cIixcImZpcnN0TG9naW5cIjpcIjIwMjUtMDUtMDZUMDY6NTA6MzguNTQ4KzAwOjAwXCIsXCJhcHBDb2RlXCI6XCJIQ01cIixcInRlbmFudENvZGVcIjpcIkE0QlwiLFwidXNlck5hbWVcIjpcImhjbV9hZG1pbkBhNGIuY29tLnZuXCIsXCJ1c2VySWRcIjo1MDI3LjAsXCJhcHBEYXRhXCI6e1wibGVnYWxFbnRpdHlDb2RlXCI6XCJBRFRJTUFcIixcImVtcGxveWVlQWdnSWRcIjpcIjk4YmY4YWZhLWY4ZGYtNDk2OS1iZDgxLTBmZDc4ZjRkYjRmNlwiLFwid29ya2VySWRcIjoyNDU2Ny4wLFwiZW1wbG95ZWVDb2RlXCI6XCJWRy0yMDY4MlwifSxcInBob25lTnVtYmVyXCI6XCJcIixcInJlY29yZFN0YXR1c1wiOlwiT1wiLFwiY2xpZW50VHlwZVwiOjEuMCxcInRlbmFudE5hbWVcIjpcIkE0QlwiLFwiaGFzU3lzdGVtUm9sZVwiOnRydWUsXCJhcHBJZFwiOjU0LjAsXCJ0ZW5hbnRJZFwiOjI3NC4wLFwicmVmQ29kZVwiOlwiVkctMjA2ODJcIixcIm1ha2VySWRcIjpcInN5c3RlbVwifSxcImZ1bGxOYW1lXCI6XCJoY21fYWRtaW5fYTRiXCIsXCJlbWFpbFwiOlwiaGNtX2FkbWluQGE0Yi5jb20udm5cIixcInVzZXJDb2RlXCI6XCJIQ00uQTRCLmhjbV9hZG1pbkBhNGIuY29tLnZuXCIsXCJwYXNzd29yZFwiOlwiXCIsXCJ1c2VybmFtZVwiOlwiaGNtX2FkbWluQGE0Yi5jb20udm5cIixcImF1dGhvcml0aWVzXCI6W3tcImF1dGhvcml0eVwiOlwiUk9MRV9IQ01fQURNSU5fT0ZGSUNFUlwifSx7XCJhdXRob3JpdHlcIjpcIlJPTEVfSENNX0FGX1NVUFBPUlRcIn0se1wiYXV0aG9yaXR5XCI6XCJST0xFX0hDTV9DTkJcIn0se1wiYXV0aG9yaXR5XCI6XCJST0xFX0hDTV9IUkJQXCJ9LHtcImF1dGhvcml0eVwiOlwiUk9MRV9IQ01fSVRfT0ZGSUNFUlwifSx7XCJhdXRob3JpdHlcIjpcIlJPTEVfSENNX0lUX1NVUFBPUlRcIn0se1wiYXV0aG9yaXR5XCI6XCJST0xFX0hDTV9NQ1BfQURNSU5cIn0se1wiYXV0aG9yaXR5XCI6XCJST0xFX0hDTV9TVVBFUl9BRE1JTlwifV0sXCJhY2NvdW50Tm9uRXhwaXJlZFwiOnRydWUsXCJhY2NvdW50Tm9uTG9ja2VkXCI6dHJ1ZSxcImNyZWRlbnRpYWxzTm9uRXhwaXJlZFwiOnRydWUsXCJlbmFibGVkXCI6dHJ1ZX0iLCJleHAiOjE3NzYzNjI4NTgsImF1dGgiOiJST0xFX0hDTV9BRE1JTl9PRkZJQ0VSLFJPTEVfSENNX0FGX1NVUFBPUlQsUk9MRV9IQ01fQ05CLFJPTEVfSENNX0hSQlAsUk9MRV9IQ01fSVRfT0ZGSUNFUixST0xFX0hDTV9JVF9TVVBQT1JULFJPTEVfSENNX01DUF9BRE1JTixST0xFX0hDTV9TVVBFUl9BRE1JTiIsImlhdCI6MTc3NjMzNDA1OH0.xoUwqlcPlo4u7ic0Xb5kXpiR6yvE6h-_JftW_smm7A9OW9NyAy84R1zNykoEOQmr5xZffQf0Jw68ff87tIs9bQ' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Type: application/json;charset:UTF-8' \
+  -H 'Origin: https://hcmadmin-dev.a4b.vn' \
+  -H 'Referer: https://hcmadmin-dev.a4b.vn/' \
+  -H 'Sec-Fetch-Dest: empty' \
+  -H 'Sec-Fetch-Mode: cors' \
+  -H 'Sec-Fetch-Site: same-site' \
+  -H 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36' \
+  -H 'sec-ch-ua: "Google Chrome";v="147", "Not.A/Brand";v="8", "Chromium";v="147"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Windows"' \
+  --data-raw '{"startRow":0,"endRow":100,"rowGroupCols":[],"valueCols":[],"pivotCols":[],"pivotMode":false,"groupKeys":[],"filterModel":{"workerAggId":{"type":"equals","filter":"8ada4713-4a9a-4a3a-8dc1-1f55519bafd6","filterType":"text"}},"fields":[],"sortModel":[{"colId":"createDate","sort":"desc"}]}'
+
+
+  {
+  "status": 1,
+  "data": {
+    "id": 12345,
+    "code": "WKR-12345",
+    "firstName": "John",
+    "middleName": "Michael",
+    "lastName": "Smith",
+    "preferredName": "Johnny",
+    "dateOfBirth": "1990-05-15T00:00:00Z",
+    "genderId": 1,
+    "genderCode": "M",
+    "nationalityId": 1,
+    "nationalityCode": "US",
+    "maritalStatusId": 1,
+    "maritalStatusCode": "SINGLE",
+    "fullName": "John Michael Smith",
+    "personalEmail": "john.smith@email.com",
+    "mobile": "+1-555-0100",
+    "genderName": {},
+    "maritalStatusName": {},
+    "nationalityAggId": "123e4567-e89b-12d3-a456-426614174000",
+    "nationalityName": {},
+    "placeOfBirthAggId": "123e4567-e89b-12d3-a456-426614174000",
+    "placeOfBirthId": 1,
+    "placeOfBirthCode": "NYC",
+    "placeOfBirthName": {},
+    "placeOfBirthNativeName": "New York City",
+    "workerIdentifiers": [
+      {
+        "id": 12345,
+        "workerId": 1,
+        "idTypeId": 1,
+        "idTypeCode": "PASSPORT",
+        "idNumber": "N1234567",
+        "issueDate": "2020-01-15T00:00:00Z",
+        "issuingPlaceId": 1,
+        "issuingPlaceCode": "NYC",
+        "primaryFlg": true,
+        "workerAggId": "123e4567-e89b-12d3-a456-426614174000",
+        "workerCode": "WKR-12345",
+        "workerFirstName": "John",
+        "workerMiddleName": "Michael",
+        "workerLastName": "Smith",
+        "workerPreferredName": "Johnny",
+        "workerFullName": "John Michael Smith",
+        "idTypeName": {},
+        "issuingPlaceAggId": "123e4567-e89b-12d3-a456-426614174000",
+        "issuingPlaceName": {},
+        "documents": {},
+        "expiryDate": "2030-01-15T00:00:00Z",
+        "aggId": "123e4567-e89b-12d3-a456-426614174000",
+        "description": "string"
+      }
+    ],
+    "aggId": "123e4567-e89b-12d3-a456-426614174000",
+    "metadata": {},
+    "description": "string"
+  },
+  "timestamp": "2026-04-16T10:03:45.300Z"
+}

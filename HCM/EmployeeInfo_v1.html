@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Info</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #d85a30;
+    --orange-light: #fff3ef;
+    --bg: #f4f2ee;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --text-primary: #1e1d1b;
+    --text-muted: #9f998f;
+    --green: #3b6d11;
+    --green-bg: #eaf3de;
+    --blue: #185fa5;
+    --blue-bg: #e6f1fb;
+    --font: 'Exo 2', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font);
+    color: var(--text-primary);
+    background: transparent;
+  }
+
+  .info-widget {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .card-body {
+    padding: 18px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+
+  .error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  .section {
+    margin-bottom: 18px;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 14px 20px;
+  }
+
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .field-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-height: 18px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .field-val.mono {
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .chip.green {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .chip.blue {
+    background: var(--blue-bg);
+    color: var(--blue);
+  }
+
+  .skills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-tag {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    background: var(--orange-light);
+    color: var(--orange);
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .empty-note {
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  @media (max-width: 680px) {
+    .card-body {
+      padding: 14px;
+    }
+
+    .field-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="info-widget" aria-label="Employee Info">
+    <div class="card-body">
+      <div id="loading" class="loading">Loading employee info...</div>
+      <div id="error" class="error" style="display:none;"></div>
+
+      <div id="dataContainer" style="display:none;">
+        <div class="section">
+          <div class="section-title">Worker Profile</div>
+          <div class="field-grid">
+            <div><div class="field-label">Full Name</div><div class="field-val" id="workerFullName"></div></div>
+            <div><div class="field-label">Preferred Name</div><div class="field-val" id="workerPreferredName"></div></div>
+            <div><div class="field-label">Worker Code</div><div class="field-val mono" id="workerCode"></div></div>
+
+            <div><div class="field-label">Date Of Birth</div><div class="field-val" id="workerDob"></div></div>
+            <div><div class="field-label">Gender</div><div class="field-val" id="workerGender"></div></div>
+            <div><div class="field-label">Marital Status</div><div class="field-val" id="workerMarital"></div></div>
+
+            <div><div class="field-label">Nationality</div><div class="field-val" id="workerNationality"></div></div>
+            <div><div class="field-label">Personal Email</div><div class="field-val" id="workerEmail"></div></div>
+            <div><div class="field-label">Mobile</div><div class="field-val" id="workerMobile"></div></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Primary Identifier</div>
+          <div class="field-grid">
+            <div><div class="field-label">ID Type</div><div class="field-val" id="idType"></div></div>
+            <div><div class="field-label">ID Number</div><div class="field-val mono" id="idNumber"></div></div>
+            <div><div class="field-label">Primary</div><div class="field-val" id="idPrimary"></div></div>
+
+            <div><div class="field-label">Issue Date</div><div class="field-val" id="idIssueDate"></div></div>
+            <div><div class="field-label">Expiry Date</div><div class="field-val" id="idExpiryDate"></div></div>
+            <div><div class="field-label">Issuing Place</div><div class="field-val" id="idIssuingPlace"></div></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Worker Skills</div>
+          <div id="skillsWrap" class="skills-wrap"></div>
+          <div id="skillsEmpty" class="empty-note" style="display:none;">No skills found.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    var _ctx = null;
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      try {
+        const date = new Date(dateStr);
+        if (Number.isNaN(date.getTime())) return dateStr;
+        return date.toLocaleDateString('vi-VN');
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function getNestedValue(obj, path, fallback) {
+      var defaultValue = typeof fallback === 'undefined' ? '-' : fallback;
+      try {
+        var value = path.split('.').reduce(function(current, prop) {
+          return current ? current[prop] : undefined;
+        }, obj);
+
+        if (value && typeof value === 'object' && (value.en || value.vi)) {
+          return value.vi || value.en || defaultValue;
+        }
+
+        if (value === null || typeof value === 'undefined') return defaultValue;
+        var text = String(value).trim();
+        return text ? text : defaultValue;
+      } catch (e) {
+        return defaultValue;
+      }
+    }
+
+    function setText(id, value, fallback) {
+      var defaultValue = typeof fallback === 'undefined' ? '-' : fallback;
+      var el = document.getElementById(id);
+      if (!el) return;
+      var text = (value === null || typeof value === 'undefined') ? '' : String(value).trim();
+      el.textContent = text || defaultValue;
+    }
+
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').textContent = message;
+      document.getElementById('error').style.display = 'block';
+    }
+
+    function showDataContainer() {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'none';
+      document.getElementById('dataContainer').style.display = 'block';
+    }
+
+    function getPrimaryIdentifier(worker) {
+      var identifiers = Array.isArray(worker.workerIdentifiers) ? worker.workerIdentifiers : [];
+      if (!identifiers.length) return null;
+      var primary = identifiers.find(function(item) { return item.primaryFlg; });
+      return primary || identifiers[0];
+    }
+
+    function renderSkills(skills) {
+      var skillsWrap = document.getElementById('skillsWrap');
+      var skillsEmpty = document.getElementById('skillsEmpty');
+      skillsWrap.innerHTML = '';
+
+      if (!Array.isArray(skills) || !skills.length) {
+        skillsEmpty.style.display = 'block';
+        return;
+      }
+
+      skillsEmpty.style.display = 'none';
+
+      skills.forEach(function(skill) {
+        var name = getNestedValue(skill, 'skillName', '') || skill.skillCode || 'Unknown Skill';
+        var level = skill.proficiencyLevel ? 'Lv.' + skill.proficiencyLevel : '';
+        var years = (skill.yearsExperience || skill.yearsExperience === 0) ? skill.yearsExperience + 'y' : '';
+        var suffix = [level, years].filter(Boolean).join(' | ');
+
+        var tag = document.createElement('span');
+        tag.className = 'skill-tag';
+        tag.textContent = suffix ? (name + ' (' + suffix + ')') : name;
+        skillsWrap.appendChild(tag);
+      });
+    }
+
+    function renderEmployeeInfo(employee, worker, skills) {
+      showDataContainer();
+
+      setText('workerFullName', worker.fullName || employee.workerFullName || employee.employeeFullname);
+      setText('workerPreferredName', worker.preferredName || employee.workerPreferredName);
+      setText('workerCode', employee.workerCode || worker.code);
+
+      setText('workerDob', formatDate(worker.dateOfBirth || employee.dateOfBirth));
+      setText('workerGender', getNestedValue(worker, 'genderName') || getNestedValue(employee, 'genderName') || worker.genderCode || employee.genderCode);
+      setText('workerMarital', getNestedValue(worker, 'maritalStatusName') || getNestedValue(employee, 'maritalStatusName') || worker.maritalStatusCode || employee.maritalStatusCode);
+
+      setText('workerNationality', getNestedValue(worker, 'nationalityName') || getNestedValue(employee, 'nationalityName') || worker.nationalityCode || employee.nationalityCode);
+      setText('workerEmail', worker.personalEmail || employee.personalEmail);
+      setText('workerMobile', worker.mobile || employee.mobile);
+
+      var primaryId = getPrimaryIdentifier(worker);
+      setText('idType', primaryId ? (getNestedValue(primaryId, 'idTypeName') || primaryId.idTypeCode) : '-');
+      setText('idNumber', primaryId ? primaryId.idNumber : '-');
+      setText('idPrimary', primaryId ? (primaryId.primaryFlg ? 'Yes' : 'No') : '-');
+      setText('idIssueDate', primaryId ? formatDate(primaryId.issueDate) : '-');
+      setText('idExpiryDate', primaryId ? formatDate(primaryId.expiryDate) : '-');
+      setText('idIssuingPlace', primaryId ? (getNestedValue(primaryId, 'issuingPlaceName') || primaryId.issuingPlaceCode) : '-');
+
+      renderSkills(skills);
+    }
+
+    function postJson(url, payload) {
+      return fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': '*/*',
+          'AppCode': 'HCM',
+          'Authorization': 'Bearer ' + _ctx.jwtToken,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify(payload)
+      }).then(function(response) {
+        if (!response.ok) throw new Error('API Error: ' + response.status);
+        return response.json();
+      });
+    }
+
+    function getEmployeeByAggId(empAggId) {
+      var url = _ctx.urlApi + 'api/v1/core/employee/getByAggId?aggId=' + encodeURIComponent(empAggId);
+      return fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': '*/*',
+          'AppCode': 'HCM',
+          'Authorization': 'Bearer ' + _ctx.jwtToken,
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      }).then(function(response) {
+        if (!response.ok) throw new Error('API Error: ' + response.status);
+        return response.json();
+      }).then(function(result) {
+        return result.data || result;
+      });
+    }
+
+    function getWorkerInfo(workerAggId) {
+      var url = _ctx.urlApi + 'api/v1/core/worker/pivotPagingEffective';
+      var payload = {
+        startRow: 0,
+        endRow: 100,
+        rowGroupCols: [],
+        valueCols: [],
+        pivotCols: [],
+        pivotMode: false,
+        groupKeys: [],
+        filterModel: {
+          workerAggId: {
+            type: 'equals',
+            filter: workerAggId,
+            filterType: 'text'
+          }
+        },
+        fields: [],
+        sortModel: [{ colId: 'createDate', sort: 'desc' }]
+      };
+
+      return postJson(url, payload).then(function(result) {
+        var data = result.data;
+        if (Array.isArray(data && data.data)) return data.data[0] || null;
+        return data || null;
+      });
+    }
+
+    function getWorkerSkills(workerAggId) {
+      var url = _ctx.urlApi + 'api/v1/core/workerSkill/pivotPagingEffective';
+      var payload = {
+        startRow: 0,
+        endRow: 100,
+        rowGroupCols: [],
+        valueCols: [],
+        pivotCols: [],
+        pivotMode: false,
+        groupKeys: [],
+        filterModel: {
+          workerAggId: {
+            type: 'equals',
+            filter: workerAggId,
+            filterType: 'text'
+          }
+        },
+        fields: [],
+        sortModel: [{ colId: 'createDate', sort: 'desc' }]
+      };
+
+      return postJson(url, payload).then(function(result) {
+        if (Array.isArray(result.data && result.data.data)) return result.data.data;
+        if (Array.isArray(result.data)) return result.data;
+        return [];
+      });
+    }
+
+    function loadEmployeeInfoByEmpAggId(empAggId) {
+      if (!_ctx || !_ctx.urlApi || !_ctx.jwtToken) {
+        showError('Missing widget context for API call.');
+        return;
+      }
+
+      if (!empAggId) {
+        showError('No employee ID provided in parameters.');
+        return;
+      }
+
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('error').style.display = 'none';
+      document.getElementById('dataContainer').style.display = 'none';
+
+      getEmployeeByAggId(empAggId)
+        .then(function(employee) {
+          if (!employee) throw new Error('Employee not found.');
+
+          var workerAggId = employee.workerAggId;
+          if (!workerAggId) throw new Error('workerAggId is missing in employee payload.');
+
+          return Promise.all([Promise.resolve(employee), getWorkerInfo(workerAggId), getWorkerSkills(workerAggId)]);
+        })
+        .then(function(results) {
+          var employee = results[0];
+          var worker = results[1];
+          var skills = results[2];
+
+          if (!worker) throw new Error('Worker info not found.');
+          renderEmployeeInfo(employee, worker, skills);
+        })
+        .catch(function(error) {
+          console.error('EmployeeInfo API Error:', error);
+          showError('Failed to load employee info: ' + error.message);
+        });
+    }
+
+    window.addEventListener('message', function(e) {
+      var msg = e.data;
+      if (!msg || typeof msg !== 'object') return;
+
+      if (msg._context) _ctx = msg._context;
+
+      var keys = Object.keys(msg);
+      var isContextOnly = keys.length === 1 && keys[0] === '_context';
+
+      if (isContextOnly) {
+        var params = (_ctx && _ctx.params) || null;
+        var empAggId = params && params.empAggId ? params.empAggId : null;
+        if (empAggId) loadEmployeeInfoByEmpAggId(empAggId);
+        return;
+      }
+
+      var directEmployee = msg.data || msg;
+      if (directEmployee && directEmployee.workerAggId) {
+        var directEmpAggId = directEmployee.aggId || directEmployee.employeeAggId || null;
+        if (directEmpAggId) loadEmployeeInfoByEmpAggId(directEmpAggId);
+      }
+    });
+  </script>
+</body>
+</html>

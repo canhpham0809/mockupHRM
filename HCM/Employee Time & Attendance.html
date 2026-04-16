@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Time and Attendance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --surface:#fff; --bg:#f4f2ee; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-light:#fff3ef; --blue:#185fa5; --blue-bg:#e6f1fb; --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); background:transparent; color:var(--text); }
+  .widget { width:100%; height:100%; background:transparent; padding:16px; overflow:auto; display:grid; gap:10px; }
+  .grid { display:grid; grid-template-columns:repeat(4,minmax(130px,1fr)); gap:10px; }
+  .tile { background:var(--bg); border-radius:12px; padding:12px; }
+  .label { font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); font-weight:700; }
+  .value { margin-top:6px; font-size:22px; font-weight:700; }
+  .sub { margin-top:2px; font-size:11px; color:var(--muted); }
+  .leave-list { display:grid; gap:8px; }
+  .leave-item { background:var(--bg); border-radius:10px; padding:10px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .name { font-size:12px; font-weight:700; }
+  .meta { font-size:11px; color:var(--muted); margin-top:2px; }
+  .badge { display:inline-flex; border-radius:999px; padding:3px 8px; font-size:10px; font-weight:700; background:var(--blue-bg); color:var(--blue); }
+  @media (max-width: 840px) { .widget { padding:12px; } .grid { grid-template-columns:1fr 1fr; } }
+  @media (max-width: 520px) { .grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Employee Time and Attendance">
+    <div class="grid">
+      <div class="tile"><div class="label">Working Days</div><div class="value" id="timeWorkingDays"></div><div class="sub" id="timeWorkingDaysSub"></div></div>
+      <div class="tile"><div class="label">Present</div><div class="value" id="timePresent"></div><div class="sub" id="timePresentSub"></div></div>
+      <div class="tile"><div class="label">Leave Used</div><div class="value" id="timeLeaveUsed"></div><div class="sub" id="timeLeaveSub"></div></div>
+      <div class="tile"><div class="label">OT Hours</div><div class="value" id="timeOtHours"></div><div class="sub" id="timeOtSub"></div></div>
+    </div>
+
+    <div class="leave-list" id="timeLeaveList"></div>
+  </section>
+
+  <script>
+    const mockTime = {
+      workingDays: '20',
+      workingSub: 'April 2026',
+      present: '17',
+      presentSub: '85% attendance',
+      leaveUsed: '4',
+      leaveSub: '/ 12 days remaining',
+      otHours: '11h',
+      otSub: '+1h vs monthly avg',
+      leaves: [
+        { name: 'Annual Leave', meta: 'Current balance', badge: '12 days' },
+        { name: 'Sick Leave', meta: 'Current balance', badge: '5 days' },
+        { name: 'WFH Request', meta: 'This month', badge: '2 days' }
+      ]
+    };
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value || '-';
+    }
+
+    function renderTime(data) {
+      setText('timeWorkingDays', data.workingDays);
+      setText('timeWorkingDaysSub', data.workingSub);
+      setText('timePresent', data.present);
+      setText('timePresentSub', data.presentSub);
+      setText('timeLeaveUsed', data.leaveUsed);
+      setText('timeLeaveSub', data.leaveSub);
+      setText('timeOtHours', data.otHours);
+      setText('timeOtSub', data.otSub);
+
+      const list = document.getElementById('timeLeaveList');
+      if (!list) return;
+      list.innerHTML = (data.leaves || []).map((l) => `
+        <article class="leave-item">
+          <div><div class="name">${l.name}</div><div class="meta">${l.meta}</div></div>
+          <span class="badge">${l.badge}</span>
+        </article>
+      `).join('');
+    }
+
+    renderTime(mockTime);
+  </script>
+</body>
+</html>

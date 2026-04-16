@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee TimeLine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --surface:#fff; --bg:#f4f2ee; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-light:#fff3ef; --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); background:transparent; color:var(--text); }
+  .widget { width:100%; height:100%; background:transparent; padding:16px; overflow:auto; }
+  .timeline { display:grid; gap:10px; }
+  .event { display:grid; grid-template-columns:22px 1fr; gap:10px; }
+  .dot-wrap { display:flex; justify-content:center; }
+  .dot { width:10px; height:10px; border-radius:50%; margin-top:7px; background:var(--orange); }
+  .content { background:var(--bg); border-radius:12px; padding:10px 12px; }
+  .head { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .title { font-size:13px; font-weight:700; }
+  .date { font-family:var(--mono); font-size:11px; color:var(--muted); }
+  .desc { margin-top:4px; font-size:12px; color:var(--muted); }
+  .tag { margin-top:6px; display:inline-flex; padding:3px 8px; border-radius:999px; font-size:10px; font-weight:700; background:var(--orange-light); color:var(--orange); }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Employee TimeLine">
+    <div class="timeline" id="timelineList"></div>
+  </section>
+
+  <script>
+    const mockTimeline = [
+      { title: 'Secondment Started', date: '2024-07-01', desc: 'Started regional assignment in Singapore Hub.', tag: 'Assignment' },
+      { title: 'Performance Review 2023', date: '2024-01-12', desc: 'Final rating: Exceeds Expectations.', tag: 'Performance' },
+      { title: 'Promotion Approved', date: '2023-06-20', desc: 'Promoted to Senior Software Engineer L1.', tag: 'Promotion' },
+      { title: 'Employment Contract Signed', date: '2020-01-15', desc: 'Initial full-time contract activated.', tag: 'Contract' }
+    ];
+
+    function renderTimeline(items) {
+      const el = document.getElementById('timelineList');
+      if (!el) return;
+      el.innerHTML = (items || []).map((item) => `
+        <article class="event">
+          <div class="dot-wrap"><span class="dot"></span></div>
+          <div class="content">
+            <div class="head"><div class="title">${item.title}</div><div class="date">${item.date}</div></div>
+            <div class="desc">${item.desc}</div>
+            <span class="tag">${item.tag}</span>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    renderTimeline(mockTimeline);
+  </script>
+</body>
+</html>

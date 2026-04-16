@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Assignment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #d85a30;
+    --orange-light: #fff3ef;
+    --bg: #f4f2ee;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --border-soft: #f0ede6;
+    --text-primary: #1e1d1b;
+    --text-secondary: #6b6860;
+    --text-muted: #9f998f;
+    --green: #3b6d11;
+    --green-bg: #eaf3de;
+    --blue: #185fa5;
+    --blue-bg: #e6f1fb;
+    --font: 'Exo 2', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font);
+    color: var(--text-primary);
+    background: transparent;
+  }
+
+  .assignment-widget {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    overflow: auto;
+  }
+
+  .card-body {
+    padding: 18px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 14px 20px;
+  }
+
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .field-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-height: 18px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .field-val.mono {
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .chip.orange {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  .chip.green {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .chip.blue {
+    background: var(--blue-bg);
+    color: var(--blue);
+  }
+
+  .loading {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+  }
+
+  .error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 16px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab-btn.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 14px 20px;
+  }
+
+  @media (max-width: 680px) {
+    .card-body {
+      padding: 14px;
+    }
+
+    .field-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .tabs {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="assignment-widget" aria-label="Employee Assignment">
+    <div class="card-body">
+      <div id="loading" class="loading">Loading employee assignment data...</div>
+      <div id="error" class="error" style="display:none;"></div>
+      
+      <div id="dataContainer" style="display:none;">
+        <!-- Tabs for multiple assignments -->
+        <div class="tabs" id="assignmentTabs"></div>
+
+        <!-- Tab Contents -->
+        <div id="assignmentContents"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    var _ctx = null;
+    var _assignmentData = [];
+    var _activeTab = 0;
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('vi-VN');
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function getNestedValue(obj, path, fallback = '-') {
+      try {
+        const value = path.split('.').reduce((current, prop) => current?.[prop], obj);
+        if (value && typeof value === 'object' && (value.en || value.vi)) {
+          return value.vi || value.en || fallback;
+        }
+        return (value && String(value).trim()) || fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function setText(id, value, fallback = '-') {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const content = String(value || '').trim();
+      el.textContent = content || fallback;
+    }
+
+    function switchTab(index) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      // Show selected tab
+      document.getElementById('tabContent-' + index).classList.add('active');
+      document.getElementById('tabBtn-' + index).classList.add('active');
+      _activeTab = index;
+    }
+
+    function createAssignmentTab(data, index) {
+      const tabId = 'tabContent-' + index;
+      const content = document.createElement('div');
+      content.id = tabId;
+      content.className = 'tab-content field-grid' + (index === 0 ? ' active' : '');
+
+      // Position and Job info
+      const positionTitle = getNestedValue(data, 'positionTitle') || data.positionCode;
+      const jobTitle = getNestedValue(data, 'jobTitle');
+
+      content.innerHTML = `
+        <div><div class="field-label">Position Code</div><div class="field-val mono">${data.positionCode || '-'}</div></div>
+        <div><div class="field-label">Position Title</div><div class="field-val">${positionTitle}</div></div>
+        <div><div class="field-label">Job Title</div><div class="field-val">${jobTitle}</div></div>
+
+        <div><div class="field-label">Department</div><div class="field-val">${data.deptUnitCode || '-'}</div></div>
+        <div><div class="field-label">Department Name</div><div class="field-val">${getNestedValue(data, 'deptUnitName')}</div></div>
+        <div><div class="field-label">BU Unit</div><div class="field-val">${data.buUnitCode || '-'}</div></div>
+
+        <div><div class="field-label">BU Unit Name</div><div class="field-val">${getNestedValue(data, 'buUnitName')}</div></div>
+        <div><div class="field-label">Work Location</div><div class="field-val">${data.workLocationCode || '-'}</div></div>
+        <div><div class="field-label">Work Location Name</div><div class="field-val">${getNestedValue(data, 'workLocationName')}</div></div>
+
+        <div><div class="field-label">Start Date</div><div class="field-val">${formatDate(data.startDate)}</div></div>
+        <div><div class="field-label">End Date</div><div class="field-val">${formatDate(data.endDate) || '-'}</div></div>
+        <div><div class="field-label">Status</div><div class="chip green">${getNestedValue(data, 'statusName')}</div></div>
+
+        <div><div class="field-label">Supervisor</div><div class="field-val">${data.supervisorEmployeeName || '-'}</div></div>
+        <div><div class="field-label">Supervisor Code</div><div class="field-val mono">${data.supervisorEmployeeCode || '-'}</div></div>
+        <div><div class="field-label">Work Pattern</div><div class="field-val">${data.workPatternCode || '-'}</div></div>
+
+        <div><div class="field-label">FTE</div><div class="field-val">${data.fte || '-'}</div></div>
+        <div><div class="field-label">Reason</div><div class="field-val">${getNestedValue(data, 'reasonName')}</div></div>
+        <div><div class="field-label">Country</div><div class="field-val">${data.countryCode || '-'}</div></div>
+      `;
+
+      return content;
+    }
+
+    function renderAssignments(assignments) {
+      if (!assignments || !assignments.length) {
+        showError('No assignment data found.');
+        return;
+      }
+
+      _assignmentData = assignments;
+      document.getElementById('dataContainer').style.display = 'block';
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = 'none';
+
+      const tabsContainer = document.getElementById('assignmentTabs');
+      const contentsContainer = document.getElementById('assignmentContents');
+      
+      tabsContainer.innerHTML = '';
+      contentsContainer.innerHTML = '';
+
+      // Create tabs for each assignment
+      assignments.forEach((assignment, index) => {
+        // Create tab button
+        const tabBtn = document.createElement('button');
+        tabBtn.id = 'tabBtn-' + index;
+        tabBtn.className = 'tab-btn' + (index === 0 ? ' active' : '');
+        tabBtn.textContent = assignment.positionCode + ' (' + formatDate(assignment.startDate) + ')';
+        tabBtn.onclick = () => switchTab(index);
+        tabsContainer.appendChild(tabBtn);
+
+        // Create tab content
+        const content = createAssignmentTab(assignment, index);
+        contentsContainer.appendChild(content);
+      });
+    }
+
+    function showError(message) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').textContent = message;
+      document.getElementById('error').style.display = 'block';
+    }
+
+    function fetchAssignmentData(empAggId) {
+      if (!empAggId || !_ctx) {
+        showError('Missing employee ID or context.');
+        return;
+      }
+
+      const url = _ctx.urlApi + 'api/v1/core/empAssignment/pivotPagingEffective';
+      
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': '*/*',
+          'AppCode': 'HCM',
+          'Authorization': 'Bearer ' + _ctx.jwtToken,
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify({
+          startRow: 0,
+          endRow: 100,
+          rowGroupCols: [],
+          valueCols: [],
+          pivotCols: [],
+          pivotMode: false,
+          groupKeys: [],
+          filterModel: {
+            employeeAggId: {
+              type: 'equals',
+              filter: empAggId,
+              filterType: 'text'
+            }
+          },
+          fields: [],
+          sortModel: [{ colId: 'startDate', sort: 'desc' }]
+        })
+      })
+      .then(function(response) {
+        if (!response.ok) throw new Error('API Error: ' + response.status);
+        return response.json();
+      })
+      .then(function(result) {
+        // Handle response structure: result.data.data contains the assignments array
+        const assignmentList = (result.data && result.data.data) || result.data || [];
+        if (assignmentList && assignmentList.length > 0) {
+          renderAssignments(assignmentList);
+        } else {
+          showError('No assignment data found for this employee.');
+        }
+      })
+      .catch(function(error) {
+        console.error('API Error:', error);
+        showError('Failed to load assignment data: ' + error.message);
+      });
+    }
+
+    window.addEventListener('message', function(e) {
+      var msg = e.data;
+      if (!msg || typeof msg !== 'object') return;
+
+      // Update context
+      if (msg._context) {
+        _ctx = msg._context;
+      }
+
+      // Check if this is a context-only message or has datasource data
+      var keys = Object.keys(msg);
+      var isContextOnly = keys.length === 1 && keys[0] === '_context';
+
+      if (isContextOnly) {
+        // Extract empAggId from dynamic parameters
+        var params = _ctx.params || null;
+        var empAggId = params && params.empAggId ? params.empAggId : null;
+        
+        if (empAggId) {
+          fetchAssignmentData(empAggId);
+        } else {
+          showError('No employee ID provided in parameters.');
+        }
+      } else {
+        // Datasource data message - render directly if it contains assignment data
+        const assignmentList = (msg.data && msg.data.data) || msg.data || [];
+        if (Array.isArray(assignmentList) && assignmentList.length > 0) {
+          renderAssignments(assignmentList);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Working Relationship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f4f2ee; --surface:#fff; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-light:#fff3ef; --green:#3b6d11; --green-bg:#eaf3de; --blue:#185fa5; --blue-bg:#e6f1fb; --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); background:transparent; color:var(--text); }
+  .widget { width:100%; height:100%; background:transparent; padding:16px; overflow:auto; }
+  .wr-grid { display:grid; grid-template-columns:repeat(3,minmax(220px,1fr)); gap:12px; }
+  .wr-card { background:var(--bg); border-radius:12px; padding:12px; }
+  .wr-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .wr-name { font-size:14px; font-weight:700; }
+  .chip { display:inline-flex; align-items:center; border-radius:999px; padding:3px 9px; font-size:10px; font-weight:700; }
+  .chip.green { background:var(--green-bg); color:var(--green); }
+  .chip.blue { background:var(--blue-bg); color:var(--blue); }
+  .chip.orange { background:var(--orange-light); color:var(--orange); }
+  .wr-meta { margin-top:10px; display:grid; gap:6px; }
+  .row { font-size:12px; color:var(--muted); }
+  .row strong { color:var(--text); font-weight:600; }
+  .row.mono { font-family:var(--mono); font-size:11px; }
+  @media (max-width: 960px) { .wr-grid { grid-template-columns:1fr 1fr; } }
+  @media (max-width: 640px) { .widget { padding:12px; } .wr-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Working Relationship">
+    <div class="wr-grid" id="wrGrid"></div>
+  </section>
+
+  <script>
+    const mockWorkingRelationships = [
+      {
+        name: 'ABC Corporation Vietnam',
+        status: 'ACTIVE',
+        badge: 'PRIMARY WR',
+        type: 'Employment (Full-time)',
+        role: 'Senior Software Engineer',
+        manager: 'Tran Van B',
+        period: '2020-01-15 to Present',
+        employeeNo: 'EMP-VN-001'
+      },
+      {
+        name: 'ABC Corporation Singapore',
+        status: 'ACTIVE',
+        badge: 'SECONDMENT',
+        type: 'Secondment',
+        role: 'Tech Lead Regional',
+        manager: 'John D',
+        period: '2024-07-01 to Present',
+        employeeNo: 'EMP-SG-042'
+      },
+      {
+        name: 'XYZ Consulting',
+        status: 'UNACTIVE',
+        badge: 'HISTORICAL WR',
+        type: 'Contract',
+        role: 'Tech Consultant',
+        manager: 'Le Minh',
+        period: '2018-01-01 to 2019-12-31',
+        employeeNo: 'EMP-CN-118'
+      }
+    ];
+
+    function renderWorkingRelationships(list) {
+      const grid = document.getElementById('wrGrid');
+      if (!grid) return;
+      grid.innerHTML = list.map((item) => {
+        const statusClass = item.status === 'ACTIVE' ? 'green' : 'orange';
+        return `
+          <article class="wr-card">
+            <div class="wr-top">
+              <div class="wr-name">${item.name}</div>
+              <span class="chip ${statusClass}">${item.status}</span>
+            </div>
+            <div style="margin-top:8px;"><span class="chip blue">${item.badge}</span></div>
+            <div class="wr-meta">
+              <div class="row">Type: <strong>${item.type}</strong></div>
+              <div class="row">Role: <strong>${item.role}</strong></div>
+              <div class="row">Manager: <strong>${item.manager}</strong></div>
+              <div class="row mono">${item.period}</div>
+              <div class="row mono">${item.employeeNo}</div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    renderWorkingRelationships(mockWorkingRelationships);
+  </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capability Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f4f2ee; --surface:#fff; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-soft:rgba(216,90,48,.18); --green:#7bb547; --green-soft:rgba(123,181,71,.14); --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); background:transparent; color:var(--text); }
+  .widget { width:100%; height:100%; background:transparent; padding:16px; overflow:auto; display:grid; gap:12px; }
+  .legend { display:flex; gap:12px; flex-wrap:wrap; }
+  .legend-item { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); }
+  .dot { width:10px; height:10px; border-radius:2px; }
+  .dot.self { background:var(--orange); }
+  .dot.manager { background:var(--green); }
+  .chart-wrap { background:var(--bg); border-radius:12px; padding:12px; }
+  .chart { width:100%; height:auto; display:block; max-width:420px; margin:0 auto; }
+  .labels { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+  .label-item { background:#fff; border-radius:10px; padding:8px 10px; font-size:12px; }
+  .label-item strong { font-family:var(--mono); }
+  @media (max-width: 640px) { .widget { padding:12px; } .labels { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Capability Radar">
+    <div class="legend">
+      <div class="legend-item"><span class="dot self"></span>Self Review</div>
+      <div class="legend-item"><span class="dot manager"></span>Manager Review</div>
+    </div>
+
+    <div class="chart-wrap">
+      <svg class="chart" viewBox="0 0 320 280" role="img" aria-label="Capability radar chart">
+        <polygon points="160,30 257,76 280,170 215,243 105,243 40,170 63,76" fill="none" stroke="#ddd7ce" />
+        <polygon points="160,55 236,91 255,165 205,221 115,221 65,165 84,91" fill="none" stroke="#e5e0d7" />
+        <polygon points="160,82 218,106 233,161 196,203 124,203 87,161 102,106" fill="none" stroke="#ebe7de" />
+
+        <polygon points="160,70 225,103 236,163 196,206 118,210 85,160 106,100" fill="var(--orange-soft)" stroke="var(--orange)" stroke-width="2" />
+        <polygon points="160,86 210,111 221,160 191,194 126,196 95,158 109,112" fill="var(--green-soft)" stroke="var(--green)" stroke-width="2" />
+      </svg>
+
+      <div class="labels">
+        <div class="label-item">Technical Depth <strong>4.5</strong></div>
+        <div class="label-item">Communication <strong>4.2</strong></div>
+        <div class="label-item">Ownership <strong>4.4</strong></div>
+        <div class="label-item">Problem Solving <strong>4.3</strong></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -1,0 +1,143 @@
+① Received from Datasource / Dashboard state
+{
+  "_fetchResponse": {
+    "requestId": "hf1",
+    "ok": true,
+    "status": 200,
+    "statusText": "OK",
+    "data": {
+      "status": 0,
+      "data": {
+        "id": 111078,
+        "aggId": "858746b7-202f-450e-8e4f-7f1d5dc4e57a",
+        "createDate": "2025-10-17T08:38:48.217768Z",
+        "makerDate": null,
+        "makerId": null,
+        "updateDate": null,
+        "updateId": null,
+        "checkerId": null,
+        "checkerDate": null,
+        "tenantCode": "A4B",
+        "appCode": "HCM",
+        "modNo": 1,
+        "recordOrder": null,
+        "authStatus": "A",
+        "recordStatus": "O",
+        "buCode": null,
+        "empCode": null,
+        "employeeCode": "ZN-01510",
+        "employeeFullname": "Đào Nguyên Bảo Khánh",
+        "employeeTypeId": 76,
+        "employeeTypeCode": "OFFICE",
+        "workerId": 30047,
+        "legalEntityId": 182,
+        "statusId": 54,
+        "statusCode": "Active",
+        "hireDate": "2025-10-17",
+        "terminationDate": null,
+        "metadata": null,
+        "description": null,
+        "legalEntityCode": "Zion",
+        "legalEntityCountryCode": "VN",
+        "workerCategoryId": null,
+        "workerCategoryCode": "STAFF",
+        "employeeClassId": 642,
+        "employeeClassCode": "PERMANENT",
+        "wcategoryGroupId": 9,
+        "eclassGroupId": 44,
+        "employeeAccount": null,
+        "employeeContractname": null,
+        "email": null,
+        "phone": null,
+        "workerFirstName": "Khánh",
+        "workerMiddleName": null,
+        "workerLastName": "Đào Nguyên Bảo",
+        "workerPreferredName": null,
+        "workerFullName": "Đào Nguyên Bảo Khánh",
+        "workerAggId": "b41cabb4-b04e-4a2e-a6e2-b87f82cc55d9",
+        "workerCode": "HW-2381102",
+        "dateOfBirth": "1993-01-01",
+        "personalEmail": "48238local@my.local",
+        "mobile": "+84 123456789",
+        "genderId": 5,
+        "genderCode": "G001",
+        "genderName": {
+          "en": "Male",
+          "vi": "Nam"
+        },
+        "maritalStatusId": 5,
+        "maritalStatusCode": "SIN",
+        "maritalStatusName": {
+          "en": "Single",
+          "vi": "Độc thân"
+        },
+        "nationalityId": 236,
+        "nationalityCode": "VN",
+        "nationalityAggId": "cc9c5aa2-257e-4615-b165-818e0a97441c",
+        "nationalityName": {
+          "en": "Việt Nam",
+          "vi": "Việt Nam"
+        },
+        "legalEntityAggId": "1c688cf2-8978-4929-b87c-3e58c3d62dad",
+        "legalEntityName": {
+          "en": "Zion Joint Stock Company",
+          "vi": "Công ty Cổ Phần ZION"
+        },
+        "employeeTypeName": null,
+        "statusName": {
+          "en": "Active",
+          "vi": "Đang hoạt động"
+        },
+        "employeeClassName": {
+          "en": "Permanent",
+          "vi": "Permanent"
+        },
+        "employeeReportToAggId": "47d39d3b-038f-4e0d-9bf6-b0f28c2938e3",
+        "employeeReportToCode": "ZN-01385",
+        "employeeReportFullname": "Trần Đắc Trung",
+        "positionCode": "PO-309077",
+        "workLocationId": 1190,
+        "placeId": null,
+        "placeAggId": null,
+        "placeCode": null,
+        "placeName": null,
+        "buUnitId": 2520,
+        "buUnitAggId": "bba7d079-a593-45ed-8abf-d9355a5d8a36",
+        "buUnitCode": "UG40718",
+        "deptUnitAggId": "bba7d079-a593-45ed-8abf-d9355a5d8a36",
+        "deptUnitCode": "UG40718",
+        "deptUnitName": {
+          "en": "User Growth",
+          "vi": "User Growth"
+        },
+        "buUnitName": {
+          "en": "User Growth",
+          "vi": "User Growth"
+        },
+        "jobTitle": {
+          "en": "Ads Operations Collaborator",
+          "vi": "Ads Operations Collaborator"
+        },
+        "workLocationName": {
+          "en": null,
+          "vi": "Your Company"
+        },
+        "contractId": 112694,
+        "contractAggId": "6fd8656e-6cc9-49e0-899d-9ea79b430898",
+        "contractNumber": "25-COT-112673",
+        "contractTypeCode": "5",
+        "contractTypeName": {
+          "en": "Definite labor contract (1 year)",
+          "vi": "HĐLĐ xác định 1 năm"
+        },
+        "workRelationshipId": 11452,
+        "relationshipTypeCode": "EMPLOYEE",
+        "assignments": null,
+        "pathLevel": null,
+        "contractStartDate": "2025-03-31",
+        "contractEndDate": null
+      },
+      "timestamp": "2026-04-16T09:52:36.372756765Z"
+    }
+  }
+}

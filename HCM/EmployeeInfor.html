@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Infor Widget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #d85a30;
+    --orange-light: #fff3ef;
+    --bg: #f4f2ee;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --border-soft: #f0ede6;
+    --text-primary: #1e1d1b;
+    --text-secondary: #6b6860;
+    --text-muted: #9f998f;
+    --green: #3b6d11;
+    --green-bg: #eaf3de;
+    --font: 'Exo 2', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    padding: 0;
+    background: transparent;
+    font-family: var(--font);
+    color: var(--text-primary);
+  }
+
+  .demo-shell {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .card-head-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+
+  .icon-btn:hover {
+    background: var(--bg);
+    color: var(--text-primary);
+    border-color: var(--border);
+  }
+
+  .icon-btn svg,
+  .meta-item svg,
+  .action-pill svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+  }
+
+  .card-body {
+    padding: 22px;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .profile-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 100%;
+  }
+
+  .profile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .profile-flex {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .avatar-upload {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, #f4a282 0%, #d85a30 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.18);
+  }
+
+  .avatar-initials {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .avatar-caption {
+    margin-top: 6px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.88;
+  }
+
+  .profile-meta-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .profile-name {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .worker-id {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 13px;
+  }
+
+  .meta-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 10px 18px;
+   
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    min-width: 0;
+  }
+
+  .meta-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .skills-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .skills-label {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-right: 4px;
+  }
+
+  .skill-tag,
+  .skill-more {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .skill-tag {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  .skill-more {
+    background: var(--bg);
+    color: var(--text-secondary);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .quick-actions-wrap {
+    position: relative;
+  }
+
+  .action-pill {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 10px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.15s ease;
+  }
+
+  .action-pill:hover {
+    border-color: #f1b8a3;
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  .quick-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 190px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: 0 16px 32px rgba(32, 23, 18, 0.12);
+    display: none;
+  }
+
+  .quick-menu.show {
+    display: block;
+  }
+
+  .quick-item {
+    border-radius: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: 0.15s ease;
+  }
+
+  .quick-item:hover {
+    background: var(--orange-light);
+  }
+
+  .quick-item-title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .meta-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .card-head,
+    .card-body {
+      padding: 16px;
+    }
+
+    .profile-flex {
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    .profile-name {
+      font-size: 22px;
+    }
+
+    .profile-top {
+      align-items: flex-start;
+    }
+
+    .meta-row {
+      grid-template-columns: 1fr;
+    }
+
+    .card-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .card-head-right,
+    .header-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .quick-menu {
+      left: 0;
+      right: auto;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="demo-shell">
+    <section class="card" aria-label="Employee Infor">
+      <!-- <div class="card-head">
+        <span class="card-title">Employee Profile</span>
+        <div class="card-head-right">
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            <span id="employeeStatus">Active</span>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn" type="button" aria-label="Refresh profile">
+              <svg viewBox="0 0 20 20"><path d="M4 10a6 6 0 1 1 1.4 3.9" /><path d="M4 14v-4h4" /></svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Open layout options">
+              <svg viewBox="0 0 20 20"><path d="M3 3h5v5H3zM12 3h5v5h-5zM3 12h5v5H3zM12 12h5v5h-5z" /></svg>
+            </button>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="card-body">
+        <div class="profile-main">
+          <div class="profile-top">
+            <div class="profile-flex">
+              <div class="avatar-upload" aria-hidden="true">
+                <div class="avatar-initials" id="avatarInitials">AN</div>
+                <div class="avatar-caption">Employee</div>
+              </div>
+
+              <div class="profile-meta-stack">
+                <div>
+                  <div class="profile-name" id="profileName">Nguyen Van A</div>
+                  <div class="worker-id" id="profileWorkerId">Worker ID: W-001</div>
+                </div>
+
+                <div class="meta-row">
+                  <div class="meta-item">
+                    <svg viewBox="0 0 20 20"><path d="M4 6h12v5H4z" /><path d="M4 12h16v4H4z" /></svg>
+                    <span id="profileCountry">Vietnam</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg viewBox="0 0 20 20"><path d="M4 5h12v12H4z" /><path d="M4 9h12" /><path d="M8 3v4M12 3v4" /></svg>
+                    <span id="profileDob">15/03/1990</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg viewBox="0 0 20 20"><path d="M3 5h14v10H3z" /><path d="M4 6l6 4 6-4" /></svg>
+                    <span id="profileEmail">nguyen.a@gmail.com</span>
+                  </div>
+                  <div class="meta-item">
+                    <svg viewBox="0 0 20 20"><path d="M5 3h3l1.5 4-2 1.5c1 2 2.5 3.5 4.5 4.5L13.5 11 18 12.5V16c0 1.1-.9 2-2 2C7 18 2 13 2 5c0-1.1.9-2 2-2z" /></svg>
+                    <span id="profilePhone">+84 912 345 678</span>
+                  </div>
+                </div>
+
+                <div class="skills-row" id="profileSkillsRow"></div>
+              </div>
+            </div>
+
+            <!-- <div class="header-actions">
+              <div class="quick-actions-wrap">
+                <button class="action-pill" id="quickActionsBtn" type="button" aria-haspopup="true" aria-expanded="false">
+                  <svg viewBox="0 0 20 20"><path d="M10 2l2.2 4.5L17 7l-3.5 3.4.8 4.8L10 13l-4.3 2.2.8-4.8L3 7l4.8-.5z" /></svg>
+                  Actions
+                </button>
+                <div class="quick-menu" id="quickActionsMenu">
+                  <div class="quick-item"><div class="quick-item-title">Transfer</div></div>
+                  <div class="quick-item"><div class="quick-item-title">Promote</div></div>
+                  <div class="quick-item"><div class="quick-item-title">Compensation</div></div>
+                  <div class="quick-item"><div class="quick-item-title">Update Contact</div></div>
+                  <div class="quick-item"><div class="quick-item-title">Terminate</div></div>
+                </div>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const mockEmployee = {
+      fullName: 'Nguyen Van A',
+      workerId: 'W-001',
+      status: 'Active',
+      country: 'Vietnam',
+      dob: '15/03/1990',
+      email: 'nguyen.a@gmail.com',
+      phone: '+84 912 345 678',
+      skills: ['Python', 'AWS', 'React', 'System Design', 'People Mentoring', 'Agile Delivery', 'Architecture Review']
+    };
+
+    function getInitials(name) {
+      return name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part[0].toUpperCase())
+        .join('');
+    }
+
+    function setText(id, value) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = value || '';
+      }
+    }
+
+    function renderSkills(skills) {
+      const row = document.getElementById('profileSkillsRow');
+      if (!row) {
+        return;
+      }
+
+      const topSkills = skills.slice(0, 5);
+      const remaining = Math.max(skills.length - topSkills.length, 0);
+
+      row.innerHTML = `
+        <span class="skills-label">Skills:</span>
+        ${topSkills.map((skill) => `<span class="skill-tag">${skill}</span>`).join('')}
+        ${remaining > 0 ? `<span class="skill-more">+${remaining} more</span>` : ''}
+      `;
+    }
+
+    function renderEmployeeInfor(data) {
+      setText('employeeStatus', data.status);
+      setText('avatarInitials', getInitials(data.fullName));
+      setText('profileName', data.fullName);
+      setText('profileWorkerId', `Worker ID: ${data.workerId}`);
+      setText('profileCountry', data.country);
+      setText('profileDob', data.dob);
+      setText('profileEmail', data.email);
+      setText('profilePhone', data.phone);
+      renderSkills(data.skills || []);
+    }
+
+    const quickActionsBtn = document.getElementById('quickActionsBtn');
+    const quickActionsMenu = document.getElementById('quickActionsMenu');
+
+    if (quickActionsBtn && quickActionsMenu) {
+      quickActionsBtn.addEventListener('click', () => {
+        const isOpen = quickActionsMenu.classList.toggle('show');
+        quickActionsBtn.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.quick-actions-wrap')) {
+          quickActionsMenu.classList.remove('show');
+          quickActionsBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    renderEmployeeInfor(mockEmployee);
+  </script>
+</body>
+</html>

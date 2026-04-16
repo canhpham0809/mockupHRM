@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Contract Information</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #d85a30;
+    --orange-light: #fff3ef;
+    --bg: #f4f2ee;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --border-soft: #f0ede6;
+    --text-primary: #1e1d1b;
+    --text-secondary: #6b6860;
+    --text-muted: #9f998f;
+    --green: #3b6d11;
+    --green-bg: #eaf3de;
+    --blue: #185fa5;
+    --blue-bg: #e6f1fb;
+    --font: 'Exo 2', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font);
+    color: var(--text-primary);
+    background: transparent;
+  }
+
+  .contract-widget {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    overflow: auto;
+  }
+
+  .card-body {
+    padding: 18px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 14px 20px;
+  }
+
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .field-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    min-height: 18px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+
+  .field-val.mono {
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .chip.orange {
+    background: var(--orange-light);
+    color: var(--orange);
+  }
+
+  .chip.green {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .chip.blue {
+    background: var(--blue-bg);
+    color: var(--blue);
+  }
+
+  @media (max-width: 680px) {
+    .card-body {
+      padding: 14px;
+    }
+
+    .field-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+  <section class="contract-widget" aria-label="Employee Contract Information">
+    <div class="card-body">
+      <div class="field-grid">
+        <div><div class="field-label">Legal Entity</div><div class="field-val" id="contractLegalEntity"></div></div>
+        <div><div class="field-label">Type</div><div class="chip orange" id="contractType"></div></div>
+        <div><div class="field-label">Employee Code</div><div class="field-val mono" id="contractEmployeeCode"></div></div>
+
+        <div><div class="field-label">Employee Type</div><div class="field-val" id="contractEmployeeType"></div></div>
+        <div><div class="field-label">Onboarding Date</div><div class="field-val" id="contractOnboardingDate"></div></div>
+        <div><div class="field-label">Onboarding End Date</div><div class="field-val" id="contractOnboardingEndDate"></div></div>
+
+        <div><div class="field-label">Gross Salary</div><div class="field-val" id="contractGrossSalary"></div></div>
+        <div><div class="field-label">Basic Salary</div><div class="field-val" id="contractBasicSalary"></div></div>
+        <div><div class="field-label">VBonus</div><div class="field-val" id="contractVBonus"></div></div>
+
+        <div><div class="field-label">Job Title</div><div class="field-val" id="contractJobTitle"></div></div>
+        <div><div class="field-label">Position</div><div class="field-val" id="contractPosition"></div></div>
+        <div><div class="field-label">Work Email</div><div class="field-val" id="contractWorkEmail"></div></div>
+
+        <div><div class="field-label">Join Date</div><div class="field-val" id="contractJoinDate"></div></div>
+        <div><div class="field-label">End Date</div><div class="field-val" id="contractEndDate"></div></div>
+        <div><div class="field-label">Status</div><div class="chip green" id="contractStatus"></div></div>
+
+        <div><div class="field-label">Seniority</div><div class="field-val" id="contractSeniority"></div></div>
+        <div><div class="field-label">Employee Class</div><div class="chip blue" id="contractEmployeeClass"></div></div>
+        <div><div class="field-label">Contract Type</div><div class="chip blue" id="contractContractType"></div></div>
+
+        <div><div class="field-label">Working Location</div><div class="field-val" id="contractLocation"></div></div>
+        <div><div class="field-label">Work Schedule</div><div class="field-val" id="contractWorkSchedule"></div></div>
+        <div><div class="field-label">Country</div><div class="field-val" id="contractCountry"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const mockContract = {
+      legalEntity: 'ABC Corporation Vietnam',
+      type: 'EMPLOYMENT',
+      employeeCode: 'VG-19283',
+      employeeType: 'Full Time',
+      onboardingDate: '15/01/2020',
+      onboardingEndDate: '15/07/2020',
+      grossSalary: '37M',
+      basicSalary: '27M',
+      vBonus: '10M',
+      jobTitle: 'Senior Software Engineer',
+      position: 'Senior Software Engineer L1',
+      workEmail: 'nguyen.a@abccorp.vn',
+      joinDate: '03/09/2013',
+      endDate: '',
+      status: 'Active',
+      seniority: '3 years 4 months 12 days',
+      employeeClass: 'Permanent',
+      contractType: 'Labour Contract Unlimited',
+      location: 'VNG Campus',
+      workSchedule: 'Mon-Fri, 8:30 - 17:30',
+      country: 'Vietnam'
+    };
+
+    function setText(id, value, fallback = '-') {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const content = String(value || '').trim();
+      el.textContent = content || fallback;
+    }
+
+    function renderContract(data) {
+      setText('contractLegalEntity', data.legalEntity);
+      setText('contractType', data.type);
+      setText('contractEmployeeCode', data.employeeCode);
+      setText('contractEmployeeType', data.employeeType);
+      setText('contractOnboardingDate', data.onboardingDate);
+      setText('contractOnboardingEndDate', data.onboardingEndDate);
+      setText('contractGrossSalary', data.grossSalary);
+      setText('contractBasicSalary', data.basicSalary);
+      setText('contractVBonus', data.vBonus);
+      setText('contractJobTitle', data.jobTitle);
+      setText('contractPosition', data.position);
+      setText('contractWorkEmail', data.workEmail);
+      setText('contractJoinDate', data.joinDate);
+      setText('contractEndDate', data.endDate);
+      setText('contractStatus', data.status);
+      setText('contractSeniority', data.seniority);
+      setText('contractEmployeeClass', data.employeeClass);
+      setText('contractContractType', data.contractType);
+      setText('contractLocation', data.location);
+      setText('contractWorkSchedule', data.workSchedule);
+      setText('contractCountry', data.country);
+    }
+
+    renderContract(mockContract);
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee History</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#f4f2ee; --surface:#fff; --text:#1e1d1b; --muted:#7f7a72; --orange:#d85a30; --orange-light:#fff3ef; --font:'Exo 2',sans-serif; --mono:'DM Mono',monospace; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; }
+  body { font-family:var(--font); background:transparent; color:var(--text); }
+  .widget { width:100%; height:100%; background:transparent; padding:16px; overflow:auto; }
+  .history-list { display:grid; gap:10px; }
+  .item { background:var(--bg); border-radius:12px; padding:12px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .title { font-size:13px; font-weight:700; }
+  .date { font-size:11px; color:var(--muted); font-family:var(--mono); }
+  .meta { margin-top:6px; font-size:12px; color:var(--muted); }
+  .chip { margin-top:6px; display:inline-flex; border-radius:999px; padding:3px 8px; font-size:10px; font-weight:700; color:var(--orange); background:var(--orange-light); }
+</style>
+</head>
+<body>
+  <section class="widget" aria-label="Employee History">
+    <div class="history-list" id="historyList"></div>
+  </section>
+
+  <script>
+    const mockHistory = [
+      { title: 'Promotion to Senior Software Engineer', date: '2024-07-01', meta: 'From Software Engineer L2 to Senior Software Engineer L1', type: 'Promotion' },
+      { title: 'Salary Adjustment', date: '2023-07-01', meta: 'Adjusted base salary from 32M to 35M', type: 'Compensation' },
+      { title: 'Internal Transfer', date: '2022-03-15', meta: 'Moved from Product Infra to Platform Team', type: 'Transfer' },
+      { title: 'Onboarded as Full-time Employee', date: '2020-01-15', meta: 'Primary legal entity: ABC Corporation Vietnam', type: 'Onboarding' }
+    ];
+
+    function renderHistory(items) {
+      const list = document.getElementById('historyList');
+      if (!list) return;
+      list.innerHTML = (items || []).map((h) => `
+        <article class="item">
+          <div class="top"><div class="title">${h.title}</div><div class="date">${h.date}</div></div>
+          <div class="meta">${h.meta}</div>
+          <span class="chip">${h.type}</span>
+        </article>
+      `).join('');
+    }
+
+    renderHistory(mockHistory);
+  </script>
+</body>
+</html>

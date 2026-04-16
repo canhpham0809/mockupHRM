@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f8fafc;
+      padding: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+    }
+
+    .card h3 {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .card .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f1f5f9;
+      text-align: left;
+      padding: 8px 10px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn:hover {
+      background: #2563eb;
+    }
+
+    .selected-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Status badge */
+    .status-info {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .status-warning {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .status-error {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ② RENDERING DATA: Render a table from received rows -->
+  <div class="card" id="tableCard" style="display:none">
+    <h3>② Employee List (rendered from data)</h3>
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- ③ PUBLISHING STATE: click a row → publish selectedEmployeeId back to dashboard -->
+  <div class="card">
+    <h3>③ Published State → other widgets react</h3>
+    <p style="font-size:13px;color:#64748b;margin-bottom:8px;">
+      Click "Select" on a row above. This widget fires
+      <code style="background:#f1f5f9;padding:2px 5px;border-radius:4px;">parent.postMessage({ _state: { selectedEmployeeId } })</code>
+      so other widgets with param
+      <code style="background:#f1f5f9;padding:2px 5px;border-radius:4px;">{{widgetNamespace.selectedEmployeeId}}</code>
+      re-render automatically.
+    </p>
+    <span class="selected-badge" id="selectedLabel">None selected</span>
+  </div>
+
+  <!-- ① RECEIVING DATA: Dashboard / Datasource sends data via postMessage -->
+  <div class="card">
+    <pre id="context" style="font-size:12px;color:#64748b;white-space:pre-wrap;word-break:break-all;">
+Waiting for data…</pre>
+    <h3>① Received from Datasource / Dashboard state</h3>
+    <pre id="rawData" style="font-size:12px;color:#64748b;white-space:pre-wrap;word-break:break-all;">
+Waiting for data…</pre>
+  </div>
+
+  <script>
+    // ─── HOW postMessage WORKS IN THIS WIDGET ────────────────────────────────
+    // Two types of messages arrive:
+    //
+    //  [A] CONTEXT-ONLY  (sent immediately on iframe load, before any API call)
+    //      Shape: { _context: { jwtToken, urlApi, isDisable, language, params } }
+    //      → No other keys.  Use _context.params for dynamic parameter values.
+    //
+    //  [B] DATASOURCE DATA  (sent when Use Datasource / Use Rest API returns)
+    //      Shape: { ...apiResponseFields, _context: { ... } }
+    //      → Has extra keys beyond _context.  Use this to render your UI.
+    //
+    // _context.params — resolved Dynamic Parameters (key → typed value):
+    //   Defined in the "Dynamic Parameters" section of the widget designer.
+    //   Default values are sent on load; updated values are re-sent when
+    //   a dashboard state binding changes the param at runtime.
+    //
+    // A simple way to tell message types apart:
+    //   isContextOnly = Object.keys(msg).length === 1 && '_context' in msg
+    // ─────────────────────────────────────────────────────────────────────────
+
+    var _ctx = null; // cached context — set on first message
+
+    window.addEventListener('message', function(e) {
+      var msg = e.data;
+      if (!msg || typeof msg !== 'object') return;
+
+      // Always update cached context (params may have changed)
+      if (msg._context) _ctx = msg._context;
+      document.getElementById('context').textContent = JSON.stringify(_ctx, null, 2);
+
+      // ─── [A] Context-only message ────────────────────────────────────────
+      var keys = Object.keys(msg);
+      var isContextOnly = keys.length === 1 && keys[0] === '_context';
+
+      if (isContextOnly) {
+        // _ctx.params contains the current Dynamic Parameter values.
+        // Use them to filter or personalise your own API calls:
+        //
+        // var params = _ctx.params || {};            // e.g. { empCode: 'ZN-01683', endRow: 10 }
+        // fetch(_ctx.urlApi + '/api/v1/core/employee/pivotPaging', {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': 'Bearer ' + _ctx.jwtToken
+        //   },
+        //   body: JSON.stringify({
+        //     startRow: 0,
+        //     endRow: params.endRow || 10,
+        //     filterModel: { ftsValue: { type: 'contains', filter: params.empCode || '' } }
+        //   })
+        // }).then(r => r.json()).then(data => renderRows(data.data?.data));
+
+        var params = _ctx.params || null; 
+        // Lấy empAggId từ params động của Dashboard
+        var empAggId = params && params.empAggId ? params?.empAggId : null; 
+        if (empAggId) {
+          // // Xây dựng URL với query parameters 
+          var url = _ctx.urlApi + 'api/v1/core/employee/getByAggId?aggId=' + empAggId;
+          fetch(url, {
+            method: 'GET', // Theo curl mẫu là GET 
+            headers: {
+              'Accept': '*/*',
+              'AppCode': 'HCM', // Bắt buộc theo API mẫu 
+              'Authorization': 'Bearer ' + _ctx.jwtToken, // Sử dụng Token từ context 
+              'Content-Type': 'application/json;charset:UTF-8'
+            }
+          })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(result) {
+            document.getElementById('rawData').textContent = JSON.stringify(result, null, 2);
+            // Dữ liệu trả về thường nằm trong result.data hoặc result [cite: 31, 32, 33]
+            var rowData = result.data ? [result.data] : (Array.isArray(result) ? result : []);
+            renderRows(rowData);
+          })
+          .catch(function(error) {
+            console.error('API Error:', error);
+          });
+        }
+        return;
+      }
+
+      // ─── [B] Datasource / Rest API data message ──────────────────────────
+      // _ctx is also available here for additional auth calls if needed
+      document.getElementById('rawData').textContent = JSON.stringify(msg, null, 2);
+
+      var rows = Array.isArray(msg) ? msg
+               : Array.isArray(msg.data) ? msg.data
+               : msg.data ? [msg.data]
+               : null;
+      if (rows && rows.length > 0) renderRows(rows);
+    });
+
+    function renderRows(rows) {
+      if (!rows || !rows.length) return;
+      document.getElementById('tableCard').style.display = 'block';
+      document.getElementById('tableBody').innerHTML = rows.map(function(row) {
+        var id   = row.aggId ?? row.id ?? row.code ?? '';
+        var name = row.employeeFullname ?? row.workerFullName ?? row.fullName ?? row.employeeName ?? '—';
+        var dept = (row.deptUnitName && (row.deptUnitName.vi || row.deptUnitName.en))
+                   || row.department || row.dept || '—';
+        return '<tr>'
+          + '<td>' + id + '</td>'
+          + '<td>' + name + '</td>'
+          + '<td>' + dept + '</td>'
+          + '<td><button class="btn" onclick="selectEmployee(\'' + id + '\', \'' + name + '\')">Select</button></td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    // ─── ③ Publish selected employee ID back to the dashboard ─────────────────
+    function selectEmployee(id, name) {
+      document.getElementById('selectedLabel').textContent = name + ' (' + id + ')';
+
+      // This is the KEY mechanism:
+      // _state object keys become namespaced state that other widgets can bind to.
+      // Example: if this widget's namespace is "employeeList",
+      // then other widgets can use {{employeeList.selectedEmployeeId}} as a dynamic param.
+      parent.postMessage({
+        _state: {
+          selectedEmployeeId:   id,
+          selectedEmployeeName: name
+        }
+      }, '*');
+    }
+  </script>
+</body>
+
+</html>
